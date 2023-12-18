@@ -1,4 +1,9 @@
 ./*/.vscode
+
 .vscode
-./src/build/*
+
+./src/build/*.o
+
+./src/run
+
 ./data/*.vtk
