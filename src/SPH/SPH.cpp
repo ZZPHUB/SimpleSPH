@@ -1,5 +1,6 @@
 #include "SPH.H"
 #include <fstream>
+#include <iomanip>
 using namespace std;
 
 int main(void)
@@ -27,15 +28,15 @@ int main(void)
     ofstream writefile;
     writefile.open("../data/init.vtk");
 
-    writefile << "vtk DataFile Version 3.0" << endl;
+    writefile << "# vtk DataFile Version 3.0" << endl;
     writefile << "init data" << endl;
     writefile << "ASCII" << endl;
     writefile << "DATASET UNSTRUCTURED_GRID" << endl;
-    writefile << "POINTS " << FLUID_PTC_NUM << "double" << endl;
+    writefile << "POINTS " << FLUID_PTC_NUM<< " " << "double" << endl;
 
     for(int i=0;i<FLUID_PTC_NUM;i++)
     {
-        writefile << particle.x[i]<< " " << particle.y[i] << 0.0 << endl;
+        writefile << setiosflags(ios::scientific) << particle.x[i]<< " " << particle.y[i]<< " " << 0.0 << endl;
     }
     
     writefile.close();

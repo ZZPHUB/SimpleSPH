@@ -12,7 +12,7 @@
 #define DOMAIN_LENGTH 12.0    //computational domain length
 #define DOAMIN_DEEPTH 5.0     //computational domain deepth
 
-#define PTC_SPACING 0.01    //spacing between particles
+#define PTC_SPACING 0.1    //spacing between particles
 #define PTC_SML 0.01    //smoothed leng of particles 
 
 #define DOMAIN_LENGTH_NUM (int)(DOMAIN_LENGTH/PTC_SPACING+1)
