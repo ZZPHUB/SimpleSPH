@@ -1,6 +1,6 @@
 #include "SPH.H"
-
-
+#include <fstream>
+using namespace std;
 
 int main(void)
 { 
@@ -24,6 +24,21 @@ int main(void)
     particle.type = type;  
     ptc_generate(particle.x,particle.y);
 
+    ofstream writefile;
+    writefile.open("../data/init.vtk");
+
+    writefile << "vtk DataFile Version 3.0" << endl;
+    writefile << "init data" << endl;
+    writefile << "ASCII" << endl;
+    writefile << "DATASET UNSTRUCTURED_GRID" << endl;
+    writefile << "POINTS " << FLUID_PTC_NUM << "double" << endl;
+
+    for(int i=0;i<FLUID_PTC_NUM;i++)
+    {
+        writefile << particle.x[i]<< " " << particle.y[i] << 0.0 << endl;
+    }
+    
+    writefile.close();
     return 0;
 }
 

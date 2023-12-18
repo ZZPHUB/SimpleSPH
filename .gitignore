@@ -1,3 +1,4 @@
 ./*/.vscode
 .vscode
 ./src/build/*
+./data/*
