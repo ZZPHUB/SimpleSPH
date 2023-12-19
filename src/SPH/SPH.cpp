@@ -1,6 +1,7 @@
 #include "SPH.H"
 #include <fstream>
 #include <iomanip>
+#include <stdlib.h>
 using namespace std;
 
 int main(void)
@@ -10,25 +11,25 @@ int main(void)
     SPH_PAIR pair;
 
     /************stack is too small,so init data in heap***************/
-    particle.x = (double *)(malloc(sizeof(double)*PTC_TOL_NUM));
-    particle.y = (double *)(malloc(sizeof(double)*PTC_TOL_NUM));
-    particle.vx = (double *)(malloc(sizeof(double)*PTC_TOL_NUM));
-    particle.vy = (double *)(malloc(sizeof(double)*PTC_TOL_NUM));
-    particle.accx = (double *)(malloc(sizeof(double)*PTC_TOL_NUM)); 
-    particle.accy = (double *)(malloc(sizeof(double)*PTC_TOL_NUM));
-    particle.density = (double *)(malloc(sizeof(double)*PTC_TOL_NUM));
-    particle.mass = (double *)(malloc(sizeof(double)*PTC_TOL_NUM));
-    particle.dif_density = (double *)(malloc(sizeof(double)*PTC_TOL_NUM));
-    particle.pressure = (double *)(malloc(sizeof(double)*PTC_TOL_NUM));
-    particle.type = (char *)(malloc(sizeof(char)*PTC_TOL_NUM));  
+    particle.x = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
+    particle.y = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
+    particle.vx = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
+    particle.vy = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
+    particle.accx = (double *)(calloc(PTC_TOL_NUM,sizeof(double))); 
+    particle.accy = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
+    particle.density = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
+    particle.mass = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
+    particle.dif_density = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
+    particle.pressure = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
+    particle.type = (char *)(calloc(PTC_TOL_NUM,sizeof(char)));  
 
-    kernel.w = (double *)(malloc(sizeof(double)*4*PTC_TOL_NUM));
-    kernel.dwdx = (double *)(malloc(sizeof(double)*4*PTC_TOL_NUM));
-    kernel.dwdy = (double *)(malloc(sizeof(double)*4*PTC_TOL_NUM));
+    kernel.w = (double *)(calloc(4*PTC_TOL_NUM,sizeof(double)));
+    kernel.dwdx = (double *)(calloc(4*PTC_TOL_NUM,sizeof(double)));
+    kernel.dwdy = (double *)(calloc(4*PTC_TOL_NUM,sizeof(double)));
    
     pair.total = 0; 
-    pair.i = (int *)(malloc(sizeof(int)*4*PTC_TOL_NUM));
-    pair.j = (int *)(malloc(sizeof(int)*4*PTC_TOL_NUM));
+    pair.i = (int *)(calloc(4*PTC_TOL_NUM,sizeof(int)));
+    pair.j = (int *)(calloc(4*PTC_TOL_NUM,sizeof(int)));
 
     ptc_generate(&particle);//generate the fluid solid and dummy particles
     cout << particle.x[3] << " " << particle.y[3] << endl;
