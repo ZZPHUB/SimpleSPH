@@ -11,7 +11,9 @@ void ptc_kernel(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel)
             double temp_dis = 0;
             //calculate the kernel value
             for(int i=0;i<pair->total;i++)
-            {   temp_dis = PTC_DISTANCE(pair->i[i],pair->j[i]);
+            {   
+                //temp_dis = PTC_DISTANCE(pair->i[i],pair->j[i]);
+                temp_dis = sqrt(pow(particle->x[pair->i[i]]-particle->x[pair->j[i]],2)+pow(particle->y[pair->i[i]]-particle->y[pair->j[i]],2));
                 if(0<temp_dis && temp_dis < PTC_SML)
                 {
                     kernel->w[i] = ALPHA*(2.0/3.0-pow(temp_dis,2)+0.5*pow(temp_dis,3));
@@ -29,7 +31,8 @@ void ptc_kernel(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel)
             //calculate the x-direction differential kernel value
             for(int i=0;i<pair->total;i++)
             {
-                temp_dis = PTC_DISTANCE(pair->i[i],pair->j[i]);
+                //temp_dis = PTC_DISTANCE(pair->i[i],pair->j[i]);
+                temp_dis = sqrt(pow(particle->x[pair->i[i]]-particle->x[pair->j[i]],2)+pow(particle->y[pair->i[i]]-particle->y[pair->j[i]],2));
                 if(0<temp_dis && temp_dis < PTC_SML)
                 {
                     kernel->dwdx[i] = ALPHA*(-2.0+1.5*temp_dis/PTC_SML)*(particle->x[pair->i[i]]-particle->x[pair->j[i]])/pow(PTC_SML,2);
@@ -47,7 +50,8 @@ void ptc_kernel(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel)
             //calculate the x-direction differential kernel value
             for(int i=0;i<pair->total;i++)
             {
-                temp_dis = PTC_DISTANCE(pair->i[i],pair->j[i]);
+                //temp_dis = PTC_DISTANCE(pair->i[i],pair->j[i]);
+                temp_dis = sqrt(pow(particle->x[pair->i[i]]-particle->x[pair->j[i]],2)+pow(particle->y[pair->i[i]]-particle->y[pair->j[i]],2));
                 if(0<temp_dis && temp_dis < PTC_SML)
                 {
                     kernel->dwdx[i] = ALPHA*(-2.0+1.5*temp_dis/PTC_SML)*(particle->y[pair->i[i]]-particle->y[pair->j[i]])/pow(PTC_SML,2);
