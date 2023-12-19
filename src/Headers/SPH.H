@@ -7,17 +7,17 @@
 #define DOMAIN_LENGTH 12.0    //computational domain length
 #define DOAMIN_DEEPTH 5.0     //computational domain deepth
 
-#define PTC_SPACING 0.001    //spacing between particles
-#define PTC_SML 0.001    //smoothed leng of particles
-#define PTC_REGION_RADIUS 0.002 //particle support region radius,which is PTC_SML*2
+#define PTC_SPACING 0.1    //spacing between particles
+#define PTC_SML 0.1    //smoothed leng of particles
+#define PTC_REGION_RADIUS 0.2 //particle support region radius,which is PTC_SML*2
 
 
 #define DOMAIN_LENGTH_NUM (int)(DOMAIN_LENGTH/PTC_SPACING+1)
 #define DOMAIN_DEEPTH_NUM (int)(DOAMIN_DEEPTH/PTC_SPACING+1)
 
 #define FLUID_PTC_NUM (DOMAIN_LENGTH_NUM)*(DOMAIN_DEEPTH_NUM)  //液体例子数
-#define SOLID_PTC_NUM 1600  //刚体粒子数
-#define VIRTUAL_PTC_NUM 1600    //虚拟粒子数
+#define SOLID_PTC_NUM 0  //刚体粒子数
+#define VIRTUAL_PTC_NUM 0    //虚拟粒子数
 #define PTC_TOL_NUM (FLUID_PTC_NUM+SOLID_PTC_NUM+VIRTUAL_PTC_NUM)   //总粒子数
 
 // two paritcles distance
@@ -57,11 +57,11 @@ typedef struct
     int *j;
 }SPH_PAIR;
 
-extern SPH_PARTICLE particle;
-extern SPH_PAIR pare;
+//extern SPH_PARTICLE particle;
+//extern SPH_PAIR pare;
 
-extern double x[PTC_TOL_NUM];
-extern double y[PTC_TOL_NUM];
+//extern double x[PTC_TOL_NUM];
+//extern double y[PTC_TOL_NUM];
 
 
 

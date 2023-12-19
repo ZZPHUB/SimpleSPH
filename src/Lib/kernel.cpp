@@ -3,17 +3,17 @@ using namespace std;
 
 void ptc_kernel(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel)
 {
-    #pragma omp parallel sections num_threads(3)
+    double temp_dis;
+    #pragma omp parallel sections private(temp_dis) num_threads(3)
     {
         #pragma omp section 
         {
             //temp particle distance
-            double temp_dis = 0;
             //calculate the kernel value
             for(int i=0;i<pair->total;i++)
             {   
-                //temp_dis = PTC_DISTANCE(pair->i[i],pair->j[i]);
-                temp_dis = sqrt(pow(particle->x[pair->i[i]]-particle->x[pair->j[i]],2)+pow(particle->y[pair->i[i]]-particle->y[pair->j[i]],2));
+                temp_dis = PTC_DISTANCE(pair->i[0],pair->j[0]);
+                //temp_dis = sqrt(pow(particle->x[pair->i[i]]-particle->x[pair->j[i]],2)+pow(particle->y[pair->i[i]]-particle->y[pair->j[i]],2));
                 if(0<temp_dis && temp_dis < PTC_SML)
                 {
                     kernel->w[i] = ALPHA*(2.0/3.0-pow(temp_dis,2)+0.5*pow(temp_dis,3));
@@ -27,12 +27,11 @@ void ptc_kernel(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel)
         #pragma omp section
         {
             //temp paritcle distance 
-            double temp_dis;
             //calculate the x-direction differential kernel value
             for(int i=0;i<pair->total;i++)
             {
-                //temp_dis = PTC_DISTANCE(pair->i[i],pair->j[i]);
-                temp_dis = sqrt(pow(particle->x[pair->i[i]]-particle->x[pair->j[i]],2)+pow(particle->y[pair->i[i]]-particle->y[pair->j[i]],2));
+                temp_dis = PTC_DISTANCE(pair->i[2],pair->j[2]);
+                //temp_dis = sqrt(pow(particle->x[pair->i[i]]-particle->x[pair->j[i]],2)+pow(particle->y[pair->i[i]]-particle->y[pair->j[i]],2));
                 if(0<temp_dis && temp_dis < PTC_SML)
                 {
                     kernel->dwdx[i] = ALPHA*(-2.0+1.5*temp_dis/PTC_SML)*(particle->x[pair->i[i]]-particle->x[pair->j[i]])/pow(PTC_SML,2);
@@ -46,12 +45,11 @@ void ptc_kernel(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel)
         #pragma omp section
         {
             //temp paritcle distance 
-            double temp_dis;
             //calculate the x-direction differential kernel value
             for(int i=0;i<pair->total;i++)
             {
-                //temp_dis = PTC_DISTANCE(pair->i[i],pair->j[i]);
-                temp_dis = sqrt(pow(particle->x[pair->i[i]]-particle->x[pair->j[i]],2)+pow(particle->y[pair->i[i]]-particle->y[pair->j[i]],2));
+                temp_dis = PTC_DISTANCE(pair->i[1],pair->j[1]);
+                //temp_dis = sqrt(pow(particle->x[pair->i[i]]-particle->x[pair->j[i]],2)+pow(particle->y[pair->i[i]]-particle->y[pair->j[i]],2));
                 if(0<temp_dis && temp_dis < PTC_SML)
                 {
                     kernel->dwdx[i] = ALPHA*(-2.0+1.5*temp_dis/PTC_SML)*(particle->y[pair->i[i]]-particle->y[pair->j[i]])/pow(PTC_SML,2);

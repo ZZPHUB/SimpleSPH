@@ -22,14 +22,24 @@ int main(void)
     particle.pressure = (double *)(malloc(sizeof(double)*PTC_TOL_NUM));
     particle.type = (char *)(malloc(sizeof(char)*PTC_TOL_NUM));  
 
-    pair.i = (int *)(malloc(sizeof(int)*4*PTC_TOL_NUM));
-    pair.j = (int *)(malloc(sizeof(int)*4*PTC_TOL_NUM));
-    ptc_generate(&particle);//generate the fluid solid and dummy particles
-
     kernel.w = (double *)(malloc(sizeof(double)*4*PTC_TOL_NUM));
     kernel.dwdx = (double *)(malloc(sizeof(double)*4*PTC_TOL_NUM));
     kernel.dwdy = (double *)(malloc(sizeof(double)*4*PTC_TOL_NUM));
+   
+    pair.total = 0; 
+    pair.i = (int *)(malloc(sizeof(int)*4*PTC_TOL_NUM));
+    pair.j = (int *)(malloc(sizeof(int)*4*PTC_TOL_NUM));
 
+    ptc_generate(&particle);//generate the fluid solid and dummy particles
+    cout << particle.x[3] << " " << particle.y[3] << endl;
+    nnps_direct(&particle,&pair);
+    cout << pair.total << endl;
+/*
+    for(int i=0;i<pair.total;i=i+1){
+    //cout << sqrt(pow(particle.x[pair.i[i]]-particle.x[pair.j[i]],2)+pow(particle.y[pair.i[i]]-particle.y[pair.j[i]],2)) << endl;
+    cout << pair.i[i] << " " << pair.j[i] << endl;
+    }
+    //cout << PTC_DISTANCE(pair.i[2],pair.j[2]) << endl;
     ptc_kernel(&particle,&pair,&kernel);
     cout << "total interact particle num is " << pair.total << endl;
 
@@ -50,25 +60,26 @@ int main(void)
     }
     
     writefile.close();
+    */
 
-    free(particle.x);
-    free(particle.y);
-    free(particle.vx);
-    free(particle.vy);
-    free(particle.accx);
-    free(particle.accy);
-    free(particle.density);
-    free(particle.dif_density);
-    free(particle.mass);
-    free(particle.pressure);
-    free(particle.type);
+    free((void *)particle.x);
+    free((void *)particle.y);
+    free((void *)particle.vx);
+    free((void *)particle.vy);
+    free((void *)particle.accx);
+    free((void *)particle.accy);
+    free((void *)particle.density);
+    free((void *)particle.dif_density);
+    free((void *)particle.mass);
+    free((void *)particle.pressure);
+    free((void *)particle.type);
 
-    free(kernel.w);
-    free(kernel.dwdx);
-    free(kernel.dwdy);
+    free((void *)kernel.w);
+    free((void *)kernel.dwdx);
+    free((void *)kernel.dwdy);
     
-    free(pair.i);
-    free(pair.j);
+    free((void *)pair.i);
+    free((void *)pair.j);
     return 0;
 }
 
