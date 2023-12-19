@@ -1,32 +1,32 @@
 #include "PreProcess.H"
 
 
-
-void fluid_ptc_generate(double *f_x,double *f_y)
+void fluid_ptc_generate(SPH_PARTICLE *particle)
 {
     for(int i=0;i<(DOMAIN_LENGTH_NUM);i++)
     {
         for(int j=0;j<(DOMAIN_DEEPTH_NUM);j++)
         {
-            f_x[i*(DOMAIN_DEEPTH_NUM)+j] = i*PTC_SPACING;
-            f_y[i*(DOMAIN_DEEPTH_NUM)+j] = j*PTC_SPACING;
+            particle->x[i*(DOMAIN_DEEPTH_NUM)+j] = i*PTC_SPACING;
+            particle->y[i*(DOMAIN_DEEPTH_NUM)+j] = j*PTC_SPACING;
+            particle->type[i*(DOMAIN_DEEPTH_NUM)+j] = 0;
         }
     }
 }
 
-void solid_ptc_generate(double *s_x,double *s_y)
+void solid_ptc_generate(SPH_PARTICLE *particle)
 {
 
 }
 
-void virtual_ptc_generate(double *v_x,double *v_y)
+void virtual_ptc_generate(SPH_PARTICLE *particle)
 {
 
 }
 
-void ptc_generate(double *p_x,double *p_y)
+void ptc_generate(SPH_PARTICLE *particle)
 {
-    fluid_ptc_generate(p_x,p_y);
-    solid_ptc_generate(p_x,p_y);
-    virtual_ptc_generate(p_x,p_y);
+    fluid_ptc_generate(particle);
+    solid_ptc_generate(particle);
+    virtual_ptc_generate(particle);
 }

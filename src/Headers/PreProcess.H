@@ -6,5 +6,6 @@
 #include "SPH.H"
 
 /* Extern Function Here*/
-extern void ptc_generate(double *,double *);
+extern void ptc_generate(SPH_PARTICLE *);
+extern void ptc_init(SPH_PARTICLE *);
 #endif

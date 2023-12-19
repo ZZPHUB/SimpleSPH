@@ -5,31 +5,19 @@ using namespace std;
 
 int main(void)
 { 
-    //get_max_men();
     SPH_PARTICLE particle;
     SPH_KERNEL kernel;
-    SPH_PARE pare;
+    SPH_PAIR pair;
 
-
-    /************stack is too small***************
-    double x[PTC_TOL_NUM]={0};
-    double y[PTC_TOL_NUM]={0};
-    double vx[PTC_TOL_NUM]={0};
-    double vy[PTC_TOL_NUM]={0};
-    double pressure[PTC_TOL_NUM]={0};
-    double density[PTC_TOL_NUM]={0};
-    char type[PTC_TOL_NUM]={0};
-    ***********************************************/
-
-   
-
+    /************stack is too small,so init data in heap***************/
     particle.x = (double *)(malloc(sizeof(double)*PTC_TOL_NUM));
     particle.y = (double *)(malloc(sizeof(double)*PTC_TOL_NUM));
     particle.vx = (double *)(malloc(sizeof(double)*PTC_TOL_NUM));
     particle.vy = (double *)(malloc(sizeof(double)*PTC_TOL_NUM));
     particle.pressure = (double *)(malloc(sizeof(double)*PTC_TOL_NUM));
     particle.type = (char *)(malloc(sizeof(char)*PTC_TOL_NUM));  
-    ptc_generate(particle.x,particle.y);
+    ptc_generate(&particle);//generate the fluid solid and dummy particles
+    ptc_init(&particle); //particles init values
 
     ofstream writefile;
     writefile.open("../data/init.vtk");
