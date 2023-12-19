@@ -7,6 +7,11 @@ INCLUDE = -I./Headers
 BUILD_DIR = ./build
 OBJ = $(addprefix $(BUILD_DIR)/,$(patsubst %.cpp,%.o,$(SRC))) 
 
+ifeq ($(ver), debug)
+CPPFLAGS = -c -g -Ddebug
+else
+CPPFLAGS = -c 
+endif
 
 TARGET = run
 
@@ -24,7 +29,7 @@ $(TARGET): $(OBJ)
 # 上一句目标文件依赖一大堆.o文件，这句表示所有.o都由相应名字的.cpp文件自动生成
 $(BUILD_DIR)/%.o:%.cpp
 	if [ ! -d $(BUILD_DIR) ]; then mkdir -p $(BUILD_DIR); fi;\
-	$(CC) -c -fopenmp $(INCLUDE) -o $@ $^ 
+	$(CC) $(CPPFLAGS) -fopenmp $(INCLUDE) -o $@ $^ 
 
 debug: $(TARGET)
 
