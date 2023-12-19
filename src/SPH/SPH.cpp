@@ -51,7 +51,24 @@ int main(void)
     
     writefile.close();
 
+    free(particle.x);
+    free(particle.y);
+    free(particle.vx);
+    free(particle.vy);
+    free(particle.accx);
+    free(particle.accy);
+    free(particle.density);
+    free(particle.dif_density);
+    free(particle.mass);
+    free(particle.pressure);
+    free(particle.type);
 
+    free(kernel.w);
+    free(kernel.dwdx);
+    free(kernel.dwdy);
+    
+    free(pair.i);
+    free(pair.j);
     return 0;
 }
 
