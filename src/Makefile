@@ -42,5 +42,3 @@ $(BUILD_DIR)/%.o:%.cpp
 clean:
 	rm -f $(OBJ) $(TARGET)
 
-debug:
-	echo $(SRC) $(OBJ)
