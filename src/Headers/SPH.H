@@ -7,8 +7,8 @@
 #define DOMAIN_LENGTH 12.0    //computational domain length
 #define DOAMIN_DEEPTH 5.0     //computational domain deepth
 
-#define PTC_SPACING 0.1    //spacing between particles
-#define PTC_SML 0.1    //smoothed leng of particles
+#define PTC_SPACING 0.01    //spacing between particles
+#define PTC_SML 0.01    //smoothed leng of particles
 #define PTC_REGION_RADIUS 0.2 //particle support region radius,which is PTC_SML*2
 
 
