@@ -18,7 +18,7 @@ void ptc_init(SPH_PARTICLE *particle)
                 particle->mass[i] = 1000.0*pow(PTC_SPACING,3);
             }
         }
-        #pragma opm section
+        #pragma omp section
         {
             for(int i=0;i<PTC_TOL_NUM;i++)
             {
