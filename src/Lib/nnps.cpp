@@ -2,7 +2,7 @@
 using namespace std;
 
 void nnps_direct(SPH_PARTICLE *particle,SPH_PAIR *pair)
-{   
+{   cout << "here in nnps" << endl;
     pair->total = 0;
     #pragma omp parallel num_threads(8)
     {
