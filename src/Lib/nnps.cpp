@@ -26,3 +26,80 @@ void nnps_direct(SPH_PARTICLE *particle,SPH_PAIR *pair)
         }
     }
 }
+
+void nnps_mesh(SPH_PARTICLE *particle,SPH_PAIR *pair,unsigned int ***mesh)
+{
+    #pragma omp parallel for num_threads(6)
+    for(int i=0;i<MESH_DEEPTH_NUM;i++)
+    {
+        for(int j=0;j<MESH_LENGTH_NUM;j++)
+        {
+            for(unsigned int k=0;k<mesh[i][j][MESH_PTC_NUM-1];k++)
+            {
+                //mesh[i][j]-->mesh[i][j]
+                for(unsigned int m=0;m<mesh[i][j][MESH_PTC_NUM-1];m++)
+                {
+                    if(PTC_DISTANCE(mesh[i][j][k],mesh[i][j][m])<=PTC_REGION_RADIUS)
+                    {
+                        pair->i[pair->total] = mesh[i][j][k];
+                        pair->j[pair->total] = mesh[i][j][m];
+                        pair->total++;
+                    }
+                }
+                //mesh[i][j]-->mesh[i][j+1]
+                if(j<(MESH_LENGTH_NUM-1))
+                {
+                    for(unsigned int m=0;m<mesh[i][j+1][MESH_PTC_NUM-1];m++)
+                    {
+                        if(PTC_DISTANCE(mesh[i][j][k],mesh[i][j+1][m])<=PTC_REGION_RADIUS)
+                        {
+                            pair->i[pair->total] = mesh[i][j][k];
+                            pair->j[pair->total] = mesh[i][j+1][m];
+                            pair->total++;
+                        }
+                    }
+                }
+                //mesh[i][j]-->mesh[i+1][j]
+                if(i<(MESH_DEEPTH_NUM-1))
+                {
+                    for(unsigned int m=0;m<mesh[i+1][j][MESH_PTC_NUM-1];m++)
+                    {
+                        if(PTC_DISTANCE(mesh[i][j][k],mesh[i+1][j][m])<=PTC_REGION_RADIUS)
+                        {
+                            pair->i[pair->total] = mesh[i][j][k];
+                            pair->j[pair->total] = mesh[i+1][j][m];
+                            pair->total++;
+                        }
+                    }
+                }
+                //mesh[i][j]-->mesh[i+1][j+1]
+                if(i < (MESH_DEEPTH_NUM-1) && j < (MESH_LENGTH_NUM-1))
+                {
+                    for(unsigned int m=0;m<mesh[i+1][j+1][MESH_PTC_NUM-1];m++)
+                    {
+                        if(PTC_DISTANCE(mesh[i][j][k],mesh[i+1][j+1][m])<=PTC_REGION_RADIUS)
+                        {
+                            pair->i[pair->total] = mesh[i][j][k];
+                            pair->j[pair->total] = mesh[i+1][j+1][m];
+                            pair->total++;
+                        }
+                    }
+
+                }
+                //mesh[i][j]-->mesh[i-1][j+1]
+                if(i > 0 && j<(MESH_LENGTH_NUM-1))
+                {
+                    for(unsigned int m=0;m<mesh[i-1][j+1][MESH_PTC_NUM-1];m++)
+                    {
+                        if(PTC_DISTANCE(mesh[i][j][k],mesh[i-1][j+1][m])<=PTC_REGION_RADIUS)
+                        {
+                            pair->i[pair->total] = mesh[i][j][k];
+                            pair->j[pair->total] = mesh[i-1][j+1][m];
+                            pair->total++;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
