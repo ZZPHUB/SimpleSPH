@@ -2,9 +2,9 @@
 
 void ptc_init(SPH_PARTICLE *particle)
 {
-//    #pragma omp parallel num_threads(8)
-//    {
-//        #pragma omp for
+    #pragma omp parallel num_threads(8)
+    {
+        #pragma omp for
 //       {
             for(int i=0;i<PTC_TOL_NUM;i++)
             {
@@ -14,5 +14,5 @@ void ptc_init(SPH_PARTICLE *particle)
                 particle->density[i] = 1000;
             }
 //        }
-//    }
+    }
 }
