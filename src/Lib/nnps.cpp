@@ -30,9 +30,9 @@ void nnps_direct(SPH_PARTICLE *particle,SPH_PAIR *pair)
 void nnps_mesh(SPH_PARTICLE *particle,SPH_PAIR *pair,unsigned int ***mesh)
 {
     //#pragma omp parallel for num_threads(6)
-    for(int i=0;i<MESH_DEEPTH_NUM;i++)
+    for(int j=0;j<MESH_LENGTH_NUM;j++)
     {
-        for(int j=0;j<MESH_LENGTH_NUM;j++)
+        for(int i=0;i<MESH_DEEPTH_NUM;i++)
         {
             for(unsigned int k=0;k<mesh[i][j][MESH_PTC_NUM-1];k++)
             {
