@@ -4,9 +4,9 @@ using namespace std;
 void nnps_direct(SPH_PARTICLE *particle,SPH_PAIR *pair)
 {   cout << "here in nnps" << endl;
     pair->total = 0;
-    #pragma omp parallel num_threads(8)
+    #pragma omp parallel num_threads(7)
     {
-        #pragma omp for
+        #pragma omp for schedule(static,PTC_TOL_NUM/7)
         for(int i=0;i<PTC_TOL_NUM;i++)
         {
             for(int j=i+1;j<PTC_TOL_NUM;j++)
