@@ -37,7 +37,7 @@ void nnps_mesh(SPH_PARTICLE *particle,SPH_PAIR *pair,unsigned int ***mesh)
             for(unsigned int k=0;k<mesh[i][j][MESH_PTC_NUM-1];k++)
             {
                 //mesh[i][j]-->mesh[i][j]
-                for(unsigned int m=0;m<mesh[i][j][MESH_PTC_NUM-1];m++)
+                for(unsigned int m=k+1;m<mesh[i][j][MESH_PTC_NUM-1];m++)
                 {
                     if(PTC_DISTANCE(mesh[i][j][k],mesh[i][j][m])<=PTC_REGION_RADIUS)
                     {
