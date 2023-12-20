@@ -12,6 +12,7 @@ extern void get_max_men(void);
 extern void set_max_men(void);
 extern void nnps_direct(SPH_PARTICLE *,SPH_PAIR *);
 extern void ptc_kernel(SPH_PARTICLE *,SPH_PAIR *,SPH_KERNEL *);
+extern void mesh_process(SPH_PARTICLE *,unsigned int ***);
 
 /* Define Symbols Here*/
 #define PI 3.14159265358

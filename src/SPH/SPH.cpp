@@ -11,6 +11,7 @@ int main(void)
     SPH_PAIR pair;
 
     /************stack is too small,so init data in heap***************/
+    //particle data init
     particle.x = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
     particle.y = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
     particle.vx = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
@@ -23,17 +24,37 @@ int main(void)
     particle.pressure = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
     particle.type = (char *)(calloc(PTC_TOL_NUM,sizeof(char)));  
 
+    //kernel data init
     kernel.w = (double *)(calloc(5*PTC_TOL_NUM,sizeof(double)));
     kernel.dwdx = (double *)(calloc(5*PTC_TOL_NUM,sizeof(double)));
     kernel.dwdy = (double *)(calloc(5*PTC_TOL_NUM,sizeof(double)));
    
+    //pair data init
     pair.total = 0; 
-    pair.i = (int *)(calloc(5*PTC_TOL_NUM,sizeof(int)));
-    pair.j = (int *)(calloc(5*PTC_TOL_NUM,sizeof(int)));
+    pair.i = (unsigned int *)(calloc(5*PTC_TOL_NUM,sizeof(unsigned int)));
+    pair.j = (unsigned int *)(calloc(5*PTC_TOL_NUM,sizeof(unsigned int)));
+
+    //mesh data init
+    unsigned int ***mesh = (unsigned int ***)(calloc(MESH_DEEPTH_NUM,sizeof(unsigned int **)));
+    for(int i=0;i<MESH_DEEPTH_NUM;i++)
+    {
+        mesh[i] = (unsigned int **)(calloc(MESH_LENGTH_NUM,sizeof(unsigned int *)));
+        for(int j=0;j<MESH_LENGTH_NUM;j++)
+        {
+            mesh[i][j] = (unsigned int *)(calloc(2*PTC_TOL_NUM/MESH_TOL_NUM + 1,sizeof(unsigned int)));
+        }
+    }
 
     ptc_generate(&particle);//generate the fluid solid and dummy particles
-    
-    nnps_direct(&particle,&pair);
+    mesh_process(&particle,mesh);//generate the mesh 
+
+    unsigned int head = mesh[0][0][2*PTC_TOL_NUM/MESH_TOL_NUM];
+    for(unsigned int i=0;i<head;i++)
+    {
+        cout << mesh[0][0][i] << endl;
+    }
+
+    //nnps_direct(&particle,&pair);
     
     cout << "total particles is " << PTC_TOL_NUM << endl;
     cout << "total interact particles is " << pair.total << endl;
