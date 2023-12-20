@@ -45,16 +45,17 @@ int main(void)
         }
     }
 
-    ptc_generate(&particle);//generate the fluid solid and dummy particles
-    mesh_process(&particle,mesh);//generate the mesh 
+    ptc_generate(&particle);    //generate the fluid solid and dummy particles
+    mesh_process(&particle,mesh);   //generate the mesh 
+    nnps_mesh(&particle,&pair,mesh);    //use mesh to search interactive pairs
 
+    /*
     unsigned int head = mesh[0][0][MESH_PTC_NUM-1];
     for(unsigned int i=0;i<head;i++)
     {
         cout << mesh[0][0][i] << endl;
     }
-
-    //nnps_direct(&particle,&pair);
+    */
     
     cout << "total particles is " << PTC_TOL_NUM << endl;
     cout << "total interact particles is " << pair.total << endl;
