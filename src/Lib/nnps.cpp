@@ -17,6 +17,11 @@ void nnps_direct(SPH_PARTICLE *particle,SPH_PAIR *pair)
                     pair->i[pair->total] = i;
                     pair->j[pair->total] = j;
                     pair->total = pair->total+1;
+
+                    if(i%10000 == 0)
+                    {
+                        cout << "i is " << i << endl;
+                    }
                 }
             }
         }
