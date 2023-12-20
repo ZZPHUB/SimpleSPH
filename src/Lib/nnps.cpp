@@ -9,6 +9,7 @@ void nnps_direct(SPH_PARTICLE *particle,SPH_PAIR *pair)
         #pragma omp for schedule(static,PTC_TOL_NUM/7)
         for(int i=0;i<PTC_TOL_NUM;i++)
         {
+            cout << "i is " << i << "thid is " << omp_get_threads_num() << endl;
             for(int j=i+1;j<PTC_TOL_NUM;j++)
             {
             /*  if the distance between the particles i and j is less or equ to PTC_RADIUS,then they are a pair*/
@@ -17,11 +18,6 @@ void nnps_direct(SPH_PARTICLE *particle,SPH_PAIR *pair)
                     pair->i[pair->total] = i;
                     pair->j[pair->total] = j;
                     pair->total = pair->total+1;
-
-                    if(i%10000 == 0)
-                    {
-                        cout << "i is " << i << endl;
-                    }
                 }
             }
         }
