@@ -19,7 +19,7 @@ void nnps_direct(SPH_PARTICLE *particle,SPH_PAIR *pair)
                     pair->j[pair->total] = j;
                     pair->total = pair->total+1;
 
-                    if(omp_get_thread_num()==6) cout << "total is " << pair->total << "thid is " << omp_get_thread_num() << endl;
+                    //if(omp_get_thread_num()==6) cout << "total is " << pair->total << "thid is " << omp_get_thread_num() << endl;
 
                 }
             }
@@ -29,7 +29,7 @@ void nnps_direct(SPH_PARTICLE *particle,SPH_PAIR *pair)
 
 void nnps_mesh(SPH_PARTICLE *particle,SPH_PAIR *pair,unsigned int ***mesh)
 {
-    #pragma omp parallel for num_threads(6)
+    //#pragma omp parallel for num_threads(6)
     for(int i=0;i<MESH_DEEPTH_NUM;i++)
     {
         for(int j=0;j<MESH_LENGTH_NUM;j++)

@@ -26,13 +26,13 @@ int main(void)
 
     //kernel data init
     kernel.w = (double *)(calloc(5*PTC_TOL_NUM,sizeof(double)));
-    kernel.dwdx = (double *)(calloc(5*PTC_TOL_NUM,sizeof(double)));
-    kernel.dwdy = (double *)(calloc(5*PTC_TOL_NUM,sizeof(double)));
+    kernel.dwdx = (double *)(calloc(10*PTC_TOL_NUM,sizeof(double)));
+    kernel.dwdy = (double *)(calloc(10*PTC_TOL_NUM,sizeof(double)));
    
     //pair data init
     pair.total = 0; 
-    pair.i = (unsigned int *)(calloc(5*PTC_TOL_NUM,sizeof(unsigned int)));
-    pair.j = (unsigned int *)(calloc(5*PTC_TOL_NUM,sizeof(unsigned int)));
+    pair.i = (unsigned int *)(calloc(10*PTC_TOL_NUM,sizeof(unsigned int)));
+    pair.j = (unsigned int *)(calloc(10*PTC_TOL_NUM,sizeof(unsigned int)));
 
     //mesh data init
     unsigned int ***mesh = (unsigned int ***)(calloc(MESH_DEEPTH_NUM,sizeof(unsigned int **)));
@@ -60,7 +60,7 @@ int main(void)
     cout << "total particles is " << PTC_TOL_NUM << endl;
     cout << "total interact particles is " << pair.total << endl;
     
-    ptc_kernel(&particle,&pair,&kernel);
+    ptc_kernel_serial(&particle,&pair,&kernel);
     ptc_init(&particle); //particles init values
 
     ofstream writefile;
@@ -98,6 +98,7 @@ int main(void)
     
     free(pair.i);
     free(pair.j);
+    free(mesh);
     return 0;
 }
 
