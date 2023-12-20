@@ -25,7 +25,7 @@ int main(void)
     particle.type = (char *)(calloc(PTC_TOL_NUM,sizeof(char)));  
 
     //kernel data init
-    kernel.w = (double *)(calloc(5*PTC_TOL_NUM,sizeof(double)));
+    kernel.w = (double *)(calloc(10*PTC_TOL_NUM,sizeof(double)));
     kernel.dwdx = (double *)(calloc(10*PTC_TOL_NUM,sizeof(double)));
     kernel.dwdy = (double *)(calloc(10*PTC_TOL_NUM,sizeof(double)));
    
