@@ -9,7 +9,7 @@
 
 #define PTC_SPACING 0.01    //spacing between particles
 #define PTC_SML 0.01    //smoothed leng of particles
-#define PTC_REGION_RADIUS 0.02 //particle support region radius,which is PTC_SML*2
+#define PTC_REGION_RADIUS 0.015 //particle support region radius,which is PTC_SML*2
 
 
 #define DOMAIN_LENGTH_NUM (int)(DOMAIN_LENGTH/PTC_SPACING+1)
