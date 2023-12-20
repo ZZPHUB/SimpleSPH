@@ -41,14 +41,14 @@ int main(void)
         mesh[i] = (unsigned int **)(calloc(MESH_LENGTH_NUM,sizeof(unsigned int *)));
         for(int j=0;j<MESH_LENGTH_NUM;j++)
         {
-            mesh[i][j] = (unsigned int *)(calloc(2*PTC_TOL_NUM/MESH_TOL_NUM + 1,sizeof(unsigned int)));
+            mesh[i][j] = (unsigned int *)(calloc(MESH_PTC_NUM,sizeof(unsigned int)));
         }
     }
 
     ptc_generate(&particle);//generate the fluid solid and dummy particles
     mesh_process(&particle,mesh);//generate the mesh 
 
-    unsigned int head = mesh[0][0][2*PTC_TOL_NUM/MESH_TOL_NUM];
+    unsigned int head = mesh[0][0][MESH_PTC_NUM-1];
     for(unsigned int i=0;i<head;i++)
     {
         cout << mesh[0][0][i] << endl;

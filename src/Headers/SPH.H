@@ -9,7 +9,7 @@
 
 #define PTC_SPACING 0.01    //spacing between particles
 #define PTC_SML PTC_SPACING    //smoothed leng of particles
-#define PTC_REGION_RADIUS 2*PTC_SML //particle support region radius,which is PTC_SML*2
+#define PTC_REGION_RADIUS (2*PTC_SML) //particle support region radius,which is PTC_SML*2
 
 #define DOMAIN_LENGTH_NUM (int)(DOMAIN_LENGTH/PTC_SPACING-1)
 #define DOMAIN_DEEPTH_NUM (int)(DOAMIN_DEEPTH/PTC_SPACING-1)
@@ -19,10 +19,11 @@
 #define VIRTUAL_PTC_NUM 0    //virtual paritcles number
 #define PTC_TOL_NUM (FLUID_PTC_NUM+SOLID_PTC_NUM+VIRTUAL_PTC_NUM)   //total particles
 
-#define MESH_SPACING 10.0*PTC_SPACING //mesh spacing
+#define MESH_SPACING (PTC_SPACING*10.0) //mesh spacing
 #define MESH_LENGTH_NUM (int)(DOMAIN_LENGTH/MESH_SPACING) //length-direction mesh number
 #define MESH_DEEPTH_NUM (int)(DOAMIN_DEEPTH/MESH_SPACING) //deepth-direction mesh number
 #define MESH_TOL_NUM (MESH_LENGTH_NUM*MESH_DEEPTH_NUM) //total mesh number
+#define MESH_PTC_NUM 201
 
 // two paritcles distance
 #define PTC_DISTANCE(a,b) (sqrt(pow(particle->x[a]-particle->x[b],2)+pow(particle->y[a]-particle->y[b],2)))
@@ -63,7 +64,7 @@ typedef struct
 
 
 /* Headers Include Here*/
-#include <omp.h>
+//#include <omp.h>
 #include "Lib.H"
 #include "PreProcess.H"
 #include "PostProcess.H"
