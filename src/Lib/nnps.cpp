@@ -4,8 +4,9 @@ using namespace std;
 void nnps_direct(SPH_PARTICLE *particle,SPH_PAIR *pair)
 {   
     pair->total = 0;
-    #pragma omp parallel for num_threads(8)
-//    {
+    #pragma omp parallel num_threads(8)
+    {
+        #pragma omp for
         for(int i=0;i<PTC_TOL_NUM;i++)
         {
             for(int j=i+1;j<PTC_TOL_NUM;j++)
@@ -19,5 +20,5 @@ void nnps_direct(SPH_PARTICLE *particle,SPH_PAIR *pair)
                 }
             }
         }
-//    }
+    }
 }
