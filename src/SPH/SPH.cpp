@@ -22,7 +22,7 @@ int main(void)
     particle.mass = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
     particle.dif_density = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
     particle.pressure = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
-    particle.type = (char *)(calloc(PTC_TOL_NUM,sizeof(char)));  
+    particle.type = (int *)(calloc(PTC_TOL_NUM,sizeof(int)));  
 
     //kernel data init
     kernel.w = (double *)(calloc(10*PTC_TOL_NUM,sizeof(double)));
@@ -78,11 +78,11 @@ int main(void)
     }
 
     writefile << "POINT_DATA" << " " << PTC_TOL_NUM << endl;
-    writefile << "SCALARS type double 1" << endl;
+    writefile << "SCALARS type int 1" << endl;
     writefile << "LOOKUP_TABLE DEFAULT" << endl;
     for(int i=0;i<PTC_TOL_NUM;i++)
     {
-        writefile <<setiosflags(ios::scientific)<< particle.type[i] << endl;
+        writefile << particle.type[i] << endl;
     }
 
 

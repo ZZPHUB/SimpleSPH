@@ -24,13 +24,13 @@ void solid_ptc_generate(SPH_PARTICLE *particle)
             if(i<=1 || i>= DOMAIN_LENGTH_NUM+2)
             {
                 particle->x[FLUID_PTC_NUM+k] = (i-2)*PTC_SPACING;
-                particle->y[FLUID_PTC_NUM+k] = j*PTC_SPACING;
+                particle->y[FLUID_PTC_NUM+k] = (j-2)*PTC_SPACING;
                 particle->type[FLUID_PTC_NUM+k] = -1;
                 k++;
             }
             else if (j <= 1)
             {
-                particle->x[FLUID_PTC_NUM+k] = i*PTC_SPACING;
+                particle->x[FLUID_PTC_NUM+k] = (i-2)*PTC_SPACING;
                 particle->y[FLUID_PTC_NUM+k] = (j-2)*PTC_SPACING;
                 particle->type[FLUID_PTC_NUM+k] = -1;
                 k++;
