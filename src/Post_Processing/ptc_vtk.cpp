@@ -17,8 +17,8 @@ void ptc_vtk_mesh(SPH_PARTICLE *particle,unsigned int ***mesh)
         {
             for(int m=0;m<mesh[i][j][MESH_PTC_NUM-1];m++)
             {
-                writefile << setiosflags(ios::scientific) <<particle->x[m] << " " \
-                << particle->y[m] << " " << 0.0 << endl;
+                writefile << setiosflags(ios::scientific) <<particle->x[mesh[i][j][m]] << " " \
+                << particle->y[mesh[i][j][m]] << " " << 0.0 << endl;
             }
         }
     }
@@ -32,7 +32,7 @@ void ptc_vtk_mesh(SPH_PARTICLE *particle,unsigned int ***mesh)
         {
             for(int m=0;m<mesh[i][j][MESH_PTC_NUM-1];m++)
             {
-                writefile << setiosflags(ios::scientific) << (double)(0.000001*particle->type[m]) << endl;
+                writefile << setiosflags(ios::scientific) << (double)(0.000001*particle->type[mesh[i][j][m]]) << endl;
             }
         }
     }
