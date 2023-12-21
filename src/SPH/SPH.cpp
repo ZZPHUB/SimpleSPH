@@ -76,7 +76,17 @@ int main(void)
     {
         writefile << setiosflags(ios::scientific) << particle.x[i]<< " " << particle.y[i]<< " " << 0.0 << endl;
     }
-    
+
+    writefile << "POINT_DATA" << " " << PTC_TOL_NUM << endl;
+    writefile << "SCALARS type int i" << endl;
+    writefile << "LOOKUP_TABLE DEFAULT" << endl;
+    for(int i=0;i<FLUID_PTC_NUM;i++)
+    {
+        writefile << particle.type[i] << endl;
+    }
+
+
+
     writefile.close();
     
 

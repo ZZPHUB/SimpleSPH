@@ -7,16 +7,16 @@
 #define DOMAIN_LENGTH 12.0    //computational domain length
 #define DOAMIN_DEEPTH 5.0     //computational domain deepth
 
-#define PTC_SPACING 0.01    //spacing between particles
+#define PTC_SPACING 0.1    //spacing between particles
 #define PTC_SML PTC_SPACING    //smoothed leng of particles
 #define PTC_REGION_RADIUS (2*PTC_SML) //particle support region radius,which is PTC_SML*2
 
-#define DOMAIN_LENGTH_NUM (int)(DOMAIN_LENGTH/PTC_SPACING-1)
-#define DOMAIN_DEEPTH_NUM (int)(DOAMIN_DEEPTH/PTC_SPACING-1)
+#define DOMAIN_LENGTH_NUM (int)(DOMAIN_LENGTH/PTC_SPACING-2)
+#define DOMAIN_DEEPTH_NUM (int)(DOAMIN_DEEPTH/PTC_SPACING-2)
 
 #define FLUID_PTC_NUM (DOMAIN_LENGTH_NUM)*(DOMAIN_DEEPTH_NUM)  //fluid particles number
 #define SOLID_PTC_NUM 0  //rigid body particles number
-#define VIRTUAL_PTC_NUM 0    //virtual paritcles number
+#define VIRTUAL_PTC_NUM (int)((DOMAIN_LENGTH_NUM+4)*(DOMAIN_DEEPTH_NUM+2)-FLUID_PTC_NUM)  //virtual paritcles number
 #define PTC_TOL_NUM (FLUID_PTC_NUM+SOLID_PTC_NUM+VIRTUAL_PTC_NUM)   //total particles
 
 #define MESH_SPACING (PTC_SPACING*10.0) //mesh spacing
