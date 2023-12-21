@@ -6,6 +6,9 @@
 #include "sys/resource.h"
 #include "cmath"
 #include <iostream>
+#include <fstream>
+#include <iomanip>
+#include <stdlib.h>
 
 /* Extern Function Here*/
 extern void get_max_men(void);
@@ -15,7 +18,7 @@ extern void nnps_mesh(SPH_PARTICLE *,SPH_PAIR *,unsigned int ***);
 extern void ptc_kernel_serial(SPH_PARTICLE *,SPH_PAIR *,SPH_KERNEL *);
 extern void ptc_kernel_parallel(SPH_PARTICLE *,SPH_PAIR *,SPH_KERNEL *);
 extern void mesh_process(SPH_PARTICLE *,unsigned int ***);
-
+extern void ptc_vtk_mesh(SPH_PARTICLE *,unsigned int ***);
 
 /* Define Symbols Here*/
 #define PI 3.14159265358

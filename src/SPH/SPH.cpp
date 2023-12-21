@@ -22,7 +22,7 @@ int main(void)
     particle.mass = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
     particle.dif_density = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
     particle.pressure = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
-    particle.type = (int *)(calloc(PTC_TOL_NUM,sizeof(int)));  
+    particle.type = (char *)(calloc(PTC_TOL_NUM,sizeof(char)));  
 
     //kernel data init
     kernel.w = (double *)(calloc(10*PTC_TOL_NUM,sizeof(double)));
@@ -63,32 +63,8 @@ int main(void)
     ptc_kernel_serial(&particle,&pair,&kernel);
     ptc_init(&particle); //particles init values
 
-    ofstream writefile;
-    writefile.open("../data/init.vtk");
+    ptc_vtk_mesh(&particle,mesh);
 
-    writefile << "# vtk DataFile Version 3.0" << endl;
-    writefile << "init data" << endl;
-    writefile << "ASCII" << endl;
-    writefile << "DATASET UNSTRUCTURED_GRID" << endl;
-    writefile << "POINTS " << PTC_TOL_NUM<< " " << "double" << endl;
-
-    for(int i=0;i<PTC_TOL_NUM;i++)
-    {
-        writefile << setiosflags(ios::scientific) << particle.x[i]<< " " << particle.y[i]<< " " << 0.0 << endl;
-    }
-
-    writefile << "POINT_DATA" << " " << PTC_TOL_NUM << endl;
-    writefile << "SCALARS type int 1" << endl;
-    writefile << "LOOKUP_TABLE DEFAULT" << endl;
-    for(int i=0;i<PTC_TOL_NUM;i++)
-    {
-        writefile << particle.type[i] << endl;
-    }
-
-
-
-    writefile.close();
-    
 
     free(particle.x);
     free(particle.y);

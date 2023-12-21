@@ -42,7 +42,7 @@ typedef  struct
     double *density;    //density of particle
     double *dif_density;    //differential density value
     double *mass;   //mass of particle
-    int *type; //particle type:0 denote fulid;1 denote rigid;-1 denote dummy particles
+    char *type; //particle type:0 denote fulid;1 denote rigid;-1 denote dummy particles
 }SPH_PARTICLE;
 
 typedef struct 
