@@ -15,7 +15,7 @@ extern void get_max_men(void);
 extern void set_max_men(void);
 extern void nnps_direct(SPH_PARTICLE *,SPH_PAIR *);
 extern void nnps_mesh(SPH_PARTICLE *,SPH_PAIR *,unsigned int ***);
-extern void nnps_check(SPH_PAIR *,SPH_PAIR *,unsigned int *)
+extern void nnps_check(SPH_PAIR *,SPH_PAIR *,unsigned int *);
 extern void ptc_kernel_serial(SPH_PARTICLE *,SPH_PAIR *,SPH_KERNEL *);
 extern void ptc_kernel_parallel(SPH_PARTICLE *,SPH_PAIR *,SPH_KERNEL *);
 extern void mesh_process(SPH_PARTICLE *,unsigned int ***);

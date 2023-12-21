@@ -39,11 +39,11 @@ void nnps_mesh(SPH_PARTICLE *particle,SPH_PAIR *pair,unsigned int ***mesh)
                 {
                     if(PTC_DISTANCE(mesh[i][j][k],mesh[i][j][m])<=PTC_REGION_RADIUS)
                     {
-			omp_set_lock(&lock);
+			            omp_set_lock(&lock);
                         pair->i[pair->total] = mesh[i][j][k];
                         pair->j[pair->total] = mesh[i][j][m];
                         pair->total++;
-			omp_unset_lock(&lock);
+			            omp_unset_lock(&lock);
                     }
                 }
                 //mesh[i][j]-->mesh[i][j+1]
@@ -53,11 +53,11 @@ void nnps_mesh(SPH_PARTICLE *particle,SPH_PAIR *pair,unsigned int ***mesh)
                     {
                         if(PTC_DISTANCE(mesh[i][j][k],mesh[i][j+1][m])<=PTC_REGION_RADIUS)
                         {
-			    omp_set_lock(&lock);
+			                omp_set_lock(&lock);
                             pair->i[pair->total] = mesh[i][j][k];
                             pair->j[pair->total] = mesh[i][j+1][m];
                             pair->total++;
-			    omp_unset_lock(&lock);
+			                omp_unset_lock(&lock);
                         }
                     }
                 }
@@ -68,11 +68,11 @@ void nnps_mesh(SPH_PARTICLE *particle,SPH_PAIR *pair,unsigned int ***mesh)
                     {
                         if(PTC_DISTANCE(mesh[i][j][k],mesh[i+1][j][m])<=PTC_REGION_RADIUS)
                         {
-			    omp_set_lock(&lock);
+			                omp_set_lock(&lock);
                             pair->i[pair->total] = mesh[i][j][k];
                             pair->j[pair->total] = mesh[i+1][j][m];
                             pair->total++;
-			    omp_unset_lock(&lock);
+			                omp_unset_lock(&lock);
                         }
                     }
                 }
@@ -83,11 +83,11 @@ void nnps_mesh(SPH_PARTICLE *particle,SPH_PAIR *pair,unsigned int ***mesh)
                     {
                         if(PTC_DISTANCE(mesh[i][j][k],mesh[i+1][j+1][m])<=PTC_REGION_RADIUS)
                         {
-			    omp_set_lock(&lock);
+			                omp_set_lock(&lock);
                             pair->i[pair->total] = mesh[i][j][k];
                             pair->j[pair->total] = mesh[i+1][j+1][m];
                             pair->total++;
-			    omp_unset_lock(&lock);
+			                omp_unset_lock(&lock);
                         }
                     }
 
@@ -99,11 +99,11 @@ void nnps_mesh(SPH_PARTICLE *particle,SPH_PAIR *pair,unsigned int ***mesh)
                     {
                         if(PTC_DISTANCE(mesh[i][j][k],mesh[i+1][j-1][m])<=PTC_REGION_RADIUS)
                         {
-			    omp_set_lock(&lock);
+			                omp_set_lock(&lock);
                             pair->i[pair->total] = mesh[i][j][k];
                             pair->j[pair->total] = mesh[i+1][j-1][m];
                             pair->total++;
-			    omp_unset_lock(&lock);
+			                omp_unset_lock(&lock);
                         }
                     }
                 }
@@ -120,6 +120,10 @@ void nnps_check(SPH_PAIR *pair,SPH_PAIR *pair_direct,unsigned int *total)
         for(int j=0;j<pair_direct->total;j++)
         {
             if(pair->i[i]==pair_direct->i[j] && pair->j[i] == pair_direct->j[j])
+            {
+                (*total)++;
+            }
+            else if(pair->i[i] == pair_direct->j[j] && pair->j[i] == pair->i[j])
             {
                 (*total)++;
             }
