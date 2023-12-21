@@ -28,14 +28,14 @@ int main(void)
     particle.type = (char *)(calloc(PTC_TOL_NUM,sizeof(char)));  
 
     //kernel data init
-    kernel.w = (double *)(calloc(10*PTC_TOL_NUM,sizeof(double)));
-    kernel.dwdx = (double *)(calloc(10*PTC_TOL_NUM,sizeof(double)));
-    kernel.dwdy = (double *)(calloc(10*PTC_TOL_NUM,sizeof(double)));
+    kernel.w = (double *)(calloc(5*PTC_TOL_NUM,sizeof(double)));
+    kernel.dwdx = (double *)(calloc(5*PTC_TOL_NUM,sizeof(double)));
+    kernel.dwdy = (double *)(calloc(5*PTC_TOL_NUM,sizeof(double)));
    
     //pair data init
     pair.total = 0; 
-    pair.i = (unsigned int *)(calloc(10*PTC_TOL_NUM,sizeof(unsigned int)));
-    pair.j = (unsigned int *)(calloc(10*PTC_TOL_NUM,sizeof(unsigned int)));
+    pair.i = (unsigned int *)(calloc(5*PTC_TOL_NUM,sizeof(unsigned int)));
+    pair.j = (unsigned int *)(calloc(5*PTC_TOL_NUM,sizeof(unsigned int)));
 
     //get time current time
     time_t current_time = 0;
@@ -43,8 +43,8 @@ int main(void)
 
     //pair_direct data int
     pair_dircet.total=0;
-    pair_dircet.i = (unsigned int *)(calloc(10*PTC_TOL_NUM,sizeof(unsigned int)));
-    pair_dircet.j = (unsigned int *)(calloc(10*PTC_TOL_NUM,sizeof(unsigned int)));
+    pair_dircet.i = (unsigned int *)(calloc(5*PTC_TOL_NUM,sizeof(unsigned int)));
+    pair_dircet.j = (unsigned int *)(calloc(5*PTC_TOL_NUM,sizeof(unsigned int)));
 
     //check pair is same,the total same num is
     unsigned int total = 0;
@@ -64,22 +64,22 @@ int main(void)
     mesh_process(&particle,mesh);   //generate the mesh 
 
     //count the time of the nnps_mesh with parallel
-    current_time = time(NULL);
+    T_START
     nnps_mesh(&particle,&pair,mesh);    //use mesh to search interactive pairs
-    cout << "nnps_mesh use " << time(NULL) - current_time << endl;
-
+    T_END
+    
     //count the time of the nnps_direct without parallel
-    current_time = tiem(NULL);
-    nnps_direct(&particle,&pair_dircet); 
-    cout << "nnps_direct use " << time(NULL) - current_time << endl;
+    //current_time = time(NULL);
+    //nnps_direct(&particle,&pair_dircet); 
+    //cout << "nnps_direct use " << time(NULL) - current_time << endl;
 
-    nnps_check(&pair,&pair_dircet,&total);
+    //nnps_check(&pair,&pair_dircet,&total);
 
 
     cout << "total particle num is " << PTC_TOL_NUM << endl;
-    cout << "nnds_direct find total pair is " << pair_dircet.total << endl;
+    //cout << "nnds_direct find total pair is " << pair_dircet.total << endl;
     cout << "nnds_mesh find total pair is " << pair.total << endl;
-    cout << "the total same pair is " << total << endl;
+    //cout << "the total same pair is " << total << endl;
 
     /*
     unsigned int head = mesh[0][0][MESH_PTC_NUM-1];
