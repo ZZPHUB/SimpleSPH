@@ -70,19 +70,19 @@ int main(void)
     writefile << "init data" << endl;
     writefile << "ASCII" << endl;
     writefile << "DATASET UNSTRUCTURED_GRID" << endl;
-    writefile << "POINTS " << FLUID_PTC_NUM<< " " << "double" << endl;
+    writefile << "POINTS " << PTC_TOL_NUM<< " " << "double" << endl;
 
-    for(int i=0;i<FLUID_PTC_NUM;i++)
+    for(int i=0;i<PTC_TOL_NUM;i++)
     {
         writefile << setiosflags(ios::scientific) << particle.x[i]<< " " << particle.y[i]<< " " << 0.0 << endl;
     }
 
     writefile << "POINT_DATA" << " " << PTC_TOL_NUM << endl;
-    writefile << "SCALARS type int i" << endl;
+    writefile << "SCALARS type double 1" << endl;
     writefile << "LOOKUP_TABLE DEFAULT" << endl;
-    for(int i=0;i<FLUID_PTC_NUM;i++)
+    for(int i=0;i<PTC_TOL_NUM;i++)
     {
-        writefile << particle.type[i] << endl;
+        writefile <<setiosflags(ios::scientific)<< particle.type[i] << endl;
     }
 
 
