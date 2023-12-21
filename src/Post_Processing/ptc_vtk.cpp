@@ -24,7 +24,7 @@ void ptc_vtk_mesh(SPH_PARTICLE *particle,unsigned int ***mesh)
     }
 
     writefile << "POINT_DATA" << " " << PTC_TOL_NUM << endl;
-    writefile << "SCALARS "<< "name int 1" << endl;
+    writefile << "SCALARS "<< "name double 1" << endl;
     writefile << "LOOKUP_TABLE DEFAULT" << endl;
     for(int i=0;i<MESH_DEEPTH_NUM;i=i+5)
     {
