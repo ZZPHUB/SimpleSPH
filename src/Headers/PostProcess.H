@@ -3,8 +3,11 @@
 
 /* Include Headers Here */
 #include "SPH.H"
+#include <fstream>
+#include <iomanip>
+#include <stdlib.h>
 
-
-
+/* Extern Functions Here */
+extern void ptc_vtk_mesh(SPH_PARTICLE *,unsigned int ***);
 
 #endif
