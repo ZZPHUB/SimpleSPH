@@ -123,7 +123,7 @@ void nnps_check(SPH_PAIR *pair,SPH_PAIR *pair_direct,unsigned int *total)
             {
                 (*total)++;
             }
-            else if(pair->i[i] == pair_direct->j[j] && pair->j[i] == pair->i[j])
+            else if(pair->i[i] == pair_direct->j[j] && pair->j[i] == pair_direct->i[j])
             {
                 (*total)++;
             }
