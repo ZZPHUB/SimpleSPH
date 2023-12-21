@@ -2,6 +2,8 @@
 #include <fstream>
 #include <iomanip>
 #include <stdlib.h>
+#include <time.h>
+
 using namespace std;
 
 int main(void)
@@ -35,7 +37,11 @@ int main(void)
     pair.i = (unsigned int *)(calloc(10*PTC_TOL_NUM,sizeof(unsigned int)));
     pair.j = (unsigned int *)(calloc(10*PTC_TOL_NUM,sizeof(unsigned int)));
 
-    //pair data int
+    //get time current time
+    time_t current_time = 0;
+
+
+    //pair_direct data int
     pair_dircet.total=0;
     pair_dircet.i = (unsigned int *)(calloc(10*PTC_TOL_NUM,sizeof(unsigned int)));
     pair_dircet.j = (unsigned int *)(calloc(10*PTC_TOL_NUM,sizeof(unsigned int)));
@@ -56,8 +62,17 @@ int main(void)
 
     ptc_generate(&particle);    //generate the fluid solid and dummy particles
     mesh_process(&particle,mesh);   //generate the mesh 
+
+    //count the time of the nnps_mesh with parallel
+    current_time = time(NULL);
     nnps_mesh(&particle,&pair,mesh);    //use mesh to search interactive pairs
+    cout << "nnps_mesh use " << time(NULL) - current_time << endl;
+
+    //count the time of the nnps_direct without parallel
+    current_time = tiem(NULL);
     nnps_direct(&particle,&pair_dircet); 
+    cout << "nnps_direct use " << time(NULL) - current_time << endl;
+
     nnps_check(&pair,&pair_dircet,&total);
 
 
