@@ -3,6 +3,14 @@ using namespace std;
 
 void ptc_vtk_mesh(SPH_PARTICLE *particle,unsigned int ***mesh)
 {
+    int ptc_num = 0;
+    for(int i=0;i<MESH_DEEPTH_NUM;i=i+5)
+    {
+        for(int j=0;j<MESH_LENGTH_NUM;j=j+5)
+        {
+            ptc_num = mesh[i][j][MESH_PTC_NUM-1] + ptc_num;
+        }
+    }
     ofstream writefile;
     writefile.open("../data/init.vtk");
 
@@ -10,7 +18,7 @@ void ptc_vtk_mesh(SPH_PARTICLE *particle,unsigned int ***mesh)
     writefile << "init data" << endl;
     writefile << "ASCII" << endl;
     writefile << "DATASET UNSTRUCTURED_GRID" << endl;
-    writefile << "POINTS " << PTC_TOL_NUM<< " " << "double" << endl;
+    writefile << "POINTS " << ptc_num << " " << "double" << endl;
     for(int i=0;i<MESH_DEEPTH_NUM;i=i+5)
     {
         for(int j=0;j<MESH_LENGTH_NUM;j=j+5)
@@ -23,7 +31,7 @@ void ptc_vtk_mesh(SPH_PARTICLE *particle,unsigned int ***mesh)
         }
     }
 
-    writefile << "POINT_DATA" << " " << PTC_TOL_NUM << endl;
+    writefile << "POINT_DATA" << " " << ptc_num << endl;
     writefile << "SCALARS "<< "name double 1" << endl;
     writefile << "LOOKUP_TABLE DEFAULT" << endl;
     for(int i=0;i<MESH_DEEPTH_NUM;i=i+5)
