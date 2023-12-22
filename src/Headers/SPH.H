@@ -30,7 +30,7 @@
 #define MESH_PTC_NUM 51
 
 #define T_START current_time=time(NULL);{
-#define T_END }cout << "use time is " << time(NULL)-current_time << " s" << endl;
+#define T_END(a) }cout << a << "use time is " << time(NULL)-current_time << " s" << endl;
 
 
 // two paritcles distance

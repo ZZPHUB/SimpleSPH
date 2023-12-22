@@ -58,7 +58,7 @@ int main(void)
     //count the time of the nnps_mesh with parallel
     T_START
     nnps_mesh(&particle,&pair,mesh);    //use mesh to search interactive pairs
-    T_END
+    T_END("nnps_mesh")
 
     cout << "total particle num is " << PTC_TOL_NUM << endl;
     //cout << "nnds_direct find total pair is " << pair_dircet.total << endl;
@@ -74,8 +74,8 @@ int main(void)
     */
     
 
-    //ptc_kernel_serial(&particle,&pair,&kernel);
-    //ptc_init(&particle); //particles init values
+    ptc_kernel_parallel(&particle,&pair,&kernel);
+    ptc_init(&particle); //particles init values
 
     ptc_vtk_mesh(&particle,mesh);
 
