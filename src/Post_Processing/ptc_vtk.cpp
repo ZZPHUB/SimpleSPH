@@ -4,9 +4,9 @@ using namespace std;
 void ptc_vtk_mesh(SPH_PARTICLE *particle,unsigned int ***mesh)
 {
     int ptc_num = 0;
-    for(int i=0;i<MESH_DEEPTH_NUM;i=i+5)
+    for(int i=0;i<MESH_DEEPTH_NUM;i=i++)
     {
-        for(int j=0;j<MESH_LENGTH_NUM;j=j+5)
+        for(int j=0;j<MESH_LENGTH_NUM;j=j++)
         {
             ptc_num = mesh[i][j][MESH_PTC_NUM-1] + ptc_num;
         }
@@ -19,9 +19,9 @@ void ptc_vtk_mesh(SPH_PARTICLE *particle,unsigned int ***mesh)
     writefile << "ASCII" << endl;
     writefile << "DATASET UNSTRUCTURED_GRID" << endl;
     writefile << "POINTS " << ptc_num << " " << "double" << endl;
-    for(int i=0;i<MESH_DEEPTH_NUM;i=i+5)
+    for(int i=0;i<MESH_DEEPTH_NUM;i=i++)
     {
-        for(int j=0;j<MESH_LENGTH_NUM;j=j+5)
+        for(int j=0;j<MESH_LENGTH_NUM;j=j++)
         {
             for(int m=0;m<mesh[i][j][MESH_PTC_NUM-1];m++)
             {
@@ -34,9 +34,9 @@ void ptc_vtk_mesh(SPH_PARTICLE *particle,unsigned int ***mesh)
     writefile << "POINT_DATA" << " " << ptc_num << endl;
     writefile << "SCALARS "<< "name double 1" << endl;
     writefile << "LOOKUP_TABLE DEFAULT" << endl;
-    for(int i=0;i<MESH_DEEPTH_NUM;i=i+5)
+    for(int i=0;i<MESH_DEEPTH_NUM;i=i++)
     {
-        for(int j=0;j<MESH_LENGTH_NUM;j=j+5)
+        for(int j=0;j<MESH_LENGTH_NUM;j=j++)
         {
             for(int m=0;m<mesh[i][j][MESH_PTC_NUM-1];m++)
             {
