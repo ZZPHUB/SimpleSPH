@@ -3,13 +3,13 @@
 
 void fluid_ptc_generate(SPH_PARTICLE *particle)
 {
-    for(int i=0;i<(DOMAIN_LENGTH_NUM);i++)
+    for(int i=0;i<(FLUID_LENGTH_NUM);i++)
     {
-        for(int j=0;j<(DOMAIN_DEEPTH_NUM);j++)
+        for(int j=0;j<(FLUID_DEEPTH_NUM);j++)
         {
-            particle->x[i*(DOMAIN_DEEPTH_NUM)+j] = i*PTC_SPACING;
-            particle->y[i*(DOMAIN_DEEPTH_NUM)+j] = j*PTC_SPACING;
-            particle->type[i*(DOMAIN_DEEPTH_NUM)+j] = 0;
+            particle->x[i*(FLUID_DEEPTH_NUM)+j] = (i+2)*PTC_SPACING;
+            particle->y[i*(FLUID_DEEPTH_NUM)+j] = (j+2)*PTC_SPACING;
+            particle->type[i*(FLUID_DEEPTH_NUM)+j] = 0;
         }
     }
 }
@@ -17,21 +17,21 @@ void fluid_ptc_generate(SPH_PARTICLE *particle)
 void solid_ptc_generate(SPH_PARTICLE *particle)
 {
     int k =0;
-    for(int i=0;i<(DOMAIN_LENGTH_NUM+4);i++)
+    for(int i=0;i<(FLUID_LENGTH_NUM+4);i++)
     {
-        for(int j=0;j<(DOMAIN_DEEPTH_NUM+2);j++)
+        for(int j=0;j<(FLUID_DEEPTH_NUM+2);j++)
         {
-            if(i<=1 || i>= DOMAIN_LENGTH_NUM+2)
+            if(i<2 || i> FLUID_LENGTH_NUM+1)
             {
-                particle->x[FLUID_PTC_NUM+k] = (i-2)*PTC_SPACING;
-                particle->y[FLUID_PTC_NUM+k] = (j-2)*PTC_SPACING;
+                particle->x[FLUID_PTC_NUM+k] = i*PTC_SPACING;
+                particle->y[FLUID_PTC_NUM+k] = j*PTC_SPACING;
                 particle->type[FLUID_PTC_NUM+k] = -1;
                 k++;
             }
-            else if (j <= 1)
+            else if (j < 2)
             {
-                particle->x[FLUID_PTC_NUM+k] = (i-2)*PTC_SPACING;
-                particle->y[FLUID_PTC_NUM+k] = (j-2)*PTC_SPACING;
+                particle->x[FLUID_PTC_NUM+k] = i*PTC_SPACING;
+                particle->y[FLUID_PTC_NUM+k] = j*PTC_SPACING;
                 particle->type[FLUID_PTC_NUM+k] = -1;
                 k++;
             }

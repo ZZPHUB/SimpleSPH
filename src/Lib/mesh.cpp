@@ -4,37 +4,37 @@ using namespace std;
 void mesh_process(SPH_PARTICLE *particle,unsigned ***mesh)
 {
     unsigned int head;
-    double x;
-    double y;
+    unsigned int j=0;
+    unsigned int k=0;
     for(unsigned int i=0;i<PTC_TOL_NUM;i++)
     {
-        if(particle->x[i]<0)
+        if(particle->y[i] < DOAMIN_DEEPTH && particle->y[i] >= 0)
         {
-            x = 0;
+            j = (unsigned int)(particle->y[i]/MESH_SPACING);
         }
-        else if(particle->x[i]>=DOMAIN_LENGTH)
+        else if(particle->y[i] >= DOAMIN_DEEPTH)
         {
-            x = DOMAIN_LENGTH-PTC_SPACING;
-        }
-        else
-        {
-            x = particle->x[i];
-        }
-        if(particle->y[i]<0)
-        {
-            y = 0;
-        }
-        else if(particle->y[i]>=DOAMIN_DEEPTH)
-        {
-            y = DOMAIN_LENGTH-PTC_SPACING;
+            j = MESH_DEEPTH_NUM - 1;
         }
         else
         {
-            y = particle->y[i];
+            j = 0;
         }
-        head = mesh[(unsigned int)(y/MESH_SPACING)][(unsigned int)(x/MESH_SPACING)][MESH_PTC_NUM-1];
-        mesh[(unsigned int)(y/MESH_SPACING)][(unsigned int)(x/MESH_SPACING)][head] = i;        
-        mesh[(unsigned int)(y/MESH_SPACING)][(unsigned int)(x/MESH_SPACING)][MESH_PTC_NUM-1]++;
+        if(particle->x[i] < DOMAIN_LENGTH && particle->x[i] >= 0)
+        {
+            k = (unsigned int)(particle->x[i]/MESH_SPACING);
+        }
+        else if(particle->x[i] >= DOMAIN_LENGTH)
+        {
+            k = MESH_LENGTH_NUM - 1;
+        }
+        else
+        {
+            k = 0;
+        }
+        head = mesh[j][k][MESH_PTC_NUM-1];
+        mesh[j][k][head] = i;        
+        mesh[j][k][MESH_PTC_NUM-1]++;
     }
 
 }
