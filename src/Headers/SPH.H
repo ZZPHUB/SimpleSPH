@@ -27,10 +27,16 @@
 #define MESH_LENGTH_NUM (int)(DOMAIN_LENGTH/MESH_SPACING) //length-direction mesh number
 #define MESH_DEEPTH_NUM (int)(DOAMIN_DEEPTH/MESH_SPACING) //deepth-direction mesh number
 #define MESH_TOL_NUM (MESH_LENGTH_NUM*MESH_DEEPTH_NUM) //total mesh number
-#define MESH_PTC_NUM 51
+#define MESH_PTC_NUM 51 //per mesh grid contain max paticle num
 
-#define T_START current_time=time(NULL);{
-#define T_END(a) }cout << a << " use time is " << time(NULL)-current_time << " s" << endl;
+#define REF_DENSITY 1000.0    //reference density for eos
+#define GRAVITY_ACC 9.80     //gravity acceleration defin here
+#define ART_SOUND_VEL (10*sqrt(GRAVITY_ACC*DOAMIN_DEEPTH))  //art_sound_velosity,it's $p=10 \times (\rho-\rho_{ref})$
+
+#define PTC_MASS (REF_DENSITY*pow(PTC_SPACING,3))   //every particle's mass is constant
+
+#define T_START current_time=time(NULL);{ //get start time
+#define T_END(a) }cout << a << " use time is " << time(NULL)-current_time << " s" << endl;  //echo used time
 
 
 // two paritcles distance
@@ -49,14 +55,17 @@ typedef  struct
     double *pressure;   //pressure of paritcle
     double *density;    //density of particle
     double *dif_density;    //differential density value
-    double *mass;   //mass of particle
+    double *visxx;      //x-x direction stress
+    double *visyy;      //y-y direction stress
+    double *visxy;      //x-y and y-x direction stress
+    //double *mass;   //mass of particle
     char *type; //particle type:0 denote fulid;1 denote rigid;-1 denote dummy particles
 }SPH_PARTICLE;
 
 typedef struct 
 {
     /* declare the kernel and differential kernel value of each pair */
-    double *w;  //kernel value
+    //double *w;  //kernel value
     double *dwdx;   //differential kernel value in x-direction
     double *dwdy;   //differential kernel value in y-direction
 }SPH_KERNEL;
@@ -72,10 +81,11 @@ typedef struct
 
 
 /* Headers Include Here*/
-#include <omp.h>
+//#include <omp.h>
 #include "Lib.H"
 #include "PreProcess.H"
 #include "PostProcess.H"
+#include "Equations.H"
 
 
 #endif

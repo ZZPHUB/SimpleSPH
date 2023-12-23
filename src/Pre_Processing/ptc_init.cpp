@@ -10,8 +10,8 @@ void ptc_init(SPH_PARTICLE *particle)
         omp_set_lock(&lock);
         particle->vx[i] = particle->vy[i] = particle->accx[i] = \
         particle->accy[i] =particle->pressure[i] =particle->dif_density[i] = 0;
-        particle->mass[i] = 1000.0*pow(PTC_SPACING,3);
-        particle->density[i] = 1000;
+        //particle->mass[i] = REF_DENSITY*pow(PTC_SPACING,3);
+        particle->density[i] = REF_DENSITY;
         omp_unset_lock(&lock);
     }
 }

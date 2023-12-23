@@ -22,13 +22,16 @@ int main(void)
     particle.accx = (double *)(calloc(PTC_TOL_NUM,sizeof(double))); 
     particle.accy = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
     particle.density = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
-    particle.mass = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
+    //particle.mass = (double *)(calloc(PTC_TOL_NUM,sizeof(double))); //for particle's mass is constant
     particle.dif_density = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
     particle.pressure = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
+    particle.visxx = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
+    particle.visyy = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
+    particle.visxy = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
     particle.type = (char *)(calloc(PTC_TOL_NUM,sizeof(char)));  
 
     //kernel data init
-    kernel.w = (double *)(calloc(5*PTC_TOL_NUM,sizeof(double)));
+    //kernel.w = (double *)(calloc(5*PTC_TOL_NUM,sizeof(double)));  //this code donnot use kernel value
     kernel.dwdx = (double *)(calloc(5*PTC_TOL_NUM,sizeof(double)));
     kernel.dwdy = (double *)(calloc(5*PTC_TOL_NUM,sizeof(double)));
    
