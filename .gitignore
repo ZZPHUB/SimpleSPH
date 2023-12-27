@@ -6,4 +6,4 @@
 
 ./src/run
 
-./data/*.vtk
+./data/postprocess/*.vtk
