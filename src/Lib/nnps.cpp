@@ -4,10 +4,10 @@ using namespace std;
 void nnps_direct(SPH_PARTICLE *particle,SPH_PAIR *pair)
 {   cout << "here in nnps" << endl;
     pair->total = 0;
-    for(int i=0;i<PTC_TOL_NUM;i++)
+    for(int i=0;i<particle->total;i++)
     {   
         //if(omp_get_thread_num()==6) cout << "i is " << i << "thid is " << omp_get_thread_num() << endl;
-        for(int j=i+1;j<PTC_TOL_NUM;j++)
+        for(int j=i+1;j<particle->total;j++)
         {
         /*  if the distance between the particles i and j is less or equ to PTC_RADIUS,then they are a pair*/
             if(PTC_DISTANCE(i,j) <= PTC_REGION_RADIUS) 

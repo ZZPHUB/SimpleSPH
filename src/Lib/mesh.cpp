@@ -6,7 +6,7 @@ void mesh_process(SPH_PARTICLE *particle,unsigned ***mesh)
     unsigned int head;
     unsigned int j=0;
     unsigned int k=0;
-    unsigned int mesh_ptc_tol;
+    unsigned int mesh_ptc_tol=0;
     for(unsigned int i=0;i<particle->type;i++)
     {
         if(particle->y[i] < TOL_DOMAIN_DEEPTH && particle->y[i] >= 0)
@@ -47,7 +47,7 @@ void mesh_process(SPH_PARTICLE *particle,unsigned ***mesh)
             mesh_ptc_tol = mesh_ptc_tol+mesh[i][j][MESH_PTC_NUM-1];
         }
     }
-    if(mesh_ptc_tol == PTC_TOL_NUM)
+    if(mesh_ptc_tol == particle->total)
     {
         cout << "num of particles in meshs equal to tolal particles " << endl;
     }

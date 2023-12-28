@@ -3,7 +3,7 @@ using namespace std;
 
 void ptc_vtk_mesh(SPH_PARTICLE *particle,unsigned int ***mesh)
 {
-    int ptc_num = PTC_TOL_NUM;
+    int ptc_num = particle->total;
     
     ofstream writefile;
     writefile.open("../data/init.vtk");

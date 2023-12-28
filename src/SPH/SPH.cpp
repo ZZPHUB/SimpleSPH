@@ -71,14 +71,20 @@ int main(void)
     cout << "nnds_mesh find total pair is " << pair.total << endl;
     //cout << "the total same pair is " << total << endl;
 
-    /*
-    unsigned int head = mesh[0][0][MESH_PTC_NUM-1];
-    for(unsigned int i=0;i<head;i++)
+    int temp_c = -1;
+    int temp_tol = 0;
+    for(int i=0;i<pair.total;i++)
     {
-        cout << mesh[0][0][i] << endl;
+        if(temp_c != pair.i[i])
+        {
+            temp_tol++;
+            temp_c = pair.i[i];
+        }
     }
-    */
-    
+
+    cout << "fluid pair is " << temp_tol << endl;
+    cout << "fluid particle is " << FLUID_PTC_NUM << endl;
+
     T_START
     ptc_kernel_parallel(&particle,&pair,&kernel);
     T_END("ptc_kernel_parallel")
@@ -100,7 +106,7 @@ int main(void)
     free(particle.accy);
     free(particle.density);
     free(particle.dif_density);
-    free(particle.mass);
+    //free(particle.mass);
     free(particle.pressure);
     free(particle.type);
 
