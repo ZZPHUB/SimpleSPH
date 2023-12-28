@@ -13,32 +13,34 @@ int main(void)
     SPH_PAIR pair;
     SPH_PAIR pair_dircet;
 
+    unsigned int s_ptc_n = solid_ptc_num();
+
     /************stack is too small,so init data in heap***************/
     //particle data init
-    particle.x = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
-    particle.y = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
-    particle.vx = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
-    particle.vy = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
-    particle.accx = (double *)(calloc(PTC_TOL_NUM,sizeof(double))); 
-    particle.accy = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
-    particle.density = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
-    //particle.mass = (double *)(calloc(PTC_TOL_NUM,sizeof(double))); //for particle's mass is constant
-    particle.dif_density = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
-    particle.pressure = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
-    particle.visxx = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
-    particle.visyy = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
-    particle.visxy = (double *)(calloc(PTC_TOL_NUM,sizeof(double)));
-    particle.type = (char *)(calloc(PTC_TOL_NUM,sizeof(char)));  
+    particle.x = (double *)(calloc(PTC_TOL_NUM+s_ptc_n,sizeof(double)));
+    particle.y = (double *)(calloc(PTC_TOL_NUM+s_ptc_n,sizeof(double)));
+    particle.vx = (double *)(calloc(PTC_TOL_NUM+s_ptc_n,sizeof(double)));
+    particle.vy = (double *)(calloc(PTC_TOL_NUM+s_ptc_n,sizeof(double)));
+    particle.accx = (double *)(calloc(PTC_TOL_NUM+s_ptc_n,sizeof(double))); 
+    particle.accy = (double *)(calloc(PTC_TOL_NUM+s_ptc_n,sizeof(double)));
+    particle.density = (double *)(calloc(PTC_TOL_NUM+s_ptc_n,sizeof(double)));
+    //particle.mass = (double *)(calloc(PTC_TOL_NUM+s_ptc_n,sizeof(double))); //for particle's mass is constant
+    particle.dif_density = (double *)(calloc(PTC_TOL_NUM+s_ptc_n,sizeof(double)));
+    particle.pressure = (double *)(calloc(PTC_TOL_NUM+s_ptc_n,sizeof(double)));
+    particle.visxx = (double *)(calloc(PTC_TOL_NUM+s_ptc_n,sizeof(double)));
+    particle.visyy = (double *)(calloc(PTC_TOL_NUM+s_ptc_n,sizeof(double)));
+    particle.visxy = (double *)(calloc(PTC_TOL_NUM+s_ptc_n,sizeof(double)));
+    particle.type = (char *)(calloc(PTC_TOL_NUM+s_ptc_n,sizeof(char)));  
 
     //kernel data init
-    //kernel.w = (double *)(calloc(5*PTC_TOL_NUM,sizeof(double)));  //this code donnot use kernel value
-    kernel.dwdx = (double *)(calloc(5*PTC_TOL_NUM,sizeof(double)));
-    kernel.dwdy = (double *)(calloc(5*PTC_TOL_NUM,sizeof(double)));
+    kernel.w = (double *)(calloc(5*PTC_TOL_NUM+s_ptc_n,sizeof(double)));  //this code donnot use kernel value
+    kernel.dwdx = (double *)(calloc(5*PTC_TOL_NUM+s_ptc_n,sizeof(double)));
+    kernel.dwdy = (double *)(calloc(5*PTC_TOL_NUM+s_ptc_n,sizeof(double)));
    
     //pair data init
     pair.total = 0; 
-    pair.i = (unsigned int *)(calloc(5*PTC_TOL_NUM,sizeof(unsigned int)));
-    pair.j = (unsigned int *)(calloc(5*PTC_TOL_NUM,sizeof(unsigned int)));
+    pair.i = (unsigned int *)(calloc(5*PTC_TOL_NUM+s_ptc_n,sizeof(unsigned int)));
+    pair.j = (unsigned int *)(calloc(5*PTC_TOL_NUM+s_ptc_n,sizeof(unsigned int)));
 
     //get time current time
     time_t current_time = 0;
@@ -63,7 +65,7 @@ int main(void)
     nnps_mesh(&particle,&pair,mesh);    //use mesh to search interactive pairs
     T_END("nnps_mesh")
 
-    cout << "total particle num is " << PTC_TOL_NUM << endl;
+    cout << "total particle num is " << PTC_TOL_NUM+s_ptc_n << endl;
     //cout << "nnds_direct find total pair is " << pair_dircet.total << endl;
     cout << "nnds_mesh find total pair is " << pair.total << endl;
     //cout << "the total same pair is " << total << endl;

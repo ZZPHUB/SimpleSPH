@@ -9,11 +9,11 @@ void mesh_process(SPH_PARTICLE *particle,unsigned ***mesh)
     unsigned int mesh_ptc_tol;
     for(unsigned int i=0;i<PTC_TOL_NUM;i++)
     {
-        if(particle->y[i] < TOL_DOAMIN_DEEPTH && particle->y[i] >= 0)
+        if(particle->y[i] < TOL_DOMAIN_DEEPTH && particle->y[i] >= 0)
         {
             j = (unsigned int)(particle->y[i]/MESH_SPACING);
         }
-        else if(particle->y[i] >= TOL_DOAMIN_DEEPTH)
+        else if(particle->y[i] >= TOL_DOMAIN_DEEPTH)
         {
             j = MESH_DEEPTH_NUM - 1;
         }
@@ -25,7 +25,7 @@ void mesh_process(SPH_PARTICLE *particle,unsigned ***mesh)
         {
             k = (unsigned int)(particle->x[i]/MESH_SPACING);
         }
-        else if(particle->x[i] >= TOL_DOAMIN_LENGTH)
+        else if(particle->x[i] >= TOL_DOMAIN_LENGTH)
         {
             k = MESH_LENGTH_NUM - 1;
         }
