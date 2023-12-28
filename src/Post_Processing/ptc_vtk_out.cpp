@@ -33,7 +33,7 @@ void ptc_vtk_mesh(SPH_PARTICLE *particle,unsigned int ***mesh)
     */
 
     writefile << "POINT_DATA" << " " << ptc_num << endl;
-    writefile << "SCALARS "<< "density double 1" << endl;
+    writefile << "SCALARS "<< "type double 1" << endl;
     writefile << "LOOKUP_TABLE DEFAULT" << endl;
     for(int i=0;i<MESH_DEEPTH_NUM;i++)
     {
@@ -41,7 +41,7 @@ void ptc_vtk_mesh(SPH_PARTICLE *particle,unsigned int ***mesh)
         {
             for(int m=0;m<mesh[i][j][MESH_PTC_NUM-1];m++)
             {
-                writefile << setiosflags(ios::scientific) << particle->density[mesh[i][j][m]] << endl;
+                writefile << setiosflags(ios::scientific) << (double)(0.0001*particle->type[mesh[i][j][m]]) << endl;
             }
         }
     }
