@@ -7,7 +7,7 @@ void mesh_process(SPH_PARTICLE *particle,unsigned ***mesh)
     unsigned int j=0;
     unsigned int k=0;
     unsigned int mesh_ptc_tol=0;
-    for(unsigned int i=0;i<particle->type;i++)
+    for(unsigned int i=0;i<particle->total;i++)
     {
         if(particle->y[i] < TOL_DOMAIN_DEEPTH && particle->y[i] >= 0)
         {
