@@ -71,19 +71,6 @@ int main(void)
     cout << "nnds_mesh find total pair is " << pair.total << endl;
     //cout << "the total same pair is " << total << endl;
 
-    int temp_c = -1;
-    int temp_tol = 0;
-    for(int i=0;i<pair.total;i++)
-    {
-        if(temp_c != pair.i[i])
-        {
-            temp_tol++;
-            temp_c = pair.i[i];
-        }
-    }
-
-    cout << "fluid pair is " << temp_tol << endl;
-    cout << "fluid particle is " << FLUID_PTC_NUM << endl;
 
     T_START
     ptc_kernel_parallel(&particle,&pair,&kernel);
