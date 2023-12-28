@@ -2,7 +2,7 @@
 
 void solid_ptc_generate(SPH_PARTICLE *particle)
 {
-    std::string filename = "./wedge.vtk";
+    std::string filename = "../data/preprocess/wedge.vtk";
     double x[3];
 
     vtkSmartPointer<vtkUnstructuredGridReader> reader =      vtkSmartPointer<vtkUnstructuredGridReader>::New();
