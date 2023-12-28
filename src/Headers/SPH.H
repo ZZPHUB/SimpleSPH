@@ -7,31 +7,32 @@
 /* for dummy particles,they y-direction arrange betweent (-2*PTC_SACING,5) */
 
 /* Define Symbols Here*/
-#define READ_STL 0  //if or not read stl format file to generate particles
-#define DOMAIN_LENGTH 12.0    //computational domain length
-#define DOAMIN_DEEPTH 5.0     //computational domain deepth
+#define FLUID_DOMAIN_LENGTH 12.0    //computational domain length
+#define FLUID_DOAMIN_DEEPTH 5.0     //computational domain deepth
+#define TOL_DOAMIN_LENGTH (FLUID_DOMAIN_LENGTH)
+#define TOL_DOAMIN_DEEPTH (FLUID_DOAMIN_DEEPTH*1.5)
 
 #define PTC_SPACING 0.01    //spacing between particles
 #define PTC_SML PTC_SPACING    //smoothed leng of particles
 #define PTC_REGION_RADIUS (2*PTC_SML) //particle support region radius,which is PTC_SML*2
 
-#define FLUID_LENGTH_NUM (int)(DOMAIN_LENGTH/PTC_SPACING+1-4)
-#define FLUID_DEEPTH_NUM (int)(DOAMIN_DEEPTH/PTC_SPACING+1-2)
+#define FLUID_LENGTH_NUM (int)(FLUID_DOMAIN_LENGTH/PTC_SPACING+1-4)
+#define FLUID_DEEPTH_NUM (int)(FLUID_DOAMIN_DEEPTH/PTC_SPACING+1-2)
 
 #define FLUID_PTC_NUM (FLUID_LENGTH_NUM)*(FLUID_DEEPTH_NUM)  //fluid particles number
-#define SOLID_PTC_NUM 0  //rigid body particles number
-#define VIRTUAL_PTC_NUM (int)((DOAMIN_DEEPTH/PTC_SPACING+1)*(DOMAIN_LENGTH/PTC_SPACING+1)-FLUID_PTC_NUM)  //virtual paritcles number
+#define SOLID_PTC_NUM  68594 //rigid body particles number
+#define VIRTUAL_PTC_NUM (int)((FLUID_DOAMIN_DEEPTH/PTC_SPACING+1)*(FLUID_DOMAIN_LENGTH/PTC_SPACING+1)-FLUID_PTC_NUM)  //virtual paritcles number
 #define PTC_TOL_NUM (FLUID_PTC_NUM+SOLID_PTC_NUM+VIRTUAL_PTC_NUM)   //total particles
 
 #define MESH_SPACING (PTC_SPACING*2.0) //mesh spacing
-#define MESH_LENGTH_NUM (int)(DOMAIN_LENGTH/MESH_SPACING) //length-direction mesh number
-#define MESH_DEEPTH_NUM (int)(DOAMIN_DEEPTH/MESH_SPACING) //deepth-direction mesh number
+#define MESH_LENGTH_NUM (int)(TOL_DOMAIN_LENGTH/MESH_SPACING) //length-direction mesh number
+#define MESH_DEEPTH_NUM (int)(TOL_DOAMIN_DEEPTH/MESH_SPACING) //deepth-direction mesh number
 #define MESH_TOL_NUM (MESH_LENGTH_NUM*MESH_DEEPTH_NUM) //total mesh number
 #define MESH_PTC_NUM 51 //per mesh grid contain max paticle num
 
 #define REF_DENSITY 1000.0    //reference density for eos
 #define GRAVITY_ACC 9.80     //gravity acceleration defin here
-#define ART_SOUND_VEL (10*sqrt(GRAVITY_ACC*DOAMIN_DEEPTH))  //art_sound_velosity,it's $p=10 \times (\rho-\rho_{ref})$
+#define ART_SOUND_VEL (10*sqrt(GRAVITY_ACC*FLUID_DOAMIN_DEEPTH))  //art_sound_velosity,it's $p=10 \times (\rho-\rho_{ref})$
 
 #define PTC_MASS (REF_DENSITY*pow(PTC_SPACING,3))   //every particle's mass is constant
 

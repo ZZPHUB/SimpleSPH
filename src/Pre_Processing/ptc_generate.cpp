@@ -14,7 +14,7 @@ void fluid_ptc_generate(SPH_PARTICLE *particle)
     }
 }
 
-void solid_ptc_generate(SPH_PARTICLE *particle)
+void virtual_ptc_generate(SPH_PARTICLE *particle)
 {
     int k =0;
     for(int i=0;i<(FLUID_LENGTH_NUM+4);i++)
@@ -39,14 +39,9 @@ void solid_ptc_generate(SPH_PARTICLE *particle)
     }
 }
 
-void virtual_ptc_generate(SPH_PARTICLE *particle)
-{
-
-}
-
 void ptc_generate(SPH_PARTICLE *particle)
 {
     fluid_ptc_generate(particle);
-    solid_ptc_generate(particle);
     virtual_ptc_generate(particle);
+    solid_ptc_generate(particle);
 }
