@@ -68,14 +68,14 @@ void nnps_mesh(SPH_PARTICLE *particle,SPH_PAIR *pair,unsigned int ***mesh)
 			            {
                             omp_set_lock(&lock);
                             pair->i[pair->total] = mesh[i][j][k];
-                            pair->j[pair->total] = mesh[i][j][m];
+                            pair->j[pair->total] = mesh[i][j+1][m];
                             pair->total++;
 			                omp_unset_lock(&lock);
                         }
-                        else if (particle->type[mesh[i][j][m]]==0)
+                        else if (particle->type[mesh[i][j+1][m]]==0)
                         {
                             omp_set_lock(&lock);
-                            pair->i[pair->total] = mesh[i][j][m];
+                            pair->i[pair->total] = mesh[i][j+1][m];
                             pair->j[pair->total] = mesh[i][j][k];
                             pair->total++;
                             omp_unset_lock(&lock);
@@ -94,14 +94,14 @@ void nnps_mesh(SPH_PARTICLE *particle,SPH_PAIR *pair,unsigned int ***mesh)
 			            {
                             omp_set_lock(&lock);
                             pair->i[pair->total] = mesh[i][j][k];
-                            pair->j[pair->total] = mesh[i][j][m];
+                            pair->j[pair->total] = mesh[i+1][j][m];
                             pair->total++;
 			                omp_unset_lock(&lock);
                         }
-                        else if (particle->type[mesh[i][j][m]]==0)
+                        else if (particle->type[mesh[i+1][j][m]]==0)
                         {
                             omp_set_lock(&lock);
-                            pair->i[pair->total] = mesh[i][j][m];
+                            pair->i[pair->total] = mesh[i+1][j][m];
                             pair->j[pair->total] = mesh[i][j][k];
                             pair->total++;
                             omp_unset_lock(&lock);
@@ -120,14 +120,14 @@ void nnps_mesh(SPH_PARTICLE *particle,SPH_PAIR *pair,unsigned int ***mesh)
 			            {
                             omp_set_lock(&lock);
                             pair->i[pair->total] = mesh[i][j][k];
-                            pair->j[pair->total] = mesh[i][j][m];
+                            pair->j[pair->total] = mesh[i+1][j+1][m];
                             pair->total++;
 			                omp_unset_lock(&lock);
                         }
-                        else if (particle->type[mesh[i][j][m]]==0)
+                        else if (particle->type[mesh[i+1][j+1][m]]==0)
                         {
                             omp_set_lock(&lock);
-                            pair->i[pair->total] = mesh[i][j][m];
+                            pair->i[pair->total] = mesh[i+1][j+1][m];
                             pair->j[pair->total] = mesh[i][j][k];
                             pair->total++;
                             omp_unset_lock(&lock);
@@ -136,25 +136,25 @@ void nnps_mesh(SPH_PARTICLE *particle,SPH_PAIR *pair,unsigned int ***mesh)
                     }
 
                 }
-                //mesh[i][j]-->mesh[i+1][j-1]
-                if(j > 0 && i<(MESH_DEEPTH_NUM-1))
+                //mesh[i][j]-->mesh[i-1][j+1]
+                if(i > 0 && j<(MESH_LENGTH_NUM-1))
                 {
-                    for(unsigned int m=0;m<mesh[i+1][j-1][MESH_PTC_NUM-1];m++)
+                    for(unsigned int m=0;m<mesh[i-1][j+1][MESH_PTC_NUM-1];m++)
                     {
-                        if(PTC_DISTANCE(mesh[i][j][k],mesh[i+1][j-1][m])<=PTC_REGION_RADIUS)
+                        if(PTC_DISTANCE(mesh[i][j][k],mesh[i-1][j+1][m])<=PTC_REGION_RADIUS)
                         {
                         if(particle->type[mesh[i][j][k]]==0)
 			            {
                             omp_set_lock(&lock);
                             pair->i[pair->total] = mesh[i][j][k];
-                            pair->j[pair->total] = mesh[i][j][m];
+                            pair->j[pair->total] = mesh[i-1][j+1][m];
                             pair->total++;
 			                omp_unset_lock(&lock);
                         }
-                        else if (particle->type[mesh[i][j][m]]==0)
+                        else if (particle->type[mesh[i-1][j+1][m]]==0)
                         {
                             omp_set_lock(&lock);
-                            pair->i[pair->total] = mesh[i][j][m];
+                            pair->i[pair->total] = mesh[i-1][j+1][m];
                             pair->j[pair->total] = mesh[i][j][k];
                             pair->total++;
                             omp_unset_lock(&lock);
