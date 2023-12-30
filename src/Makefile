@@ -1,4 +1,4 @@
-VPATH = ./Equation:./Lib:./Post_Processing:./Pre_Processing:./SPH
+VPATH = ./Lib:./Post_Processing:./Pre_Processing:./SPH:./Equations
 # 正则表达式表示目录下所有.c文件
 SRC = $(notdir $(wildcard ./*/*.cpp))
 # 头文件路径
