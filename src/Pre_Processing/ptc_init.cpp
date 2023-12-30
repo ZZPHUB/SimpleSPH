@@ -4,7 +4,7 @@ void ptc_init(SPH_PARTICLE *particle)
 {
     omp_lock_t lock;
     omp_init_lock(&lock);
-    #pragma omp parallel for num_threads(6)
+    #pragma omp parallel for num_threads(TH_NUM)
     for(int i=0;i<particle->total;i++)
     {
         omp_set_lock(&lock);

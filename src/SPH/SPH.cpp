@@ -12,6 +12,8 @@ int main(void)
     SPH_KERNEL kernel;
     SPH_PAIR pair;
     SPH_PAIR pair_dircet;
+    RIGID wall;
+    RIGID wedge;
 
     
     particle.total = FLUID_PTC_NUM+VIRTUAL_PTC_NUM+solid_ptc_num(); //get all of the particle number
@@ -26,6 +28,7 @@ int main(void)
     particle.accy = (double *)(calloc(particle.total,sizeof(double)));
     particle.density = (double *)(calloc(particle.total,sizeof(double)));
     //particle.mass = (double *)(calloc(particle.total,sizeof(double))); //for particle's mass is constant
+    particle.w = (double *)(calloc(particle.total,sizeof(double)));
     particle.dif_density = (double *)(calloc(particle.total,sizeof(double)));
     particle.pressure = (double *)(calloc(particle.total,sizeof(double)));
     particle.visxx = (double *)(calloc(particle.total,sizeof(double)));
@@ -42,6 +45,17 @@ int main(void)
     pair.total = 0; 
     pair.i = (unsigned int *)(calloc(5*particle.total,sizeof(unsigned int)));
     pair.j = (unsigned int *)(calloc(5*particle.total,sizeof(unsigned int)));
+
+    //rigid wall init
+    wall.vx=wall.vy=wall.accx=wall.accy=wall.omega=wall.alpha=wall.cogx=wall.cogy=wall.mass=0;
+
+    //rigid body init
+    wedge.vx=wedge.vy=wedge.accx=wedge.accy=wedge.omega=wedge.alpha=0
+    wedge.cogx = TOL_DOMAIN_LENGTH/2;
+    wedge.cogy = 1.024+2*PTC_SPACING;
+    wedge.mass = 12.8;
+
+
 
     //get time current time
     time_t current_time = 0;

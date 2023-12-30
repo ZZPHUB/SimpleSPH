@@ -11,8 +11,6 @@
 #include <stdlib.h>
 
 /* Extern Function Here*/
-extern void get_max_men(void);
-extern void set_max_men(void);
 extern void nnps_direct(SPH_PARTICLE *,SPH_PAIR *);
 extern void nnps_mesh(SPH_PARTICLE *,SPH_PAIR *,unsigned int ***);
 extern void nnps_check(SPH_PAIR *,SPH_PAIR *,unsigned int *);

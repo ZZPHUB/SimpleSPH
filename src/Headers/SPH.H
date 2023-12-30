@@ -34,6 +34,10 @@
 #define GRAVITY_ACC 9.80     //gravity acceleration defin here
 #define ART_SOUND_VEL (10*sqrt(GRAVITY_ACC*FLUID_DOMAIN_DEEPTH))  //art_sound_velosity,it's $p=10 \times (\rho-\rho_{ref})$
 
+#define MU 0.001 //define the constant viscous
+
+#define TH_NUM 7
+
 #define PTC_MASS (REF_DENSITY*pow(PTC_SPACING,3))   //every particle's mass is constant
 
 #define T_START current_time=time(NULL);{ //get start time
@@ -60,6 +64,7 @@ typedef  struct
     double *visyy;      //y-y direction stress
     double *visxy;      //x-y and y-x direction stress
     //double *mass;   //mass of particle
+    double *w; //sum of kernel value
     unsigned int total; //total particles number
     char *type; //particle type:0 denote fulid;1 denote rigid;-1 denote dummy particles
 }SPH_PARTICLE;
@@ -80,6 +85,21 @@ typedef struct
     unsigned int *i;
     unsigned int *j;
 }SPH_PAIR;
+
+typedef struct 
+{
+    /* rigid body kinematics information */
+    double vx;  //rigid body x-direction velocity
+    double vy;  //rigid body y-direction velocity
+    double omega;   //rigid body angular velocity
+    double accx;    //rigid body x-direciton acceleration
+    double accy;    //rigid body y-direction acceleration
+    double alpha;   //rigid body angular acceleration
+    double cogx;    //x-direction center of gravity coordinate
+    double cogy;    //y-direction center of gravity coordinate 
+    double mass;    //rigid body mass 
+}RIGID;
+
 
 
 /* Headers Include Here*/
