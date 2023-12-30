@@ -76,6 +76,7 @@ int main(void)
     ptc_kernel_parallel(&particle,&pair,&kernel);
     T_END("ptc_kernel_parallel")
 
+    /*
     T_START
     ptc_init(&particle); //particles init values
     T_END("ptc_init")
@@ -83,7 +84,7 @@ int main(void)
     T_START
     ptc_vtk_mesh(&particle,mesh);
     T_END("ptc_vtk_mesh")
-
+    */
 
     free(particle.x);
     free(particle.y);
