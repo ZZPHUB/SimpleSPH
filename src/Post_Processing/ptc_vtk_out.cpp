@@ -62,7 +62,7 @@ void ptc_vtk_direct(SPH_PARTICLE *particle,double *scale,char *filename)
     for(unsigned int i=0;i<particle->total;i++)
     {
         if(particle->x[i]>= scale[0] && particle->x[i] <= scale[1] && \
-           particle->y[i]>= scalb[2] && particle->y[i] <= scale[3])
+           particle->y[i]>= scale[2] && particle->y[i] <= scale[3])
            {
                ptc_num++;
            } 
@@ -80,7 +80,7 @@ void ptc_vtk_direct(SPH_PARTICLE *particle,double *scale,char *filename)
     for(unsigned int i=0;i<particle->total;i++)
     {
         if(particle->x[i]>= scale[0] && particle->x[i] <= scale[1] && \
-           particle->y[i]>= scalb[2] && particle->y[i] <= scale[3])
+           particle->y[i]>= scale[2] && particle->y[i] <= scale[3])
            {
                 writefile << setiosflags(ios::scientific) << particle->x[i] << " " \
                 << particle->y[i] << " " << 0.0 << endl;
@@ -97,7 +97,7 @@ void ptc_vtk_direct(SPH_PARTICLE *particle,double *scale,char *filename)
         for(unsigned int i=0;i<particle->total;i++)
         {
             if(particle->x[i]>= scale[0] && particle->x[i] <= scale[1] && \
-                particle->y[i]>= scalb[2] && particle->y[i] <= scale[3])
+                particle->y[i]>= scale[2] && particle->y[i] <= scale[3])
                 {
                     writefile << setiosflags(ios::scientific) << particle->density[i] << endl;
                 } 
@@ -111,7 +111,7 @@ void ptc_vtk_direct(SPH_PARTICLE *particle,double *scale,char *filename)
         for(unsigned int i=0;i<particle->total;i++)
         {
             if(particle->x[i]>= scale[0] && particle->x[i] <= scale[1] && \
-                particle->y[i]>= scalb[2] && particle->y[i] <= scale[3])
+                particle->y[i]>= scale[2] && particle->y[i] <= scale[3])
                 {
                     writefile << setiosflags(ios::scientific) << particle->pressure[i] << endl;
                 } 
@@ -125,7 +125,7 @@ void ptc_vtk_direct(SPH_PARTICLE *particle,double *scale,char *filename)
         for(unsigned int i=0;i<particle->total;i++)
         {
             if(particle->x[i]>= scale[0] && particle->x[i] <= scale[1] && \
-                particle->y[i]>= scalb[2] && particle->y[i] <= scale[3])
+                particle->y[i]>= scale[2] && particle->y[i] <= scale[3])
                 {
                     writefile << setiosflags(ios::scientific) << particle->x[i] <<" " << particle->y[i] << " " \
                     << 0.0 << endl;
@@ -140,7 +140,7 @@ void ptc_vtk_direct(SPH_PARTICLE *particle,double *scale,char *filename)
         for(unsigned int i=0;i<particle->total;i++)
         {
             if(particle->x[i]>= scale[0] && particle->x[i] <= scale[1] && \
-                particle->y[i]>= scalb[2] && particle->y[i] <= scale[3])
+                particle->y[i]>= scale[2] && particle->y[i] <= scale[3])
                 {
                     writefile << setiosflags(ios::scientific) << particle->accx[i] <<" " << particle->accy[i] << " " \
                     << 0.0 << endl;

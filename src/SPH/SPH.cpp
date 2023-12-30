@@ -87,9 +87,9 @@ int main(void)
             if(i%PRINT_TIME_STEP == 0)
             {
                 ptc_info(&particle,&pair,&wedge,i);
-                filename[24] = (i/PRINT_TIME_STEP)/100;
-                filename[25] = ((i/PRINT_TIME_STEP)%100)/10;
-                filename[26] = (i%10)
+                filename[23] = (i/PRINT_TIME_STEP)/100 + 48;
+                filename[24] = ((i/PRINT_TIME_STEP)%100)/10 + 48;
+                filename[25] = ((i/PRINT_TIME_STEP)/%10) + 48;
                 ptc_vtk_direct(&particle,scale,filename);
             }
         }
@@ -123,5 +123,5 @@ int main(void)
 
 void ptc_time_integral(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,RIGID *wall,RIGID *wedge,double d_time)
 {
-    
+
 }
