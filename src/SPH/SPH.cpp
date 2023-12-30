@@ -76,6 +76,19 @@ int main(void)
     ptc_kernel_parallel(&particle,&pair,&kernel);
     T_END("ptc_kernel_parallel")
 
+    for(int i=0;i<pair.total;i++)
+    {
+        for(int j=i+1;j<pair.total;j++)
+        {
+            if((pair.i[i]==pair.i[j])&&(pair.j[i]==pair.j[j]))
+            {
+                cout << "they are the same" << endl;
+                cout << i << " " << pair.i[i] << " " << pair.j[i] << endl;
+                cout << j << " " << pair.i[j] << " " << pair.j[j] << endl;
+            }
+        }
+    }
+
     /*
     T_START
     ptc_init(&particle); //particles init values
