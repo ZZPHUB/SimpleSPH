@@ -16,8 +16,8 @@ extern void nnps_mesh(SPH_PARTICLE *,SPH_PAIR *,unsigned int ***);
 extern void nnps_check(SPH_PAIR *,SPH_PAIR *,unsigned int *);
 extern void ptc_kernel_serial(SPH_PARTICLE *,SPH_PAIR *,SPH_KERNEL *);
 extern void ptc_kernel_parallel(SPH_PARTICLE *,SPH_PAIR *,SPH_KERNEL *);
-extern void mesh_process(SPH_PARTICLE *,unsigned int ***)
-extern void ptc_info(SPH_PARTICLE *,SPH_PAIR *,RIGID *,unsigned int)
+extern void mesh_process(SPH_PARTICLE *,unsigned int ***);
+extern void ptc_info(SPH_PARTICLE *,SPH_PAIR *,RIGID *,unsigned int);
 
 
 /* Define Symbols Here*/
