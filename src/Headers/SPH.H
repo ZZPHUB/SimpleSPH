@@ -36,7 +36,16 @@
 
 #define MU 0.001 //define the constant viscous
 
-#define TH_NUM 7
+#define TH_NUM 7 //paraller threads
+#define INIT_TIME_STEP 500
+#define DELTA_TIME 0.001
+#define PRINT_TIME_STEP 50  //every 50 time step to print
+
+#define PARA (0x01|0x02)
+//0x01----------->density
+//0x02----------->pressure
+//0x04----------->velosity
+//0x08----------->acceleration
 
 #define PTC_MASS (REF_DENSITY*pow(PTC_SPACING,3))   //every particle's mass is constant
 

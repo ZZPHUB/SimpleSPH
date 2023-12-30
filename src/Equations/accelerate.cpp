@@ -30,11 +30,11 @@ void ptc_acc(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel)
         /temp_rho_j)*kernel->dwdx[i];
 
         particle->accy[pair->i[i]] = particle->accy[pair->i[i]] - temp_p*kernel->dwdy[i] + \
-        MU*((particle->visyy[pair->i[i]]+particle->xy[pair->i[i]])/temp_rho_i + (particle->visyy[pair->j[i]]+particle->visxy[pair->j[i]]) \
+        MU*((particle->visyy[pair->i[i]]+particle->visxy[pair->i[i]])/temp_rho_i + (particle->visyy[pair->j[i]]+particle->visxy[pair->j[i]]) \
         /temp_rho_j)*kernel->dwdy[i];
 
         particle->accy[pair->j[i]] = particle->accy[pair->j[i]] + temp_p*kernel->dwdy[i] - \
-        MU*((particle->visyy[pair->i[i]]+particle->visxy[pair->i[i]])/temp_rho_i + (particle->visyy[pair->j[i]+particle->visxy[pair->j[i]]]) \
+        MU*((particle->visyy[pair->i[i]]+particle->visxy[pair->i[i]])/temp_rho_i + (particle->visyy[pair->j[i]]+particle->visxy[pair->j[i]]) \
         /temp_rho_j);
 
         omp_unset_lock(&lock);

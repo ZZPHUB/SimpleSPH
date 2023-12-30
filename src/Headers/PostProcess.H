@@ -9,5 +9,5 @@
 
 /* Extern Functions Here */
 extern void ptc_vtk_mesh(SPH_PARTICLE *,unsigned int ***);
-
+extern void ptc_vtk_direct(SPH_PARTICLE *,double *,char *);
 #endif

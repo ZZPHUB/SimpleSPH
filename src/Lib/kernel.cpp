@@ -15,7 +15,7 @@ void ptc_kernel_serial(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel)
 
             //each particles kernel value sum
             particle->w[pair->i[i]] += kernel->w[i];
-            particle->w[pair->j[i]] += kernel->w[j];
+            particle->w[pair->j[i]] += kernel->w[i];
 
             //each pair's differential kernel value in x and y direction
             kernel->dwdx[i] = ALPHA*(-2.0+1.5*temp_dis/PTC_SML)*(particle->x[pair->i[i]]-particle->x[pair->j[i]])/pow(PTC_SML,2);
@@ -28,7 +28,7 @@ void ptc_kernel_serial(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel)
 
             //each particles kernel value sum
             particle->w[pair->i[i]] += kernel->w[i];
-            particle->w[pair->j[i]] += kernel->w[j];
+            particle->w[pair->j[i]] += kernel->w[i];
             
             //each pair's differential kernel value in x and y direction
             kernel->dwdx[i] = ALPHA*0.5*pow(2-temp_dis/PTC_SML,2)*(particle->x[pair->i[i]]-particle->x[pair->j[i]])/(PTC_SML*temp_dis);
@@ -61,7 +61,7 @@ void ptc_kernel_parallel(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kerne
             
             //each particles kernel value sum
             particle->w[pair->i[i]] += kernel->w[i];
-            particle->w[pair->j[i]] += kernel->w[j];
+            particle->w[pair->j[i]] += kernel->w[i];
             omp_unset_lock(&lock);
         }
         else if (PTC_SML <= temp_dis && temp_dis < PTC_REGION_RADIUS)
@@ -76,7 +76,7 @@ void ptc_kernel_parallel(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kerne
             
             //each particles kernel value sum
             particle->w[pair->i[i]] += kernel->w[i];
-            particle->w[pair->j[i]] += kernel->w[j];
+            particle->w[pair->j[i]] += kernel->w[i];
             omp_unset_lock(&lock);
         }
     }

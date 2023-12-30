@@ -54,3 +54,99 @@ void ptc_vtk_mesh(SPH_PARTICLE *particle,unsigned int ***mesh)
 
     writefile.close();    
 }
+
+void ptc_vtk_direct(SPH_PARTICLE *particle,double *scale,char *filename)
+{
+    unsigned int ptc_num = 0;
+    //get the number of the particles
+    for(unsigned int i=0;i<particle->total;i++)
+    {
+        if(particle->x[i]>= scale[0] && particle->x[i] <= scale[1] && \
+           particle->y[i]>= scalb[2] && particle->y[i] <= scale[3])
+           {
+               ptc_num++;
+           } 
+    }
+
+    ofstream writefile;
+    writefile.open(filename);
+
+    writefile << "# vtk DataFile Version 3.0" << endl;
+    writefile << "sph data" << endl;
+    writefile << "ASCII" << endl;
+    writefile << "DATASET UNSTRUCTURED_GRID" << endl;
+    writefile << "POINTS " << ptc_num << " " << "double" << endl;
+
+    for(unsigned int i=0;i<particle->total;i++)
+    {
+        if(particle->x[i]>= scale[0] && particle->x[i] <= scale[1] && \
+           particle->y[i]>= scalb[2] && particle->y[i] <= scale[3])
+           {
+                writefile << setiosflags(ios::scientific) << particle->x[i] << " " \
+                << particle->y[i] << " " << 0.0 << endl;
+           } 
+    }
+
+    writefile << "POINT_DATA" << " " << ptc_num << endl;
+
+    //density
+    if(PARA&0x01)
+    {
+        writefile << "SCALARS "<< "density double 1" << endl;
+        writefile << "LOOKUP_TABLE DEFAULT" << endl;
+        for(unsigned int i=0;i<particle->total;i++)
+        {
+            if(particle->x[i]>= scale[0] && particle->x[i] <= scale[1] && \
+                particle->y[i]>= scalb[2] && particle->y[i] <= scale[3])
+                {
+                    writefile << setiosflags(ios::scientific) << particle->density[i] << endl;
+                } 
+        }
+    }
+    //pressure
+    if(PARA&0x02)
+    {
+        writefile << "SCALARS "<< "pressure double 1" << endl;
+        writefile << "LOOKUP_TABLE DEFAULT" << endl;
+        for(unsigned int i=0;i<particle->total;i++)
+        {
+            if(particle->x[i]>= scale[0] && particle->x[i] <= scale[1] && \
+                particle->y[i]>= scalb[2] && particle->y[i] <= scale[3])
+                {
+                    writefile << setiosflags(ios::scientific) << particle->pressure[i] << endl;
+                } 
+        }
+    }
+    //velocity
+    if(PARA&0x04)
+    {
+        writefile << "VECTORS "<< "velocity double" << endl;
+        writefile << "LOOKUP_TABLE DEFAULT" << endl;
+        for(unsigned int i=0;i<particle->total;i++)
+        {
+            if(particle->x[i]>= scale[0] && particle->x[i] <= scale[1] && \
+                particle->y[i]>= scalb[2] && particle->y[i] <= scale[3])
+                {
+                    writefile << setiosflags(ios::scientific) << particle->x[i] <<" " << particle->y[i] << " " \
+                    << 0.0 << endl;
+                } 
+        }
+    }
+    //acceleration
+    if(PARA&0x08)
+    {
+        writefile << "VECTORS "<< "acceleration double" << endl;
+        writefile << "LOOKUP_TABLE DEFAULT" << endl;
+        for(unsigned int i=0;i<particle->total;i++)
+        {
+            if(particle->x[i]>= scale[0] && particle->x[i] <= scale[1] && \
+                particle->y[i]>= scalb[2] && particle->y[i] <= scale[3])
+                {
+                    writefile << setiosflags(ios::scientific) << particle->accx[i] <<" " << particle->accy[i] << " " \
+                    << 0.0 << endl;
+                } 
+        }
+    }
+
+
+}

@@ -7,7 +7,7 @@ void fluid_ptc_pressure(SPH_PARTICLE *particle)
     double c = ART_SOUND_VEL; //ariti_sound_velocity
 
     #pragma omp parallel for num_threads(TH_NUM)
-    for(unsigned int i=0;i<PTC_TOL_NUM;i++)
+    for(unsigned int i=0;i<particle->total;i++)
     {
         if(particle->type[i]==0)
         {

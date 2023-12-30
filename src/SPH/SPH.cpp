@@ -6,6 +6,8 @@
 
 using namespace std;
 
+void ptc_time_integral(SPH_PARTICLE *,SPH_PAIR *,SPH_KERNEL *,RIGID *,RIGID *,double);
+
 int main(void)
 { 
     SPH_PARTICLE particle;
@@ -50,12 +52,10 @@ int main(void)
     wall.vx=wall.vy=wall.accx=wall.accy=wall.omega=wall.alpha=wall.cogx=wall.cogy=wall.mass=0;
 
     //rigid body init
-    wedge.vx=wedge.vy=wedge.accx=wedge.accy=wedge.omega=wedge.alpha=0
+    wedge.vx=wedge.vy=wedge.accx=wedge.accy=wedge.omega=wedge.alpha=0;
     wedge.cogx = TOL_DOMAIN_LENGTH/2;
-    wedge.cogy = 1.024+2*PTC_SPACING;
+    wedge.cogy = 1.024+4*PTC_SPACING;
     wedge.mass = 12.8;
-
-
 
     //get time current time
     time_t current_time = 0;
@@ -73,48 +73,31 @@ int main(void)
     }
 
     ptc_generate(&particle);    //generate the fluid solid and dummy particles
-    mesh_process(&particle,mesh);   //generate the mesh 
+    
+    double delta_time = DELTA_TIME;  //the time step length
+    unsigned int time_step = INIT_TIME_STEP; //time step num
+    char filename[] = "../data/postprocess/sph001.vtk"; //filename 
+    double scale[4] = {0,TOL_DOMAIN_LENGTH,0,TOL_DOMAIN_DEEPTH}; //output domain scale
 
-    //count the time of the nnps_mesh with parallel
-    T_START
-    nnps_mesh(&particle,&pair,mesh);    //use mesh to search interactive pairs
-    T_END("nnps_mesh")
-
-    cout << "total particle num is " << particle.total << endl;
-    //cout << "nnds_direct find total pair is " << pair_dircet.total << endl;
-    cout << "nnds_mesh find total pair is " << pair.total << endl;
-    //cout << "the total same pair is " << total << endl;
-
-    T_START
-    ptc_init(&particle);
-    T_END("ptc_init");
-
-    T_START
-    ptc_kernel_parallel(&particle,&pair,&kernel);
-    T_END("ptc_kernel_parallel")
-
-    T_START
-    ptc_dif_density(&particle,&pair,&kernel);
-    T_END("ptc_dif_density")
-
-    T_START
-    ptc_viscous(&particle,&pair,&kernel,&wall,&wedge);
-    T_END("ptc_viscous");
-
-    T_START 
-    fluid_ptc_pressure(&particle);
-    T_END("fluid_ptc_pressure");
-
-
-    /*
-    T_START
-    ptc_init(&particle); //particles init values
-    T_END("ptc_init")
-
-    T_START
-    ptc_vtk_mesh(&particle,mesh);
-    T_END("ptc_vtk_mesh")
-    */
+    while (true)
+    {
+        for(unsigned int i=0;i<time_step;i++)
+        {
+            ptc_time_integral(&particle,&pair,&kernel,&wall,&wedge,delta_time);
+            if(i%PRINT_TIME_STEP == 0)
+            {
+                ptc_info(&particle,&pair,&wedge,i);
+                filename[24] = (i/PRINT_TIME_STEP)/100;
+                filename[25] = ((i/PRINT_TIME_STEP)%100)/10;
+                filename[26] = (i%10)
+                ptc_vtk_direct(&particle,scale,filename);
+            }
+        }
+        system("clear");
+        cout << "press 0 to kill precess or num(>100) for more steps" << endl;
+        cin >> time_step;
+        if(time_step == 0) break;
+    }
 
     free(particle.x);
     free(particle.y);
@@ -138,4 +121,7 @@ int main(void)
     return 0;
 }
 
-
+void ptc_time_integral(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,RIGID *wall,RIGID *wedge,double d_time)
+{
+    
+}

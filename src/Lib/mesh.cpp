@@ -1,7 +1,7 @@
 #include "Lib.H"
 using namespace std;
 
-void mesh_process(SPH_PARTICLE *particle,unsigned ***mesh)
+void mesh_process(SPH_PARTICLE *particle,unsigned int ***mesh)
 {
     unsigned int head;
     unsigned int j=0;
@@ -49,7 +49,7 @@ void mesh_process(SPH_PARTICLE *particle,unsigned ***mesh)
     }
     if(mesh_ptc_tol == particle->total)
     {
-        cout << "num of particles in meshs equal to tolal particles " << endl;
+        //cout << "num of particles in meshs equal to tolal particles " << endl;
     }
     else 
     {
