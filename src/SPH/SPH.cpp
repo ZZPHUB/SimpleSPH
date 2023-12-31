@@ -6,7 +6,6 @@
 
 using namespace std;
 
-void ptc_time_integral(SPH_PARTICLE *,SPH_PAIR *,SPH_KERNEL *,unsigned int ***,RIGID *,RIGID *,double,int);
 
 int main(void)
 { 
@@ -97,7 +96,7 @@ int main(void)
         for(step;step<time_step;step++)
         {
             //calculate and integration
-            ptc_time_integral(&particle,&pair,&kernel,&wall,&wedge,delta_time,rigid_flag); 
+            ptc_time_integral(&particle,&pair,&kernel,mesh,&wall,&wedge,delta_time,rigid_flag); 
             if(step%PRINT_TIME_STEP == 0)
             {
                 ptc_info(&particle,&pair,&wedge,step);
@@ -216,7 +215,7 @@ void ptc_time_integral(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,
             omp_set_lock(&lock);
             wedge->accx += particle->accx[i]*(PTC_MASS/wedge->mass);
             wedge->accy += particle->accy[i]*(PTC_MASS/wedge->mass);
-            wedge->alpha += ((particle->x[i]-wedge->cogx)*particle->accy[i]-(particle->y[i]-wedge->cogy)*particle->accx[i])*(PTC_MASS/wedeg->moi);
+            wedge->alpha += ((particle->x[i]-wedge->cogx)*particle->accy[i]-(particle->y[i]-wedge->cogy)*particle->accx[i])*(PTC_MASS/wedge->moi);
             omp_unset_lock(&lock);
         }
     }
