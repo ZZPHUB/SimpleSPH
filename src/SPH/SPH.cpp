@@ -165,7 +165,7 @@ void ptc_time_integral(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,
     ptc_kernel_parallel(particle,pair,kernel);
 
     //ptc_dif_density
-    ptc_dif_density(particle,pair,kernel);
+    ptc_dif_density(particle,pair,kernel,wall,wedge);
 
     //ptc_viscous
     ptc_viscous(particle,pair,kernel,wall,wedge);

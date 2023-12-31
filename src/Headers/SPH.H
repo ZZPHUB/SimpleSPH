@@ -111,6 +111,8 @@ typedef struct
 }RIGID;
 
 
+/* Extern Functions Here*/
+void ptc_time_integral(SPH_PARTICLE *,SPH_PAIR *,SPH_KERNEL *,unsigned int ***,RIGID *,RIGID *,double,int);
 
 /* Headers Include Here*/
 //#include <omp.h>
