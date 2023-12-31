@@ -90,19 +90,20 @@ int main(void)
     unsigned int time_step = INIT_TIME_STEP; //time step num
     char filename[] = "../data/postprocess/sph001.vtk"; //filename 
     double scale[4] = {0,TOL_DOMAIN_LENGTH,0,TOL_DOMAIN_DEEPTH}; //output domain scale
+    unsigned int step = 0;
 
     while (true)
     {
-        for(unsigned int i=0;i<time_step;i++)
+        for(step;step<time_step;step++)
         {
             //calculate and integration
             ptc_time_integral(&particle,&pair,&kernel,&wall,&wedge,delta_time,rigid_flag); 
-            if(i%PRINT_TIME_STEP == 0)
+            if(step%PRINT_TIME_STEP == 0)
             {
-                ptc_info(&particle,&pair,&wedge,i);
-                filename[23] = (i/PRINT_TIME_STEP)/100 + 48;
-                filename[24] = ((i/PRINT_TIME_STEP)%100)/10 + 48;
-                filename[25] = ((i/PRINT_TIME_STEP)/%10) + 48;
+                ptc_info(&particle,&pair,&wedge,step);
+                filename[23] = (step/PRINT_TIME_STEP)/100 + 48;
+                filename[24] = ((step/PRINT_TIME_STEP)%100)/10 + 48;
+                filename[25] = ((step/PRINT_TIME_STEP)/%10) + 48;
                 ptc_vtk_direct(&particle,scale,filename);
             }
         }
@@ -110,7 +111,9 @@ int main(void)
         cout << "press 0 to kill precess or num(>100) for more steps" << endl;
         cin >> time_step;
         if(time_step == 0) break;
+        time_step += INIT_TIME_STEP;
         rigid_flag = 1;
+        scale[2] = FLUID_DOMAIN_DEEPTH/2;
     }
 
     free(particle.x);
