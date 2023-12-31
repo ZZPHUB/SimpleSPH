@@ -266,7 +266,7 @@ void ptc_time_integral(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,
             omp_set_lock(&lock);
             particle->pressure[pair->j[i]] += (particle->pressure[pair->i[i]]+particle->density[pair->i[i]]*\
             ((wall->accx-wall->alpha*(particle->y[pair->j[i]] - wall->cogy)-wall->omega*pow(particle->x[pair->j[i]]-wall->cogx,2))*(particle->x[pair->i[i]]-particle->x[pair->j[i]])*kernel->w[i]+\
-             (wall->accy+wall->alpha*(particle->x[pair->j[i]] - wall->cogx)-wall->omega*pow(particle->y[pair->j[i]]-wall->cogy,2))*(particle->y[pair->i[i]]-particle->y[pair->j[i]])*kernel->w[i]))/particle->w[pair->j[i]];
+             (wall->accy+wall->alpha*(particle->x[pair->j[i]] - wall->cogx)-wall->omega*pow(particle->y[pair->j[i]]-wall->cogy,2)+GRAVITY_ACC)*(particle->y[pair->i[i]]-particle->y[pair->j[i]])*kernel->w[i]))/particle->w[pair->j[i]];
             
             //correct virtual particle velocity for viscous calculation
             particle->vx[pair->j[i]] += particle->vx[pair->i[i]]/particle->w[pair->j[i]];
@@ -282,7 +282,7 @@ void ptc_time_integral(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,
         if(particle->type[i]!=0)
         {
             omp_set_lock(&lock);
-            particle->density[i] = particle->pressure[i]/ART_SOUND_VEL + REF_DENSITY;
+            particle->density[i] = particle->pressure[i]/pow(ART_SOUND_VEL,2) + REF_DENSITY;
             omp_unset_lock(&lock);
         }
     }

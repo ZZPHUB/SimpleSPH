@@ -43,7 +43,7 @@ void ptc_acc(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel)
 
         particle->accy[pair->j[i]] = particle->accy[pair->j[i]] + temp_p*kernel->dwdy[i] - \
         MU*((particle->visyy[pair->i[i]]+particle->visxy[pair->i[i]])/temp_rho_i + (particle->visyy[pair->j[i]]+particle->visxy[pair->j[i]]) \
-        /temp_rho_j);
+        /temp_rho_j)*kernel->dwdy[i];
 
         omp_unset_lock(&lock);
     }
@@ -52,9 +52,12 @@ void ptc_acc(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel)
     //add gravity acceleration in y-direction
     for(unsigned int i=0;i<particle->total;i++)
     {
-        omp_set_lock(&lock);
-        particle->accy[i] -= GRAVITY_ACC;
-        omp_unset_lock(&lock);
+        if(particle->type[i]==0)
+        {
+            omp_set_lock(&lock);
+            particle->accy[i] -= GRAVITY_ACC;
+            omp_unset_lock(&lock);
+        }
     }
     
 }
