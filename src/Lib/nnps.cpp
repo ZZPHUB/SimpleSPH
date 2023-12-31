@@ -27,6 +27,7 @@ void ptc_nnps_mesh(SPH_PARTICLE *particle,SPH_PAIR *pair,unsigned int ***mesh)
 {
     omp_lock_t lock;
     omp_init_lock(&lock);
+    pair->total = 0;
     #pragma omp parallel for num_threads(TH_NUM) 
     for(int j=0;j<MESH_LENGTH_NUM;j++)
     {
