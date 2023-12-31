@@ -103,7 +103,7 @@ int main(void)
                 ptc_info(&particle,&pair,&wedge,step);
                 filename[23] = (step/PRINT_TIME_STEP)/100 + 48;
                 filename[24] = ((step/PRINT_TIME_STEP)%100)/10 + 48;
-                filename[25] = ((step/PRINT_TIME_STEP)/%10) + 48;
+                filename[25] = ((step/PRINT_TIME_STEP)%10) + 48;
                 ptc_vtk_direct(&particle,scale,filename);
             }
         }
