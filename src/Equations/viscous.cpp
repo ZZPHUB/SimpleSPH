@@ -7,6 +7,15 @@ void ptc_viscous(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,RIGID 
     double m = PTC_MASS;
     double div_vx = 0;
     double div_vy = 0;
+
+    #pragma omp parallel for num_threads(TH_NUM)
+    for(unsigned int i=0;i<particle->total;i++)
+    {
+        omp_set_lock(&lock);
+        particle->visxx[i] = particle->visyy[i] = particle->visxy[i] = 0;
+        omp_unset_lock(&lock);
+    }
+
     #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<pair->total;i++)
     {

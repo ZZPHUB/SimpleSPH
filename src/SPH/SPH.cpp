@@ -149,16 +149,7 @@ void ptc_time_integral(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,
     ptc_nnps_mesh(particle,pair,mesh);
 
     //before the kernel generate,we need init the particle->w,for it donot involve the time integration
-    #pragma omp parallel for num_threads(TH_NUM)
-    for(unsigned int i=0;i<particle->total;i++)
-    {
-        omp_set_lock(&lock);
-        particle->w[i] = 0;
-        particle->visxx[i] = 0;
-        particle->visxy[i] = 0;
-        particle->visyy[i] = 0;
-        omp_unset_lock(&lock);
-    }
+    
 
     //ptc_kernel_parallel
     ptc_kernel_parallel(particle,pair,kernel);

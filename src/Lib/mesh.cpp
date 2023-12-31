@@ -64,6 +64,7 @@ void ptc_mesh_process(SPH_PARTICLE *particle,unsigned int ***mesh)
     else 
     {
         cout << "some particles are not in the mesh" << endl;
+        cout << "total particles is: " << particle->total << "mesh ptc tol: " << mesh_ptc_tol << endl;
     }
 
 }

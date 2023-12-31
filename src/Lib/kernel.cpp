@@ -45,6 +45,15 @@ void ptc_kernel_parallel(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kerne
     omp_lock_t lock;
     omp_init_lock(&lock);
     
+    //particle->w donot involve time integration
+    #pragma omp parallel for num_threads(TH_NUM)
+    for(unsigned int i=0;i<particle->total;i++)
+    {
+        omp_set_lock(&lock);
+        particle->w[i] = 0;
+        omp_unset_lock(&lock);
+    }
+
     #pragma omp parallel for num_threads(TH_NUM)
     for(int i=0;i<pair->total;i++)
     {   

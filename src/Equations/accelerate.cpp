@@ -10,6 +10,14 @@ void ptc_acc(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel)
     double temp_rho_j = 0;
 
     #pragma omp parallel for num_threads(TH_NUM)
+    for(unsigned int i=0;i<particle->total;i++)
+    {
+        omp_set_lock(&lock);
+        particle->accx[i] = particle->accy[i] = 0;
+        omp_unset_lock(&lock);
+    }
+
+    #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<pair->total;i++)
     {
         omp_set_lock(&lock);
