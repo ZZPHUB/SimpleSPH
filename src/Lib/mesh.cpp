@@ -1,7 +1,7 @@
 #include "Lib.H"
 using namespace std;
 
-void mesh_process(SPH_PARTICLE *particle,unsigned int ***mesh)
+void ptc_mesh_process(SPH_PARTICLE *particle,unsigned int ***mesh)
 {
     unsigned int head;
     unsigned int j=0;

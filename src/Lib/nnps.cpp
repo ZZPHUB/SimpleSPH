@@ -1,7 +1,7 @@
 #include "Lib.H"
 using namespace std;
 
-void nnps_direct(SPH_PARTICLE *particle,SPH_PAIR *pair)
+void ptc_nnps_direct(SPH_PARTICLE *particle,SPH_PAIR *pair)
 {   cout << "here in nnps" << endl;
     pair->total = 0;
     for(int i=0;i<particle->total;i++)
@@ -23,7 +23,7 @@ void nnps_direct(SPH_PARTICLE *particle,SPH_PAIR *pair)
     }
 }
 
-void nnps_mesh(SPH_PARTICLE *particle,SPH_PAIR *pair,unsigned int ***mesh)
+void ptc_nnps_mesh(SPH_PARTICLE *particle,SPH_PAIR *pair,unsigned int ***mesh)
 {
     omp_lock_t lock;
     omp_init_lock(&lock);
@@ -167,7 +167,7 @@ void nnps_mesh(SPH_PARTICLE *particle,SPH_PAIR *pair,unsigned int ***mesh)
     }
 }
 
-void nnps_check(SPH_PAIR *pair,SPH_PAIR *pair_direct,unsigned int *total)
+void ptc_nnps_check(SPH_PAIR *pair,SPH_PAIR *pair_direct,unsigned int *total)
 {
     *total = 0;
     for(int i=0;i<pair->total;i++)

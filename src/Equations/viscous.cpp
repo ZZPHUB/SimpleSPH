@@ -18,13 +18,13 @@ void ptc_viscous(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,RIGID 
         }
         else if(particle->type[pair->j[i]]==-1)
         {
-            div_vx = (2*wall->vx - particle->vx[pair->j[i]] - particle->vx[pair->i[i]])*kernel->dwdx[i];
-            div_vy = (2*wall->vy - particle->vy[pair->j[i]] - particle->vy[pair->i[i]])*kernel->dwdy[i];
+            div_vx = (2*(wall->vx - wall->omega*(particle->y[pair->j[i]] - wall->cogy)) - particle->vx[pair->j[i]] - particle->vx[pair->i[i]])*kernel->dwdx[i];
+            div_vy = (2*(wall->vy + wall->omega*(particle->x[pair->j[i]] - wall->cogx)) - particle->vy[pair->j[i]] - particle->vy[pair->i[i]])*kernel->dwdy[i];
         }
         else if(particle->type[pair->j[i]]==1)
         {
-            div_vx = (2*wedge->vx - particle->vx[pair->j[i]] - particle->vx[pair->i[i]])*kernel->dwdx[i];
-            div_vy = (2*wedge->vy - particle->vy[pair->j[i]] - particle->vy[pair->i[i]])*kernel->dwdy[i];
+            div_vx = (2*(wedge->vx - wedge->omega*(particle->y[pair->j[i]] - wedge->cogy)) - particle->vx[pair->j[i]] - particle->vx[pair->i[i]])*kernel->dwdx[i];
+            div_vy = (2*(wedge->vy + wedge->omega*(particle->x[pair->j[i]] - wedge->cogx)) - particle->vy[pair->j[i]] - particle->vy[pair->i[i]])*kernel->dwdy[i];
         }
 
         particle->visxx[pair->i[i]] = particle->visxx[pair->i[i]] + \

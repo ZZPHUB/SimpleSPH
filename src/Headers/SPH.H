@@ -107,6 +107,7 @@ typedef struct
     double cogx;    //x-direction center of gravity coordinate
     double cogy;    //y-direction center of gravity coordinate 
     double mass;    //rigid body mass 
+    double moi;     //rigid body moment of inertia
 }RIGID;
 
 
