@@ -56,12 +56,12 @@ int main(void)
     wedge.cogx = TOL_DOMAIN_LENGTH/2;
     wedge.cogy = 1.024+4*PTC_SPACING;
     wedge.mass = 12.8;
-    for(int i=0;i<particle->total;i++)
+    for(int i=0;i<particle.total;i++)
     {
-        if(particle->type[i]==1)
+        if(particle.type[i]==1)
         {
             //set the rigid body moment of inertia
-            wedge.moi += (double)(wedge.mass/solid_ptc_num())*sqrt(pow(particle->x[i]-wedge.cogx,2)+pow(particle->y[i]-wedge->cogy,2));
+            wedge.moi += (double)(wedge.mass/solid_ptc_num())*sqrt(pow(particle.x[i]-wedge.cogx,2)+pow(particle.y[i]-wedge.cogy,2));
         }
     }
 
@@ -292,7 +292,7 @@ void ptc_time_integral(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,
         if(particle->type[i]!=0)
         {
             omp_set_lock(&lock);
-            particle->density[i] = particle->pressure/ART_SOUND_VEL + REF_DENSITY;
+            particle->density[i] = particle->pressure[i]/ART_SOUND_VEL + REF_DENSITY;
             omp_unset_lock(&lock);
         }
     }

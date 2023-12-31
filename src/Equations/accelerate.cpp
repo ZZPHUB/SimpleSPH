@@ -16,7 +16,7 @@ void ptc_acc(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel)
 
         //to reduce the calculate times,define $\rho^2$ to temp para
         temp_rho_i = pow(particle->density[pair->i[i]],2);
-        temp_rho_i = pow(particle->density[pair->j[i]],2);
+        temp_rho_j = pow(particle->density[pair->j[i]],2);
 
         //to reduce the calculate tiems,define $p_i/\rho_i^2 + p_j/\rho_j^2$ to temp para
         temp_p = particle->pressure[pair->i[i]]/temp_rho_i + particle->pressure[pair->j[i]]/temp_rho_j;
