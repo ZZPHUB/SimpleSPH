@@ -1,6 +1,6 @@
 #include "PreProcess.H"
 
-void ptc_init(SPH_PARTICLE *particle,RIGID *wedge)
+void ptc_init(SPH_PARTICLE *particle,RIGID *wall,RIGID *wedge)
 {
     omp_lock_t lock;
     omp_init_lock(&lock);

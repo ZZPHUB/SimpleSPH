@@ -50,12 +50,7 @@ int main(void)
     //rigid wall init
     wall.vx=wall.vy=wall.accx=wall.accy=wall.omega=wall.alpha=wall.cogx=wall.cogy=wall.mass=0;
 
-    //rigid body init
-    wedge.vx=wedge.vy=wedge.accx=wedge.accy=wedge.omega=wedge.alpha=0;
-    wedge.cogx = TOL_DOMAIN_LENGTH/2;
-    wedge.cogy = 1.024+4*PTC_SPACING;
-    wedge.mass = 12.8;
-    wedge.moi = 0;
+    
 
     //get time current time
     time_t current_time = 0;
@@ -76,7 +71,7 @@ int main(void)
     }
 
     ptc_generate(&particle);    //generate the fluid solid and dummy particles
-    ptc_init(&particle);    //particle info init
+    ptc_init(&particle,&wall,&wedge);    //particle info init
     
     double delta_time = DELTA_TIME;  //the time step length
     unsigned int time_step = INIT_TIME_STEP; //time step num

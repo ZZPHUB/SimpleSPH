@@ -14,5 +14,5 @@
 extern void solid_ptc_generate(SPH_PARTICLE *);
 extern unsigned int solid_ptc_num(void);
 extern void ptc_generate(SPH_PARTICLE *);
-extern void ptc_init(SPH_PARTICLE *);
+extern void ptc_init(SPH_PARTICLE *,RIGID *,RIGID *);
 #endif
