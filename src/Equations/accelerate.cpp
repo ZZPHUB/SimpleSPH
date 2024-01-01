@@ -48,6 +48,7 @@ void ptc_acc(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel)
         omp_unset_lock(&lock);
     }
 
+    /*
     #pragma omp parallel for num_threads(TH_NUM)
     //add gravity acceleration in y-direction
     for(unsigned int i=0;i<particle->total;i++)
@@ -59,5 +60,6 @@ void ptc_acc(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel)
             omp_unset_lock(&lock);
         }
     }
+    */
     
 }
