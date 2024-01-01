@@ -236,7 +236,7 @@ void ptc_time_integral(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,
     #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<pair->total;i++)
     {
-        if(particle->type[pair->j[i]]==1)
+        if(particle->type[pair->j[i]]==1 && particle->w[pair->j[i]]!= 0)
         {
             omp_set_lock(&lock);
             particle->pressure[pair->j[i]] += (particle->pressure[pair->i[i]]+particle->density[pair->i[i]]*\
@@ -248,7 +248,7 @@ void ptc_time_integral(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,
             particle->vy[pair->j[i]] += particle->vy[pair->i[i]]/particle->w[pair->j[i]];
             omp_unset_lock(&lock);
         }
-        else if(particle->type[pair->j[i]]==-1)
+        else if(particle->type[pair->j[i]]==-1 && particle->w[pair->j[i]]!=0)
         {
             //virtual particles pressure
             omp_set_lock(&lock);
