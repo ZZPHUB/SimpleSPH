@@ -101,6 +101,7 @@ int main(void)
         time_step += INIT_TIME_STEP;
         rigid_flag = 1;
         scale[2] = FLUID_DOMAIN_DEEPTH/2;
+        wedge->vy = -5.0;
     }
 
     free(particle.x);
