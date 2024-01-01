@@ -55,14 +55,7 @@ int main(void)
     wedge.cogx = TOL_DOMAIN_LENGTH/2;
     wedge.cogy = 1.024+4*PTC_SPACING;
     wedge.mass = 12.8;
-    for(int i=0;i<particle.total;i++)
-    {
-        if(particle.type[i]==1)
-        {
-            //set the rigid body moment of inertia
-            wedge.moi += (double)(wedge.mass/solid_ptc_num())*sqrt(pow(particle.x[i]-wedge.cogx,2)+pow(particle.y[i]-wedge.cogy,2));
-        }
-    }
+    wedge.moi = 0;
 
     //get time current time
     time_t current_time = 0;
