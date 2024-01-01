@@ -56,6 +56,9 @@
 // two paritcles distance
 #define PTC_DISTANCE(a,b) (sqrt(pow(particle->x[a]-particle->x[b],2)+pow(particle->y[a]-particle->y[b],2)))
 
+#define PI 3.14159265358
+#define ALPHA 15.0/(7*PI*pow(PTC_SML,2))
+
 /* Data Structure Declare */
 typedef  struct 
 {
