@@ -159,12 +159,15 @@ void ptc_time_integral(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,
         if(particle->type[i]!=0)
         {
             omp_set_lock(&lock);
-            particle->vx[i] = 0;
-            particle->vy[i] = 0;
+            //particle->vx[i] = 0;
+            //particle->vy[i] = 0;
+            particle->vx[i] *= (2.0*ALPHA)/3.0;
+            particle->vy[i] *= (2.0*ALPHA)/3.0;
             particle->accx[i] = 0;
             particle->accy[i] = 0;
             particle->density[i] = 0;
-            particle->pressure[i] = 0;
+            //particle->pressure[i] = 0;
+            particle->pressure *= (2.0*ALPHA)/3.0;
             omp_unset_lock(&lock);
         }
     }
@@ -240,9 +243,9 @@ void ptc_time_integral(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,
         if(particle->type[pair->j[i]]==1)
         {
             omp_set_lock(&lock);
-            particle->pressure[pair->j[i]] += (particle->pressure[pair->i[i]]+particle->density[pair->i[i]]*\
+            particle->pressure[pair->j[i]] += (particle->pressure[pair->i[i]]*kernel->w[i] /*+particle->density[pair->i[i]]*\
             ((wedge->accx-wedge->alpha*(particle->y[pair->j[i]] - wedge->cogy)-wedge->omega*pow(particle->x[pair->j[i]]-wedge->cogx,2))*(particle->x[pair->i[i]]-particle->x[pair->j[i]])*kernel->w[i]+\
-             (wedge->accy+wedge->alpha*(particle->x[pair->j[i]] - wedge->cogx)-wedge->omega*pow(particle->y[pair->j[i]]-wedge->cogy,2))*(particle->y[pair->i[i]]-particle->y[pair->j[i]])*kernel->w[i]))/(particle->w[pair->j[i]]);
+             (wedge->accy+wedge->alpha*(particle->x[pair->j[i]] - wedge->cogx)-wedge->omega*pow(particle->y[pair->j[i]]-wedge->cogy,2))*(particle->y[pair->i[i]]-particle->y[pair->j[i]])*kernel->w[i])*/)/(particle->w[pair->j[i]]);
             
             //correct virtual particles velocity for viscous calculation
             particle->vx[pair->j[i]] += particle->vx[pair->i[i]]/(particle->w[pair->j[i]]);
@@ -253,9 +256,9 @@ void ptc_time_integral(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,
         {
             //virtual particles pressure
             omp_set_lock(&lock);
-            particle->pressure[pair->j[i]] += (particle->pressure[pair->i[i]]+particle->density[pair->i[i]]*\
+            particle->pressure[pair->j[i]] += (particle->pressure[pair->i[i]]*kernel->w[i] /*+particle->density[pair->i[i]] * \
             ((wall->accx-wall->alpha*(particle->y[pair->j[i]] - wall->cogy)-wall->omega*pow(particle->x[pair->j[i]]-wall->cogx,2))*(particle->x[pair->i[i]]-particle->x[pair->j[i]])*kernel->w[i]+\
-             (wall->accy+wall->alpha*(particle->x[pair->j[i]] - wall->cogx)-wall->omega*pow(particle->y[pair->j[i]]-wall->cogy,2)/*+GRAVITY_ACC*/)*(particle->y[pair->i[i]]-particle->y[pair->j[i]])*kernel->w[i]))/(particle->w[pair->j[i]]);
+             (wall->accy+wall->alpha*(particle->x[pair->j[i]] - wall->cogx)-wall->omega*pow(particle->y[pair->j[i]]-wall->cogy,2))*(particle->y[pair->i[i]]-particle->y[pair->j[i]])*kernel->w[i])*/ )/(particle->w[pair->j[i]]);
             
             //correct virtual particle velocity for viscous calculation
             particle->vx[pair->j[i]] += particle->vx[pair->i[i]]/(particle->w[pair->j[i]]);
