@@ -13,7 +13,8 @@ void ptc_acc(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel)
     for(unsigned int i=0;i<particle->total;i++)
     {
         omp_set_lock(&lock);
-        particle->accx[i] = particle->accy[i] = 0;
+        particle->accx[i] = 0;
+        particle->accy[i] = -GRAVITY_ACC;
         omp_unset_lock(&lock);
     }
 
@@ -30,20 +31,20 @@ void ptc_acc(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel)
         temp_p = particle->pressure[pair->i[i]]/temp_rho_i + particle->pressure[pair->j[i]]/temp_rho_j;
 
         particle->accx[pair->i[i]] = particle->accx[pair->i[i]] - temp_p*kernel->dwdx[i] + \
-        MU*((particle->visxx[pair->i[i]]+particle->visxy[pair->i[i]])/temp_rho_i + (particle->visxx[pair->j[i]]+particle->visxy[pair->j[i]]) \
-        /temp_rho_j)*kernel->dwdx[i];
+        MU*(particle->visxx[pair->i[i]]/temp_rho_i + particle->visxx[pair->j[i]]/temp_rho_j)*kernel->dwdx[i] + \
+        MU*(particle->visxy[pair->i[i]]/temp_rho_i + particle->visxy[pair->j[i]]/temp_rho_j)*kernel->dwdy[i];
 
         particle->accx[pair->j[i]] = particle->accx[pair->j[i]] + temp_p*kernel->dwdx[i] - \
-        MU*((particle->visxx[pair->i[i]]+particle->visxy[pair->i[i]])/temp_rho_i + (particle->visxx[pair->j[i]]+particle->visxy[pair->j[i]]) \
-        /temp_rho_j)*kernel->dwdx[i];
+        MU*(particle->visxx[pair->i[i]]/temp_rho_i + particle->visxx[pair->j[i]]/temp_rho_j)*kernel->dwdx[i] - \
+        MU*(particle->visxy[pair->i[i]]/temp_rho_i + particle->visxy[pair->j[i]]/temp_rho_j)*kernel->dwdy[i];
 
         particle->accy[pair->i[i]] = particle->accy[pair->i[i]] - temp_p*kernel->dwdy[i] + \
-        MU*((particle->visyy[pair->i[i]]+particle->visxy[pair->i[i]])/temp_rho_i + (particle->visyy[pair->j[i]]+particle->visxy[pair->j[i]]) \
-        /temp_rho_j)*kernel->dwdy[i];
+        MU*(particle->visyy[pair->i[i]]/temp_rho_i + particle->visyy[pair->j[i]]/temp_rho_j)*kernel->dwdy[i] + \
+        MU*(particle->visxy[pair->i[i]]/temp_rho_i + particle->visxy[pair->j[i]]/temp_rho_j)*kernel->dwdx[i];
 
         particle->accy[pair->j[i]] = particle->accy[pair->j[i]] + temp_p*kernel->dwdy[i] - \
-        MU*((particle->visyy[pair->i[i]]+particle->visxy[pair->i[i]])/temp_rho_i + (particle->visyy[pair->j[i]]+particle->visxy[pair->j[i]]) \
-        /temp_rho_j)*kernel->dwdy[i];
+        MU*(particle->visyy[pair->i[i]]/temp_rho_i + particle->visyy[pair->j[i]]/temp_rho_j)*kernel->dwdy[i] - \
+        MU*(particle->visxy[pair->i[i]]/temp_rho_i + particle->visxy[pair->j[i]]/temp_rho_j)*kernel->dwdx[i];
 
         omp_unset_lock(&lock);
     }

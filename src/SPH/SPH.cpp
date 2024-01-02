@@ -75,7 +75,7 @@ int main(void)
     
     double delta_time = DELTA_TIME;  //the time step length
     unsigned int time_step = INIT_TIME_STEP; //time step num
-    char filename[] = "../data/postprocess/sph001.vtk"; //filename 
+    char filename[] = "../data/postprocess/sph000.vtk"; //filename 
     double scale[4] = {0,TOL_DOMAIN_LENGTH,0,TOL_DOMAIN_DEEPTH}; //output domain scale
     unsigned int step = 0;
 
@@ -85,9 +85,9 @@ int main(void)
         {
             //calculate and integration
             ptc_time_integral(&particle,&pair,&kernel,mesh,&wall,&wedge,delta_time,rigid_flag); 
+            ptc_info(&particle,&pair,&wedge,step);
             if(step%PRINT_TIME_STEP == 0)
             {
-                ptc_info(&particle,&pair,&wedge,step);
                 filename[23] = (step/PRINT_TIME_STEP)/100 + 48;
                 filename[24] = ((step/PRINT_TIME_STEP)%100)/10 + 48;
                 filename[25] = ((step/PRINT_TIME_STEP)%10) + 48;
@@ -237,29 +237,29 @@ void ptc_time_integral(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,
     #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<pair->total;i++)
     {
-        if(particle->type[pair->j[i]]==1 && particle->w[pair->j[i]]!= 0)
+        if(particle->type[pair->j[i]]==1)
         {
             omp_set_lock(&lock);
             particle->pressure[pair->j[i]] += (particle->pressure[pair->i[i]]+particle->density[pair->i[i]]*\
             ((wedge->accx-wedge->alpha*(particle->y[pair->j[i]] - wedge->cogy)-wedge->omega*pow(particle->x[pair->j[i]]-wedge->cogx,2))*(particle->x[pair->i[i]]-particle->x[pair->j[i]])*kernel->w[i]+\
-             (wedge->accy+wedge->alpha*(particle->x[pair->j[i]] - wedge->cogx)-wedge->omega*pow(particle->y[pair->j[i]]-wedge->cogy,2))*(particle->y[pair->i[i]]-particle->y[pair->j[i]])*kernel->w[i]))/(particle->w[pair->j[i]]+2.0*ALPHA/3.0);
+             (wedge->accy+wedge->alpha*(particle->x[pair->j[i]] - wedge->cogx)-wedge->omega*pow(particle->y[pair->j[i]]-wedge->cogy,2))*(particle->y[pair->i[i]]-particle->y[pair->j[i]])*kernel->w[i]))/(particle->w[pair->j[i]]);
             
             //correct virtual particles velocity for viscous calculation
-            particle->vx[pair->j[i]] += particle->vx[pair->i[i]]/(particle->w[pair->j[i]]+2.0*ALPHA/3.0);
-            particle->vy[pair->j[i]] += particle->vy[pair->i[i]]/(particle->w[pair->j[i]]+2.0*ALPHA/3.0);
+            particle->vx[pair->j[i]] += particle->vx[pair->i[i]]/(particle->w[pair->j[i]]);
+            particle->vy[pair->j[i]] += particle->vy[pair->i[i]]/(particle->w[pair->j[i]]);
             omp_unset_lock(&lock);
         }
-        else if(particle->type[pair->j[i]]==-1 && particle->w[pair->j[i]]!=0)
+        else if(particle->type[pair->j[i]]==-1)
         {
             //virtual particles pressure
             omp_set_lock(&lock);
             particle->pressure[pair->j[i]] += (particle->pressure[pair->i[i]]+particle->density[pair->i[i]]*\
             ((wall->accx-wall->alpha*(particle->y[pair->j[i]] - wall->cogy)-wall->omega*pow(particle->x[pair->j[i]]-wall->cogx,2))*(particle->x[pair->i[i]]-particle->x[pair->j[i]])*kernel->w[i]+\
-             (wall->accy+wall->alpha*(particle->x[pair->j[i]] - wall->cogx)-wall->omega*pow(particle->y[pair->j[i]]-wall->cogy,2)/*+GRAVITY_ACC*/)*(particle->y[pair->i[i]]-particle->y[pair->j[i]])*kernel->w[i]))/(particle->w[pair->j[i]]+2.0*ALPHA/3.0);
+             (wall->accy+wall->alpha*(particle->x[pair->j[i]] - wall->cogx)-wall->omega*pow(particle->y[pair->j[i]]-wall->cogy,2)/*+GRAVITY_ACC*/)*(particle->y[pair->i[i]]-particle->y[pair->j[i]])*kernel->w[i]))/(particle->w[pair->j[i]]);
             
             //correct virtual particle velocity for viscous calculation
-            particle->vx[pair->j[i]] += particle->vx[pair->i[i]]/(particle->w[pair->j[i]]+2.0*ALPHA/3.0);
-            particle->vy[pair->j[i]] += particle->vy[pair->i[i]]/(particle->w[pair->j[i]]+2.0*ALPHA/3.0);
+            particle->vx[pair->j[i]] += particle->vx[pair->i[i]]/(particle->w[pair->j[i]]);
+            particle->vy[pair->j[i]] += particle->vy[pair->i[i]]/(particle->w[pair->j[i]]);
             omp_unset_lock(&lock);
         }
     }

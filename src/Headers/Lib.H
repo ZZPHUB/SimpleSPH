@@ -20,9 +20,7 @@ extern void ptc_mesh_process(SPH_PARTICLE *,unsigned int ***);
 extern void ptc_info(SPH_PARTICLE *,SPH_PAIR *,RIGID *,unsigned int);
 
 
-/* Define Symbols Here*/
-#define PI 3.14159265358
-#define ALPHA 15.0/(7*PI*pow(PTC_SML,2))
+
 
 
 #endif
