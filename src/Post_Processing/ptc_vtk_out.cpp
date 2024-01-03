@@ -121,13 +121,13 @@ void ptc_vtk_direct(SPH_PARTICLE *particle,double *scale,char *filename)
     if(PARA&0x04)
     {
         writefile << "VECTORS "<< "velocity double" << endl;
-        writefile << "LOOKUP_TABLE DEFAULT" << endl;
+        //writefile << "LOOKUP_TABLE DEFAULT" << endl;
         for(unsigned int i=0;i<particle->total;i++)
         {
             if(particle->x[i]>= scale[0] && particle->x[i] <= scale[1] && \
                 particle->y[i]>= scale[2] && particle->y[i] <= scale[3])
                 {
-                    writefile << setiosflags(ios::scientific) << particle->x[i] <<" " << particle->y[i] << " " \
+                    writefile << setiosflags(ios::scientific) << particle->vx[i] <<" " << particle->vy[i] << " " \
                     << 0.0 << endl;
                 } 
         }
@@ -136,7 +136,7 @@ void ptc_vtk_direct(SPH_PARTICLE *particle,double *scale,char *filename)
     if(PARA&0x08)
     {
         writefile << "VECTORS "<< "acceleration double" << endl;
-        writefile << "LOOKUP_TABLE DEFAULT" << endl;
+        //writefile << "LOOKUP_TABLE DEFAULT" << endl;
         for(unsigned int i=0;i<particle->total;i++)
         {
             if(particle->x[i]>= scale[0] && particle->x[i] <= scale[1] && \
@@ -148,5 +148,6 @@ void ptc_vtk_direct(SPH_PARTICLE *particle,double *scale,char *filename)
         }
     }
 
+    writefile.close();
 
 }
