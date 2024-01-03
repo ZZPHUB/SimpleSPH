@@ -50,7 +50,7 @@ void ptc_kernel_parallel(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kerne
     for(unsigned int i=0;i<particle->total;i++)
     {
         omp_set_lock(&lock);
-        particle->w[i] = (2.0*ALPHA)/3.0;
+        particle->w[i] = 0;
         omp_unset_lock(&lock);
     }
 

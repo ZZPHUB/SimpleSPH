@@ -136,6 +136,10 @@ void ptc_time_integral(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,
 
     //ptc_nnps_mesh
     ptc_nnps_mesh(particle,pair,mesh);
+    for(unsigned int i=0;i<pair->total;i++)
+    {
+        if(particle->type[pair->i[i]] != 0) cout << "particle id " << pair->i[i] << " is not fluid" << endl;
+    }
 
     //before the kernel generate,we need init the particle->w,for it donot involve the time integration
     
@@ -159,15 +163,15 @@ void ptc_time_integral(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,
         if(particle->type[i]!=0)
         {
             omp_set_lock(&lock);
-            //particle->vx[i] = 0;
-            //particle->vy[i] = 0;
-            particle->vx[i] *= (2.0*ALPHA)/3.0;
-            particle->vy[i] *= (2.0*ALPHA)/3.0;
+            particle->vx[i] = 0;
+            particle->vy[i] = 0;
+            //particle->vx[i] *= (2.0*ALPHA)/3.0;
+            //particle->vy[i] *= (2.0*ALPHA)/3.0;
             particle->accx[i] = 0;
             particle->accy[i] = 0;
             particle->density[i] = 0;
-            //particle->pressure[i] = 0;
-            particle->pressure[i] *= (2.0*ALPHA)/3.0;
+            particle->pressure[i] = 0;
+            //particle->pressure[i] *= (2.0*ALPHA)/3.0;
             omp_unset_lock(&lock);
         }
     }
@@ -242,6 +246,11 @@ void ptc_time_integral(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,
     {
         if(particle->type[pair->j[i]]==1)
         {
+            if(particle->w[pair->j[i]] == 0 )
+            {
+                cout << pair->j[i] << " type is: " << particle->type[pair->j[i]] << " w = " << 0 << endl;
+            }
+            else{
             omp_set_lock(&lock);
             particle->pressure[pair->j[i]] += (particle->pressure[pair->i[i]]*kernel->w[i] /*+particle->density[pair->i[i]]*\
             ((wedge->accx-wedge->alpha*(particle->y[pair->j[i]] - wedge->cogy)-wedge->omega*pow(particle->x[pair->j[i]]-wedge->cogx,2))*(particle->x[pair->i[i]]-particle->x[pair->j[i]])*kernel->w[i]+\
@@ -251,9 +260,16 @@ void ptc_time_integral(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,
             particle->vx[pair->j[i]] += particle->vx[pair->i[i]]/(particle->w[pair->j[i]]);
             particle->vy[pair->j[i]] += particle->vy[pair->i[i]]/(particle->w[pair->j[i]]);
             omp_unset_lock(&lock);
+            }
         }
         else if(particle->type[pair->j[i]]==-1)
         {
+            if(particle->w[pair->j[i]] == 0)
+            {
+                cout << pair->j[i] << " type is: " << particle->type[pair->j[i]] << " w = " << 0 << endl;
+            }
+            else
+            {
             //virtual particles pressure
             omp_set_lock(&lock);
             particle->pressure[pair->j[i]] += (particle->pressure[pair->i[i]]*kernel->w[i] /*+particle->density[pair->i[i]] * \
@@ -264,6 +280,7 @@ void ptc_time_integral(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,
             particle->vx[pair->j[i]] += particle->vx[pair->i[i]]/(particle->w[pair->j[i]]);
             particle->vy[pair->j[i]] += particle->vy[pair->i[i]]/(particle->w[pair->j[i]]);
             omp_unset_lock(&lock);
+            }
         }
     }
 
