@@ -275,7 +275,7 @@ void ptc_time_integral(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,
             omp_set_lock(&lock);
             particle->pressure[pair->j[i]] += (particle->pressure[pair->i[i]]*kernel->w[i] +particle->density[pair->i[i]] * \
             ((wall->accx-wall->alpha*(particle->y[pair->j[i]] - wall->cogy)-(particle->x[pair->j[i]]-wall->cogx)*pow(wall->omega,2))*(particle->x[pair->i[i]]-particle->x[pair->j[i]])*kernel->w[i]+\
-             (wall->accy+wall->alpha*(particle->x[pair->j[i]] - wall->cogx)-(particle->y[pair->j[i]]-wall->cogy)*pow(wall->omega,2))*(particle->y[pair->i[i]]-particle->y[pair->j[i]])*kernel->w[i]))/(particle->w[pair->j[i]]);
+             (wall->accy+wall->alpha*(particle->x[pair->j[i]] - wall->cogx)-(particle->y[pair->j[i]]-wall->cogy)*pow(wall->omega,2)+GRAVITY_ACC)*(particle->y[pair->i[i]]-particle->y[pair->j[i]])*kernel->w[i]))/(particle->w[pair->j[i]]);
             
             //particle->pressure[pair->j[i]] += (particle->pressure[pair->i[i]]*kernel->w[i])/particle->w[pair->j[i]];
             

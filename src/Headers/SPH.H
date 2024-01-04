@@ -16,8 +16,8 @@
 #define PTC_SML PTC_SPACING    //smoothed leng of particles
 #define PTC_REGION_RADIUS (2*PTC_SML) //particle support region radius,which is PTC_SML*2
 
-#define FLUID_LENGTH_NUM (int)(FLUID_DOMAIN_LENGTH/PTC_SPACING+1-4)
-#define FLUID_DEEPTH_NUM (int)(FLUID_DOMAIN_DEEPTH/PTC_SPACING+1-2)
+#define FLUID_LENGTH_NUM (int)(FLUID_DOMAIN_LENGTH/PTC_SPACING+1-8)
+#define FLUID_DEEPTH_NUM (int)(FLUID_DOMAIN_DEEPTH/PTC_SPACING+1-4)
 
 #define FLUID_PTC_NUM (FLUID_LENGTH_NUM)*(FLUID_DEEPTH_NUM)  //fluid particles number
 //#define SOLID_PTC_NUM  0 //rigid body particles number
