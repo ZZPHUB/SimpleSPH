@@ -13,7 +13,7 @@
 #define TOL_DOMAIN_DEEPTH (FLUID_DOMAIN_DEEPTH*1.5)
 
 #define PTC_SPACING 0.005    //spacing between particles
-#define PTC_SML PTC_SPACING    //smoothed leng of particles
+#define PTC_SML 2*PTC_SPACING    //smoothed leng of particles
 #define PTC_REGION_RADIUS (2*PTC_SML) //particle support region radius,which is PTC_SML*2
 
 #define FLUID_LENGTH_NUM (int)(FLUID_DOMAIN_LENGTH/PTC_SPACING+1-8)
@@ -24,11 +24,11 @@
 #define VIRTUAL_PTC_NUM (int)((FLUID_DOMAIN_DEEPTH/PTC_SPACING+1)*(FLUID_DOMAIN_LENGTH/PTC_SPACING+1)-FLUID_PTC_NUM)  //virtual paritcles number
 //#define PTC_TOL_NUM (FLUID_PTC_NUM+SOLID_PTC_NUM+VIRTUAL_PTC_NUM)   //total particles
 
-#define MESH_SPACING (PTC_SPACING*2.0) //mesh spacing
+#define MESH_SPACING (PTC_SPACING*4.0) //mesh spacing
 #define MESH_LENGTH_NUM (int)(TOL_DOMAIN_LENGTH/MESH_SPACING) //length-direction mesh number
 #define MESH_DEEPTH_NUM (int)(TOL_DOMAIN_DEEPTH/MESH_SPACING) //deepth-direction mesh number
 #define MESH_TOL_NUM (MESH_LENGTH_NUM*MESH_DEEPTH_NUM) //total mesh number
-#define MESH_PTC_NUM 51 //per mesh grid contain max paticle num
+#define MESH_PTC_NUM 201 //per mesh grid contain max paticle num
 
 #define REF_DENSITY 1000.0    //reference density for eos
 #define GRAVITY_ACC 9.80     //gravity acceleration defin here

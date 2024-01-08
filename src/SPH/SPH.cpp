@@ -38,14 +38,14 @@ int main(void)
     particle.type = (char *)(calloc(particle.total,sizeof(char)));  
 
     //kernel data init
-    kernel.w = (double *)(calloc(10*particle.total,sizeof(double)));  //this code donnot use kernel value
-    kernel.dwdx = (double *)(calloc(10*particle.total,sizeof(double)));
-    kernel.dwdy = (double *)(calloc(10*particle.total,sizeof(double)));
+    kernel.w = (double *)(calloc(30*particle.total,sizeof(double)));  //this code donnot use kernel value
+    kernel.dwdx = (double *)(calloc(30*particle.total,sizeof(double)));
+    kernel.dwdy = (double *)(calloc(30*particle.total,sizeof(double)));
    
     //pair data init
     pair.total = 0; 
-    pair.i = (unsigned int *)(calloc(10*particle.total,sizeof(unsigned int)));
-    pair.j = (unsigned int *)(calloc(10*particle.total,sizeof(unsigned int)));
+    pair.i = (unsigned int *)(calloc(30*particle.total,sizeof(unsigned int)));
+    pair.j = (unsigned int *)(calloc(30*particle.total,sizeof(unsigned int)));
 
     //rigid wall init
     wall.vx=wall.vy=wall.accx=wall.accy=wall.omega=wall.alpha=wall.cogx=wall.cogy=wall.mass=0;
