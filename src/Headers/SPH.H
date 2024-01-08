@@ -34,11 +34,11 @@
 #define GRAVITY_ACC 9.80     //gravity acceleration defin here
 #define ART_SOUND_VEL (10*sqrt(GRAVITY_ACC*FLUID_DOMAIN_DEEPTH))  //art_sound_velosity,it's $p=10 \times (\rho-\rho_{ref})$
 
-#define MU 0.001 //define the constant viscous
+#define MU 10000 //define the constant viscous
 
 #define TH_NUM 7 //paraller threads
-#define INIT_TIME_STEP 51
-#define DELTA_TIME 0.00001
+#define INIT_TIME_STEP 2000
+#define DELTA_TIME 0.0008
 #define PRINT_TIME_STEP 50  //every 50 time step to print
 
 #define PARA (0x01|0x02)
