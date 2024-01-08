@@ -11,7 +11,7 @@ void ptc_kernel_serial(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel)
         if(0<temp_dis && temp_dis < PTC_SML)
         {
             //each pair's kernel value
-            kernel->w[i] = ALPHA*(2.0/3.0-pow(temp_dis,2)+0.5*pow(temp_dis,3));
+            kernel->w[i] = ALPHA*(2.0/3.0-pow(temp_dis/PTC_SML,2)+0.5*pow(temp_dis/PTC_SML,3));
 
             //each particles kernel value sum
             particle->w[pair->i[i]] += kernel->w[i];
@@ -24,7 +24,7 @@ void ptc_kernel_serial(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel)
         else if (PTC_SML <= temp_dis && temp_dis < PTC_REGION_RADIUS)
         {
             //each pair's kernel value
-            kernel->w[i] = ALPHA*(pow(2.0-temp_dis,3)/6.0); 
+            kernel->w[i] = ALPHA*(pow(2.0-temp_dis/PTC_SML,3)/6.0); 
 
             //each particles kernel value sum
             particle->w[pair->i[i]] += kernel->w[i];
