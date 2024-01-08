@@ -62,11 +62,11 @@ void ptc_kernel_parallel(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kerne
         {
             omp_set_lock(&lock);
             //each pair's kernel value
-            kernel->w[i] = ALPHA*(2.0/3.0-pow(temp_dis,2)+0.5*pow(temp_dis,3));
+            kernel->w[i] = ALPHA*(2.0/3.0-pow(temp_dis/PTC_SML,2)+0.5*pow(temp_dis/PTC_SML,3));
 
             //each pair's differential kernel value in x and y direction
-            kernel->dwdx[i] = -2*ALPHA*(-2.0+1.5*temp_dis/PTC_SML)*(particle->x[pair->i[i]]-particle->x[pair->j[i]])/pow(PTC_SML,2);
-            kernel->dwdy[i] = -2*ALPHA*(-2.0+1.5*temp_dis/PTC_SML)*(particle->y[pair->i[i]]-particle->y[pair->j[i]])/pow(PTC_SML,2);
+            kernel->dwdx[i] = ALPHA*(-2.0+1.5*temp_dis/PTC_SML)*(particle->x[pair->i[i]]-particle->x[pair->j[i]])/pow(PTC_SML,2);
+            kernel->dwdy[i] = ALPHA*(-2.0+1.5*temp_dis/PTC_SML)*(particle->y[pair->i[i]]-particle->y[pair->j[i]])/pow(PTC_SML,2);
             
             //each particles kernel value sum
             particle->w[pair->i[i]] += kernel->w[i];
@@ -77,11 +77,11 @@ void ptc_kernel_parallel(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kerne
         {
             omp_set_lock(&lock);
             //each pair's kernel value
-            kernel->w[i] = ALPHA*(pow(2.0-temp_dis,3)/6.0); 
+            kernel->w[i] = ALPHA*(pow(2.0-temp_dis/PTC_SML,3)/6.0); 
 
             //each pair's differential kernel value in x and y direction
-            kernel->dwdx[i] = 2*ALPHA*0.5*pow(2-temp_dis/PTC_SML,2)*(particle->x[pair->i[i]]-particle->x[pair->j[i]])/(PTC_SML*temp_dis);
-            kernel->dwdy[i] = 2*ALPHA*0.5*pow(2-temp_dis/PTC_SML,2)*(particle->y[pair->i[i]]-particle->y[pair->j[i]])/(PTC_SML*temp_dis);
+            kernel->dwdx[i] = -1*ALPHA*0.5*pow(2-temp_dis/PTC_SML,2)*(particle->x[pair->i[i]]-particle->x[pair->j[i]])/(PTC_SML*temp_dis);
+            kernel->dwdy[i] = -1*ALPHA*0.5*pow(2-temp_dis/PTC_SML,2)*(particle->y[pair->i[i]]-particle->y[pair->j[i]])/(PTC_SML*temp_dis);
             
             //each particles kernel value sum
             particle->w[pair->i[i]] += kernel->w[i];
