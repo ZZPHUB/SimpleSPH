@@ -58,6 +58,7 @@ void ptc_vtk_mesh(SPH_PARTICLE *particle,unsigned int ***mesh)
 void ptc_vtk_direct(SPH_PARTICLE *particle,double *scale,char *filename)
 {
     unsigned int ptc_num = 0;
+    /*
     //get the number of the particles
     for(unsigned int i=0;i<particle->total;i++)
     {
@@ -67,6 +68,9 @@ void ptc_vtk_direct(SPH_PARTICLE *particle,double *scale,char *filename)
                ptc_num++;
            } 
     }
+    */
+
+   ptc_num = particle->total;
 
     ofstream writefile;
     writefile.open(filename);
@@ -79,12 +83,12 @@ void ptc_vtk_direct(SPH_PARTICLE *particle,double *scale,char *filename)
 
     for(unsigned int i=0;i<particle->total;i++)
     {
-        if(particle->x[i]>= scale[0] && particle->x[i] <= scale[1] && \
-           particle->y[i]>= scale[2] && particle->y[i] <= scale[3])
-           {
+        //if(particle->x[i]>= scale[0] && particle->x[i] <= scale[1] && \
+        //   particle->y[i]>= scale[2] && particle->y[i] <= scale[3])
+        //   {
                 writefile << setiosflags(ios::scientific) << particle->x[i] << " " \
                 << particle->y[i] << " " << 0.0 << endl;
-           } 
+        //   } 
     }
 
     writefile << "POINT_DATA" << " " << ptc_num << endl;
@@ -96,11 +100,11 @@ void ptc_vtk_direct(SPH_PARTICLE *particle,double *scale,char *filename)
         writefile << "LOOKUP_TABLE DEFAULT" << endl;
         for(unsigned int i=0;i<particle->total;i++)
         {
-            if(particle->x[i]>= scale[0] && particle->x[i] <= scale[1] && \
-                particle->y[i]>= scale[2] && particle->y[i] <= scale[3])
-                {
+            //if(particle->x[i]>= scale[0] && particle->x[i] <= scale[1] && \
+            //    particle->y[i]>= scale[2] && particle->y[i] <= scale[3])
+            //    {
                     writefile << setiosflags(ios::scientific) << particle->density[i] << endl;
-                } 
+            //    } 
         }
     }
     //pressure
@@ -110,11 +114,11 @@ void ptc_vtk_direct(SPH_PARTICLE *particle,double *scale,char *filename)
         writefile << "LOOKUP_TABLE DEFAULT" << endl;
         for(unsigned int i=0;i<particle->total;i++)
         {
-            if(particle->x[i]>= scale[0] && particle->x[i] <= scale[1] && \
-                particle->y[i]>= scale[2] && particle->y[i] <= scale[3])
-                {
+            //if(particle->x[i]>= scale[0] && particle->x[i] <= scale[1] && \
+            //    particle->y[i]>= scale[2] && particle->y[i] <= scale[3])
+            //    {
                     writefile << setiosflags(ios::scientific) << particle->pressure[i] << endl;
-                } 
+            //    } 
         }
     }
     //velocity
@@ -124,12 +128,12 @@ void ptc_vtk_direct(SPH_PARTICLE *particle,double *scale,char *filename)
         //writefile << "LOOKUP_TABLE DEFAULT" << endl;
         for(unsigned int i=0;i<particle->total;i++)
         {
-            if(particle->x[i]>= scale[0] && particle->x[i] <= scale[1] && \
-                particle->y[i]>= scale[2] && particle->y[i] <= scale[3])
-                {
+            //if(particle->x[i]>= scale[0] && particle->x[i] <= scale[1] && \
+            //    particle->y[i]>= scale[2] && particle->y[i] <= scale[3])
+            //    {
                     writefile << setiosflags(ios::scientific) << particle->vx[i] <<" " << particle->vy[i] << " " \
                     << 0.0 << endl;
-                } 
+            //    } 
         }
     }
     //acceleration
@@ -139,12 +143,12 @@ void ptc_vtk_direct(SPH_PARTICLE *particle,double *scale,char *filename)
         //writefile << "LOOKUP_TABLE DEFAULT" << endl;
         for(unsigned int i=0;i<particle->total;i++)
         {
-            if(particle->x[i]>= scale[0] && particle->x[i] <= scale[1] && \
-                particle->y[i]>= scale[2] && particle->y[i] <= scale[3])
-                {
+            //if(particle->x[i]>= scale[0] && particle->x[i] <= scale[1] && \
+            //    particle->y[i]>= scale[2] && particle->y[i] <= scale[3])
+            //    {
                     writefile << setiosflags(ios::scientific) << particle->accx[i] <<" " << particle->accy[i] << " " \
                     << 0.0 << endl;
-                } 
+            //    } 
         }
     }
 
