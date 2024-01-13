@@ -74,8 +74,8 @@ int main(void)
         }
     }
 
-    ptc_generate(&particle);    //generate the fluid solid and dummy particles
-    ptc_init(&particle,&wall,&wedge);    //particle info init
+    ptc_generate(&sph);    //generate the fluid solid and dummy particles
+    ptc_init(&sph);    //particle info init
     
     double delta_time = DELTA_TIME;  //the time step length
     unsigned int time_step = INIT_TIME_STEP; //time step num
@@ -95,7 +95,7 @@ int main(void)
                 filename[23] = (sph.step/PRINT_TIME_STEP)/100 + 48;
                 filename[24] = ((sph.step/PRINT_TIME_STEP)%100)/10 + 48;
                 filename[25] = ((sph.step/PRINT_TIME_STEP)%10) + 48;
-                ptc_vtk_direct(&particle,scale,filename);
+                ptc_vtk_direct(&sph,filename);
             }
         }
         system("clear");
