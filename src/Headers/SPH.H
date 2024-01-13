@@ -130,7 +130,7 @@ typedef struct
     SPH_MESH mesh;
 
     //current time step
-    double step;
+    int step;
 
     //time step size
     double d_time;

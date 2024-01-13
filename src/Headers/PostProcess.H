@@ -8,5 +8,5 @@
 #include <stdlib.h>
 
 /* Extern Functions Here */
-extern void ptc_vtk_direct(SPH *);
+extern void ptc_vtk_direct(SPH *,char *);
 #endif
