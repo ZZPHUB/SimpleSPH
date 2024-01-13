@@ -15,7 +15,7 @@ int main(void)
     SPH_PAIR pair_dircet;
     SPH_RIGID wall;
     SPH_RIGID wedge;
-    SPH_MESH mesh;
+    SPH_MESH mesh = NULL;
     SPH sph;
 
     
@@ -68,41 +68,38 @@ int main(void)
     sph.rigid_0 = &wall;
     sph.rigid_1 = &wedge;
     sph.mesh = mesh;
-    sph.d_time = 0;
+    sph.d_time = DELTA_TIME;
     sph.flag = 0;
-    sph.step = 0;
+    sph.current_step = 0;
+    sph.total_step = INIT_TIME_STEP;
 
 
 
     ptc_generate(&sph);    //generate the fluid solid and dummy particles
     ptc_init(&sph);    //particle info init
     
-    double delta_time = DELTA_TIME;  //the time step length
-    unsigned int time_step = INIT_TIME_STEP; //time step num
     char filename[] = "../data/postprocess/sph000.vtk"; //filename 
-    double scale[4] = {0,TOL_DOMAIN_LENGTH,0,TOL_DOMAIN_DEEPTH}; //output domain scale
-
 
     while (true)
     {
-        for(sph.step;sph.step<time_step;sph.step++)
+        for(sph.current_step;sph.total_step<sph.total_step;sph.current_step++)
         {
             //calculate and integration
             ptc_time_integral(&sph); 
             ptc_info(&sph);
-            if(sph.step%PRINT_TIME_STEP == 0)
+            if(sph.current_step%PRINT_TIME_STEP == 0)
             {
-                filename[23] = (sph.step/PRINT_TIME_STEP)/100 + 48;
-                filename[24] = ((sph.step/PRINT_TIME_STEP)%100)/10 + 48;
-                filename[25] = ((sph.step/PRINT_TIME_STEP)%10) + 48;
+                filename[23] = (sph.current_step/PRINT_TIME_STEP)/100 + 48;
+                filename[24] = ((sph.current_step/PRINT_TIME_STEP)%100)/10 + 48;
+                filename[25] = ((sph.current_step/PRINT_TIME_STEP)%10) + 48;
                 ptc_vtk_direct(&sph,filename);
             }
         }
         system("clear");
         cout << "press 0 to kill precess or num(>100) for more steps" << endl;
-        cin >> time_step;
+        cin >> sph.total_step;
         if(time_step == 0) break;
-        time_step += INIT_TIME_STEP;
+        sph.total_step += INIT_TIME_STEP;
         sph.flag = 1;
         wedge.vy = -5.0;
     }
