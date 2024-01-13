@@ -5,7 +5,7 @@ void ptc_mesh_process(SPH *sph)
 //void ptc_mesh_process(SPH_PARTICLE *particle,unsigned int ***mesh)
 {
     SPH_PARTICLE *particle;
-    SPH_MESH *mesh;
+    SPH_MESH mesh;
     particle = sph->particle;
     mesh = sph->mesh;
 

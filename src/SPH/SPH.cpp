@@ -64,7 +64,7 @@ int main(void)
 
 
     //mesh data init
-    mesh = (unsigned int ***)(calloc(MESH_DEEPTH_NUM,sizeof(unsigned int **)));
+    mesh = (SPH_MESH)(calloc(MESH_DEEPTH_NUM,sizeof(unsigned int **)));
     for(int i=0;i<MESH_DEEPTH_NUM;i++)
     {
         mesh[i] = (unsigned int **)(calloc(MESH_LENGTH_NUM,sizeof(unsigned int *)));

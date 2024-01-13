@@ -48,10 +48,7 @@ void virtual_ptc_generate(SPH *sph)
 
 void ptc_generate(SPH *sph)
 {
-    SPH_PARTICLE *particle;
-    particle = sph->particle;
-    
-    fluid_ptc_generate(particle);
-    virtual_ptc_generate(particle);
-    solid_ptc_generate(particle);
+    fluid_ptc_generate(sph);
+    virtual_ptc_generate(sph);
+    solid_ptc_generate(sph);
 }
