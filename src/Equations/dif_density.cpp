@@ -47,8 +47,8 @@ void ptc_dif_density(SPH *sph)
             temp = (particle->vx[pair->i[i]] - (wedge->vx - wedge->omega*(particle->y[pair->j[i]] - wedge->cogy)))*kernel->dwdx[i] \
             + (particle->vy[pair->i[i]] - (wedge->vy + wedge->omega*(particle->x[pair->j[i]] - wedge->cogx)))*kernel->dwdy[i];
         }
-        particle->dif_density[pair->i[i]] = particle->dif_density[pair->i[i]]+m*temp;
-        particle->dif_density[pair->j[i]] = particle->dif_density[pair->j[i]]+m*temp;
+        particle->dif_density[pair->i[i]] += m*temp;
+        particle->dif_density[pair->j[i]] += m*temp;
         omp_unset_lock(&lock);
     }
 }

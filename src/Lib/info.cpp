@@ -22,7 +22,7 @@ void ptc_info(SPH *sph)
     cout << "------------------------------------------------------" << endl;
     cout << "Total Particles Pair Num: " << pair->total << endl;
     cout << "------------------------------------------------------" << endl;
-    cout << "Current Time Step: " << sph->step << endl;
+    cout << "Current Time Step: " << sph->current_step << endl;
     cout << "------------------------------------------------------" << endl;
     cout << "Rigid Body Velocity in X-direction: " << wedge->vx << endl;
     cout << "------------------------------------------------------" << endl;

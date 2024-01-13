@@ -34,9 +34,11 @@ int main(void)
     particle.w = (double *)(calloc(particle.total,sizeof(double)));
     particle.dif_density = (double *)(calloc(particle.total,sizeof(double)));
     particle.pressure = (double *)(calloc(particle.total,sizeof(double)));
+    #ifdef FLAG
     particle.visxx = (double *)(calloc(particle.total,sizeof(double)));
     particle.visyy = (double *)(calloc(particle.total,sizeof(double)));
     particle.visxy = (double *)(calloc(particle.total,sizeof(double)));
+    #endif
     particle.type = (char *)(calloc(particle.total,sizeof(char)));  
 
     //kernel data init

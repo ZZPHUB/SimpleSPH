@@ -1,5 +1,6 @@
 #include "Equations.H"
 
+#ifdef FLAG
 void ptc_viscous(SPH *sph)
 //void ptc_viscous(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,RIGID *wall,RIGID *wedge)
 {
@@ -72,3 +73,4 @@ void ptc_viscous(SPH *sph)
         omp_unset_lock(&lock);
     }
 }
+#endif
