@@ -52,6 +52,16 @@ int main(void)
     //rigid wall init
     wall.vx=wall.vy=wall.accx=wall.accy=wall.omega=wall.alpha=wall.cogx=wall.cogy=wall.mass=0;
 
+    //mesh data init
+    mesh = (SPH_MESH)(calloc(MESH_DEEPTH_NUM,sizeof(unsigned int **)));
+    for(int i=0;i<MESH_DEEPTH_NUM;i++)
+    {
+        mesh[i] = (unsigned int **)(calloc(MESH_LENGTH_NUM,sizeof(unsigned int *)));
+        for(int j=0;j<MESH_LENGTH_NUM;j++)
+        {
+            mesh[i][j] = (unsigned int *)(calloc(MESH_PTC_NUM,sizeof(unsigned int)));
+        }
+    }
     sph.particle = &particle;
     sph.kernel = &kernel;
     sph.pair = &pair;
@@ -63,16 +73,6 @@ int main(void)
     sph.step = 0;
 
 
-    //mesh data init
-    mesh = (SPH_MESH)(calloc(MESH_DEEPTH_NUM,sizeof(unsigned int **)));
-    for(int i=0;i<MESH_DEEPTH_NUM;i++)
-    {
-        mesh[i] = (unsigned int **)(calloc(MESH_LENGTH_NUM,sizeof(unsigned int *)));
-        for(int j=0;j<MESH_LENGTH_NUM;j++)
-        {
-            mesh[i][j] = (unsigned int *)(calloc(MESH_PTC_NUM,sizeof(unsigned int)));
-        }
-    }
 
     ptc_generate(&sph);    //generate the fluid solid and dummy particles
     ptc_init(&sph);    //particle info init
