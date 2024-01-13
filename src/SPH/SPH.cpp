@@ -84,7 +84,7 @@ int main(void)
 
     while (true)
     {
-        for(sph.current_step;sph.total_step<sph.total_step;sph.current_step++)
+        for(sph.current_step;sph.current_step<sph.total_step;sph.current_step++)
         {
             //calculate and integration
             ptc_time_integral(&sph); 
@@ -100,7 +100,7 @@ int main(void)
         system("clear");
         cout << "press 0 to kill precess or num(>100) for more steps" << endl;
         cin >> sph.total_step;
-        if(time_step == 0) break;
+        if(sph.total_step == 0) break;
         sph.total_step += INIT_TIME_STEP;
         sph.flag = 1;
         wedge.vy = -5.0;
@@ -141,21 +141,37 @@ void ptc_time_integral(SPH *sph)
     wall = sph->rigid_0;
     wedge = sph->rigid_1;
 
+
     omp_lock_t lock;
     omp_init_lock(&lock);
+
+    //fluid_particles_info time integral and
+    #pragma omp parallel for num_threads(TH_NUM)
+    for(unsigned int i=0;i<particle->total;i++)
+    {
+        if(particle->type[i] == 0)
+        {
+            //fulid paritcles density,vx,vy,x,y time integral
+            omp_set_lock(&lock);
+            particle->vx[i] += particle->accx[i]*sph->d_time/2;
+            particle->vy[i] += particle->accy[i]*sph->d_time/2;
+            particle->x[i] += particle->vx[i]*sph->d_time/2;
+            particle->y[i] += particle->vy[i]*sph->d_time/2;
+            omp_unset_lock(&lock);
+        }  
+    }
 
     //ptc_mesh_process
     ptc_mesh_process(sph);
 
     //ptc_nnps_mesh
     ptc_nnps_mesh(sph);
+    /*
     for(unsigned int i=0;i<pair->total;i++)
     {
         if(particle->type[pair->i[i]] != 0) cout << "particle id " << pair->i[i] << " is not fluid" << endl;
     }
-
-    //before the kernel generate,we need init the particle->w,for it donot involve the time integration
-    
+    */
 
     //ptc_kernel_parallel
     ptc_kernel_parallel(sph);
@@ -163,8 +179,10 @@ void ptc_time_integral(SPH *sph)
     //ptc_dif_density
     ptc_dif_density(sph);
 
+    #ifdef
     //ptc_viscous
     ptc_viscous(sph);
+    #endif
 
     //ptc_acceleration
     ptc_acc(sph);
@@ -194,7 +212,7 @@ void ptc_time_integral(SPH *sph)
     wedge->accy = 0;
     wedge->alpha = 0;
 
-    //fluid_particles_info time integral and collect the rigid body's acceleration
+    //fluid_particles_info time integral and
     #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<particle->total;i++)
     {
@@ -203,13 +221,19 @@ void ptc_time_integral(SPH *sph)
             //fulid paritcles density,vx,vy,x,y time integral
             omp_set_lock(&lock);
             particle->density[i] += particle->dif_density[i]*sph->d_time;
-            particle->vx[i] += particle->accx[i]*sph->d_time;
-            particle->vy[i] += particle->accy[i]*sph->d_time;
-            particle->x[i] += particle->vx[i]*sph->d_time;
-            particle->y[i] += particle->vy[i]*sph->d_time;
+            particle->x[i] += particle->vx[i]*sph->d_time/2;
+            particle->y[i] += particle->vy[i]*sph->d_time/2;
+            particle->vx[i] += particle->accx[i]*sph->d_time/2;
+            particle->vy[i] += particle->accy[i]*sph->d_time/2;
             omp_unset_lock(&lock);
-        }
-        else if(particle->type[i] == 1)
+        }  
+    }
+
+    //collect the rigid body's acceleration
+    #pragma omp parallel for num_threads(TH_NUM)
+    for(unsigned int i=0;i<particle->total;i++)
+    {
+        if(particle->type[i] == 1)
         {
             //rigid body acceleration and angular acceleration
             omp_set_lock(&lock);
@@ -219,8 +243,6 @@ void ptc_time_integral(SPH *sph)
             omp_unset_lock(&lock);
         }
     }
-
-
 
     //rigid body velocity and angular velocity
     #pragma omp parallel for num_threads(TH_NUM)
