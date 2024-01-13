@@ -9,9 +9,9 @@ void ptc_init(SPH *sph)
     SPH_RIGID *wedge;
     particle = sph->particle;
     pair = sph->pair;
-    wall = sph->wall;
-    wedge = sph->wedge;
-    
+    wall = sph->rigid_0;
+    wedge = sph->rigid_1;
+
     omp_lock_t lock;
     omp_init_lock(&lock);
     #pragma omp parallel for num_threads(TH_NUM)
