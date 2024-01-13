@@ -11,8 +11,8 @@
 #include "SPH.H"
 
 /* Extern Function Here*/
-extern void solid_ptc_generate(SPH_PARTICLE *);
+extern void solid_ptc_generate(SPH *);
 extern unsigned int solid_ptc_num(void);
-extern void ptc_generate(SPH_PARTICLE *);
-extern void ptc_init(SPH_PARTICLE *,RIGID *,RIGID *);
+extern void ptc_generate(SPH *);
+extern void ptc_init(SPH *);
 #endif

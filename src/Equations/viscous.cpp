@@ -1,7 +1,19 @@
 #include "Equations.H"
 
-void ptc_viscous(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,RIGID *wall,RIGID *wedge)
+void ptc_viscous(SPH *sph)
+//void ptc_viscous(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,RIGID *wall,RIGID *wedge)
 {
+    SPH_PARTICLE *particle;
+    SPH_PAIR *pair;
+    SPH_KERNEL *kernel;
+    SPH_RIGID *wall;
+    SPH_RIGID *wedge;
+    particle = sph->particle;
+    pair = sph->pair;
+    kernel = sph->kernel;
+    wall = sph->rigid_0;
+    wedge = sph->rigid_1;
+
     omp_lock_t lock;
     omp_init_lock(&lock);
     double m = PTC_MASS;
@@ -27,8 +39,8 @@ void ptc_viscous(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,RIGID 
         }
         else if(particle->type[pair->j[i]]==-1)
         {
-            div_vx = (2*(wall->vx - wall->omega*(particle->y[pair->j[i]] - wall->cogy)) - particle->vx[pair->j[i]] - particle->vx[pair->i[i]]);
-            div_vy = (2*(wall->vy + wall->omega*(particle->x[pair->j[i]] - wall->cogx)) - particle->vy[pair->j[i]] - particle->vy[pair->i[i]]);
+            div_vx = (- particle->vx[pair->j[i]] - particle->vx[pair->i[i]]);
+            div_vy = (- particle->vy[pair->j[i]] - particle->vy[pair->i[i]]);
         }
         else if(particle->type[pair->j[i]]==1)
         {

@@ -13,8 +13,10 @@ int main(void)
     SPH_KERNEL kernel;
     SPH_PAIR pair;
     SPH_PAIR pair_dircet;
-    RIGID wall;
-    RIGID wedge;
+    SPH_RIGID wall;
+    SPH_RIGID wedge;
+    SPH_MESH mesh;
+    SPH sph;
 
     
     particle.total = FLUID_PTC_NUM+VIRTUAL_PTC_NUM+solid_ptc_num(); //get all of the particle number
@@ -50,17 +52,19 @@ int main(void)
     //rigid wall init
     wall.vx=wall.vy=wall.accx=wall.accy=wall.omega=wall.alpha=wall.cogx=wall.cogy=wall.mass=0;
 
-    
-
-    //get time current time
-    time_t current_time = 0;
-
-    //if rigid body involve
-    int rigid_flag = 0;
+    sph.particle = &particle;
+    sph.kernel = &kernel;
+    sph.pair = &pair;
+    sph.rigid_0 = &wall;
+    sph.rigid_1 = &wedge;
+    sph.mesh = mesh;
+    sph.d_time = 0;
+    sph.flag = 0;
+    sph.step = 0;
 
 
     //mesh data init
-    unsigned int ***mesh = (unsigned int ***)(calloc(MESH_DEEPTH_NUM,sizeof(unsigned int **)));
+    mesh = (unsigned int ***)(calloc(MESH_DEEPTH_NUM,sizeof(unsigned int **)));
     for(int i=0;i<MESH_DEEPTH_NUM;i++)
     {
         mesh[i] = (unsigned int **)(calloc(MESH_LENGTH_NUM,sizeof(unsigned int *)));
@@ -77,20 +81,20 @@ int main(void)
     unsigned int time_step = INIT_TIME_STEP; //time step num
     char filename[] = "../data/postprocess/sph000.vtk"; //filename 
     double scale[4] = {0,TOL_DOMAIN_LENGTH,0,TOL_DOMAIN_DEEPTH}; //output domain scale
-    unsigned int step = 0;
+
 
     while (true)
     {
-        for(step;step<time_step;step++)
+        for(sph.step;sph.step<time_step;sph.step++)
         {
             //calculate and integration
-            ptc_time_integral(&particle,&pair,&kernel,mesh,&wall,&wedge,delta_time,rigid_flag); 
-            ptc_info(&particle,&pair,&wedge,step);
-            if(step%PRINT_TIME_STEP == 0)
+            ptc_time_integral(&sph); 
+            ptc_info(&sph);
+            if(sph.step%PRINT_TIME_STEP == 0)
             {
-                filename[23] = (step/PRINT_TIME_STEP)/100 + 48;
-                filename[24] = ((step/PRINT_TIME_STEP)%100)/10 + 48;
-                filename[25] = ((step/PRINT_TIME_STEP)%10) + 48;
+                filename[23] = (sph.step/PRINT_TIME_STEP)/100 + 48;
+                filename[24] = ((sph.step/PRINT_TIME_STEP)%100)/10 + 48;
+                filename[25] = ((sph.step/PRINT_TIME_STEP)%10) + 48;
                 ptc_vtk_direct(&particle,scale,filename);
             }
         }
@@ -99,8 +103,7 @@ int main(void)
         cin >> time_step;
         if(time_step == 0) break;
         time_step += INIT_TIME_STEP;
-        rigid_flag = 1;
-        scale[2] = FLUID_DOMAIN_DEEPTH/2;
+        sph.flag = 1;
         wedge.vy = -5.0;
     }
 
@@ -126,16 +129,27 @@ int main(void)
     return 0;
 }
 
-void ptc_time_integral(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,unsigned int ***mesh,RIGID *wall,RIGID *wedge,double d_time,int flag)
+void ptc_time_integral(SPH *sph)
 {
+    SPH_PARTICLE *particle;
+    SPH_PAIR *pair;
+    SPH_KERNEL *kernel;
+    SPH_RIGID *wall;
+    SPH_RIGID *wedge;
+    particle = sph->particle;
+    pair = sph->pair;
+    kernel = sph->kernel;
+    wall = sph->rigid_0;
+    wedge = sph->rigid_1;
+
     omp_lock_t lock;
     omp_init_lock(&lock);
 
     //ptc_mesh_process
-    ptc_mesh_process(particle,mesh);
+    ptc_mesh_process(sph);
 
     //ptc_nnps_mesh
-    ptc_nnps_mesh(particle,pair,mesh);
+    ptc_nnps_mesh(sph);
     for(unsigned int i=0;i<pair->total;i++)
     {
         if(particle->type[pair->i[i]] != 0) cout << "particle id " << pair->i[i] << " is not fluid" << endl;
@@ -145,16 +159,16 @@ void ptc_time_integral(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,
     
 
     //ptc_kernel_parallel
-    ptc_kernel_parallel(particle,pair,kernel);
+    ptc_kernel_parallel(sph);
 
     //ptc_dif_density
-    ptc_dif_density(particle,pair,kernel,wall,wedge);
+    ptc_dif_density(sph);
 
     //ptc_viscous
-    ptc_viscous(particle,pair,kernel,wall,wedge);
+    ptc_viscous(sph);
 
     //ptc_acceleration
-    ptc_acc(particle,pair,kernel);
+    ptc_acc(sph);
     
     //for virtual particles not in time integration,so the vx,vy,density,pressure need to be init every time step
     #pragma omp parallel for num_threads(TH_NUM)
@@ -189,11 +203,11 @@ void ptc_time_integral(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,
         {
             //fulid paritcles density,vx,vy,x,y time integral
             omp_set_lock(&lock);
-            particle->density[i] += particle->dif_density[i]*d_time;
-            particle->vx[i] += particle->accx[i]*d_time;
-            particle->vy[i] += particle->accy[i]*d_time;
-            particle->x[i] += particle->vx[i]*d_time;
-            particle->y[i] += particle->vy[i]*d_time;
+            particle->density[i] += particle->dif_density[i]*sph->d_time;
+            particle->vx[i] += particle->accx[i]*sph->d_time;
+            particle->vy[i] += particle->accy[i]*sph->d_time;
+            particle->x[i] += particle->vx[i]*sph->d_time;
+            particle->y[i] += particle->vy[i]*sph->d_time;
             omp_unset_lock(&lock);
         }
         else if(particle->type[i] == 1)
@@ -216,9 +230,9 @@ void ptc_time_integral(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,
         if(particle->type[i]==1)
         {
             omp_set_lock(&lock);
-            wedge->vx += wedge->accx*d_time*flag;
-            wedge->vy += (wedge->accy-GRAVITY_ACC)*d_time*flag;
-            wedge->omega += wedge->alpha*d_time*flag;
+            wedge->vx += wedge->accx*sph->d_time*sph->flag;
+            wedge->vy += (wedge->accy-GRAVITY_ACC)*sph->d_time*sph->flag;
+            wedge->omega += wedge->alpha*sph->d_time*sph->flag;
             omp_unset_lock(&lock);
         }
     }
@@ -230,15 +244,15 @@ void ptc_time_integral(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,
         if(particle->type[i]==1)
         {
             omp_set_lock(&lock);
-            particle->x[i] += (wedge->vx - wedge->omega*(particle->y[i]-wedge->cogy))*d_time;
-            particle->y[i] += (wedge->vy + wedge->omega*(particle->x[i]-wedge->cogx))*d_time;
+            particle->x[i] += (wedge->vx - wedge->omega*(particle->y[i]-wedge->cogy))*sph->d_time;
+            particle->y[i] += (wedge->vy + wedge->omega*(particle->x[i]-wedge->cogx))*sph->d_time;
             omp_unset_lock(&lock);
         }
     }
 
     /* -----------------------------------They are for next step calculation ------------------------------------------*/
     //fluid pressure
-    fluid_ptc_pressure(particle);
+    fluid_ptc_pressure(sph);
 
     //rigid body particle pressure 
     #pragma omp parallel for num_threads(TH_NUM)

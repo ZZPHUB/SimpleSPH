@@ -1,30 +1,51 @@
 #include "Lib.H"
 using namespace std;
 
-void ptc_nnps_direct(SPH_PARTICLE *particle,SPH_PAIR *pair)
-{   cout << "here in nnps" << endl;
+void ptc_nnps_direct(SPH *sph)
+//void ptc_nnps_direct(SPH_PARTICLE *particle,SPH_PAIR *pair)
+{   
+    SPH_PARTICLE *particle;
+    SPH_PAIR *pair;
+    particle = sph->particle;
+    pair = sph->pair;
+
+    cout << "here in nnps" << endl;
     pair->total = 0;
     for(int i=0;i<particle->total;i++)
     {   
-        //if(omp_get_thread_num()==6) cout << "i is " << i << "thid is " << omp_get_thread_num() << endl;
         for(int j=i+1;j<particle->total;j++)
         {
         /*  if the distance between the particles i and j is less or equ to PTC_RADIUS,then they are a pair*/
             if(PTC_DISTANCE(i,j) <= PTC_REGION_RADIUS) 
             {
-                pair->i[pair->total] = i;
-                pair->j[pair->total] = j;
-                pair->total = pair->total+1;
-
-                //if(omp_get_thread_num()==6) cout << "total is " << pair->total << "thid is " << omp_get_thread_num() << endl;
-
+                if(particle->type[i] == 0)
+                {
+                    pair->i[pair->total] = i;
+                    pair->j[pair->total] = j;
+                    pair->total = pair->total+1;
+                }
+                else if (particle->type[j] == 0)
+                {
+                    pair->i[pair->total] = j;
+                    pair->j[pair->total] = i;
+                    pair->total = pair->total+1;
+                }
+                
             }
         }
     }
 }
 
-void ptc_nnps_mesh(SPH_PARTICLE *particle,SPH_PAIR *pair,unsigned int ***mesh)
+void ptc_nnps_mesh(SPH *sph)
+//void ptc_nnps_mesh(SPH_PARTICLE *particle,SPH_PAIR *pair,unsigned int ***mesh)
 {
+    SPH_PARTICLE *particle;
+    SPH_PAIR *pair;
+    SPH_MESH mesh;
+    particle = sph->particle;
+    pair = sph->pair;
+    mesh = sph->mesh;
+
     omp_lock_t lock;
     omp_init_lock(&lock);
     pair->total = 0;

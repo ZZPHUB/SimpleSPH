@@ -1,7 +1,11 @@
 #include "PreProcess.H"
 
-void solid_ptc_generate(SPH_PARTICLE *particle)
+void solid_ptc_generate(SPH *sph)
+//void solid_ptc_generate(SPH_PARTICLE *particle)
 {
+    SPH_PARTICLE *particle;
+    particle = sph->particle;
+    
     std::string filename = "../data/preprocess/wedge.vtk";
     double x[3];
     unsigned int tol=0;

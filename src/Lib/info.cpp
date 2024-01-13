@@ -1,7 +1,15 @@
 #include "Lib.H"
 
-void ptc_info(SPH_PARTICLE *particle,SPH_PAIR *pair,RIGID *wedge,unsigned int time)
+void ptc_info(SPH *sph)
+//void ptc_info(SPH_PARTICLE *particle,SPH_PAIR *pair,RIGID *wedge,unsigned int time)
 {
+    SPH_PARTICLE *particle;
+    SPH_PAIR *pair;
+    SPH_RIGID *wedge;
+    particle = sph->particle;
+    pair = sph->pair;
+    wedge = sph->rigid_1;
+
     system("clear");
     cout << "***************************SPH*************************" << endl;
     cout << "Total Particles Num: " << particle->total << endl;
@@ -14,7 +22,7 @@ void ptc_info(SPH_PARTICLE *particle,SPH_PAIR *pair,RIGID *wedge,unsigned int ti
     cout << "------------------------------------------------------" << endl;
     cout << "Total Particles Pair Num: " << pair->total << endl;
     cout << "------------------------------------------------------" << endl;
-    cout << "Current Time Step: " << time << endl;
+    cout << "Current Time Step: " << sph->step << endl;
     cout << "------------------------------------------------------" << endl;
     cout << "Rigid Body Velocity in X-direction: " << wedge->vx << endl;
     cout << "------------------------------------------------------" << endl;

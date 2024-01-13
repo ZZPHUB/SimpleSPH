@@ -1,8 +1,11 @@
 #include "PreProcess.H"
 
 
-void fluid_ptc_generate(SPH_PARTICLE *particle)
+void fluid_ptc_generate(SPH *sph)
 {
+    SPH_PARTICLE *particle;
+    particle = sph->particle;
+
     for(int i=0;i<(FLUID_LENGTH_NUM);i++)
     {
         for(int j=0;j<(FLUID_DEEPTH_NUM);j++)
@@ -14,9 +17,13 @@ void fluid_ptc_generate(SPH_PARTICLE *particle)
     }
 }
 
-void virtual_ptc_generate(SPH_PARTICLE *particle)
+void virtual_ptc_generate(SPH *sph)
 {
+    SPH_PARTICLE *particle;
+    particle = sph->particle;
+
     int k =0;
+
     for(int i=0;i<(FLUID_LENGTH_NUM+8);i++)
     {
         for(int j=0;j<(FLUID_DEEPTH_NUM+4);j++)
@@ -39,8 +46,11 @@ void virtual_ptc_generate(SPH_PARTICLE *particle)
     }
 }
 
-void ptc_generate(SPH_PARTICLE *particle)
+void ptc_generate(SPH *sph)
 {
+    SPH_PARTICLE *particle;
+    particle = sph->particle;
+    
     fluid_ptc_generate(particle);
     virtual_ptc_generate(particle);
     solid_ptc_generate(particle);

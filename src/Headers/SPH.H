@@ -60,6 +60,8 @@
 #define ALPHA 15.0/(7*PI*pow(PTC_SML,2))
 
 /* Data Structure Declare */
+typedef unsigned int*** SPH_MESH;
+
 typedef  struct 
 {
     /* declare the position,velosity,pressure,density,type of the particle */
@@ -98,6 +100,7 @@ typedef struct
     unsigned int *j;
 }SPH_PAIR;
 
+
 typedef struct 
 {
     /* rigid body kinematics information */
@@ -111,9 +114,30 @@ typedef struct
     double cogy;    //y-direction center of gravity coordinate 
     double mass;    //rigid body mass 
     double moi;     //rigid body moment of inertia
-}RIGID;
+    double total;   //rigid body ptc num
+}SPH_RIGID;
 
 
+
+typedef struct 
+{
+    /* SPH Program Struct */
+    SPH_PARTICLE *particle;
+    SPH_RIGID *rigid_0;
+    SPH_RIGID *rigid_1;
+    SPH_PAIR *pair;
+    SPH_KERNEL *kernel;
+    SPH_MESH mesh;
+
+    //current time step
+    double step;
+
+    //time step size
+    double d_time;
+    
+    //current process flags
+    char flag;  // if rigid_1 body involves
+}SPH;
 
 /* Headers Include Here*/
 //#include <omp.h>
@@ -123,6 +147,6 @@ typedef struct
 #include "Equations.H"
 
 /* Extern Functions Here*/
-void ptc_time_integral(SPH_PARTICLE *,SPH_PAIR *,SPH_KERNEL *,unsigned int ***,RIGID *,RIGID *,double,int);
+void ptc_time_integral(SPH *);
 
 #endif

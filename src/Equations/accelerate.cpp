@@ -1,7 +1,15 @@
 #include "Equations.H"
 
-void ptc_acc(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel)
+void ptc_acc(SPH *sph)
+//void ptc_acc(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel)
 {
+    SPH_PARTICLE *particle;
+    SPH_PAIR *pair;
+    SPH_KERNEL *kernel;
+    particle = sph->particle;
+    pair = sph->pair;
+    kernel = sph->kernel;
+
     omp_lock_t lock;
     omp_init_lock(&lock);
     double m = PTC_MASS;

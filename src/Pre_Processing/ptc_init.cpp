@@ -1,7 +1,17 @@
 #include "PreProcess.H"
 
-void ptc_init(SPH_PARTICLE *particle,RIGID *wall,RIGID *wedge)
+void ptc_init(SPH *sph)
+//void ptc_init(SPH_PARTICLE *particle,RIGID *wall,RIGID *wedge)
 {
+    SPH_PARTICLE *particle;
+    SPH_PAIR *pair;
+    SPH_RIGID *wall;
+    SPH_RIGID *wedge;
+    particle = sph->particle;
+    pair = sph->pair;
+    wall = sph->wall;
+    wedge = sph->wedge;
+    
     omp_lock_t lock;
     omp_init_lock(&lock);
     #pragma omp parallel for num_threads(TH_NUM)

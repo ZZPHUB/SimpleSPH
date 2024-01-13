@@ -1,7 +1,19 @@
 #include "Equations.H"
 
-void ptc_dif_density(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,RIGID *wall,RIGID *wedge)
+void ptc_dif_density(SPH *sph)
+//void ptc_dif_density(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,RIGID *wall,RIGID *wedge)
 {
+    SPH_PARTICLE *particle;
+    SPH_PAIR *pair;
+    SPH_KERNEL *kernel;
+    SPH_RIGID *wall;
+    SPH_RIGID *wedge;
+    particle = sph->particle;
+    pair = sph->pair;
+    kernel = sph->kernel;
+    wall = sph->rigid_0;
+    wedge = sph->rigid_1;
+
     omp_lock_t lock;
     omp_init_lock(&lock);
     double m = PTC_MASS;
@@ -27,8 +39,8 @@ void ptc_dif_density(SPH_PARTICLE *particle,SPH_PAIR *pair,SPH_KERNEL *kernel,RI
         }
         else if(particle->type[pair->j[i]]==-1)
         {
-            temp = (particle->vx[pair->i[i]] - (wall->vx - wall->omega*(particle->y[pair->j[i]] - wall->cogy)))*kernel->dwdx[i] \
-            + (particle->vy[pair->i[i]] - (wall->vy + wall->omega*(particle->x[pair->j[i]] - wall->cogx)))*kernel->dwdy[i];
+            temp = (particle->vx[pair->i[i]])*kernel->dwdx[i] \
+            + (particle->vy[pair->i[i]])*kernel->dwdy[i];
         }
         else
         {

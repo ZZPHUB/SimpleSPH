@@ -8,6 +8,5 @@
 #include <stdlib.h>
 
 /* Extern Functions Here */
-extern void ptc_vtk_mesh(SPH_PARTICLE *,unsigned int ***);
-extern void ptc_vtk_direct(SPH_PARTICLE *,double *,char *);
+extern void ptc_vtk_direct(SPH *);
 #endif
