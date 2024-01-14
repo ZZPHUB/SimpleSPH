@@ -84,12 +84,13 @@ void ptc_acc(SPH *sph)
         omp_set_lock(&lock);
         temp = ((particle->vx[pair->i[i]]-particle->vx[pair->j[i]])*(particle->x[pair->i[i]]-particle->x[pair->j[i]])+\
                (particle->vy[pair->i[i]]-particle->vy[pair->j[i]])*(particle->y[pair->i[i]]-particle->y[pair->j[i]]))/ \
-               (pow(particle->x[pair->i[i]]-particle->x[pair->j[i]],2)+pow(particle->y[pair->i[i]]-particle->y[pair->j[i]],2)+0.01*pow(PTC_SML,2));
+               ((pow(particle->x[pair->i[i]]-particle->x[pair->j[i]],2)+pow(particle->y[pair->i[i]]-particle->y[pair->j[i]],2)+0.01*pow(PTC_SML,2))*\
+               (particle->density[pair->i[i]]/2.0 + particle->density[pair->j[i]]/2.0));
         
-        particle->accx[pair->i[i]] -= m*0.01*PTC_SML*ART_SOUND_VEL*temp*kernel->dwdx[i];
-        particle->accx[pair->j[i]] += m*0.01*PTC_SML*ART_SOUND_VEL*temp*kernel->dwdx[i];
-        particle->accy[pair->i[i]] -= m*0.01*PTC_SML*ART_SOUND_VEL*temp*kernel->dwdy[i];
-        particle->accy[pair->j[i]] += m*0.01*PTC_SML*ART_SOUND_VEL*temp*kernel->dwdy[i];
+        particle->accx[pair->i[i]] += m*0.01*PTC_SML*ART_SOUND_VEL*temp*kernel->dwdx[i];
+        particle->accx[pair->j[i]] -= m*0.01*PTC_SML*ART_SOUND_VEL*temp*kernel->dwdx[i];
+        particle->accy[pair->i[i]] += m*0.01*PTC_SML*ART_SOUND_VEL*temp*kernel->dwdy[i];
+        particle->accy[pair->j[i]] -= m*0.01*PTC_SML*ART_SOUND_VEL*temp*kernel->dwdy[i];
         omp_unset_lock(&lock);
     }
     #endif
