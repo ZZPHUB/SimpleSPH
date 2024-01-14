@@ -192,18 +192,21 @@ void ptc_nnps_mesh(SPH *sph)
 void ptc_nnps_check(SPH_PAIR *pair,SPH_PAIR *pair_direct,unsigned int *total)
 {
     *total = 0;
-    for(int i=0;i<pair->total;i++)
-    {   
-        for(int j=0;j<pair_direct->total;j++)
-        {
-            if(pair->i[i]==pair_direct->i[j] && pair->j[i] == pair_direct->j[j])
+    if(pair->total == pair_direct->total)
+    {
+        for(int i=0;i<pair->total;i++)
+        {   
+            for(int j=0;j<pair_direct->total;j++)
             {
-                (*total)++;
-            }
-            else if(pair->i[i] == pair_direct->j[j] && pair->j[i] == pair_direct->i[j])
-            {
-                (*total)++;
+                if(pair->i[i]==pair_direct->i[j] && pair->j[i] == pair_direct->j[j])
+                {
+                    (*total)++;
+                }
+                else if(pair->i[i] == pair_direct->j[j] && pair->j[i] == pair_direct->i[j])
+                {
+                    (*total)++;
+                }
             }
         }
-    }
+        }
 }

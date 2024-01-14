@@ -59,8 +59,8 @@ void ptc_kernel_parallel(SPH *sph)
             kernel->w[i] = ALPHA*(pow(2.0-temp_dis/PTC_SML,3)/6.0); 
 
             //each pair's differential kernel value in x and y direction
-            kernel->dwdx[i] = -1*ALPHA*0.5*pow(2-temp_dis/PTC_SML,2)*(particle->x[pair->i[i]]-particle->x[pair->j[i]])/(PTC_SML*temp_dis);
-            kernel->dwdy[i] = -1*ALPHA*0.5*pow(2-temp_dis/PTC_SML,2)*(particle->y[pair->i[i]]-particle->y[pair->j[i]])/(PTC_SML*temp_dis);
+            kernel->dwdx[i] = -1*ALPHA*0.5*pow(2.0-temp_dis/PTC_SML,2)*(particle->x[pair->i[i]]-particle->x[pair->j[i]])/(PTC_SML*temp_dis);
+            kernel->dwdy[i] = -1*ALPHA*0.5*pow(2.0-temp_dis/PTC_SML,2)*(particle->y[pair->i[i]]-particle->y[pair->j[i]])/(PTC_SML*temp_dis);
             
             //each particles kernel value sum
             particle->w[pair->i[i]] += kernel->w[i];

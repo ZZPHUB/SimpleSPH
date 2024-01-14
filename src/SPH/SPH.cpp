@@ -196,13 +196,10 @@ void ptc_time_integral(SPH *sph)
             omp_set_lock(&lock);
             particle->vx[i] = 0;
             particle->vy[i] = 0;
-            //particle->vx[i] *= (2.0*ALPHA)/3.0;
-            //particle->vy[i] *= (2.0*ALPHA)/3.0;
             particle->accx[i] = 0;
             particle->accy[i] = 0;
             particle->density[i] = 0;
             particle->pressure[i] = 0;
-            //particle->pressure[i] *= (2.0*ALPHA)/3.0;
             omp_unset_lock(&lock);
         }
     }
