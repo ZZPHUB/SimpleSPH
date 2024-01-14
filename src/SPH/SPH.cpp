@@ -290,8 +290,8 @@ void ptc_time_integral(SPH *sph)
             //particle->pressure[pair->j[i]] += (particle->pressure[pair->i[i]]*kernel->w[i])/particle->w[pair->j[i]];
             
             //correct virtual particles velocity for viscous calculation
-            particle->vx[pair->j[i]] += particle->vx[pair->i[i]]/(particle->w[pair->j[i]]);
-            particle->vy[pair->j[i]] += particle->vy[pair->i[i]]/(particle->w[pair->j[i]]);
+            particle->vx[pair->j[i]] += particle->vx[pair->i[i]]*kernel->w[i]/(particle->w[pair->j[i]]);
+            particle->vy[pair->j[i]] += particle->vy[pair->i[i]]*kernel->w[i]/(particle->w[pair->j[i]]);
             omp_unset_lock(&lock);
             }
         }
@@ -312,8 +312,8 @@ void ptc_time_integral(SPH *sph)
             //particle->pressure[pair->j[i]] += (particle->pressure[pair->i[i]]*kernel->w[i])/particle->w[pair->j[i]];
             
             //correct virtual particle velocity for viscous calculation
-            particle->vx[pair->j[i]] += particle->vx[pair->i[i]]/(particle->w[pair->j[i]]);
-            particle->vy[pair->j[i]] += particle->vy[pair->i[i]]/(particle->w[pair->j[i]]);
+            particle->vx[pair->j[i]] += particle->vx[pair->i[i]]*kernel->w[i]/(particle->w[pair->j[i]]);
+            particle->vy[pair->j[i]] += particle->vy[pair->i[i]]*kernel->w[i]/(particle->w[pair->j[i]]);
             omp_unset_lock(&lock);
             }
         }
