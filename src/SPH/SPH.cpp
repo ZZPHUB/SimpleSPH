@@ -86,9 +86,6 @@ int main(void)
     {
         for(sph.current_step;sph.current_step<sph.total_step;sph.current_step++)
         {
-            //calculate and integration
-            ptc_time_integral(&sph); 
-            ptc_info(&sph);
             if(sph.current_step%PRINT_TIME_STEP == 0)
             {
                 filename[23] = (sph.current_step/PRINT_TIME_STEP)/100 + 48;
@@ -96,6 +93,9 @@ int main(void)
                 filename[25] = ((sph.current_step/PRINT_TIME_STEP)%10) + 48;
                 ptc_vtk_direct(&sph,filename);
             }
+            //calculate and integration
+            ptc_time_integral(&sph); 
+            ptc_info(&sph);
         }
         system("clear");
         cout << "press 0 to kill precess or num(>100) for more steps" << endl;
