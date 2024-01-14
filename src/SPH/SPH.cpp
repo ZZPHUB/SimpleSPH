@@ -39,7 +39,7 @@ int main(void)
     particle.visyy = (double *)(calloc(particle.total,sizeof(double)));
     particle.visxy = (double *)(calloc(particle.total,sizeof(double)));
     #endif
-    particle.type = (char *)(calloc(particle.total,sizeof(char)));  
+    particle.type = (int *)(calloc(particle.total,sizeof(int)));  
 
     //kernel data init
     kernel.w = (double *)(calloc(30*particle.total,sizeof(double)));  //this code donnot use kernel value
@@ -179,7 +179,7 @@ void ptc_time_integral(SPH *sph)
     //ptc_dif_density
     ptc_dif_density(sph);
 
-    #ifdef
+    #ifdef FLAG
     //ptc_viscous
     ptc_viscous(sph);
     #endif

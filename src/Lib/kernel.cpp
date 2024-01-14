@@ -34,7 +34,7 @@ void ptc_kernel_parallel(SPH *sph)
     }
 
     #pragma omp parallel for num_threads(TH_NUM)
-    for(int i=0;i<pair->total;i++)
+    for(unsigned int i=0;i<pair->total;i++)
     {   
         temp_dis = PTC_DISTANCE(pair->i[i],pair->j[i]);
         if(0<temp_dis && temp_dis < PTC_SML)

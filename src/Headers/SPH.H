@@ -79,7 +79,7 @@ typedef  struct
     //double *mass;   //mass of particle
     double *w; //sum of kernel value
     unsigned int total; //total particles number
-    char *type; //particle type:0 denote fulid;1 denote rigid;-1 denote dummy particles
+    int *type; //particle type:0 denote fulid;1 denote rigid;-1 denote dummy particles
 }SPH_PARTICLE;
 
 typedef struct 
@@ -130,7 +130,7 @@ typedef struct
     //time step size
     double d_time;
     //current process flags
-    char flag;  // if rigid_1 body involves
+    int flag;  // if rigid_1 body involves
 }SPH;
 
 /* Headers Include Here*/
