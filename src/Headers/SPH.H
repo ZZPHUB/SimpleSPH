@@ -39,9 +39,9 @@
 #define TH_NUM 7 //paraller threads
 #define INIT_TIME_STEP 2000
 #define DELTA_TIME 0.0008
-#define PRINT_TIME_STEP 50  //every 50 time step to print
+#define PRINT_TIME_STEP 1  //every 50 time step to print
 
-#define PARA (0x01|0x02)
+#define PARA (0x01|0x02|0x04|0x08)
 //0x01----------->density
 //0x02----------->pressure
 //0x04----------->velosity
