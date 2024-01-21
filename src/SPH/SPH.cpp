@@ -134,8 +134,6 @@ int main(void)
     free(mesh);
     return 0;
 }
-
-
 void ptc_dummy(SPH *sph)
 {
     SPH_PARTICLE *particle;
@@ -153,7 +151,7 @@ void ptc_dummy(SPH *sph)
     omp_init_lock(&lock);
     //rigid body(wall & wedge)vx,vy,accx,accy,pressure init
     #pragma omp parallel for num_threads(TH_NUM)
-    for(unsigned int i=0;i<pair->total;i++)
+    for(unsigned int i=0;i<particle->total;i++)
     {
         if(particle->type[i] != 0)
         {
@@ -192,12 +190,12 @@ void ptc_dummy(SPH *sph)
     }
     //rigid body(wall & wedege) pressure 
     #pragma omp parallel for num_threads(TH_NUM)
-    for(unsigned int i=0;i<pair->total;i++)
+    for(unsigned int i=0;i<particle->total;i++)
     {
         if(particle->type[i] != 0)
         {
             omp_set_lock(&lock);
-            particle->density[i] = particle->pressure/pow(sph->c,2)+REF_DENSITY;
+            particle->density[i] = particle->pressure[i]/pow(sph->c,2)+REF_DENSITY;
             omp_unset_lock(&lock);
         }
     }
@@ -254,7 +252,7 @@ void ptc_time_integral(SPH *sph)
             particle->y[i] = particle->temp_y[i] + particle->temp_vy[i]*sph->d_time/2.0;
             particle->vx[i] = particle->temp_vx[i] + particle->accx[i]*sph->d_time/2.0;
             particle->vy[i] = particle->temp_vy[i] + particle->accy[i]*sph->d_time/2.0;
-            particle->density[i] = paritcle->temp_density[i] + particle->dif_density[i]*sph->d_time/2.0;
+            particle->density[i] = particle->temp_density[i] + particle->dif_density[i]*sph->d_time/2.0;
             if(particle->density[i]<REF_DENSITY) particle->density[i] = REF_DENSITY;
             omp_unset_lock(&lock);
         }
@@ -295,12 +293,10 @@ void ptc_time_integral(SPH *sph)
     //get rigid body's pressure and velosity
     ptc_dummy(sph);
     
-    //we need init the rigid body's acceleration and angular acceleration
+    //and alse,we need init the rigid body's acceleration and angular acceleration
     wedge->accx = 0;
     wedge->accy = 0;
     wedge->alpha = 0;
-
-
     //collect the rigid body's acceleration
     #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<particle->total;i++)
@@ -315,7 +311,6 @@ void ptc_time_integral(SPH *sph)
             omp_unset_lock(&lock);
         }
     }
-
     //rigid body velocity and angular velocity
     #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<particle->total;i++)
@@ -329,7 +324,6 @@ void ptc_time_integral(SPH *sph)
             omp_unset_lock(&lock);
         }
     }
-
     //rigid body vx,vy,omega time integration
     #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<particle->total;i++)
