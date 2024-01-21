@@ -56,8 +56,6 @@ int main(void)
     pair.i = (unsigned int *)(calloc(30*particle.total,sizeof(unsigned int)));
     pair.j = (unsigned int *)(calloc(30*particle.total,sizeof(unsigned int)));
 
-    //rigid wall init
-    wall.vx=wall.vy=wall.accx=wall.accy=wall.omega=wall.alpha=wall.cogx=wall.cogy=wall.mass=0;
 
     //mesh data init
     mesh = (SPH_MESH)(calloc(MESH_DEEPTH_NUM,sizeof(unsigned int **)));
@@ -78,7 +76,7 @@ int main(void)
     sph.d_time = DELTA_TIME;
     sph.c = ART_SOUND_VEL;
     sph.g = GRAVITY_ACC;
-    sph.flag = 0;
+    sph.flag = 0.0;
     sph.current_step = 0;
     sph.total_step = INIT_TIME_STEP;
 
@@ -134,6 +132,40 @@ int main(void)
     free(mesh);
     return 0;
 }
+void ptc_density_correct(SPH *sph)
+{
+    SPH_PARTICLE *particle;
+    SPH_PAIR *pair;
+    SPH_KERNEL *kernel;
+    particle = sph->particle;
+    pair = sph->pair;
+    kernel = sph->kernel;
+
+    double m = PTC_MASS;    
+
+    omp_lock_t lock;
+    omp_init_lock(&lock);
+
+    #pragma omp parallel for num_threads(TH_NUM)
+    for(unsigned int i=0;i<particle->total;i++)
+    {
+        if(particle->type[i] == 0)
+        {
+            particle->density[i] *= 2.0*ALPHA/(3.0*particle->w[i]);
+        }
+    }
+
+    #pragma omp parallel for num_threads(TH_NUM)
+    for(unsigned int i=0;i<pair->total;i++)
+    {
+        particle->density[pair->i[i]] += m*kernel->w[i]/particle->w[pair->i[i]];
+        if(particle->type[pair->j[i]] == 0)
+        {
+            particle->density[pair->j[i]] += m*kernel->w[i]/particle->w[pair->j[i]];
+        }
+    }
+}
+
 void ptc_dummy(SPH *sph)
 {
     SPH_PARTICLE *particle;
@@ -293,6 +325,13 @@ void ptc_time_integral(SPH *sph)
     //get rigid body's pressure and velosity
     ptc_dummy(sph);
     
+    //DENSITY CORRECT STEP
+    if(sph->current_step%10 == 0)
+    {
+        ptc_density_correct(sph);
+    }
+
+
     //and alse,we need init the rigid body's acceleration and angular acceleration
     wedge->accx = 0;
     wedge->accy = 0;

@@ -22,7 +22,7 @@ void solid_ptc_generate(SPH *sph)
         if(x[2]==0 &&(x[0]!=0 || x[1]!= 0))
         {
             particle->x[FLUID_PTC_NUM+VIRTUAL_PTC_NUM+tol] = (double)(x[0]/1000)+0.2;
-            particle->y[FLUID_PTC_NUM+VIRTUAL_PTC_NUM+tol] = (double)(x[1]/1000)+1.0+4*PTC_SPACING;
+            particle->y[FLUID_PTC_NUM+VIRTUAL_PTC_NUM+tol] = (double)(x[1]/1000)+1.0+6*PTC_SPACING;
             particle->type[FLUID_PTC_NUM+VIRTUAL_PTC_NUM+tol] = 1;
             tol++;
         }

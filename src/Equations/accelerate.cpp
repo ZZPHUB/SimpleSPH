@@ -13,18 +13,19 @@ void ptc_acc(SPH *sph)
     omp_lock_t lock;
     omp_init_lock(&lock);
     double m = PTC_MASS;
-    double temp = 0;
-    double temp_p = 0;
-    double temp_rho_i = 0;
-    double temp_rho_j = 0;
+    double temp = 0.0;
+    double temp_p = 0.0;
+    double temp_rho_i = 0.0;
+    double temp_rho_j = 0.0;
 
     
     #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<particle->total;i++)
     {
         omp_set_lock(&lock);
-        particle->accx[i] = 0;
-        particle->accy[i] = -sph->g;
+        particle->accx[i] = 0.0;
+        if(particle->type[i] == 0)particle->accy[i] = -sph->g;
+        else particle->accy[i] == 0.0;
         omp_unset_lock(&lock);
     }
 

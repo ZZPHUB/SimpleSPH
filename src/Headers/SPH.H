@@ -155,5 +155,5 @@ typedef struct
 /* Extern Functions Here*/
 void ptc_time_integral(SPH *);
 void ptc_dummy(SPH *);
-
+void ptc_density_correct(SPH *);
 #endif

@@ -32,6 +32,9 @@ void ptc_init(SPH *sph)
     wedge->mass = 12.8;
     wedge->moi = 0;
 
+    //rigid wall init
+    wall.vx=wall.vy=wall.accx=wall.accy=wall.omega=wall.alpha=wall.cogx=wall.cogy=wall.mass=0;
+
     unsigned int temp = 0;
     temp = solid_ptc_num();
     #pragma omp parallel for num_threads(TH_NUM)
