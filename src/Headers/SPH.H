@@ -13,8 +13,8 @@
 #define TOL_DOMAIN_DEEPTH (FLUID_DOMAIN_DEEPTH*1.5)
 
 #define PTC_SPACING 0.005    //spacing between particles
-#define PTC_SML 2*PTC_SPACING    //smoothed leng of particles
-#define PTC_REGION_RADIUS (2*PTC_SML) //particle support region radius,which is PTC_SML*2
+#define PTC_SML (2.0*PTC_SPACING)    //smoothed leng of particles
+#define PTC_REGION_RADIUS (2.0*PTC_SML) //particle support region radius,which is PTC_SML*2
 
 #define FLUID_LENGTH_NUM (int)(FLUID_DOMAIN_LENGTH/PTC_SPACING+1-8)
 #define FLUID_DEEPTH_NUM (int)(FLUID_DOMAIN_DEEPTH/PTC_SPACING+1-4)

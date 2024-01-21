@@ -184,7 +184,7 @@ void ptc_dummy(SPH *sph)
             }
             else
             {
-                while(true) cout << pair->j[i] << " type is " <<particle->type[pair->j[i]] << " w = 0 " << endl;
+                //while(true) cout << pair->j[i] << " type is " <<particle->type[pair->j[i]] << " w = 0 " << endl;
             }
         }
     }
