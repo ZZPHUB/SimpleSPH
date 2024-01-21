@@ -58,24 +58,31 @@
 #define PI 3.14159265358
 #define ALPHA 15.0/(7*PI*pow(PTC_SML,2))
 
+#define LINEAR_EOS
+
 /* Data Structure Declare */
 typedef unsigned int*** SPH_MESH;
 
 typedef  struct 
 {
     /* declare the position,velosity,pressure,density,type of the particle */
-    double *x;  //x coordinations of position
-    double *y;  //y coordinations of position
-    double *vx; //x-direction velosity
-    double *vy; //y-direction velosity
-    double *accx;   //x-direction acceleration 
-    double *accy;   //y-direction acceleration
-    double *pressure;   //pressure of paritcle
-    double *density;    //density of particle
-    double *dif_density;    //differential density value
-    double *visxx;      //x-x direction stress
-    double *visyy;      //y-y direction stress
-    double *visxy;      //x-y and y-x direction stress
+    double *x;  //x coordinations of position,iterative
+    double *y;  //y coordinations of position,iterative
+    double *vx; //x-direction velosity,iterative
+    double *vy; //y-direction velosity,iterative
+    double *accx;   //x-direction acceleration,non-iterative
+    double *accy;   //y-direction acceleration,non-iterative
+    double *pressure;   //pressure of paritcle,non-iterative
+    double *density;    //density of particle,iterative
+    double *dif_density;    //differential density value,non-iterative
+    double *visxx;      //x-x direction stress,non-iterative
+    double *visyy;      //y-y direction stress,non-iterative
+    double *visxy;      //x-y and y-x direction stress,non-iterative
+    double *temp_x;     //for predict-correct scheme,non-iterative
+    double *temp_y;     //for predict-correct scheme,non-iterative
+    double *temp_vx;    //for predict-correct scheme,non-iterative
+    double *temp_vy;    //for predict-correct scheme,non-iterative
+    double *temp_density;   //for predict-correct scheme,non-iterative
     //double *mass;   //mass of particle
     double *w; //sum of kernel value
     unsigned int total; //total particles number
@@ -127,10 +134,15 @@ typedef struct
     int current_step;
     //total time steps
     int total_step;
+    //current process flags
+    int flag;  // if rigid_1 body involves,it is true
+
+    //gravity acceleration
+    double g;
+    //artificial sound speed
+    double c;
     //time step size
     double d_time;
-    //current process flags
-    int flag;  // if rigid_1 body involves
 }SPH;
 
 /* Headers Include Here*/
@@ -142,5 +154,6 @@ typedef struct
 
 /* Extern Functions Here*/
 void ptc_time_integral(SPH *);
+void ptc_dummy(SPH *);
 
 #endif

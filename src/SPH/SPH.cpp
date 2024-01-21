@@ -30,6 +30,11 @@ int main(void)
     particle.accx = (double *)(calloc(particle.total,sizeof(double))); 
     particle.accy = (double *)(calloc(particle.total,sizeof(double)));
     particle.density = (double *)(calloc(particle.total,sizeof(double)));
+    particle.temp_x = (double *)(calloc(particle.total,sizeof(double)));
+    particle.temp_y = (double *)(calloc(particle.total,sizeof(double)));
+    particle.temp_vx = (double *)(calloc(particle.total,sizeof(double)));
+    particle.temp_vy = (double *)(calloc(particle.total,sizeof(double)));
+    particle.temp_density = (double *)(calloc(particle.total,sizeof(double))); 
     //particle.mass = (double *)(calloc(particle.total,sizeof(double))); //for particle's mass is constant
     particle.w = (double *)(calloc(particle.total,sizeof(double)));
     particle.dif_density = (double *)(calloc(particle.total,sizeof(double)));
@@ -71,6 +76,8 @@ int main(void)
     sph.rigid_1 = &wedge;
     sph.mesh = mesh;
     sph.d_time = DELTA_TIME;
+    sph.c = ART_SOUND_VEL;
+    sph.g = GRAVITY_ACC;
     sph.flag = 0;
     sph.current_step = 0;
     sph.total_step = INIT_TIME_STEP;
@@ -128,6 +135,74 @@ int main(void)
     return 0;
 }
 
+
+void ptc_dummy(SPH *sph)
+{
+    SPH_PARTICLE *particle;
+    SPH_PAIR *pair;
+    SPH_KERNEL *kernel;
+    SPH_RIGID *wall;
+    SPH_RIGID *wedge;
+    particle = sph->particle;
+    pair = sph->pair;
+    kernel = sph->kernel;
+    wall = sph->rigid_0;
+    wedge = sph->rigid_1;
+
+    omp_lock_t lock;
+    omp_init_lock(&lock);
+    //rigid body(wall & wedge)vx,vy,accx,accy,pressure init
+    #pragma omp parallel for num_threads(TH_NUM)
+    for(unsigned int i=0;i<pair->total;i++)
+    {
+        if(particle->type[i] != 0)
+        {
+            omp_set_lock(&lock);
+            particle->vx[i] = 0;
+            particle->vy[i] = 0;
+            particle->pressure[i] = 0;
+            particle->density[i] = 0;
+            omp_unset_lock(&lock);
+        }
+    }
+    //rigid body(wall & wedge) particle pressure 
+    #pragma omp parallel for num_threads(TH_NUM)
+    for(unsigned int i=0;i<pair->total;i++)
+    {
+        if(particle->type[pair->j[i]] != 0)
+        {
+            if(particle->w[pair->j[i]] != 0)
+            {
+                omp_set_lock(&lock);
+                particle->pressure[pair->j[i]] += (particle->pressure[pair->i[i]]*kernel->w[i] +particle->density[pair->i[i]]*\
+                ((wedge->accx-wedge->alpha*(particle->y[pair->j[i]] - wedge->cogy)-(particle->x[pair->j[i]]-wedge->cogx)*pow(wedge->omega,2))*(particle->x[pair->i[i]]-particle->x[pair->j[i]])*kernel->w[i]+\
+                (wedge->accy+wedge->alpha*(particle->x[pair->j[i]] - wedge->cogx)-(particle->y[pair->j[i]]-wedge->cogy)*pow(wedge->omega,2))*(particle->y[pair->i[i]]-particle->y[pair->j[i]])*kernel->w[i]))/(particle->w[pair->j[i]]);
+                //particle->pressure[pair->j[i]] += (particle->pressure[pair->i[i]]*kernel->w[i])/particle->w[pair->j[i]];
+            
+                //correct virtual particles velocity for viscous calculation
+                particle->vx[pair->j[i]] += particle->vx[pair->i[i]]*kernel->w[i]/(particle->w[pair->j[i]]);
+                particle->vy[pair->j[i]] += particle->vy[pair->i[i]]*kernel->w[i]/(particle->w[pair->j[i]]);
+                omp_unset_lock(&lock);
+            }
+            else
+            {
+                while(true) cout << pair->j[i] << " type is " <<particle->type[pair->j[i]] << " w = 0 " << endl;
+            }
+        }
+    }
+    //rigid body(wall & wedege) pressure 
+    #pragma omp parallel for num_threads(TH_NUM)
+    for(unsigned int i=0;i<pair->total;i++)
+    {
+        if(particle->type[i] != 0)
+        {
+            omp_set_lock(&lock);
+            particle->density[i] = particle->pressure/pow(sph->c,2)+REF_DENSITY;
+            omp_unset_lock(&lock);
+        }
+    }
+}
+
 void ptc_time_integral(SPH *sph)
 {
     SPH_PARTICLE *particle;
@@ -141,90 +216,90 @@ void ptc_time_integral(SPH *sph)
     wall = sph->rigid_0;
     wedge = sph->rigid_1;
 
-
     omp_lock_t lock;
     omp_init_lock(&lock);
 
-    //fluid_particles_info time integral and
+    //generate mesh for nnps search
+    ptc_mesh_process(sph);
+    //search the interact particles pair
+    ptc_nnps_mesh(sph);
+    //generate the particle kernel value and differential kernel value
+    ptc_kernel_parallel(sph);
+    //get the particle pressure by eos
+    fluid_ptc_pressure(sph);
+    //get the ptc density change rate
+    ptc_dif_density(sph);
+    //get the acceleration of ptc 
+    ptc_acc(sph);
+
+    //PREDICT STEP
+    #pragma omp parallel for num_threads(TH_NUM)
+    for(unsigned int i=0;i<particle->total;i++)
+    {
+        omp_set_lock(&lock);
+        particle->temp_x[i] = particle->x[i];
+        particle->temp_y[i] = particle->y[i];
+        particle->temp_vx[i] = particle->vx[i];
+        particle->temp_vy[i] = particle->vy[i];
+        particle->temp_density[i] = particle->density[i];
+        omp_unset_lock(&lock);
+    }
     #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<particle->total;i++)
     {
         if(particle->type[i] == 0)
         {
-            //fulid paritcles density,vx,vy,x,y time integral
             omp_set_lock(&lock);
-            particle->vx[i] += particle->accx[i]*sph->d_time/2;
-            particle->vy[i] += particle->accy[i]*sph->d_time/2;
-            particle->x[i] += particle->vx[i]*sph->d_time/2;
-            particle->y[i] += particle->vy[i]*sph->d_time/2;
+            particle->x[i] = particle->temp_x[i] + particle->temp_vx[i]*sph->d_time/2.0;
+            particle->y[i] = particle->temp_y[i] + particle->temp_vy[i]*sph->d_time/2.0;
+            particle->vx[i] = particle->temp_vx[i] + particle->accx[i]*sph->d_time/2.0;
+            particle->vy[i] = particle->temp_vy[i] + particle->accy[i]*sph->d_time/2.0;
+            particle->density[i] = paritcle->temp_density[i] + particle->dif_density[i]*sph->d_time/2.0;
+            if(particle->density[i]<REF_DENSITY) particle->density[i] = REF_DENSITY;
             omp_unset_lock(&lock);
-        }  
+        }
     }
+    //get rigid body's pressure and velosity
+    ptc_dummy(sph);
 
-    //ptc_mesh_process
+    //generate mesh for nnps search
     ptc_mesh_process(sph);
-
-    //ptc_nnps_mesh
+    //search the interact particles pair
     ptc_nnps_mesh(sph);
-    /*
-    for(unsigned int i=0;i<pair->total;i++)
-    {
-        if(particle->type[pair->i[i]] != 0) cout << "particle id " << pair->i[i] << " is not fluid" << endl;
-    }
-    */
-
-    //ptc_kernel_parallel
+    //generate the particle kernel value and differential kernel value
     ptc_kernel_parallel(sph);
-
-    //ptc_dif_density
+    //get the particle pressure by eos
+    fluid_ptc_pressure(sph);
+    //get the ptc density change rate
     ptc_dif_density(sph);
-
-    #ifdef FLAG
-    //ptc_viscous
-    ptc_viscous(sph);
-    #endif
-
-    //ptc_acceleration
+    //get the acceleration of ptc 
     ptc_acc(sph);
-    
-    //for virtual particles not in time integration,so the vx,vy,density,pressure need to be init every time step
+
+    //CORRECT STEP
     #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<particle->total;i++)
     {
-        if(particle->type[i]!=0)
+        if(particle->type[i] == 0)
         {
             omp_set_lock(&lock);
-            particle->vx[i] = 0;
-            particle->vy[i] = 0;
-            particle->accx[i] = 0;
-            particle->accy[i] = 0;
-            particle->density[i] = 0;
-            particle->pressure[i] = 0;
+            particle->x[i] = particle->temp_x[i] + particle->vx[i]*sph->d_time;
+            particle->y[i] = particle->temp_y[i] + particle->vy[i]*sph->d_time;
+            particle->vx[i] = particle->temp_vx[i] + particle->accx[i]*sph->d_time;
+            particle->vy[i] = particle->temp_vy[i] + particle->accy[i]*sph->d_time;
+            particle->density[i] = particle->temp_density[i] + particle->dif_density[i]*sph->d_time;
+            if(particle->density[i] < REF_DENSITY) particle->density[i] = REF_DENSITY; 
             omp_unset_lock(&lock);
         }
     }
 
-    //and alse,we need init the rigid body's acceleration and angular acceleration
+    //get rigid body's pressure and velosity
+    ptc_dummy(sph);
+    
+    //we need init the rigid body's acceleration and angular acceleration
     wedge->accx = 0;
     wedge->accy = 0;
     wedge->alpha = 0;
 
-    //fluid_particles_info time integral and
-    #pragma omp parallel for num_threads(TH_NUM)
-    for(unsigned int i=0;i<particle->total;i++)
-    {
-        if(particle->type[i] == 0)
-        {
-            //fulid paritcles density,vx,vy,x,y time integral
-            omp_set_lock(&lock);
-            particle->density[i] += particle->dif_density[i]*sph->d_time;
-            particle->x[i] += particle->vx[i]*sph->d_time/2;
-            particle->y[i] += particle->vy[i]*sph->d_time/2;
-            particle->vx[i] += particle->accx[i]*sph->d_time/2;
-            particle->vy[i] += particle->accy[i]*sph->d_time/2;
-            omp_unset_lock(&lock);
-        }  
-    }
 
     //collect the rigid body's acceleration
     #pragma omp parallel for num_threads(TH_NUM)
@@ -264,69 +339,6 @@ void ptc_time_integral(SPH *sph)
             omp_set_lock(&lock);
             particle->x[i] += (wedge->vx - wedge->omega*(particle->y[i]-wedge->cogy))*sph->d_time;
             particle->y[i] += (wedge->vy + wedge->omega*(particle->x[i]-wedge->cogx))*sph->d_time;
-            omp_unset_lock(&lock);
-        }
-    }
-
-    /* -----------------------------------They are for next step calculation ------------------------------------------*/
-    //fluid pressure
-    fluid_ptc_pressure(sph);
-
-    //rigid body particle pressure 
-    #pragma omp parallel for num_threads(TH_NUM)
-    for(unsigned int i=0;i<pair->total;i++)
-    {
-        if(particle->type[pair->j[i]]==1)
-        {
-            if(particle->w[pair->j[i]] == 0 )
-            {
-                cout << pair->j[i] << " type is: " << particle->type[pair->j[i]] << " w = " << 0 << endl;
-            }
-            else{
-            omp_set_lock(&lock);
-            particle->pressure[pair->j[i]] += (particle->pressure[pair->i[i]]*kernel->w[i] +particle->density[pair->i[i]]*\
-            ((wedge->accx-wedge->alpha*(particle->y[pair->j[i]] - wedge->cogy)-(particle->x[pair->j[i]]-wedge->cogx)*pow(wedge->omega,2))*(particle->x[pair->i[i]]-particle->x[pair->j[i]])*kernel->w[i]+\
-             (wedge->accy+wedge->alpha*(particle->x[pair->j[i]] - wedge->cogx)-(particle->y[pair->j[i]]-wedge->cogy)*pow(wedge->omega,2))*(particle->y[pair->i[i]]-particle->y[pair->j[i]])*kernel->w[i]))/(particle->w[pair->j[i]]);
-            //particle->pressure[pair->j[i]] += (particle->pressure[pair->i[i]]*kernel->w[i])/particle->w[pair->j[i]];
-            
-            //correct virtual particles velocity for viscous calculation
-            particle->vx[pair->j[i]] += particle->vx[pair->i[i]]*kernel->w[i]/(particle->w[pair->j[i]]);
-            particle->vy[pair->j[i]] += particle->vy[pair->i[i]]*kernel->w[i]/(particle->w[pair->j[i]]);
-            omp_unset_lock(&lock);
-            }
-        }
-        else if(particle->type[pair->j[i]]==-1)
-        {
-            if(particle->w[pair->j[i]] == 0)
-            {
-                cout << pair->j[i] << " type is: " << particle->type[pair->j[i]] << " w = " << 0 << endl;
-            }
-            else
-            {
-            //virtual particles pressure
-            omp_set_lock(&lock);
-            particle->pressure[pair->j[i]] += (particle->pressure[pair->i[i]]*kernel->w[i] +particle->density[pair->i[i]] * \
-            ((wall->accx-wall->alpha*(particle->y[pair->j[i]] - wall->cogy)-(particle->x[pair->j[i]]-wall->cogx)*pow(wall->omega,2))*(particle->x[pair->i[i]]-particle->x[pair->j[i]])*kernel->w[i]+\
-             (wall->accy+wall->alpha*(particle->x[pair->j[i]] - wall->cogx)-(particle->y[pair->j[i]]-wall->cogy)*pow(wall->omega,2)+GRAVITY_ACC)*(particle->y[pair->i[i]]-particle->y[pair->j[i]])*kernel->w[i]))/(particle->w[pair->j[i]]);
-            
-            //particle->pressure[pair->j[i]] += (particle->pressure[pair->i[i]]*kernel->w[i])/particle->w[pair->j[i]];
-            
-            //correct virtual particle velocity for viscous calculation
-            particle->vx[pair->j[i]] += particle->vx[pair->i[i]]*kernel->w[i]/(particle->w[pair->j[i]]);
-            particle->vy[pair->j[i]] += particle->vy[pair->i[i]]*kernel->w[i]/(particle->w[pair->j[i]]);
-            omp_unset_lock(&lock);
-            }
-        }
-    }
-
-    //rigid body particles density
-    #pragma omp parallel for num_threads(TH_NUM)
-    for(unsigned int i=0;i<particle->total;i++)
-    {
-        if(particle->type[i]!=0)
-        {
-            omp_set_lock(&lock);
-            particle->density[i] = particle->pressure[i]/pow(ART_SOUND_VEL,2) + REF_DENSITY;
             omp_unset_lock(&lock);
         }
     }

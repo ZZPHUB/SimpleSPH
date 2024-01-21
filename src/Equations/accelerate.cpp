@@ -24,7 +24,7 @@ void ptc_acc(SPH *sph)
     {
         omp_set_lock(&lock);
         particle->accx[i] = 0;
-        particle->accy[i] = -GRAVITY_ACC;
+        particle->accy[i] = -sph->g;
         omp_unset_lock(&lock);
     }
 
@@ -87,10 +87,10 @@ void ptc_acc(SPH *sph)
                ((pow(particle->x[pair->i[i]]-particle->x[pair->j[i]],2)+pow(particle->y[pair->i[i]]-particle->y[pair->j[i]],2)+0.01*pow(PTC_SML,2))*\
                (particle->density[pair->i[i]]/2.0 + particle->density[pair->j[i]]/2.0));
         
-        particle->accx[pair->i[i]] += m*0.01*PTC_SML*ART_SOUND_VEL*temp*kernel->dwdx[i];
-        particle->accx[pair->j[i]] -= m*0.01*PTC_SML*ART_SOUND_VEL*temp*kernel->dwdx[i];
-        particle->accy[pair->i[i]] += m*0.01*PTC_SML*ART_SOUND_VEL*temp*kernel->dwdy[i];
-        particle->accy[pair->j[i]] -= m*0.01*PTC_SML*ART_SOUND_VEL*temp*kernel->dwdy[i];
+        particle->accx[pair->i[i]] += m*0.01*PTC_SML*sph->c*temp*kernel->dwdx[i];
+        particle->accx[pair->j[i]] -= m*0.01*PTC_SML*sph->c*temp*kernel->dwdx[i];
+        particle->accy[pair->i[i]] += m*0.01*PTC_SML*sph->c*temp*kernel->dwdy[i];
+        particle->accy[pair->j[i]] -= m*0.01*PTC_SML*sph->c*temp*kernel->dwdy[i];
         omp_unset_lock(&lock);
     }
     #endif

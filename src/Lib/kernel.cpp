@@ -11,6 +11,7 @@ void ptc_kernel_parallel(SPH *sph)
     pair = sph->pair;
     kernel = sph->kernel;
 
+    double m = PTC_MASS;
     double temp_dis;
     omp_lock_t lock;
     omp_init_lock(&lock);
@@ -22,7 +23,7 @@ void ptc_kernel_parallel(SPH *sph)
         if(particle->type[i]==0)
         {
             omp_set_lock(&lock);
-            particle->w[i] = 2.0*ALPHA/3.0;
+            particle->w[i] = m*2.0*ALPHA/(3.0*particle->density[i]);
             omp_unset_lock(&lock);
         }
         else if(particle->type[i]==-1)
@@ -48,8 +49,10 @@ void ptc_kernel_parallel(SPH *sph)
             kernel->dwdy[i] = ALPHA*(-2.0+1.5*temp_dis/PTC_SML)*(particle->y[pair->i[i]]-particle->y[pair->j[i]])/pow(PTC_SML,2);
             
             //each particles kernel value sum
-            particle->w[pair->i[i]] += kernel->w[i];
-            particle->w[pair->j[i]] += kernel->w[i];
+            particle->w[pair->i[i]] += kernel->w[i]*m/particle->density[pair->j[i]];
+            if(particle->type[pair->j[i]]==0) particle->w[pair->j[i]] += kernel->w[i]*m/particle->density[pair->i[i]];
+            else particle->w[pair->j[i]] += kernel->w[i];
+
             omp_unset_lock(&lock);
         }
         else if (PTC_SML <= temp_dis && temp_dis < PTC_REGION_RADIUS)
@@ -63,8 +66,9 @@ void ptc_kernel_parallel(SPH *sph)
             kernel->dwdy[i] = -1*ALPHA*0.5*pow(2.0-temp_dis/PTC_SML,2)*(particle->y[pair->i[i]]-particle->y[pair->j[i]])/(PTC_SML*temp_dis);
             
             //each particles kernel value sum
-            particle->w[pair->i[i]] += kernel->w[i];
-            particle->w[pair->j[i]] += kernel->w[i];
+            particle->w[pair->i[i]] += kernel->w[i]*m/particle->density[pair->j[i]];
+            if(particle->type[pair->j[i]]==0) particle->w[pair->j[i]] += kernel->w[i]*m/particle->density[pair->i[i]];
+            else particle->w[pair->j[i]] += kernel->w[i];
             omp_unset_lock(&lock);
         }
     }

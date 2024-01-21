@@ -7,7 +7,7 @@ void fluid_ptc_pressure(SPH *sph)
     
     omp_lock_t lock; //it seems that this donnot need a lock
     omp_init_lock(&lock);
-    double c = ART_SOUND_VEL; //ariti_sound_velocity
+    double c = sph->c; //ariti_sound_velocity
 
     #ifdef LINEAR_EOS
     #pragma omp parallel for num_threads(TH_NUM)
