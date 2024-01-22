@@ -199,7 +199,25 @@ void ptc_dummy(SPH *sph)
     #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<pair->total;i++)
     {
-        if(particle->type[pair->j[i]] != 0)
+        if(particle->type[pair->j[i]] == -1)
+        {
+            if(particle->w[pair->j[i]] != 0)
+            {
+                omp_set_lock(&lock);
+                particle->pressure[pair->j[i]] += (particle->pressure[pair->i[i]]*kernel->w[i] +particle->density[pair->i[i]]*\
+                (GRAVITY_ACC)*(particle->y[pair->i[i]]-particle->y[pair->j[i]])*kernel->w[i])/(particle->w[pair->j[i]]);
+
+                //correct virtual particles velocity for viscous calculation
+                particle->vx[pair->j[i]] += particle->vx[pair->i[i]]*kernel->w[i]/(particle->w[pair->j[i]]);
+                particle->vy[pair->j[i]] += particle->vy[pair->i[i]]*kernel->w[i]/(particle->w[pair->j[i]]);
+                omp_unset_lock(&lock);
+            }
+            else
+            {
+                //while(true) cout << pair->j[i] << " type is " <<particle->type[pair->j[i]] << " w = 0 " << endl;
+            }
+        }
+        else if(particle->type[pair->j[i]] == 1)
         {
             if(particle->w[pair->j[i]] != 0)
             {
@@ -207,8 +225,7 @@ void ptc_dummy(SPH *sph)
                 particle->pressure[pair->j[i]] += (particle->pressure[pair->i[i]]*kernel->w[i] +particle->density[pair->i[i]]*\
                 ((wedge->accx-wedge->alpha*(particle->y[pair->j[i]] - wedge->cogy)-(particle->x[pair->j[i]]-wedge->cogx)*pow(wedge->omega,2))*(particle->x[pair->i[i]]-particle->x[pair->j[i]])*kernel->w[i]+\
                 (wedge->accy+wedge->alpha*(particle->x[pair->j[i]] - wedge->cogx)-(particle->y[pair->j[i]]-wedge->cogy)*pow(wedge->omega,2))*(particle->y[pair->i[i]]-particle->y[pair->j[i]])*kernel->w[i]))/(particle->w[pair->j[i]]);
-                //particle->pressure[pair->j[i]] += (particle->pressure[pair->i[i]]*kernel->w[i])/particle->w[pair->j[i]];
-            
+
                 //correct virtual particles velocity for viscous calculation
                 particle->vx[pair->j[i]] += particle->vx[pair->i[i]]*kernel->w[i]/(particle->w[pair->j[i]]);
                 particle->vy[pair->j[i]] += particle->vy[pair->i[i]]*kernel->w[i]/(particle->w[pair->j[i]]);

@@ -17,6 +17,10 @@ void ptc_acc(SPH *sph)
     double temp_p = 0.0;
     double temp_rho_i = 0.0;
     double temp_rho_j = 0.0;
+    double dx = 0;
+    double dy = 0;
+    double dvx = 0;
+    double dvy = 0;
 
     
     #pragma omp parallel for num_threads(TH_NUM)
@@ -83,9 +87,25 @@ void ptc_acc(SPH *sph)
     for(unsigned int i=0;i<pair->total;i++)
     {
         omp_set_lock(&lock);
-        temp = ((particle->vx[pair->i[i]]-particle->vx[pair->j[i]])*(particle->x[pair->i[i]]-particle->x[pair->j[i]])+\
-               (particle->vy[pair->i[i]]-particle->vy[pair->j[i]])*(particle->y[pair->i[i]]-particle->y[pair->j[i]]))/ \
-               ((pow(particle->x[pair->i[i]]-particle->x[pair->j[i]],2)+pow(particle->y[pair->i[i]]-particle->y[pair->j[i]],2)+0.01*pow(PTC_SML,2))*\
+        dx = particle->x[pair->i[i]] - particle->x[pair->j[i]];
+        dy = particle->y[pair->i[i]] - particle->y[pair->j[i]];
+        if(particle->type[pair->j[i]] == 0)
+        {
+            dvx = particle->vx[pair->i[i]] - particle->vx[pair->j[i]];
+            dvy = particle->vy[pair->i[i]] - particle->vy[pair->j[i]];
+        }
+        else if(particle->type[pair->j[i]] == 0) 
+        {
+            dvx = particle->vx[pair->i[i]] - (0.0 - particle->vx[pair->j[i]]);
+            dvy = particle->vy[pair->i[i]] - (0.0 - particle->vy[pair->j[i]]);
+        }
+        else
+        {
+            dvx = particle->vx[pair->i[i]] - (2*(wedge->vx - wedge->omega*(particle->y[pair->j[i]] - wedge->cogy)) - particle->vx[pair->j[i]]);
+            dvy = particle->vy[pair->i[i]] - (2*(wedge->vy + wedge->omega*(particle->x[pair->j[i]] - wedge->cogx)) - particle->vy[pair->j[i]]);
+        }
+        temp = (dx*dvx+dy*dvy)/ \
+               ((dx*dx+dy*dy+0.01*PTC_SML*PTC_SML)*\
                (particle->density[pair->i[i]]/2.0 + particle->density[pair->j[i]]/2.0));
         
         particle->accx[pair->i[i]] += m*0.01*PTC_SML*sph->c*temp*kernel->dwdx[i];

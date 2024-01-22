@@ -33,7 +33,7 @@ void ptc_init(SPH *sph)
     wedge->moi = 0;
 
     //rigid wall init
-    wall.vx=wall.vy=wall.accx=wall.accy=wall.omega=wall.alpha=wall.cogx=wall.cogy=wall.mass=0;
+   wall->vx=wall->vy=wall->accx=wall->accy=wall->omega=wall->alpha=wall->cogx=wall->cogy=wall->mass=0;
 
     unsigned int temp = 0;
     temp = solid_ptc_num();
