@@ -42,10 +42,12 @@ void ptc_kernel_parallel(SPH *sph)
     #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<pair->total;i++)
     {   
+        omp_set_lock(&lock);
         dx = particle->x[pair->i[i]] - particle->x[pair->j[i]];
         dy = particle->y[pair->i[i]] - particle->y[pair->j[i]];
         r = sqrt(dx*dx+dy*dy);
         q = r/PTC_SML;
+        omp_unset_lock(&lock);
 
         if(0 <= q && q < 2.0)
         {
