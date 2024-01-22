@@ -24,9 +24,9 @@
 #define VIRTUAL_PTC_NUM (int)((FLUID_DOMAIN_DEEPTH/PTC_SPACING+1)*(FLUID_DOMAIN_LENGTH/PTC_SPACING+1)-FLUID_PTC_NUM)  //virtual paritcles number
 //#define PTC_TOL_NUM (FLUID_PTC_NUM+SOLID_PTC_NUM+VIRTUAL_PTC_NUM)   //total particles
 
-#define MESH_SPACING (PTC_SPACING*4.0) //mesh spacing
-#define MESH_LENGTH_NUM (int)(TOL_DOMAIN_LENGTH/MESH_SPACING) //length-direction mesh number
-#define MESH_DEEPTH_NUM (int)(TOL_DOMAIN_DEEPTH/MESH_SPACING) //deepth-direction mesh number
+#define MESH_SPACING (2.0*PTC_SML) //mesh spacing
+#define MESH_LENGTH_NUM (int)(TOL_DOMAIN_LENGTH/MESH_SPACING+1) //length-direction mesh number
+#define MESH_DEEPTH_NUM (int)(TOL_DOMAIN_DEEPTH/MESH_SPACING+1) //deepth-direction mesh number
 #define MESH_TOL_NUM (MESH_LENGTH_NUM*MESH_DEEPTH_NUM) //total mesh number
 #define MESH_PTC_NUM 201 //per mesh grid contain max paticle num
 
