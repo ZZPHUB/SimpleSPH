@@ -151,7 +151,7 @@ void ptc_density_correct(SPH *sph)
     {
         if(particle->type[i] == 0)
         {
-            particle->density[i] *= 2.0*ALPHA/(3.0*particle->w[i]);
+            particle->density[i] = m*2.0*ALPHA/(3.0*particle->w[i]);
         }
     }
 
