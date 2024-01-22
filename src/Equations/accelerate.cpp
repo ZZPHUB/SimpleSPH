@@ -6,10 +6,14 @@ void ptc_acc(SPH *sph)
     SPH_PARTICLE *particle;
     SPH_PAIR *pair;
     SPH_KERNEL *kernel;
+    SPH_RIGID *wall;
+    SPH_RIGID *wedge;
     particle = sph->particle;
     pair = sph->pair;
     kernel = sph->kernel;
-
+    wall = sph->rigid_0;
+    wedge = sph->rigid_1;
+    
     omp_lock_t lock;
     omp_init_lock(&lock);
     double m = PTC_MASS;
