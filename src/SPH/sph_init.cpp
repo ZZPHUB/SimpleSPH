@@ -14,6 +14,7 @@ void sph_init(SPH *sph)
     SPH_PAIR *pair;
     SPH_KERNEL *kernel;
     SPH_RIGID *wall;
+    SPH_MESH mesh;
     particle = sph->particle;
     pair = sph->pair;
     kernel = sph->kernel;
