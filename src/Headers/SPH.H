@@ -148,6 +148,13 @@ typedef struct
     double d_time;
 }SPH;
 
+extern SPH_PARTICLE particle;
+extern SPH_KERNEL kernel;
+extern SPH_PAIR pair;
+extern SPH_RIGID wall;
+extern SPH_MESH mesh = NULL;
+SPH sph;
+
 /* Headers Include Here*/
 //#include <omp.h>
 #include "Lib.H"
