@@ -14,23 +14,23 @@ int main(void)
 
     while (true)
     {
-        for(sph->current_step;sph->current_step<sph->total_step;sph->current_step++)
+        for(sph.current_step;sph.current_step<sph.total_step;sph.current_step++)
         {
-            if(sph->current_step%PRINT_TIME_STEP == 0)
+            if(sph.current_step%PRINT_TIME_STEP == 0)
             {
-                filename[23] = (sph->current_step/PRINT_TIME_STEP)/100 + 48;
-                filename[24] = ((sph->current_step/PRINT_TIME_STEP)%100)/10 + 48;
-                filename[25] = ((sph->current_step/PRINT_TIME_STEP)%10) + 48;
-                ptc_vtk_direct(sph,filename);
+                filename[23] = (sph.current_step/PRINT_TIME_STEP)/100 + 48;
+                filename[24] = ((sph.current_step/PRINT_TIME_STEP)%100)/10 + 48;
+                filename[25] = ((sph.current_step/PRINT_TIME_STEP)%10) + 48;
+                ptc_vtk_direct(&sph,filename);
             }
             //calculate and integration
-            ptc_time_integral(sph); 
-            ptc_info(sph);
+            ptc_time_integral(&sph); 
+            ptc_info(&sph);
         }
         system("clear");
         cout << "press 0 to kill precess or num(>100) for more steps" << endl;
-        cin >> sph->total_step;
-        if(sph->total_step == 0) break;
+        cin >> sph.total_step;
+        if(sph.total_step == 0) break;
     }
 
     sph_free(sph);
