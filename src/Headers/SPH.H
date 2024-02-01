@@ -8,12 +8,12 @@
 
 /* Define Symbols Here*/
 #define FLUID_DOMAIN_LENGTH 0.4   //computational domain length
-#define FLUID_DOMAIN_DEEPTH 1.0     //computational domain deepth
+#define FLUID_DOMAIN_DEEPTH 0.3     //computational domain deepth
 #define TOL_DOMAIN_LENGTH (FLUID_DOMAIN_LENGTH)
-#define TOL_DOMAIN_DEEPTH (FLUID_DOMAIN_DEEPTH*1.5)
+#define TOL_DOMAIN_DEEPTH (FLUID_DOMAIN_DEEPTH*1.0)
 
 #define PTC_SPACING 0.005    //spacing between particles
-#define PTC_SML (2.0*PTC_SPACING)    //smoothed leng of particles
+#define PTC_SML (1.5*PTC_SPACING)    //smoothed leng of particles
 #define PTC_REGION_RADIUS (2.0*PTC_SML) //particle support region radius,which is PTC_SML*2
 
 #define FLUID_LENGTH_NUM (int)(FLUID_DOMAIN_LENGTH/PTC_SPACING+1-8)
@@ -21,10 +21,10 @@
 
 #define FLUID_PTC_NUM (FLUID_LENGTH_NUM)*(FLUID_DEEPTH_NUM)  //fluid particles number
 //#define SOLID_PTC_NUM  0 //rigid body particles number
-#define VIRTUAL_PTC_NUM (int)((FLUID_DOMAIN_DEEPTH/PTC_SPACING+1)*(FLUID_DOMAIN_LENGTH/PTC_SPACING+1)-FLUID_PTC_NUM)  //virtual paritcles number
+#define WALL_PTC_NUM (int)((FLUID_DOMAIN_DEEPTH/PTC_SPACING+1)*(FLUID_DOMAIN_LENGTH/PTC_SPACING+1)-FLUID_PTC_NUM)  //virtual paritcles number
 //#define PTC_TOL_NUM (FLUID_PTC_NUM+SOLID_PTC_NUM+VIRTUAL_PTC_NUM)   //total particles
 
-#define MESH_SPACING (2.0*PTC_SML) //mesh spacing
+#define MESH_SPACING PTC_REGION_RADIUS //mesh spacing
 #define MESH_LENGTH_NUM (int)(TOL_DOMAIN_LENGTH/MESH_SPACING+1) //length-direction mesh number
 #define MESH_DEEPTH_NUM (int)(TOL_DOMAIN_DEEPTH/MESH_SPACING+1) //deepth-direction mesh number
 #define MESH_TOL_NUM (MESH_LENGTH_NUM*MESH_DEEPTH_NUM) //total mesh number
@@ -85,8 +85,11 @@ typedef  struct
     double *temp_density;   //for predict-correct scheme,non-iterative
     //double *mass;   //mass of particle
     double *w; //sum of kernel value
-    unsigned int total; //total particles number
     int *type; //particle type:0 denote fulid;1 denote rigid;-1 denote dummy particles
+
+    unsigned int fulid_ptc_num;  //total fluid particle number
+    unsigned int wall_ptc_num;   //total wall particle number
+    unsigned int total; //total particles number
 }SPH_PARTICLE;
 
 typedef struct 
@@ -153,6 +156,8 @@ typedef struct
 #include "Equations.H"
 
 /* Extern Functions Here*/
+SPH *sph_init(void);
+void sph_free(SPH *);
 void ptc_time_integral(SPH *);
 void ptc_dummy(SPH *);
 void ptc_density_correct(SPH *);

@@ -9,7 +9,6 @@ void ptc_nnps_direct(SPH *sph)
     particle = sph->particle;
     pair = sph->pair;
 
-    cout << "here in nnps" << endl;
     pair->total = 0;
     for(int i=0;i<particle->total;i++)
     {   
@@ -30,7 +29,6 @@ void ptc_nnps_direct(SPH *sph)
                     pair->j[pair->total] = i;
                     pair->total = pair->total+1;
                 }
-                
             }
         }
     }
