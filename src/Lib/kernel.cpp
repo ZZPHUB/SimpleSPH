@@ -25,7 +25,7 @@ void ptc_kernel_parallel(SPH *sph)
         r = sqrt(dx*dx+dy*dy);
         q = r/PTC_SML;
 
-        if(0.0 <= q && q < 2.0)
+        if(0.0 <= q && q < 1.0)
         {
             //each pair's kernel value
             kernel->w[i] = a*(2.0/3.0-q*q+0.5*q*q*q);

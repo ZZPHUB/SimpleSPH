@@ -120,9 +120,10 @@ void ptc_time_integral(SPH *sph)
     kernel = sph->kernel;
     wall = sph->rigid_0;
 
-
+    //generate the nnps mesh
+    ptc_mesh_process(sph);
     //search the interact particles pair
-    ptc_nnps_direct(sph);
+    ptc_nnps_mesh(sph);
     //generate the particle kernel value and differential kernel value
     ptc_kernel_parallel(sph);
     //get the particle pressure by eos
@@ -157,11 +158,6 @@ void ptc_time_integral(SPH *sph)
     //get rigid body's pressure and velosity
     ptc_dummy(sph);
 
-
-    //search the interact particles pair
-    ptc_nnps_direct(sph);
-    //generate the particle kernel value and differential kernel value
-    ptc_kernel_parallel(sph);
     //get the particle pressure by eos
     fluid_ptc_pressure(sph);
     //get the ptc density change rate
@@ -187,8 +183,8 @@ void ptc_time_integral(SPH *sph)
     ptc_dummy(sph);
     
     //DENSITY CORRECT STEP
-    if(sph->current_step%10 == 0)
-    {
-        ptc_density_correct(sph);
-    }
+    //if(sph->current_step%10 == 0)
+    //{
+        //ptc_density_correct(sph);
+    //}
 }

@@ -12,13 +12,13 @@ int main(void)
     SPH_KERNEL kernel;
     SPH_PAIR pair;
     SPH_RIGID wall;
-    //SPH_MESH mesh = NULL;
+    SPH_MESH mesh = NULL;
     SPH sph;
     sph.particle = &particle;
     sph.kernel = &kernel;
     sph.pair = &pair;
     sph.rigid_0 = &wall;
-    //sph.mesh = mesh;
+    sph.mesh = mesh;
 
     sph_init(&sph);    
     

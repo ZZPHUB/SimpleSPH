@@ -12,8 +12,9 @@ void ptc_init(SPH *sph)
     for(int i=0;i<particle->total;i++)
     {
         particle->vx[i] = particle->vy[i] = particle->accx[i] = \
-        particle->accy[i] =particle->pressure[i] =particle->dif_density[i] = 0;
-        particle->density[i] = REF_DENSITY;
+        particle->accy[i]  = particle->dif_density[i] = 0;
+        particle->pressure[i] = sph->g*REF_DENSITY*(FLUID_DOMAIN_DEEPTH-particle->y[i]);
+        particle->density[i] = particle->pressure[i]/(sph->c*sph->c)+REF_DENSITY;
     }
 
     //rigid wall init

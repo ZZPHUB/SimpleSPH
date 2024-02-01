@@ -59,7 +59,7 @@ void sph_init(SPH *sph)
     pair->j = (unsigned int *)(calloc(30*particle->total,sizeof(unsigned int)));
 
 
-    /* //mesh data init
+    //mesh data init
     mesh = (SPH_MESH)(calloc(MESH_DEEPTH_NUM,sizeof(unsigned int **)));
     for(int i=0;i<MESH_DEEPTH_NUM;i++)
     {
@@ -68,8 +68,9 @@ void sph_init(SPH *sph)
         {
             mesh[i][j] = (unsigned int *)(calloc(MESH_PTC_NUM,sizeof(unsigned int)));
         }
-    }*/
+    }
     
+    sph->mesh = mesh;
     sph->d_time = DELTA_TIME;
     sph->c = ART_SOUND_VEL;
     sph->g = GRAVITY_ACC;
