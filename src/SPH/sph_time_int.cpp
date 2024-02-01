@@ -17,6 +17,17 @@ void ptc_density_correct(SPH *sph)
  
     for(unsigned int i=0;i<particle->total;i++)
     {
+        particle->w[i] = 0;
+    }
+
+    for(unsigned int i=0;i<pair->total;i++)
+    {
+        particle->w[pair->i[i]] += kernel->w[i]*m/particle->density[pair->j[i]];
+        if(particle->type[pair->j[i]]==0) particle->w[pair->j[i]] += kernel->w[i]*m/particle->density[pair->i[i]];
+    }
+
+    for(unsigned int i=0;i<particle->total;i++)
+    {
         if(particle->type[i] == 0)
         {
             particle->density[i] = m*2.0*ALPHA/(3.0*particle->w[i]);
@@ -46,20 +57,25 @@ void ptc_dummy(SPH *sph)
     wall = sph->rigid_0;
     wedge = sph->rigid_1;
 
-    omp_lock_t lock;
-    omp_init_lock(&lock);
     //rigid body(wall & wedge)vx,vy,accx,accy,pressure init
- 
     for(unsigned int i=0;i<particle->total;i++)
     {
-        if(particle->type[i] != 0)
+        if(particle->type[i] == -1)
         {
+            particle->w[i] = 0;
             particle->vx[i] = 0;
             particle->vy[i] = 0;
             particle->pressure[i] = 0;
             particle->density[i] = 0;
         }
     }
+
+    for(unsigned int i=0;i<pair->total;i++)
+    {
+        if(particle->type[pair->j[i]]==-1) particle->w[pair->j[i]] += kernel->w[i];
+    }
+
+   
     //rigid body(wall & wedge) particle pressure 
  
     for(unsigned int i=0;i<pair->total;i++)
