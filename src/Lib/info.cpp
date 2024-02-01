@@ -8,22 +8,23 @@ void ptc_info(SPH *sph)
     SPH_RIGID *wedge;
     particle = sph->particle;
     pair = sph->pair;
-    wedge = sph->rigid_1;
+    //wedge = sph->rigid_1;
 
     system("clear");
     cout << "***************************SPH*************************" << endl;
     cout << "Total Particles Num: " << particle->total << endl;
     cout << "------------------------------------------------------" << endl;
-    cout << "Fluid Particles Num: " << FLUID_PTC_NUM << endl;
+    cout << "Fluid Particles Num: " << particle->fulid_ptc_num << endl;
     cout << "------------------------------------------------------" << endl;
-    cout << "Virtual Particles Num: " << VIRTUAL_PTC_NUM << endl;
+    cout << "Wall Particles Num: " << particle->wall_ptc_num << endl;
     cout << "------------------------------------------------------" << endl;
-    cout << "Solid Particles Num: " << particle->total-FLUID_PTC_NUM-VIRTUAL_PTC_NUM << endl;
+    cout << "Solid Particles Num: " << 0 << endl;
     cout << "------------------------------------------------------" << endl;
     cout << "Total Particles Pair Num: " << pair->total << endl;
     cout << "------------------------------------------------------" << endl;
     cout << "Current Time Step: " << sph->current_step << endl;
     cout << "------------------------------------------------------" << endl;
+    /*
     cout << "Rigid Body Velocity in X-direction: " << wedge->vx << endl;
     cout << "------------------------------------------------------" << endl;
     cout << "Rigid Body Velocity in Y-direction: " << wedge->vy << endl;
@@ -36,5 +37,5 @@ void ptc_info(SPH *sph)
     cout << "------------------------------------------------------" << endl;
     cout << "Rigid Body Angular Acceleration: "<< wedge->alpha << endl;
     cout << "******************************************************" << endl;
-
+    */
 }
