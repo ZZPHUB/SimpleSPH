@@ -9,6 +9,7 @@ void solid_ptc_generate(SPH *sph)
     std::string filename = "../data/preprocess/wedge.vtk";
     double x[3];
     unsigned int tol=0;
+    tol = particle->fulid_ptc_num+particle->wall_ptc_num;
 
     vtkSmartPointer<vtkUnstructuredGridReader> reader = vtkSmartPointer<vtkUnstructuredGridReader>::New();
     reader->SetFileName(filename.c_str());
@@ -21,9 +22,9 @@ void solid_ptc_generate(SPH *sph)
         vtkdata->GetPoint(i,x);
         if(x[2]==0 &&(x[0]!=0 || x[1]!= 0))
         {
-            particle->x[FLUID_PTC_NUM+VIRTUAL_PTC_NUM+tol] = (double)(x[0]/1000)+0.2;
-            particle->y[FLUID_PTC_NUM+VIRTUAL_PTC_NUM+tol] = (double)(x[1]/1000)+1.0+6*PTC_SPACING;
-            particle->type[FLUID_PTC_NUM+VIRTUAL_PTC_NUM+tol] = 1;
+            particle->x[tol] = (double)(x[0]/1000)+0.2;
+            particle->y[tol] = (double)(x[1]/1000)+1.0+6*PTC_SPACING;
+            particle->type[tol] = 1;
             tol++;
         }
     }
