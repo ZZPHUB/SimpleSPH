@@ -6,15 +6,15 @@
 
 using namespace std;
 
+SPH_PARTICLE particle;
+SPH_KERNEL kernel;
+SPH_PAIR pair;
+SPH_RIGID wall;
+SPH_MESH mesh = NULL;
+SPH sph;
+
 SPH* sph_init(void)
 {
-    SPH_PARTICLE particle;
-    SPH_KERNEL kernel;
-    SPH_PAIR pair;
-    SPH_RIGID wall;
-    SPH_MESH mesh = NULL;
-    SPH sph;
-
     particle.fulid_ptc_num = FLUID_PTC_NUM;
     particle.wall_ptc_num = WALL_PTC_NUM;
     particle.total = particle.fulid_ptc_num+ particle.wall_ptc_num; //get all of the particle number
