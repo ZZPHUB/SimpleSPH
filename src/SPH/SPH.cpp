@@ -33,6 +33,6 @@ int main(void)
         if(sph.total_step == 0) break;
     }
 
-    sph_free(sph);
+    sph_free(&sph);
     return 0;
 }
