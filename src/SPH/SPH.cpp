@@ -8,7 +8,7 @@ using namespace std;
 
 int main(void)
 { 
-    SPH *sph = sph_init();    
+    sph_init();    
     
     char filename[] = "../data/postprocess/sph000.vtk"; //filename 
 
