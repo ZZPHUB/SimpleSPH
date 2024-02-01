@@ -77,8 +77,6 @@ void sph_init(SPH *sph)
     sph->current_step = 0;
     sph->total_step = INIT_TIME_STEP;
 
-    ptc_generate(&sph);
-    ptc_init(&sph);
-    
-    return &sph;
+    ptc_generate(sph);
+    ptc_init(sph);
 }
