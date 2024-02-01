@@ -1,6 +1,6 @@
 #include "SPH.H"
 
-int sph_free(SPH *sph)
+void sph_free(SPH *sph)
 {
     SPH_PARTICLE *particle;
     SPH_PAIR *pair;
@@ -29,6 +29,4 @@ int sph_free(SPH *sph)
     free(pair->i);
     free(pair->j);
     //free(mesh);
-
-    return 0;
 }
