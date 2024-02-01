@@ -8,7 +8,19 @@ using namespace std;
 
 int main(void)
 { 
-    sph_init();    
+    SPH_PARTICLE particle;
+    SPH_KERNEL kernel;
+    SPH_PAIR pair;
+    SPH_RIGID wall;
+    //SPH_MESH mesh = NULL;
+    SPH sph;
+    sph.particle = &particle;
+    sph.kernel = &kernel;
+    sph.pair = &pair;
+    sph.rigid_0 = &wall;
+    //sph.mesh = mesh;
+
+    sph_init(&sph);    
     
     char filename[] = "../data/postprocess/sph000.vtk"; //filename 
 
