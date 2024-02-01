@@ -148,12 +148,6 @@ typedef struct
     double d_time;
 }SPH;
 
-extern SPH_PARTICLE particle;
-extern SPH_KERNEL kernel;
-extern SPH_PAIR pair;
-extern SPH_RIGID wall;
-extern SPH_MESH mesh;
-SPH sph;
 
 /* Headers Include Here*/
 //#include <omp.h>
@@ -163,7 +157,7 @@ SPH sph;
 #include "Equations.H"
 
 /* Extern Functions Here*/
-SPH *sph_init(void);
+void sph_init(SPH *);
 void sph_free(SPH *);
 void ptc_time_integral(SPH *);
 void ptc_dummy(SPH *);
