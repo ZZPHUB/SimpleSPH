@@ -152,7 +152,7 @@ extern SPH_PARTICLE particle;
 extern SPH_KERNEL kernel;
 extern SPH_PAIR pair;
 extern SPH_RIGID wall;
-extern SPH_MESH mesh = NULL;
+extern SPH_MESH mesh;
 SPH sph;
 
 /* Headers Include Here*/
