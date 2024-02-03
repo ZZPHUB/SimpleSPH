@@ -5,12 +5,13 @@ void ptc_pressure_conv(SPH *sph)
 {
     SPH_PARTICLE *particle;
     particle = sph->particle;
-    char filename[] = "../data/postprocess/csv/p_conv.csv"
+    char filename[] = "../data/postprocess/csv/p_conv.csv";
 
     ofstream writefile;
     writefile.open(filename,ios::out|ios::app);
 
-    writefile <<((double)sph->current_step)*sph->d_time <<", "<<particle->pressure[2226] << 9800*particle->y[2226]<< endl;
+    writefile <<((double)sph->current_step)*sph->d_time <<", "\
+    <<particle->pressure[2226] << ", " <<9800*particle->y[2226]<< endl;
 
     writefile.close();
 }
