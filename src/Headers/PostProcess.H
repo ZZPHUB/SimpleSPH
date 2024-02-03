@@ -9,4 +9,5 @@
 
 /* Extern Functions Here */
 extern void ptc_vtk_direct(SPH *,char *);
+extern void ptc_pressure_conv(SPH *);
 #endif

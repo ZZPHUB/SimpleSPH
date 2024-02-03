@@ -38,6 +38,7 @@ int main(void)
             //calculate and integration
             ptc_time_integral(&sph); 
             ptc_info(&sph);
+            ptc_pressure_conv(&sph);
         }
         system("clear");
         cout << "press 0 to kill precess or num(>100) for more steps" << endl;
