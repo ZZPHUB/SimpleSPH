@@ -22,7 +22,7 @@ int main(void)
 
     sph_init(&sph);    
     
-    char filename[] = "../data/postprocess/vtk\/sph000.vtk"; //filename 
+    char filename[] = "../data/postprocess/vtk/sph000.vtk"; //filename 
 
     while (true)
     {
@@ -30,9 +30,9 @@ int main(void)
         {
             if(sph.current_step%PRINT_TIME_STEP == 0)
             {
-                filename[23] = (sph.current_step/PRINT_TIME_STEP)/100 + 48;
-                filename[24] = ((sph.current_step/PRINT_TIME_STEP)%100)/10 + 48;
-                filename[25] = ((sph.current_step/PRINT_TIME_STEP)%10) + 48;
+                filename[24] = (sph.current_step/PRINT_TIME_STEP)/100 + 48;
+                filename[25] = ((sph.current_step/PRINT_TIME_STEP)%100)/10 + 48;
+                filename[26] = ((sph.current_step/PRINT_TIME_STEP)%10) + 48;
                 ptc_vtk_direct(&sph,filename);
             }
             //calculate and integration
