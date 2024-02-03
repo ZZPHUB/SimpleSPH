@@ -22,7 +22,7 @@ int main(void)
 
     sph_init(&sph);    
     
-    char filename[] = "../data/postprocess/vtk/sph000.vtk"; //filename 
+    char filename[] = "../data/postprocess/vtk\/sph000.vtk"; //filename 
 
     while (true)
     {
