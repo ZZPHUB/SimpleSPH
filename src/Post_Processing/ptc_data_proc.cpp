@@ -10,7 +10,8 @@ void ptc_pressure_conv(SPH *sph)
     ofstream writefile;
     writefile.open(filename,ios::out|ios::app);
 
-    writefile <<((double)sph->current_step)*sph->d_time <<", "\
+    writefile << setiosflags(ios::scientific) <<    \
+    ((double)sph->current_step)*sph->d_time <<", "  \
     <<particle->pressure[2226] << ", " <<9800*particle->y[2226]<< endl;
 
     writefile.close();
