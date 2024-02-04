@@ -37,9 +37,9 @@
 #define MU 0.001 //define the constant viscous
 
 #define TH_NUM 7 //paraller threads
-#define INIT_TIME_STEP 2000
+#define INIT_TIME_STEP 20000
 #define DELTA_TIME 0.00002
-#define PRINT_TIME_STEP 1  //every 50 time step to print
+#define PRINT_TIME_STEP 20  //every 50 time step to print
 
 #define PARA (0x01|0x02|0x04|0x08)
 //0x01----------->density

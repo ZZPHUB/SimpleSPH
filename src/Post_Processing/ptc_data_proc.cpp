@@ -12,7 +12,7 @@ void ptc_pressure_conv(SPH *sph)
 
     writefile << setiosflags(ios::scientific) <<    \
     ((double)sph->current_step)*sph->d_time <<", "  \
-    <<particle->pressure[2226] << ", " <<9800*particle->y[2226]<< endl;
+    <<particle->pressure[1994] << ", " <<9800*particle->y[2226]<< endl;
 
     writefile.close();
 }
