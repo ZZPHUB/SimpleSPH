@@ -15,11 +15,11 @@ void ptc_dif_density(SPH *sph)
     wedge = sph->rigid_1;
 
     double m = PTC_MASS;
-    double temp = 0; //particles velosity differentiation
+    double temp = 0.0; //particles velosity differentiation
 
     for(unsigned int i=0;i<particle->total;i++)
     {
-        particle->dif_density[i] = 0;
+        particle->dif_density[i] = 0.0;
     }
     
     for(unsigned int i=0;i<pair->total;i++)

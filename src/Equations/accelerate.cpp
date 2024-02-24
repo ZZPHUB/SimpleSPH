@@ -28,7 +28,7 @@ void ptc_acc(SPH *sph)
     {
         particle->accx[i] = 0.0;
         if(particle->type[i] == 0)particle->accy[i] = -sph->g;
-        else particle->accy[i] == 0.0;
+        else particle->accy[i] = 0.0;
     }
 
     for(unsigned int i=0;i<pair->total;i++)
