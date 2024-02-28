@@ -18,7 +18,7 @@ extern void ptc_kernel_serial(SPH *);
 extern void ptc_kernel_parallel(SPH *);
 extern void ptc_mesh_process(SPH *);
 extern void ptc_info(SPH *);
-
+extern void ptc_density_correct(SPH *);
 
 
 

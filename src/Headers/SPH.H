@@ -128,8 +128,8 @@ typedef struct
 {
     /* SPH Program Struct */
     SPH_PARTICLE *particle;
-    SPH_RIGID *rigid_0;
-    SPH_RIGID *rigid_1;
+    SPH_RIGID *rigid;
+    //SPH_RIGID *rigid_1;
     SPH_PAIR *pair;
     SPH_KERNEL *kernel;
     SPH_MESH mesh;
@@ -159,7 +159,7 @@ typedef struct
 /* Extern Functions Here*/
 void sph_init(SPH *);
 void sph_free(SPH *);
-void ptc_time_integral(SPH *);
+void sph_time_integral(SPH *);
 void ptc_dummy(SPH *);
-void ptc_density_correct(SPH *);
+//void ptc_density_correct(SPH *);
 #endif

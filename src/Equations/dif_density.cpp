@@ -6,13 +6,13 @@ void ptc_dif_density(SPH *sph)
     SPH_PARTICLE *particle;
     SPH_PAIR *pair;
     SPH_KERNEL *kernel;
-    SPH_RIGID *wall;
-    SPH_RIGID *wedge;
+    //SPH_RIGID *wall;
+    //SPH_RIGID *wedge;
     particle = sph->particle;
     pair = sph->pair;
     kernel = sph->kernel;
-    wall = sph->rigid_0;
-    wedge = sph->rigid_1;
+    //wall = sph->rigid_0;
+    //wedge = sph->rigid_1;
 
     double m = PTC_MASS;
     double temp = 0.0; //particles velosity differentiation

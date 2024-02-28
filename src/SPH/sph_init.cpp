@@ -13,12 +13,12 @@ void sph_init(SPH *sph)
     SPH_PARTICLE *particle;
     SPH_PAIR *pair;
     SPH_KERNEL *kernel;
-    SPH_RIGID *wall;
+    //SPH_RIGID *wall;
     SPH_MESH mesh;
     particle = sph->particle;
     pair = sph->pair;
     kernel = sph->kernel;
-    wall = sph->rigid_0;
+    //wall = sph->rigid_0;
 
     particle->fulid_ptc_num = FLUID_PTC_NUM;
     particle->wall_ptc_num = WALL_PTC_NUM;

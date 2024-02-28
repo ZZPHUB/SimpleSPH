@@ -6,12 +6,12 @@ void ptc_acc(SPH *sph)
     SPH_PARTICLE *particle;
     SPH_PAIR *pair;
     SPH_KERNEL *kernel;
-    SPH_RIGID *wall;
-    SPH_RIGID *wedge;
+    //SPH_RIGID *wall;
+    //SPH_RIGID *wedge;
     particle = sph->particle;
     pair = sph->pair;
     kernel = sph->kernel;
-    wall = sph->rigid_0;
+    //wall = sph->rigid_0;
     
     double m = PTC_MASS;
     double temp = 0.0;

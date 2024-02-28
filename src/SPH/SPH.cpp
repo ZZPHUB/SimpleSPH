@@ -11,13 +11,13 @@ int main(void)
     SPH_PARTICLE particle;
     SPH_KERNEL kernel;
     SPH_PAIR pair;
-    SPH_RIGID wall;
+    //SPH_RIGID wall;
     SPH_MESH mesh = NULL;
     SPH sph;
     sph.particle = &particle;
     sph.kernel = &kernel;
     sph.pair = &pair;
-    sph.rigid_0 = &wall;
+    //sph.rigid_0 = &wall;
     sph.mesh = mesh;
 
     sph_init(&sph);    
@@ -36,7 +36,7 @@ int main(void)
                 ptc_vtk_direct(&sph,filename);
             }
             //calculate and integration
-            ptc_time_integral(&sph); 
+            sph_time_integral(&sph); 
             ptc_info(&sph);
             ptc_pressure_conv(&sph);
         }

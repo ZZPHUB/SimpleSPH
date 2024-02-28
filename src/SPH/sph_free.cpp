@@ -5,11 +5,11 @@ void sph_free(SPH *sph)
     SPH_PARTICLE *particle;
     SPH_PAIR *pair;
     SPH_KERNEL *kernel;
-    SPH_RIGID *wall;
+    //SPH_RIGID *wall;
     particle = sph->particle;
     pair = sph->pair;
     kernel = sph->kernel;
-    wall = sph->rigid_0;
+    //wall = sph->rigid_0;
 
     free(particle->x);
     free(particle->y);

@@ -4,10 +4,10 @@ void ptc_init(SPH *sph)
 {
     SPH_PARTICLE *particle;
     SPH_PAIR *pair;
-    SPH_RIGID *wall;
+    //SPH_RIGID *wall;
     particle = sph->particle;
     pair = sph->pair;
-    wall = sph->rigid_0;
+    //wall = sph->rigid_0;
 
     for(int i=0;i<particle->total;i++)
     {
@@ -18,6 +18,6 @@ void ptc_init(SPH *sph)
     }
 
     //rigid wall init
-    wall->vx=wall->vy=wall->accx=wall->accy=wall->omega=wall->alpha=wall->cogx=wall->cogy=wall->mass=0;
+    //wall->vx=wall->vy=wall->accx=wall->accy=wall->omega=wall->alpha=wall->cogx=wall->cogy=wall->mass=0;
 
 }
