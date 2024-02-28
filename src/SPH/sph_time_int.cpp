@@ -68,7 +68,7 @@ void ptc_dummy(SPH *sph)
     }
 }
 
-void ptc_time_integral(SPH *sph)
+void sph_time_integral(SPH *sph)
 {
     SPH_PARTICLE *particle;
     SPH_PAIR *pair;
