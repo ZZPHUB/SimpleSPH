@@ -78,7 +78,7 @@ void ptc_time_integral(SPH *sph)
     particle = sph->particle;
     pair = sph->pair;
     kernel = sph->kernel;
-    wall = sph->rigid_0;
+    //wall = sph->rigid_0;
 
     //generate the nnps mesh
     ptc_mesh_process(sph);
