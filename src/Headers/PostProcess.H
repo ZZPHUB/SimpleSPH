@@ -8,6 +8,6 @@
 #include <stdlib.h>
 
 /* Extern Functions Here */
-extern void ptc_vtk_direct(SPH *,char *);
-extern void ptc_pressure_conv(SPH *);
+extern void sph_save_single(SPH *,char *);
+extern void sph_save_last(SPH *);
 #endif
