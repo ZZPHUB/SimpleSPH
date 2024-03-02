@@ -103,7 +103,7 @@ void ptc_read_vtk(SPH *sph)
     SPH_PARTICLE *particle;
     particle = sph->particle;
 
-    std::string filename = "../Preprocess/init.vtk";
+    std::string filename = "../data/preprocess/init.vtk";
 
     vtkSmartPointer<vtkUnstructuredGridReader> reader = vtkSmartPointer<vtkUnstructuredGridReader>::New();
     reader->SetFileName(filename.c_str());
