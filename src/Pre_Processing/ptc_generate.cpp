@@ -54,7 +54,7 @@ void ptc_generate(SPH *sph)
         ptc_wall_generate(sph);
         ptc_rigid_generate(sph);
     }
-   elif(sph->new_case_flag == 0)
+   else if(sph->new_case_flag == 0)
    {
         ptc_read_vtk(sph);    
    } 

@@ -2,7 +2,7 @@
 using namespace std;
 
 
-void sph_save_single(SPH *sph,char *filename)
+void sph_save_single(SPH *sph)
 {
     SPH_PARTICLE *particle;
     particle = sph->particle;

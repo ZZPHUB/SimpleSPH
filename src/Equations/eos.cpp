@@ -1,6 +1,6 @@
 #include "Equations.H"
 
-void fluid_ptc_pressure(SPH *sph)
+void ptc_fluid_pressure(SPH *sph)
 {
     SPH_PARTICLE *particle;
     particle = sph->particle;

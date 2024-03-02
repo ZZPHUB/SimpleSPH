@@ -5,7 +5,7 @@
 #include "SPH.H"
 
 /* Extern Functions Here */
-extern void fluid_ptc_pressure(SPH *);
+extern void ptc_fluid_pressure(SPH *);
 extern void ptc_dif_density(SPH *);
 extern void ptc_acc(SPH *);
 extern void ptc_viscous(SPH *);

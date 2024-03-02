@@ -7,11 +7,7 @@ void ptc_rigid_generate(SPH *sph)
     SPH_PARTICLE *particle;
     particle = sph->particle;
     
-    #if(PTC_SPACING == 0.005)
     std::string filename = "../data/preprocess/wedge005.vtk";
-    #elif(PTC_SPACING == 0.001)
-    std::string filename = "../data/preprocess/wedge001.vtk";
-    #endif
 
     double x[3] = {0};
     unsigned int tol=0;
@@ -38,11 +34,7 @@ void ptc_rigid_generate(SPH *sph)
 
 unsigned int ptc_rigid_num(void)
 {
-    #if(PTC_SPACING == 0.005)
     std::string filename = "../data/preprocess/wedge005.vtk";
-    #elif(PTC_SPACING == 0.001)
-    std::string filename = "../data/preprocess/wedge001.vtk";
-    #endif
 
     double x[3];
     unsigned int tol=0;
@@ -85,7 +77,7 @@ void ptc_rigid_init(SPH *sph)
         {
             if(particle->type[i] == 1)
             {
-                wedge->moi = (wedge->mass/particle->rigid_ptc_num)*(pow((particle->x[i]-wedge->cogx),2)+pow((particle->y[i]-wedge->cogy),2))
+                wedge->moi = (wedge->mass/particle->rigid_ptc_num)*(pow((particle->x[i]-wedge->cogx),2)+pow((particle->y[i]-wedge->cogy),2));
             }
         }
     }
@@ -133,9 +125,9 @@ void ptc_read_vtk(SPH *sph)
     vtkPointData* pointdata = vtkdata->GetPointData();  
 
     vtkDataArray* pressure_array = pointdata->GetScalars("pressure");
-    vktDataArray* density_array = pointdata->GetScalars("density");
-    vktDataArray* type_array = pointdata->GetScalars("type");
-    vktDataArray* velocity_array = pointdata->GetVectors("velocity");
+    vtkDataArray* density_array = pointdata->GetScalars("density");
+    vtkDataArray* type_array = pointdata->GetScalars("type");
+    vtkDataArray* velocity_array = pointdata->GetVectors("velocity");
 
     vtkDoubleArray* pressure_data = vtkDoubleArray::SafeDownCast(pressure_array);
     vtkDoubleArray* density_data = vtkDoubleArray::SafeDownCast(density_array);
@@ -144,7 +136,7 @@ void ptc_read_vtk(SPH *sph)
 
     if(pressure_data != nullptr && density_data != nullptr && type_data != nullptr && velocity_data != nullptr)
     {
-	    for(unsigned int i=0;i<vtk->GetNumberOfPoints();i++)
+	    for(unsigned int i=0;i<vtkdata->GetNumberOfPoints();i++)
 	     {
             double p = 0.0;
             double d = 0.0;
@@ -154,7 +146,7 @@ void ptc_read_vtk(SPH *sph)
 	        
             pressure_data->GetTuple(i,&p);
             density_data->GetTuple(i,&d);
-            type_data->GetTuple(i,&t);
+            t=type_data->GetValue(i);
             velocity_data->GetTuple(i,v);
             vtkdata->GetPoint(i,x);
             

@@ -20,7 +20,7 @@ void sph_init(SPH *sph)
 
     particle->fulid_ptc_num = FLUID_PTC_NUM;  //fluid ptc num
     particle->wall_ptc_num = WALL_PTC_NUM;    //wall ptc num
-    partial->rigid_ptc_num = ptc_rigid_num(); //rigid ptc num
+    particle->rigid_ptc_num = ptc_rigid_num(); //rigid ptc num
     //get all of the particle number
     particle->total = particle->fulid_ptc_num+particle->wall_ptc_num+particle->rigid_ptc_num; 
 
@@ -58,7 +58,6 @@ void sph_init(SPH *sph)
     pair->total = 0; 
     pair->i = (unsigned int *)(calloc(30*particle->total,sizeof(unsigned int)));
     pair->j = (unsigned int *)(calloc(30*particle->total,sizeof(unsigned int)));
-
 
     //mesh data init
     mesh = (SPH_MESH)(calloc(MESH_DEEPTH_NUM,sizeof(unsigned int **)));

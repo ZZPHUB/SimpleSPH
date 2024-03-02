@@ -8,6 +8,6 @@
 #include <stdlib.h>
 
 /* Extern Functions Here */
-extern void sph_save_single(SPH *,char *);
+extern void sph_save_single(SPH *);
 extern void sph_save_last(SPH *);
 #endif

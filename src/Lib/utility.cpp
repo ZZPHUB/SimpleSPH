@@ -76,7 +76,7 @@ void ptc_dummy(SPH *sph)
         }
     }
     
-    //the not fluid weiht term 
+    //the not fluid weight term 
     for(unsigned int i=0;i<pair->total;i++)
     {
         if(particle->type[pair->j[i]] != 0) particle->w[pair->j[i]] += kernel->w[i];

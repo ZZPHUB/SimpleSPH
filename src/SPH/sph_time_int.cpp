@@ -25,7 +25,7 @@ void sph_time_integral(SPH *sph)
         ptc_density_correct(sph);
     }
     //get the particle pressure by eos
-    fluid_ptc_pressure(sph);
+    ptc_fluid_pressure(sph);
     //get the ptc density change rate
     ptc_dif_density(sph);
     //get the acceleration of ptc 
@@ -57,7 +57,7 @@ void sph_time_integral(SPH *sph)
     ptc_dummy(sph);
 
     //get the particle pressure by eos
-    fluid_ptc_pressure(sph);
+    ptc_fluid_pressure(sph);
     //get the ptc density change rate
     ptc_dif_density(sph);
     //get the acceleration of ptc 
