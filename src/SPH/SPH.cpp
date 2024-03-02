@@ -11,27 +11,22 @@ int main(void)
     SPH_PARTICLE particle;
     SPH_KERNEL kernel;
     SPH_PAIR pair;
-    //SPH_RIGID wall;
+    SPH_RIGID wedge;
     SPH_MESH mesh = NULL;
     SPH sph;
     sph.particle = &particle;
     sph.kernel = &kernel;
     sph.pair = &pair;
-    //sph.rigid_0 = &wall;
+    sph.rigid = &wedge;
     sph.mesh = mesh;
 
     sph_init(&sph);    
     
-    char filename[] = "../data/postprocess/vtk/sph000.vtk"; //filename 
-
-    for(sph.current_step;sph.current_step<sph.total_step;sph.current_step++)
+    for(sph.current_step;sph.current_step<=sph.total_step;sph.current_step++)
     {
         if(sph.current_step%PRINT_TIME_STEP == 0)
         {
-            filename[27] = (sph.current_step/PRINT_TIME_STEP)/100 + 48;
-            filename[28] = ((sph.current_step/PRINT_TIME_STEP)%100)/10 + 48;
-            filename[29] = ((sph.current_step/PRINT_TIME_STEP)%10) + 48;
-            sph_save_single(&sph,filename);
+            sph_save_single(&sph);
         }
         //calculate and integration
         sph_time_integral(&sph); 

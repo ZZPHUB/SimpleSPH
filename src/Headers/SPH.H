@@ -10,7 +10,7 @@
 #define FLUID_DOMAIN_LENGTH 0.4   //computational domain length
 #define FLUID_DOMAIN_DEEPTH 0.3     //computational domain deepth
 #define TOL_DOMAIN_LENGTH (FLUID_DOMAIN_LENGTH)
-#define TOL_DOMAIN_DEEPTH (FLUID_DOMAIN_DEEPTH*1.0)
+#define TOL_DOMAIN_DEEPTH (FLUID_DOMAIN_DEEPTH*1.50)
 
 #define PTC_SPACING 0.005    //spacing between particles
 #define PTC_SML (1.0005*PTC_SPACING)    //smoothed leng of particles
@@ -89,6 +89,7 @@ typedef  struct
 
     unsigned int fulid_ptc_num;  //total fluid particle number
     unsigned int wall_ptc_num;   //total wall particle number
+    unsigned int rigid_ptc_num;  //total rigid particle number
     unsigned int total; //total particles number
 }SPH_PARTICLE;
 
@@ -129,7 +130,6 @@ typedef struct
     /* SPH Program Struct */
     SPH_PARTICLE *particle;
     SPH_RIGID *rigid;
-    //SPH_RIGID *rigid_1;
     SPH_PAIR *pair;
     SPH_KERNEL *kernel;
     SPH_MESH mesh;
@@ -137,8 +137,10 @@ typedef struct
     int current_step;
     //total time steps
     int total_step;
+
     //current process flags
-    int flag;  // if rigid_1 body involves,it is true
+    int new_case_flag;  // if 1 then creat a new case,or continue to run the old case
+    int init_impac_flag; //if 1 then run the init step,or run the impac step
 
     //gravity acceleration
     double g;
@@ -160,6 +162,7 @@ typedef struct
 void sph_init(SPH *);
 void sph_free(SPH *);
 void sph_time_integral(SPH *);
+void sph_rigid_integral(SPH *sph);
 void ptc_dummy(SPH *);
 //void ptc_density_correct(SPH *);
 #endif

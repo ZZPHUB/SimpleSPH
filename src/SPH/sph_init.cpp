@@ -13,16 +13,16 @@ void sph_init(SPH *sph)
     SPH_PARTICLE *particle;
     SPH_PAIR *pair;
     SPH_KERNEL *kernel;
-    //SPH_RIGID *wall;
     SPH_MESH mesh;
     particle = sph->particle;
     pair = sph->pair;
     kernel = sph->kernel;
-    //wall = sph->rigid_0;
 
-    particle->fulid_ptc_num = FLUID_PTC_NUM;
-    particle->wall_ptc_num = WALL_PTC_NUM;
-    particle->total = particle->fulid_ptc_num+ particle->wall_ptc_num; //get all of the particle number
+    particle->fulid_ptc_num = FLUID_PTC_NUM;  //fluid ptc num
+    particle->wall_ptc_num = WALL_PTC_NUM;    //wall ptc num
+    partial->rigid_ptc_num = ptc_rigid_num(); //rigid ptc num
+    //get all of the particle number
+    particle->total = particle->fulid_ptc_num+particle->wall_ptc_num+particle->rigid_ptc_num; 
 
     /************stack is too small,so init data in heap***************/
     //particle data init
@@ -75,9 +75,26 @@ void sph_init(SPH *sph)
     sph->d_time = DELTA_TIME;
     sph->c = ART_SOUND_VEL;
     sph->g = GRAVITY_ACC;
-    sph->flag = 0.0;
-    sph->current_step = 0;
-    sph->total_step = INIT_TIME_STEP;
+    
+    
+    cout << "run a new case or an old case(press 1 for new,0 for old)" << endl;
+    cin >> sph->new_case_flag;
+
+    if(sph->new_case_flag == 1)
+    {
+        sph->current_step = 0;
+        sph->total_step = INIT_TIME_STEP;
+    }
+    else if(sph->new_case_flag == 0)
+    {
+        cout << "the sph current time step is: " << endl;
+        cin >> sph->current_step;
+        cout << "the total sph time step is: " << endl;
+        cin >> sph->total_step;
+    }
+
+    cout << "run a init case or a dynamic case(press 1 for init,0 for dynamic)" << endl;
+    cin >> sph->init_impac_flag;
 
     ptc_generate(sph);
     ptc_init(sph);

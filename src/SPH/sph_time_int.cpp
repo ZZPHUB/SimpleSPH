@@ -4,81 +4,14 @@
 #include <stdlib.h>
 #include <time.h>
 
-void ptc_dummy(SPH *sph)
-{
-    SPH_PARTICLE *particle;
-    SPH_PAIR *pair;
-    SPH_KERNEL *kernel;
-    //SPH_RIGID *wall;
-    //SPH_RIGID *wedge;
-    particle = sph->particle;
-    pair = sph->pair;
-    kernel = sph->kernel;
-    //wall = sph->rigid_0;
-    //wedge = sph->rigid_1;
-
-    //rigid body(wall & wedge)vx,vy,accx,accy,pressure init
-    for(unsigned int i=0;i<particle->total;i++)
-    {
-        if(particle->type[i] == -1)
-        {
-            particle->w[i] = 0;
-            particle->vx[i] = 0;
-            particle->vy[i] = 0;
-            particle->pressure[i] = 0;
-            particle->density[i] = 0;
-        }
-    }
-
-    for(unsigned int i=0;i<pair->total;i++)
-    {
-        if(particle->type[pair->j[i]]==-1) particle->w[pair->j[i]] += kernel->w[i];
-    }
-
-   
-    //rigid body(wall & wedge) particle pressure 
- 
-    for(unsigned int i=0;i<pair->total;i++)
-    {
-        if(particle->type[pair->j[i]] == -1)
-        {
-            if(particle->w[pair->j[i]] != 0)
-            {
-                particle->pressure[pair->j[i]] += (particle->pressure[pair->i[i]]*kernel->w[i] +particle->density[pair->i[i]]*\
-                (GRAVITY_ACC)*(particle->y[pair->i[i]]-particle->y[pair->j[i]])*kernel->w[i])/(particle->w[pair->j[i]]);
-
-                //correct virtual particles velocity for viscous calculation
-                particle->vx[pair->j[i]] += particle->vx[pair->i[i]]*kernel->w[i]/(particle->w[pair->j[i]]);
-                particle->vy[pair->j[i]] += particle->vy[pair->i[i]]*kernel->w[i]/(particle->w[pair->j[i]]);
-            }
-            else
-            {
-                //while(true) cout << pair->j[i] << " type is " <<particle->type[pair->j[i]] << " w = 0 " << endl;
-            }
-        }
-    }
-
-    //rigid body(wall & wedege) pressure 
-    for(unsigned int i=0;i<particle->total;i++)
-    {
-        if(particle->type[i] != 0)
-        {
-            particle->density[i] = particle->pressure[i]/pow(sph->c,2)+REF_DENSITY;
-        }
-    }
-}
-
 void sph_time_integral(SPH *sph)
 {
     SPH_PARTICLE *particle;
     SPH_PAIR *pair;
     SPH_KERNEL *kernel;
-    //SPH_RIGID *wall;
-    //SPH_RIGID *wedge;
     particle = sph->particle;
     pair = sph->pair;
     kernel = sph->kernel;
-    //wall = sph->rigid_0;
 
     //generate the nnps mesh
     ptc_mesh_process(sph);
@@ -146,4 +79,57 @@ void sph_time_integral(SPH *sph)
 
     //get rigid body's pressure and velosity
     ptc_dummy(sph);
+    sph_rigid_integral(sph);
+}
+
+void sph_rigid_integral(SPH *sph)
+{
+    SPH_PARTICLE *particle;
+    SPH_PAIR *pair;
+    SPH_RIGID *wedge;
+    particle = sph->particle;
+    pair = sph->pair;
+    wedge = sph->rigid;
+
+    double m = PTC_MASS;
+    double temp_vx = 0.0;
+    double temp_vy = 0.0;
+
+    if(sph->init_impac_flag == 0)
+    {
+        //wedge acceleration and alpha init
+        wedge->accx = wedge->accy = wedge->alpha = 0.0;
+
+        //calculate the wedge's acceleration and alpha
+        for(unsigned int i=0;i<pair->total;i++)
+        {
+            if(particle->type[pair->j[i]] == 1)
+            {
+                wedge->accx -= particle->accx[pair->i[i]]*m/wedge->mass;
+                wedge->accx -= particle->accx[pair->i[i]]*m/wedge->mass;
+                wedge->alpha -= (particle->accy[pair->i[i]]*(particle->x[pair->j[i]]-wedge->cogx)-\
+                                 particle->accx[pair->i[i]]*(particle->y[pair->j[i]]-wedge->cogy))*m/wedge->mass;
+            }
+        }
+        //rigid ptc time integral
+        for(unsigned int i=0;i<particle->total;i++)
+        {
+            if(particle->type[i] == 1)
+            {
+                temp_vx = wedge->vx - wedge->omega*(particle->y[i]-wedge->cogy);
+                temp_vy = wedge->vy + wedge->omega*(particle->x[i]-wedge->cogx);
+                temp_vx += (wedge->accx-pow(wedge->omega,2)*(particle->x[i]-wedge->cogx)-wedge->alpha*(particle->y[i]-wedge->cogy))*sph->d_time;
+                temp_vy += (wedge->accy-pow(wedge->omega,2)*(particle->y[i]-wedge->cogy)+wedge->alpha*(particle->x[i]-wedge->cogx))*sph->d_time;
+                particle->x[i] += temp_vx*sph->d_time;
+                particle->y[i] += temp_vy*sph->d_time;
+            }
+        }
+
+        //calculate the center of gravity's moving
+        wedge->vx += wedge->accx*sph->d_time;
+        wedge->vy += wedge->accy*sph->d_time;
+        wedge->omega += wedge->alpha*sph->d_time;
+        wedge->cogx += wedge->vx*sph->d_time;
+        wedge->cogy += wedge->vy*sph->d_time;
+    }
 }

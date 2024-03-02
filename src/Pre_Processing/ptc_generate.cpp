@@ -1,7 +1,7 @@
 #include "PreProcess.H"
 
 
-void fluid_ptc_generate(SPH *sph)
+void ptc_fluid_generate(SPH *sph)
 {
     SPH_PARTICLE *particle;
     particle = sph->particle;
@@ -17,7 +17,7 @@ void fluid_ptc_generate(SPH *sph)
     }
 }
 
-void wall_ptc_generate(SPH *sph)
+void ptc_wall_generate(SPH *sph)
 {
     SPH_PARTICLE *particle;
     particle = sph->particle;
@@ -48,6 +48,14 @@ void wall_ptc_generate(SPH *sph)
 
 void ptc_generate(SPH *sph)
 {
-    fluid_ptc_generate(sph);
-    wall_ptc_generate(sph);
+    if(sph->new_case_flag == 1)
+    {
+        ptc_fluid_generate(sph);
+        ptc_wall_generate(sph);
+        ptc_rigid_generate(sph);
+    }
+   elif(sph->new_case_flag == 0)
+   {
+        ptc_read_vtk(sph);    
+   } 
 }

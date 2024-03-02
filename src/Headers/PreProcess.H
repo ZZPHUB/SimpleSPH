@@ -8,11 +8,19 @@
 #include <vtkType.h>
 #include <vtkUnstructuredGrid.h>
 #include <vtkPointSet.h>
+#include <vtkDataSetReader.h>
+#include <vtkPointData.h>
+#include <vtkDataArray.h>
+#include <vtkDoubleArray.h>
+
 #include "SPH.H"
 
 /* Extern Function Here*/
-extern void solid_ptc_generate(SPH *);
-extern unsigned int solid_ptc_num(void);
+extern void ptc_rigid_generate(SPH *);
+extern unsigned int ptc_rigid_num(void);
+extern void ptc_rigid_init(SPH *);
+extern void ptc_read_vtk(SPH *);
 extern void ptc_generate(SPH *);
+extern void ptc_info_init(SPH *);
 extern void ptc_init(SPH *);
 #endif
