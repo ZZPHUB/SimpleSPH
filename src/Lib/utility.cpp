@@ -101,11 +101,11 @@ void ptc_dummy(SPH *sph)
             }
             dx = particle->x[pair->i[i]] - particle->x[pair->j[i]];
             dy = particle->y[pair->i[i]] - particle->y[pair->j[i]];
-        }
-        particle->pressure[pair->j[i]] += (particle->pressure[pair->i[i]]+particle->density[pair->i[i]]*\
+            particle->pressure[pair->j[i]] += (particle->pressure[pair->i[i]]+particle->density[pair->i[i]]*\
                         (rigid_acc_x*dx+(rigid_acc_y+GRAVITY_ACC)*dy))*kernel->w[i]/particle->w[pair->j[i]];
-        particle->vx[pair->j[i]] += particle->vx[pair->i[i]]*kernel->w[i]/particle->w[pair->j[i]];
-        particle->vy[pair->j[i]] += particle->vy[pair->i[i]]*kernel->w[i]/particle->w[pair->j[i]];
+            particle->vx[pair->j[i]] += particle->vx[pair->i[i]]*kernel->w[i]/particle->w[pair->j[i]];
+            particle->vy[pair->j[i]] += particle->vy[pair->i[i]]*kernel->w[i]/particle->w[pair->j[i]];
+        }
     }
 
     //rigid body(wall & wedege) densiy
