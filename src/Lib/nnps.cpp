@@ -58,7 +58,6 @@ void ptc_nnps_mesh(SPH *sph)
                     {
                         if(particle->type[mesh[i][j][k]]==0)
 			            {
-                            
                             pair->i[pair->total] = mesh[i][j][k];
                             pair->j[pair->total] = mesh[i][j][m];
                             pair->total++;
@@ -66,7 +65,6 @@ void ptc_nnps_mesh(SPH *sph)
                         }
                         else if (particle->type[mesh[i][j][m]]==0)
                         {
-                            
                             pair->i[pair->total] = mesh[i][j][m];
                             pair->j[pair->total] = mesh[i][j][k];
                             pair->total++;
@@ -83,7 +81,6 @@ void ptc_nnps_mesh(SPH *sph)
                         {
                         if(particle->type[mesh[i][j][k]]==0)
 			            {
-                            
                             pair->i[pair->total] = mesh[i][j][k];
                             pair->j[pair->total] = mesh[i][j+1][m];
                             pair->total++;
@@ -91,7 +88,6 @@ void ptc_nnps_mesh(SPH *sph)
                         }
                         else if (particle->type[mesh[i][j+1][m]]==0)
                         {
-                            
                             pair->i[pair->total] = mesh[i][j+1][m];
                             pair->j[pair->total] = mesh[i][j][k];
                             pair->total++;
@@ -117,7 +113,6 @@ void ptc_nnps_mesh(SPH *sph)
                         }
                         else if (particle->type[mesh[i+1][j][m]]==0)
                         {
-                            
                             pair->i[pair->total] = mesh[i+1][j][m];
                             pair->j[pair->total] = mesh[i][j][k];
                             pair->total++;

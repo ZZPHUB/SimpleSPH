@@ -18,7 +18,7 @@ void ptc_info(SPH *sph)
     cout << "------------------------------------------------------" << endl;
     cout << "Wall Particles Num: " << particle->wall_ptc_num << endl;
     cout << "------------------------------------------------------" << endl;
-    cout << "Solid Particles Num: " << 0 << endl;
+    cout << "Solid Particles Num: " << particle->rigid_ptc_num << endl;
     cout << "------------------------------------------------------" << endl;
     cout << "Total Particles Pair Num: " << pair->total << endl;
     cout << "------------------------------------------------------" << endl;

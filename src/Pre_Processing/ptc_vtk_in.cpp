@@ -66,7 +66,7 @@ void ptc_rigid_init(SPH *sph)
     wedge->accx = wedge->accy = wedge->alpha = 0.0;
     wedge->mass = 12.8;
 
-    if(sph->new_case_flag == 1)
+    if(sph->new_case_flag == 1 || sph->init_impac_flag == 1)
     {
         wedge->vx = wedge->vy = wedge->omega = 0.0;
         wedge->cogx = FLUID_DOMAIN_LENGTH/2.0;
@@ -81,20 +81,25 @@ void ptc_rigid_init(SPH *sph)
             }
         }
     }
-    else if(sph->new_case_flag == 0)
+    else if(sph->new_case_flag == 0 && sph->init_impac_flag == 0)
     {
-        cout << "the wedge's velocity in x-direction: " << endl;
-        cin >> wedge->vx;
-        cout << "the wedge's velocity in y-direction: " << endl;
-        cin >> wedge->vy;
-        cout << "the wedge's omega is : " << endl;
-        cin >> wedge->omega;
-        cout << "the wedge's center of gravity in x-direction: " << endl;
-        cin >> wedge->cogx;
-        cout << "the wedge's center of gravity in y-direction: " << endl;
-        cin >> wedge->cogy;
-        cout << "the wedge's moi is : " << endl;
-        cin >> wedge->moi;
+        ofstream infofile;
+        infofile.open("../data/preprocess/info.txt");
+
+        std::string line;
+
+        getline(infofile,line);//vx
+        wedge->vx = stod(line.c_str());
+        getline(infofile,line);//vy
+        wedge->vy = stod(line.c_str());
+        getline(infofile,line);//omega
+        wedge->omega = stod(line.c_str());
+        getline(infofile,line);//cogx
+        wedge->cogx = stod(line.c_str());
+        getline(infofile,line);//cogy
+        wedge->cogy = stod(line.c_str());
+        getline(infofile,line);//moi
+        wedge->moi = stod(line.c_str());
     }   
 }
 
@@ -136,14 +141,14 @@ void ptc_read_vtk(SPH *sph)
 
     if(pressure_data != nullptr && density_data != nullptr && type_data != nullptr && velocity_data != nullptr)
     {
-	    for(unsigned int i=0;i<vtkdata->GetNumberOfPoints();i++)
+	    for(vtkIdType i=0;i<vtkdata->GetNumberOfPoints();i++)
 	     {
             double p = 0.0;
             double d = 0.0;
             double v[3] = {0.0};
             double x[3] = {0.0};
             int t = 0;
-	        
+	        v
             pressure_data->GetTuple(i,&p);
             density_data->GetTuple(i,&d);
             t=type_data->GetValue(i);

@@ -10,57 +10,55 @@ void sph_save_single(SPH *sph)
     unsigned int ptc_num = 0;
     ptc_num = particle->total;
 
-    double current_time = 0.0;
-    current_time = sph->current_step*DELTA_TIME;
 
     string filename = "../data/postprocess/vtk/sph"; 
-    filename += to_string(current_time);
+    filename += to_string(sph->current_step);
     filename += ".vtk";
 
-    ofstream writefile;
-    writefile.open(filename.c_str());
+    ofstream vtkfile;
+    vtkfile.open(filename.c_str());
 
-    writefile << "# vtk DataFile Version 3.0" << endl;
-    writefile << "sph data" << endl;
-    writefile << "ASCII" << endl;
-    writefile << "DATASET UNSTRUCTURED_GRID" << endl;
-    writefile << "POINTS " << ptc_num << " " << "double" << endl;
+    vtkfile << "# vtk DataFile Version 3.0" << endl;
+    vtkfile << "sph data" << endl;
+    vtkfile << "ASCII" << endl;
+    vtkfile << "DATASET UNSTRUCTURED_GRID" << endl;
+    vtkfile << "POINTS " << ptc_num << " " << "double" << endl;
 
     for(unsigned int i=0;i<particle->total;i++)
     {
-        writefile << setiosflags(ios::scientific) << particle->x[i] << " " \
+        vtkfile << setiosflags(ios::scientific) << particle->x[i] << " " \
         << particle->y[i] << " " << 0.0 << endl;
     }
 
-    writefile << "POINT_DATA" << " " << ptc_num << endl;
+    vtkfile << "POINT_DATA" << " " << ptc_num << endl;
 
     //density
     if(PARA&0x01)
     {
-        writefile << "SCALARS "<< "density double 1" << endl;
-        writefile << "LOOKUP_TABLE DEFAULT" << endl;
+        vtkfile << "SCALARS "<< "density double 1" << endl;
+        vtkfile << "LOOKUP_TABLE DEFAULT" << endl;
         for(unsigned int i=0;i<particle->total;i++)
         {
-            writefile << setiosflags(ios::scientific) << particle->density[i] << endl;
+            vtkfile << setiosflags(ios::scientific) << particle->density[i] << endl;
         }
     }
     //pressure
     if(PARA&0x02)
     {
-        writefile << "SCALARS "<< "pressure double 1" << endl;
-        writefile << "LOOKUP_TABLE DEFAULT" << endl;
+        vtkfile << "SCALARS "<< "pressure double 1" << endl;
+        vtkfile << "LOOKUP_TABLE DEFAULT" << endl;
         for(unsigned int i=0;i<particle->total;i++)
         {
-            writefile << setiosflags(ios::scientific) << particle->pressure[i] << endl;
+            vtkfile << setiosflags(ios::scientific) << particle->pressure[i] << endl;
         }
     }
     //velocity
     if(PARA&0x04)
     {
-        writefile << "VECTORS "<< "velocity double" << endl;
+        vtkfile << "VECTORS "<< "velocity double" << endl;
         for(unsigned int i=0;i<particle->total;i++)
         {
-            writefile << setiosflags(ios::scientific) << particle->vx[i] <<" " << particle->vy[i] << " " \
+            vtkfile << setiosflags(ios::scientific) << particle->vx[i] <<" " << particle->vy[i] << " " \
             << 0.0 << endl;
 
         }
@@ -68,14 +66,14 @@ void sph_save_single(SPH *sph)
     //acceleration
     if(PARA&0x08)
     {
-        writefile << "VECTORS "<< "acceleration double" << endl;
+        vtkfile << "VECTORS "<< "acceleration double" << endl;
         for(unsigned int i=0;i<particle->total;i++)
         {
-            writefile << setiosflags(ios::scientific) << particle->accx[i] <<" " << particle->accy[i] << " " \
+            vtkfile << setiosflags(ios::scientific) << particle->accx[i] <<" " << particle->accy[i] << " " \
             << 0.0 << endl;
         }
     }
-    writefile.close();
+    vtkfile.close();
 
 }
 
@@ -83,57 +81,75 @@ void sph_save_single(SPH *sph)
 void sph_save_last(SPH *sph)
 {
     SPH_PARTICLE *particle;
+    SPH_RIGID *wedge;
     particle = sph->particle;
+    wedge = sph->rigid;
 
     unsigned int ptc_num = 0;
 
     ptc_num = particle->total;
 
-    ofstream writefile;
-    writefile.open("../data/postprocess/save.vtk");
+    ofstream vtkfile;
+    vtkfile.open("../data/postprocess/save.vtk");
 
-    writefile << "# vtk DataFile Version 3.0" << endl;
-    writefile << "sph data" << endl;
-    writefile << "ASCII" << endl;
-    writefile << "DATASET UNSTRUCTURED_GRID" << endl;
-    writefile << "POINTS " << ptc_num << " " << "double" << endl;
+    vtkfile << "# vtk DataFile Version 3.0" << endl;
+    vtkfile << "sph data" << endl;
+    vtkfile << "ASCII" << endl;
+    vtkfile << "DATASET UNSTRUCTURED_GRID" << endl;
+    vtkfile << "POINTS " << ptc_num << " " << "double" << endl;
 
     for(unsigned int i=0;i<particle->total;i++)
     {
-        writefile << setiosflags(ios::scientific) << particle->x[i] << " " \
+        vtkfile << setiosflags(ios::scientific) << particle->x[i] << " " \
         << particle->y[i] << " " << 0.0 << endl;
     }
 
-    writefile << "POINT_DATA" << " " << ptc_num << endl;
+    vtkfile << "POINT_DATA" << " " << ptc_num << endl;
 
     //ptc type
-    writefile << "SCALARS "<< "type int 1" << endl;
-    writefile << "LOOKUP_TABLE DEFAULT" << endl;
+    vtkfile << "SCALARS "<< "type int 1" << endl;
+    vtkfile << "LOOKUP_TABLE DEFAULT" << endl;
     for(unsigned int i=0;i<particle->total;i++)
     {
-        writefile  << particle->type[i] << endl;
+        vtkfile  << particle->type[i] << endl;
     }
     //density
-    writefile << "SCALARS "<< "density double 1" << endl;
-    writefile << "LOOKUP_TABLE DEFAULT" << endl;
+    vtkfile << "SCALARS "<< "density double 1" << endl;
+    vtkfile << "LOOKUP_TABLE DEFAULT" << endl;
     for(unsigned int i=0;i<particle->total;i++)
     {
-        writefile << setiosflags(ios::scientific) << particle->density[i] << endl;
+        vtkfile << setiosflags(ios::scientific) << particle->density[i] << endl;
     }
     //pressure
-    writefile << "SCALARS "<< "pressure double 1" << endl;
-    writefile << "LOOKUP_TABLE DEFAULT" << endl;
+    vtkfile << "SCALARS "<< "pressure double 1" << endl;
+    vtkfile << "LOOKUP_TABLE DEFAULT" << endl;
     for(unsigned int i=0;i<particle->total;i++)
     {
-        writefile << setiosflags(ios::scientific) << particle->pressure[i] << endl;
+        vtkfile << setiosflags(ios::scientific) << particle->pressure[i] << endl;
     }
     //velocity
-    writefile << "VECTORS "<< "velocity double" << endl;
+    vtkfile << "VECTORS "<< "velocity double" << endl;
     for(unsigned int i=0;i<particle->total;i++)
     {
-        writefile << setiosflags(ios::scientific) << particle->vx[i] <<" " << particle->vy[i] << " " \
+        vtkfile << setiosflags(ios::scientific) << particle->vx[i] <<" " << particle->vy[i] << " " \
         << 0.0 << endl;
 
     }
-    writefile.close();
+    vtkfile.close();
+
+    ofstream vtkfile;
+    vtkfile.open("../data/postprocess/info.txt");
+
+    //vtkfile << "#the wedge's velocity in x-direction" << end;
+    vtkfile << setiosflags(ios::scientific) << wedge->vx << endl;
+    //vtkfile << "#the wedge's velocity in y-direction" << endl;
+    vtkfile << setiosflags(ios::scientific) << wedege->vy << endl;
+    //vtkfile << "#the wedge's omega" << endl;
+    vtkfile << setiosflags(ios::scientific) << wedge->omega << endl;
+    //vtkfile << "#the wedge's center of gravity in x-direction" << endl;
+    vtkfile << setiosflags(ios::scientific) << wedge->cogx << endl;
+    //vtkfile << "#the wedge's center of gravity in y-direction" << endl;
+    vtkfile << setiosflags(ios::scientific) << wedge->cogy << endl;
+    //vtkfile << "#the wedge's moi" << endl;
+    vtkfile << setiosflags(ios::scientific) << wedge->moi << endl;
 }
