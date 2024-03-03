@@ -83,7 +83,7 @@ void ptc_rigid_init(SPH *sph)
     }
     else if(sph->new_case_flag == 0 && sph->init_impac_flag == 0)
     {
-        ofstream infofile;
+        ifstream infofile;
         infofile.open("../data/preprocess/info.txt");
 
         std::string line;

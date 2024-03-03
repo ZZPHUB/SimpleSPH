@@ -145,7 +145,7 @@ void sph_save_last(SPH *sph)
 
     vtkfile.close();
 
-    ifstream infofile;
+    ofstream infofile;
     infofile.open("../data/postprocess/info.txt");
 
     //infofile << "#the wedge's velocity in x-direction" << end;
