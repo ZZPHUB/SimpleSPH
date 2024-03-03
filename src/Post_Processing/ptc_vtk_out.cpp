@@ -160,4 +160,9 @@ void sph_save_last(SPH *sph)
     infofile << setiosflags(ios::scientific) << wedge->cogy << endl;
     //infofile << "#the wedge's moi" << endl;
     infofile << setiosflags(ios::scientific) << wedge->moi << endl;
+
+    infofile.close();
+
+    system("cp ../data/postprocess/save.vtk ../data/preprocess/init.vtk");
+    system("cp ../data/postprocess/info.txt ../data/preprocess/info.txt");
 }

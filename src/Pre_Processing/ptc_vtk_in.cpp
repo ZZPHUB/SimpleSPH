@@ -100,6 +100,8 @@ void ptc_rigid_init(SPH *sph)
         wedge->cogy = stod(line.c_str());
         getline(infofile,line);//moi
         wedge->moi = stod(line.c_str());
+
+        infofile.close();
     }   
 }
 
