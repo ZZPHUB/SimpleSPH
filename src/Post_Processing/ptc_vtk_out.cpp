@@ -12,7 +12,7 @@ void sph_save_single(SPH *sph)
 
 
     string filename = "../data/postprocess/vtk/sph"; 
-    filename += to_string(sph->current_step);
+    filename += to_string(sph->current_step/PRINT_TIME_STEP);
     filename += ".vtk";
 
     ofstream vtkfile;
@@ -137,7 +137,7 @@ void sph_save_last(SPH *sph)
     }
     vtkfile.close();
 
-    ofstream infofile;
+    ifstream infofile;
     infofile.open("../data/postprocess/info.txt");
 
     //infofile << "#the wedge's velocity in x-direction" << end;

@@ -148,7 +148,7 @@ void ptc_read_vtk(SPH *sph)
             double v[3] = {0.0};
             double x[3] = {0.0};
             int t = 0;
-	        v
+	    
             pressure_data->GetTuple(i,&p);
             density_data->GetTuple(i,&d);
             t=type_data->GetValue(i);

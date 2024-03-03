@@ -24,7 +24,6 @@ void ptc_info(SPH *sph)
     cout << "------------------------------------------------------" << endl;
     cout << "Current Time Step: " << sph->current_step << endl;
     cout << "------------------------------------------------------" << endl;
-    /*
     cout << "Rigid Body Velocity in X-direction: " << wedge->vx << endl;
     cout << "------------------------------------------------------" << endl;
     cout << "Rigid Body Velocity in Y-direction: " << wedge->vy << endl;
@@ -37,5 +36,4 @@ void ptc_info(SPH *sph)
     cout << "------------------------------------------------------" << endl;
     cout << "Rigid Body Angular Acceleration: "<< wedge->alpha << endl;
     cout << "******************************************************" << endl;
-    */
 }
