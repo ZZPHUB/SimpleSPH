@@ -133,11 +133,13 @@ void ptc_read_vtk(SPH *sph)
     vtkDataArray* density_array = pointdata->GetScalars("density");
     vtkDataArray* type_array = pointdata->GetScalars("type");
     vtkDataArray* velocity_array = pointdata->GetVectors("velocity");
+    vtkDataArray* acc_array = pointdata->GetVectors("acceleration");
 
     vtkDoubleArray* pressure_data = vtkDoubleArray::SafeDownCast(pressure_array);
     vtkDoubleArray* density_data = vtkDoubleArray::SafeDownCast(density_array);
     vtkIntArray* type_data = vtkIntArray::SafeDownCast(type_array);
     vtkDoubleArray* velocity_data = vtkDoubleArray::SafeDownCast(velocity_array);
+    vtkDoubleArray* acc_data = vtkDoubleArray::SafeDownCast(acc_array);
 
     if(pressure_data != nullptr && density_data != nullptr && type_data != nullptr && velocity_data != nullptr)
     {
@@ -147,6 +149,7 @@ void ptc_read_vtk(SPH *sph)
             double d = 0.0;
             double v[3] = {0.0};
             double x[3] = {0.0};
+            double a[3] = {0.0};
             int t = 0;
 	    
             pressure_data->GetTuple(i,&p);
@@ -154,6 +157,7 @@ void ptc_read_vtk(SPH *sph)
             t=type_data->GetValue(i);
             velocity_data->GetTuple(i,v);
             vtkdata->GetPoint(i,x);
+            acc_data->GetTuple(i,a);
             
             particle->x[i] = x[0];
             particle->y[i] = x[1];
@@ -162,6 +166,8 @@ void ptc_read_vtk(SPH *sph)
             particle->type[i] = t;
             particle->vx[i] = v[0];
             particle->vy[i] = v[1];
+            particle->accx[i] = a[0];
+            particle->accy[i] = a[1];
 	    }
     }
 }

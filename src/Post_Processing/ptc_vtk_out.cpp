@@ -135,6 +135,14 @@ void sph_save_last(SPH *sph)
         << 0.0 << endl;
 
     }
+    //acceleration
+    vtkfile << "VECTORS "<< "acceleration double" << endl;
+    for(unsigned int i=0;i<particle->total;i++)
+    {
+        vtkfile << setiosflags(ios::scientific) << particle->accx[i] <<" " << particle->accy[i] << " " \
+        << 0.0 << endl;
+    }
+
     vtkfile.close();
 
     ifstream infofile;
