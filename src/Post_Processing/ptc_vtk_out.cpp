@@ -137,19 +137,19 @@ void sph_save_last(SPH *sph)
     }
     vtkfile.close();
 
-    ofstream vtkfile;
-    vtkfile.open("../data/postprocess/info.txt");
+    ofstream infofile;
+    infofile.open("../data/postprocess/info.txt");
 
-    //vtkfile << "#the wedge's velocity in x-direction" << end;
-    vtkfile << setiosflags(ios::scientific) << wedge->vx << endl;
-    //vtkfile << "#the wedge's velocity in y-direction" << endl;
-    vtkfile << setiosflags(ios::scientific) << wedege->vy << endl;
-    //vtkfile << "#the wedge's omega" << endl;
-    vtkfile << setiosflags(ios::scientific) << wedge->omega << endl;
-    //vtkfile << "#the wedge's center of gravity in x-direction" << endl;
-    vtkfile << setiosflags(ios::scientific) << wedge->cogx << endl;
-    //vtkfile << "#the wedge's center of gravity in y-direction" << endl;
-    vtkfile << setiosflags(ios::scientific) << wedge->cogy << endl;
-    //vtkfile << "#the wedge's moi" << endl;
-    vtkfile << setiosflags(ios::scientific) << wedge->moi << endl;
+    //infofile << "#the wedge's velocity in x-direction" << end;
+    infofile << setiosflags(ios::scientific) << wedge->vx << endl;
+    //infofile << "#the wedge's velocity in y-direction" << endl;
+    infofile << setiosflags(ios::scientific) << wedge->vy << endl;
+    //infofile << "#the wedge's omega" << endl;
+    infofile << setiosflags(ios::scientific) << wedge->omega << endl;
+    //infofile << "#the wedge's center of gravity in x-direction" << endl;
+    infofile << setiosflags(ios::scientific) << wedge->cogx << endl;
+    //infofile << "#the wedge's center of gravity in y-direction" << endl;
+    infofile << setiosflags(ios::scientific) << wedge->cogy << endl;
+    //infofile << "#the wedge's moi" << endl;
+    infofile << setiosflags(ios::scientific) << wedge->moi << endl;
 }
