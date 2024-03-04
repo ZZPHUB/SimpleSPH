@@ -12,6 +12,7 @@ void ptc_density_correct(SPH *sph)
     double a = ALPHA;
     double m = PTC_MASS;
 
+    #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<particle->total;i++)
     {
         if(particle->type[i] == 0)
@@ -20,6 +21,7 @@ void ptc_density_correct(SPH *sph)
         }
     }
 
+    #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<pair->total;i++)
     {
         particle->w[pair->i[i]] += kernel->w[i]*m/particle->density[pair->j[i]];
@@ -29,6 +31,7 @@ void ptc_density_correct(SPH *sph)
         }
     }
 
+    #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<particle->total;i++)
     {
         if(particle->type[i] == 0)
@@ -37,6 +40,7 @@ void ptc_density_correct(SPH *sph)
         }
     }
 
+    #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<pair->total;i++)
     {
         particle->density[pair->i[i]] += m*kernel->w[i]/particle->w[pair->i[i]];
@@ -58,12 +62,8 @@ void ptc_dummy(SPH *sph)
     kernel = sph->kernel;
     wedge = sph->rigid;
 
-    double dx = 0.0;
-    double dy = 0.0;
-    double rigid_acc_x = 0.0;
-    double rigid_acc_y = 0.0;
-
     //rigid body(wall & wedge)vx,vy,accx,accy,pressure init
+    #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<particle->total;i++)
     {
         if(particle->type[i] != 0)
@@ -77,14 +77,20 @@ void ptc_dummy(SPH *sph)
     }
     
     //the not fluid weight term 
+    #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<pair->total;i++)
     {
         if(particle->type[pair->j[i]] != 0) particle->w[pair->j[i]] += kernel->w[i];
     }
     
     //rigid body(wall & wedege) pressure and velocity
+    #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<pair->total;i++)
     {
+        double dx = 0.0;
+        double dy = 0.0;
+        double rigid_acc_x = 0.0;
+        double rigid_acc_y = 0.0;
         if(particle->type[pair->j[i]] != 0 && particle->w[pair->j[i]] != 0.0)
         {
             if(particle->type[pair->j[i]] == -1)
@@ -109,6 +115,7 @@ void ptc_dummy(SPH *sph)
     }
 
     //rigid body(wall & wedege) densiy
+    #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<particle->total;i++)
     {
         if(particle->type[i] != 0)

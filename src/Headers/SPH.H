@@ -7,8 +7,8 @@
 /* for dummy particles,they y-direction arrange betweent (-2*PTC_SACING,5) */
 
 /* Define Symbols Here*/
-#define FLUID_DOMAIN_LENGTH 0.4   //computational domain length
-#define FLUID_DOMAIN_DEEPTH 0.3     //computational domain deepth
+#define FLUID_DOMAIN_LENGTH 1.0   //computational domain length
+#define FLUID_DOMAIN_DEEPTH 1.0     //computational domain deepth
 #define TOL_DOMAIN_LENGTH (FLUID_DOMAIN_LENGTH)
 #define TOL_DOMAIN_DEEPTH (FLUID_DOMAIN_DEEPTH*1.50)
 
@@ -39,7 +39,7 @@
 #define TH_NUM 7 //paraller threads
 #define INIT_TIME_STEP 20000
 #define DELTA_TIME 0.00002
-#define PRINT_TIME_STEP 20  //every 50 time step to print
+#define PRINT_TIME_STEP 400  //every 50 time step to print
 
 #define PARA (0x01|0x02|0x04|0x08)
 //0x01----------->density
