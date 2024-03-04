@@ -105,10 +105,10 @@ void sph_rigid_integral(SPH *sph)
         {
             if(particle->type[pair->j[i]] == 1)
             {
-                wedge->accx -= particle->accx[pair->i[i]]*m/wedge->mass;
-                wedge->accx -= particle->accx[pair->i[i]]*m/wedge->mass;
-                wedge->alpha -= (particle->accy[pair->i[i]]*(particle->x[pair->j[i]]-wedge->cogx)-\
-                                 particle->accx[pair->i[i]]*(particle->y[pair->j[i]]-wedge->cogy))*m/wedge->mass;
+                wedge->accx -= particle->accx[pair->j[i]]*m/wedge->mass;
+                wedge->accx -= particle->accx[pair->j[i]]*m/wedge->mass;
+                wedge->alpha -= (particle->accy[pair->j[i]]*(particle->x[pair->j[i]]-wedge->cogx)-\
+                                 particle->accx[pair->j[i]]*(particle->y[pair->j[i]]-wedge->cogy))*m/wedge->mass;
             }
         }
         //rigid ptc time integral
