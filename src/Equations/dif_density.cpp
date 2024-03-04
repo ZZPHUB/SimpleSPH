@@ -13,15 +13,19 @@ void ptc_dif_density(SPH *sph)
     wedge = sph->rigid;
 
     double m = PTC_MASS;
-    double temp = 0.0; //particles velosity differentiation
 
+    
+
+    #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<particle->total;i++)
     {
         particle->dif_density[i] = 0.0;
     }
     
+    #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<pair->total;i++)
     {   
+        double temp = 0.0; //particles velocity differentiation
         if(particle->type[pair->j[i]]==0)
         {
             temp = (particle->vx[pair->i[i]]-particle->vx[pair->j[i]])*kernel->dwdx[i] \

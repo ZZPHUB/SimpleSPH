@@ -32,6 +32,7 @@ void sph_time_integral(SPH *sph)
     ptc_acc(sph);
 
     //PREDICT STEP
+    #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<particle->total;i++)
     {
         particle->temp_x[i] = particle->x[i];
@@ -41,6 +42,7 @@ void sph_time_integral(SPH *sph)
         particle->temp_density[i] = particle->density[i];
     }
  
+    #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<particle->total;i++)
     {
         if(particle->type[i] == 0)
@@ -64,6 +66,7 @@ void sph_time_integral(SPH *sph)
     ptc_acc(sph);
 
     //CORRECT STEP
+    #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<particle->total;i++)
     {
         if(particle->type[i] == 0)
