@@ -98,17 +98,18 @@ void sph_rigid_integral(SPH *sph)
     if(sph->init_impac_flag == 0)
     {
         //wedge acceleration and alpha init
-        wedge->accx = wedge->accy = wedge->alpha = 0.0;
+        wedge->accx = wedge->alpha = 0.0;
+        wedge->accy = -9.80;
 
         //calculate the wedge's acceleration and alpha
-        for(unsigned int i=0;i<pair->total;i++)
+        for(unsigned int i=0;i<particle->total;i++)
         {
-            if(particle->type[pair->j[i]] == 1)
+            if(particle->type[i] == 1)
             {
-                wedge->accx -= particle->accx[pair->j[i]]*m/wedge->mass;
-                wedge->accx -= particle->accx[pair->j[i]]*m/wedge->mass;
-                wedge->alpha -= (particle->accy[pair->j[i]]*(particle->x[pair->j[i]]-wedge->cogx)-\
-                                 particle->accx[pair->j[i]]*(particle->y[pair->j[i]]-wedge->cogy))*m/wedge->mass;
+                wedge->accx -= particle->accx[i]*m/wedge->mass;
+                wedge->accy -= particle->accy[i]*m/wedge->mass;
+                wedge->alpha -= (particle->accy[i]*(particle->x[i]-wedge->cogx)-\
+                                 particle->accx[i]*(particle->y[i]-wedge->cogy))*m/wedge->mass;
             }
         }
         //rigid ptc time integral
