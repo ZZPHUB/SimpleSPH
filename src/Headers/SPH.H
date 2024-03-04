@@ -141,6 +141,7 @@ typedef struct
     //current process flags
     int new_case_flag;  // if 1 then creat a new case,or continue to run the old case
     int init_impac_flag; //if 1 then run the init step,or run the impac step
+    int save_last_flag; //if 1 then save the last step,or donnot save it
 
     //gravity acceleration
     double g;

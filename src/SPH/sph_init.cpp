@@ -94,6 +94,9 @@ void sph_init(SPH *sph)
 
     cout << "run a init case or a dynamic case(press 1 for init,0 for dynamic)" << endl;
     cin >> sph->init_impac_flag;
+    
+    cout << "save the last step or not(press 1 ta save,0 for not)" << endl;
+    cin >> sph->save_last_flag;
 
     ptc_generate(sph);
     ptc_init(sph);
