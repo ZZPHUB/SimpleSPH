@@ -6,8 +6,10 @@
 #include <fstream>
 #include <iomanip>
 #include <stdlib.h>
+#include <vector>
 
 /* Extern Functions Here */
 extern void sph_save_single(SPH *);
 extern void sph_save_last(SPH *);
+extern void sph_save_rigid(SPH *);
 #endif
