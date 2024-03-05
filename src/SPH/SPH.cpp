@@ -30,6 +30,7 @@ int main(void)
         }
         //calculate and integration
         sph_time_integral(&sph); 
+        sph_save_rigid(&sph);
         ptc_info(&sph);
     }
     sph_save_last(&sph);
