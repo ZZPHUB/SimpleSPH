@@ -133,22 +133,26 @@ void ptc_read_vtk(SPH *sph)
 
     vtkDataArray* pressure_array = pointdata->GetScalars("pressure");
     vtkDataArray* density_array = pointdata->GetScalars("density");
+    vtkDataArray* mass_array = pointdata->GetScalars("mass");
     vtkDataArray* type_array = pointdata->GetScalars("type");
     vtkDataArray* velocity_array = pointdata->GetVectors("velocity");
     vtkDataArray* acc_array = pointdata->GetVectors("acceleration");
 
     vtkDoubleArray* pressure_data = vtkDoubleArray::SafeDownCast(pressure_array);
     vtkDoubleArray* density_data = vtkDoubleArray::SafeDownCast(density_array);
+    vtkDoubleArray* mass_data = vtkDoubleArray::SafeDownCast(mass_array);
     vtkIntArray* type_data = vtkIntArray::SafeDownCast(type_array);
     vtkDoubleArray* velocity_data = vtkDoubleArray::SafeDownCast(velocity_array);
     vtkDoubleArray* acc_data = vtkDoubleArray::SafeDownCast(acc_array);
 
-    if(pressure_data != nullptr && density_data != nullptr && type_data != nullptr && velocity_data != nullptr)
+    if(pressure_data != nullptr && density_data != nullptr && mass_data != nullptr \
+        && type_data != nullptr && velocity_data != nullptr && acc_data != nullptr)
     {
 	    for(vtkIdType i=0;i<vtkdata->GetNumberOfPoints();i++)
 	     {
             double p = 0.0;
             double d = 0.0;
+            double m = 0.0;
             double v[3] = {0.0};
             double x[3] = {0.0};
             double a[3] = {0.0};
@@ -156,6 +160,7 @@ void ptc_read_vtk(SPH *sph)
 	    
             pressure_data->GetTuple(i,&p);
             density_data->GetTuple(i,&d);
+            mass_data->GetTuple(i,&m);
             t=type_data->GetValue(i);
             velocity_data->GetTuple(i,v);
             vtkdata->GetPoint(i,x);
@@ -165,6 +170,7 @@ void ptc_read_vtk(SPH *sph)
             particle->y[i] = x[1];
             particle->pressure[i] = p;
             particle->density[i] = d;
+            particle->mass[i] = m;
             particle->type[i] = t;
             particle->vx[i] = v[0];
             particle->vy[i] = v[1];
