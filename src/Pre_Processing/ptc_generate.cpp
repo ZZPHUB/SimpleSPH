@@ -26,7 +26,7 @@ void ptc_wall_generate(SPH *sph)
 
     for(int i=0;i<(FLUID_LENGTH_NUM+8);i++)
     {
-        for(int j=0;j<(FLUID_DEEPTH_NUM+4);j++)
+        for(int j=0;j<(FLUID_DEEPTH_NUM+16);j++)
         {
             if(i<4 || i> FLUID_LENGTH_NUM+3)
             {

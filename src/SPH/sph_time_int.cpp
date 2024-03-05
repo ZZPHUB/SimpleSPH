@@ -110,7 +110,7 @@ void sph_rigid_integral(SPH *sph)
             if(particle->type[i] == 1)
             {
                 wedge->accx += particle->accx[i]*m/wedge->mass;
-                wedge->accy += particle->accy[i]*m/wedge->m ass;
+                wedge->accy += particle->accy[i]*m/wedge->mass;
                 wedge->alpha += (particle->accy[i]*(particle->x[i]-wedge->cogx)-\
                                  particle->accx[i]*(particle->y[i]-wedge->cogy))*m/wedge->mass;
             }
