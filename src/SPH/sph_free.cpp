@@ -5,11 +5,11 @@ void sph_free(SPH *sph)
     SPH_PARTICLE *particle;
     SPH_PAIR *pair;
     SPH_KERNEL *kernel;
-    //SPH_RIGID *wall;
+    SPH_RIGID *wedge;
     particle = sph->particle;
     pair = sph->pair;
     kernel = sph->kernel;
-    //wall = sph->rigid_0;
+    wedge = sph->rigid;
 
     free(particle->x);
     free(particle->y);
@@ -21,6 +21,7 @@ void sph_free(SPH *sph)
     free(particle->dif_density);
     free(particle->pressure);
     free(particle->type);
+    free(particle->mass);
 
     free(kernel->w);
     free(kernel->dwdx);

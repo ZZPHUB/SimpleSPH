@@ -10,25 +10,30 @@ void ptc_density_correct(SPH *sph)
     kernel = sph->kernel;
 
     double a = ALPHA;
-    double m = PTC_MASS;
+    //double m = PTC_MASS;
+
+    omp_lock_t lock;
+    omp_init_lock(&lock);
 
     #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<particle->total;i++)
     {
         if(particle->type[i] == 0)
         {
-            particle->w[i] = (a*2.0*m)/(3.0*particle->density[i]);
+            particle->w[i] = (a*2.0*particle->mass[i])/(3.0*particle->density[i]);
         }
     }
 
     #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<pair->total;i++)
     {
-        particle->w[pair->i[i]] += kernel->w[i]*m/particle->density[pair->j[i]];
+        omp_set_lock(&lock);
+        particle->w[pair->i[i]] += kernel->w[i]*particle->mass[pair->j[i]]/particle->density[pair->j[i]];
         if(particle->type[pair->j[i]]==0)
         {
-            particle->w[pair->j[i]] += kernel->w[i]*m/particle->density[pair->i[i]];
+            particle->w[pair->j[i]] += kernel->w[i]*particle->mass[pair->i[i]]/particle->density[pair->i[i]];
         }
+        omp_unset_lock(&lock);
     }
 
     #pragma omp parallel for num_threads(TH_NUM)
@@ -36,18 +41,20 @@ void ptc_density_correct(SPH *sph)
     {
         if(particle->type[i] == 0)
         {
-            particle->density[i] = (a*2.0*m)/(3.0*particle->w[i]);
+            particle->density[i] = (a*2.0*particle->mass[i])/(3.0*particle->w[i]);
         }
     }
 
     #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<pair->total;i++)
     {
-        particle->density[pair->i[i]] += m*kernel->w[i]/particle->w[pair->i[i]];
+        omp_set_lock(&lock);
+        particle->density[pair->i[i]] += particle->mass[pair->j[i]]*kernel->w[i]/particle->w[pair->i[i]];
         if(particle->type[pair->j[i]] == 0)
         {
-            particle->density[pair->j[i]] += m*kernel->w[i]/particle->w[pair->j[i]];
+            particle->density[pair->j[i]] += particle->mass[pair->i[i]]*kernel->w[i]/particle->w[pair->j[i]];
         }
+        omp_unset_lock(&lock);
     }
 }
 
@@ -61,6 +68,9 @@ void ptc_dummy(SPH *sph)
     pair = sph->pair;
     kernel = sph->kernel;
     wedge = sph->rigid;
+
+    omp_lock_t lock;
+    omp_init_lock(&lock);
 
     //rigid body(wall & wedge)vx,vy,accx,accy,pressure init
     #pragma omp parallel for num_threads(TH_NUM)
@@ -80,7 +90,12 @@ void ptc_dummy(SPH *sph)
     #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<pair->total;i++)
     {
-        if(particle->type[pair->j[i]] != 0) particle->w[pair->j[i]] += kernel->w[i];
+        if(particle->type[pair->j[i]] != 0) 
+        {
+            omp_set_lock(&lock);
+            particle->w[pair->j[i]] += kernel->w[i];
+            omp_set_lock(&lock);
+        }
     }
     
     //rigid body(wall & wedege) pressure and velocity
@@ -107,10 +122,12 @@ void ptc_dummy(SPH *sph)
             }
             dx = particle->x[pair->i[i]] - particle->x[pair->j[i]];
             dy = particle->y[pair->i[i]] - particle->y[pair->j[i]];
+            omp_set_lock(&lock);
             particle->pressure[pair->j[i]] += (particle->pressure[pair->i[i]]+particle->density[pair->i[i]]*\
                         (rigid_acc_x*dx+(rigid_acc_y+GRAVITY_ACC)*dy))*kernel->w[i]/particle->w[pair->j[i]];
             particle->vx[pair->j[i]] += particle->vx[pair->i[i]]*kernel->w[i]/particle->w[pair->j[i]];
             particle->vy[pair->j[i]] += particle->vy[pair->i[i]]*kernel->w[i]/particle->w[pair->j[i]];
+            omp_unset_lock(&lock);
         }
     }
 

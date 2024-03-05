@@ -45,6 +45,11 @@ void ptc_nnps_mesh(SPH *sph)
     mesh = sph->mesh;
 
     pair->total = 0;
+
+    omp_lock_t lock;
+    omp_init_lock(&lock);
+
+    #pragma omp parallel for num_threads(TH_NUM)
     for(int j=0;j<MESH_LENGTH_NUM;j++)
     {
         for(int i=0;i<MESH_DEEPTH_NUM;i++)
@@ -58,17 +63,19 @@ void ptc_nnps_mesh(SPH *sph)
                     {
                         if(particle->type[mesh[i][j][k]]==0)
 			            {
+                            omp_set_lock(&lock);
                             pair->i[pair->total] = mesh[i][j][k];
                             pair->j[pair->total] = mesh[i][j][m];
                             pair->total++;
-			                
+			                omp_unset_lock(&lock); 
                         }
                         else if (particle->type[mesh[i][j][m]]==0)
                         {
+                            omp_set_lock(&lock);
                             pair->i[pair->total] = mesh[i][j][m];
                             pair->j[pair->total] = mesh[i][j][k];
                             pair->total++;
-                            
+			                omp_unset_lock(&lock); 
                         }
                     }
                 }
@@ -79,20 +86,22 @@ void ptc_nnps_mesh(SPH *sph)
                     {
                         if(PTC_DISTANCE(mesh[i][j][k],mesh[i][j+1][m])<=PTC_REGION_RADIUS)
                         {
-                        if(particle->type[mesh[i][j][k]]==0)
-			            {
-                            pair->i[pair->total] = mesh[i][j][k];
-                            pair->j[pair->total] = mesh[i][j+1][m];
-                            pair->total++;
-			                
-                        }
-                        else if (particle->type[mesh[i][j+1][m]]==0)
-                        {
-                            pair->i[pair->total] = mesh[i][j+1][m];
-                            pair->j[pair->total] = mesh[i][j][k];
-                            pair->total++;
-                            
-                        }
+                            if(particle->type[mesh[i][j][k]]==0)
+			                {
+                                omp_set_lock(&lock);
+                                pair->i[pair->total] = mesh[i][j][k];
+                                pair->j[pair->total] = mesh[i][j+1][m];
+                                pair->total++;
+			                    omp_unset_lock(&lock); 
+                            }
+                            else if (particle->type[mesh[i][j+1][m]]==0)
+                            {
+                                omp_set_lock(&lock);
+                                pair->i[pair->total] = mesh[i][j+1][m];
+                                pair->j[pair->total] = mesh[i][j][k];
+                                pair->total++;
+			                    omp_unset_lock(&lock);   
+                            }
                         }
                     }
                 }
@@ -103,21 +112,22 @@ void ptc_nnps_mesh(SPH *sph)
                     {
                         if(PTC_DISTANCE(mesh[i][j][k],mesh[i+1][j][m])<=PTC_REGION_RADIUS)
                         {
-                        if(particle->type[mesh[i][j][k]]==0)
-			            {
-                            
-                            pair->i[pair->total] = mesh[i][j][k];
-                            pair->j[pair->total] = mesh[i+1][j][m];
-                            pair->total++;
-			                
-                        }
-                        else if (particle->type[mesh[i+1][j][m]]==0)
-                        {
-                            pair->i[pair->total] = mesh[i+1][j][m];
-                            pair->j[pair->total] = mesh[i][j][k];
-                            pair->total++;
-                            
-                        }
+                            if(particle->type[mesh[i][j][k]]==0)
+			                {
+                                omp_set_lock(&lock);
+                                pair->i[pair->total] = mesh[i][j][k];
+                                pair->j[pair->total] = mesh[i+1][j][m];
+                                pair->total++;
+			                    omp_unset_lock(&lock); 
+                            }
+                            else if (particle->type[mesh[i+1][j][m]]==0)
+                            {
+                                omp_set_lock(&lock);
+                                pair->i[pair->total] = mesh[i+1][j][m];
+                                pair->j[pair->total] = mesh[i][j][k];
+                                pair->total++;
+			                    omp_unset_lock(&lock); 
+                            }
                         }
                     }
                 }
@@ -128,22 +138,22 @@ void ptc_nnps_mesh(SPH *sph)
                     {
                         if(PTC_DISTANCE(mesh[i][j][k],mesh[i+1][j+1][m])<=PTC_REGION_RADIUS)
                         {
-                        if(particle->type[mesh[i][j][k]]==0)
-			            {
-                            
-                            pair->i[pair->total] = mesh[i][j][k];
-                            pair->j[pair->total] = mesh[i+1][j+1][m];
-                            pair->total++;
-			                
-                        }
-                        else if (particle->type[mesh[i+1][j+1][m]]==0)
-                        {
-                            
-                            pair->i[pair->total] = mesh[i+1][j+1][m];
-                            pair->j[pair->total] = mesh[i][j][k];
-                            pair->total++;
-                            
-                        }
+                            if(particle->type[mesh[i][j][k]]==0)
+			                {
+                                omp_set_lock(&lock);
+                                pair->i[pair->total] = mesh[i][j][k];
+                                pair->j[pair->total] = mesh[i+1][j+1][m];
+                                pair->total++;
+			                    omp_unset_lock(&lock); 
+                            }
+                            else if (particle->type[mesh[i+1][j+1][m]]==0)
+                            {
+                                omp_set_lock(&lock);
+                                pair->i[pair->total] = mesh[i+1][j+1][m];
+                                pair->j[pair->total] = mesh[i][j][k];
+                                pair->total++;
+			                    omp_unset_lock(&lock); 
+                            }
                         }
                     }
 
@@ -155,22 +165,22 @@ void ptc_nnps_mesh(SPH *sph)
                     {
                         if(PTC_DISTANCE(mesh[i][j][k],mesh[i-1][j+1][m])<=PTC_REGION_RADIUS)
                         {
-                        if(particle->type[mesh[i][j][k]]==0)
-			            {
-                            
-                            pair->i[pair->total] = mesh[i][j][k];
-                            pair->j[pair->total] = mesh[i-1][j+1][m];
-                            pair->total++;
-			                
-                        }
-                        else if (particle->type[mesh[i-1][j+1][m]]==0)
-                        {
-                            
-                            pair->i[pair->total] = mesh[i-1][j+1][m];
-                            pair->j[pair->total] = mesh[i][j][k];
-                            pair->total++;
-                            
-                        }
+                            if(particle->type[mesh[i][j][k]]==0)
+			                {
+                                omp_set_lock(&lock);
+                                pair->i[pair->total] = mesh[i][j][k];
+                                pair->j[pair->total] = mesh[i-1][j+1][m];
+                                pair->total++;
+			                    omp_unset_lock(&lock); 
+                            }
+                            else if (particle->type[mesh[i-1][j+1][m]]==0)
+                            {
+                                omp_set_lock(&lock);
+                                pair->i[pair->total] = mesh[i-1][j+1][m];
+                                pair->j[pair->total] = mesh[i][j][k];
+                                pair->total++;
+			                    omp_unset_lock(&lock); 
+                            }
                         }
                     }
                 }

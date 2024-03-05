@@ -94,9 +94,10 @@ void sph_rigid_integral(SPH *sph)
     pair = sph->pair;
     wedge = sph->rigid;
 
-    double m = PTC_MASS;
-    double temp_vx = 0.0;
-    double temp_vy = 0.0;
+    //double m = PTC_MASS;
+
+    omp_lock_t lock;
+    omp_init_lock(&lock);
 
     if(sph->init_impac_flag == 0)
     {
@@ -105,27 +106,35 @@ void sph_rigid_integral(SPH *sph)
         wedge->accy = -9.80;
 
         //calculate the wedge's acceleration and alpha
+        #pragma omp parallel for num_threads(TH_NUM)
         for(unsigned int i=0;i<particle->total;i++)
         {
             if(particle->type[i] == 1)
             {
-                wedge->accx += particle->accx[i]*m/wedge->mass;
-                wedge->accy += particle->accy[i]*m/wedge->mass;
+                omp_set_lock(&lock);
+                wedge->accx += particle->accx[i]*particle->mass[i]/wedge->mass;
+                wedge->accy += particle->accy[i]*particle->mass[i]/wedge->mass;
                 wedge->alpha += (particle->accy[i]*(particle->x[i]-wedge->cogx)-\
-                                 particle->accx[i]*(particle->y[i]-wedge->cogy))*m/wedge->mass;
+                particle->accx[i]*(particle->y[i]-wedge->cogy))*particle->mass[i]/wedge->mass;
+                omp_unset_lock(&lock);
             }
         }
         //rigid ptc time integral
+        #pragma omp parallel for num_threads(TH_NUM)
         for(unsigned int i=0;i<particle->total;i++)
         {
+            double temp_vx = 0.0;
+            double temp_vy = 0.0;
             if(particle->type[i] == 1)
             {
                 temp_vx = wedge->vx - wedge->omega*(particle->y[i]-wedge->cogy);
                 temp_vy = wedge->vy + wedge->omega*(particle->x[i]-wedge->cogx);
                 temp_vx += (wedge->accx-pow(wedge->omega,2)*(particle->x[i]-wedge->cogx)-wedge->alpha*(particle->y[i]-wedge->cogy))*sph->d_time;
                 temp_vy += (wedge->accy-pow(wedge->omega,2)*(particle->y[i]-wedge->cogy)+wedge->alpha*(particle->x[i]-wedge->cogx))*sph->d_time;
+                omp_set_lock(&lock);
                 particle->x[i] += temp_vx*sph->d_time;
                 particle->y[i] += temp_vy*sph->d_time;
+                omp_unset_lock(&lock);
             }
         }
 

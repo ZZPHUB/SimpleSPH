@@ -9,11 +9,12 @@ void ptc_mesh_process(SPH *sph)
     particle = sph->particle;
     mesh = sph->mesh;
 
-    unsigned int head;
-    unsigned int j=0;
-    unsigned int k=0;
+    omp_lock_t lock;
+    omp_init_lock(&lock);
+
     unsigned int mesh_ptc_tol=0;
     //init the head,which store the num of particle in grid
+    #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<MESH_DEEPTH_NUM;i++)
     {
         for(unsigned int j=0;j<MESH_LENGTH_NUM;j++)
@@ -23,8 +24,12 @@ void ptc_mesh_process(SPH *sph)
     }
 
     //mesh process
+    #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<particle->total;i++)
     {
+        unsigned int head;
+        unsigned int j=0;
+        unsigned int k=0;
         if(particle->y[i] < TOL_DOMAIN_DEEPTH && particle->y[i] >= 0)
         {
             j = (unsigned int)(particle->y[i]/MESH_SPACING);
@@ -52,15 +57,21 @@ void ptc_mesh_process(SPH *sph)
         head = mesh[j][k][MESH_PTC_NUM-1];
         if(head<MESH_PTC_NUM-1)
         {
+            omp_set_lock(&lock);
             mesh[j][k][head] = i;        
             mesh[j][k][MESH_PTC_NUM-1]++;
+            omp_unset_lock(&lock);
         }
     }
+
+    #pragma omp parallel for num_threads(TH_NUM)
     for(int i=0;i<MESH_DEEPTH_NUM;i++)
     {
         for(int j=0;j<MESH_LENGTH_NUM;j++)
         {
+            omp_set_lock(&lock);
             mesh_ptc_tol = mesh_ptc_tol+mesh[i][j][MESH_PTC_NUM-1];
+            omp_unset_lock(&lock);
         }
     }
     if(mesh_ptc_tol == particle->total)
