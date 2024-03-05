@@ -25,7 +25,7 @@ void ptc_rigid_generate(SPH *sph)
         if(x[2]==0 &&(x[0]!=0 || x[1]!= 0))
         {
             particle->x[tol] = (double)(x[0]/1000)+FLUID_DOMAIN_LENGTH/2.0;
-            particle->y[tol] = (double)(x[1]/1000)+FLUID_DOMAIN_DEEPTH+4.0*PTC_SPACING;
+            particle->y[tol] = (double)(x[1]/1000)+FLUID_DOMAIN_DEEPTH-8.0*PTC_SPACING;
             particle->type[tol] = 1;
             tol++;
         }
