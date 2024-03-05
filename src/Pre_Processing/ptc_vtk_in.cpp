@@ -178,4 +178,12 @@ void ptc_read_vtk(SPH *sph)
             particle->accy[i] = a[1];
 	    }
     }
+    else
+    {
+        while (true)
+        {
+            cout << "some case are null" << endl;
+        }
+        
+    }
 }
