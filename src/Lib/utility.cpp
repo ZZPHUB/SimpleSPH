@@ -125,15 +125,15 @@ void ptc_dummy(SPH *sph)
 void sph_avg_time(SPH *sph)
 {
     static unsigned int step = 0;
-    static time_t start;
-    static time_t end;
+    static double start;
+    static double end;
     if(step == 0)
     {
-        start = time(nullptr);
+        start = (double)time(nullptr);
     }
     else
     {
-        end = time(nullptr);
+        end = (double)time(nullptr);
         sph->avg_time = (end-start)/(double)step;
     }
     step++;
