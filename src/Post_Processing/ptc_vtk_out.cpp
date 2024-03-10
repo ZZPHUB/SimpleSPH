@@ -115,6 +115,13 @@ void sph_save_last(SPH *sph)
         {
             vtkfile  << particle->type[i] << endl;
         }
+        //mass
+        vtkfile << "SCALARS "<< "mass double 1" << endl;
+        vtkfile << "LOOKUP_TABLE DEFAULT" << endl;
+        for(unsigned int i=0;i<particle->total;i++)
+        {
+            vtkfile << particle->mass[i] << endl;
+        }
         //density
         vtkfile << "SCALARS "<< "density double 1" << endl;
         vtkfile << "LOOKUP_TABLE DEFAULT" << endl;

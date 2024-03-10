@@ -12,7 +12,7 @@ void ptc_acc(SPH *sph)
     kernel = sph->kernel;
     wedge = sph->rigid;
     
-    double m = PTC_MASS;
+    //double m = PTC_MASS;
     
     for(unsigned int i=0;i<particle->total;i++)
     {
@@ -34,10 +34,10 @@ void ptc_acc(SPH *sph)
         //to reduce the calculate tiems,define $p_i/\rho_i^2 + p_j/\rho_j^2$ to temp para
         temp_p = particle->pressure[pair->i[i]]/temp_rho_i + particle->pressure[pair->j[i]]/temp_rho_j;
 
-        particle->accx[pair->i[i]] -= m*temp_p*kernel->dwdx[i];
-        particle->accx[pair->j[i]] += m*temp_p*kernel->dwdx[i];
-        particle->accy[pair->i[i]] -= m*temp_p*kernel->dwdy[i];
-        particle->accy[pair->j[i]] += m*temp_p*kernel->dwdy[i];
+        particle->accx[pair->i[i]] -= particle->mass[pair->j[i]]*temp_p*kernel->dwdx[i];
+        particle->accx[pair->j[i]] += particle->mass[pair->i[i]]*temp_p*kernel->dwdx[i];
+        particle->accy[pair->i[i]] -= particle->mass[pair->j[i]]*temp_p*kernel->dwdy[i];
+        particle->accy[pair->j[i]] += particle->mass[pair->i[i]]*temp_p*kernel->dwdy[i];
     }
 
     //artificial viscous term
@@ -70,9 +70,9 @@ void ptc_acc(SPH *sph)
                ((dx*dx+dy*dy+0.01*PTC_SML*PTC_SML)*\
                (particle->density[pair->i[i]]/2.0 + particle->density[pair->j[i]]/2.0));
 
-        particle->accx[pair->i[i]] += m*0.01*PTC_SML*sph->c*temp*kernel->dwdx[i];
-        particle->accx[pair->j[i]] -= m*0.01*PTC_SML*sph->c*temp*kernel->dwdx[i];
-        particle->accy[pair->i[i]] += m*0.01*PTC_SML*sph->c*temp*kernel->dwdy[i];
-        particle->accy[pair->j[i]] -= m*0.01*PTC_SML*sph->c*temp*kernel->dwdy[i];      
+        particle->accx[pair->i[i]] += particle->mass[pair->j[i]]*0.01*PTC_SML*sph->c*temp*kernel->dwdx[i];
+        particle->accx[pair->j[i]] -= particle->mass[pair->i[i]]*0.01*PTC_SML*sph->c*temp*kernel->dwdx[i];
+        particle->accy[pair->i[i]] += particle->mass[pair->j[i]]*0.01*PTC_SML*sph->c*temp*kernel->dwdy[i];
+        particle->accy[pair->j[i]] -= particle->mass[pair->i[i]]*0.01*PTC_SML*sph->c*temp*kernel->dwdy[i];      
     }
 }

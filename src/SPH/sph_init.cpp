@@ -38,7 +38,7 @@ void sph_init(SPH *sph)
     particle->temp_vx = (double *)(calloc(particle->total,sizeof(double)));
     particle->temp_vy = (double *)(calloc(particle->total,sizeof(double)));
     particle->temp_density = (double *)(calloc(particle->total,sizeof(double))); 
-    //particle->mass = (double *)(calloc(particle->total,sizeof(double))); //for particle's mass is constant
+    particle->mass = (double *)(calloc(particle->total,sizeof(double))); 
     particle->w = (double *)(calloc(particle->total,sizeof(double)));
     particle->dif_density = (double *)(calloc(particle->total,sizeof(double)));
     particle->pressure = (double *)(calloc(particle->total,sizeof(double)));
@@ -74,6 +74,7 @@ void sph_init(SPH *sph)
     sph->d_time = DELTA_TIME;
     sph->c = ART_SOUND_VEL;
     sph->g = GRAVITY_ACC;
+    sph->avg_time = 0.0;
     
     
     cout << "run a new case or an old case(press 1 for new,0 for old)" << endl;

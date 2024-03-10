@@ -11,11 +11,7 @@ void ptc_kernel_parallel(SPH *sph)
     pair = sph->pair;
     kernel = sph->kernel;
 
-    double m = PTC_MASS;
-
-
-    omp_lock_t lock;
-    omp_init_lock(&lock);
+    //double m = PTC_MASS;
 
     for(unsigned int i=0;i<pair->total;i++)
     {      

@@ -10,22 +10,23 @@ void ptc_density_correct(SPH *sph)
     kernel = sph->kernel;
 
     double a = ALPHA;
-    double m = PTC_MASS;
+    //double m = PTC_MASS;
+
 
     for(unsigned int i=0;i<particle->total;i++)
     {
         if(particle->type[i] == 0)
         {
-            particle->w[i] = (a*2.0*m)/(3.0*particle->density[i]);
+            particle->w[i] = (a*2.0*particle->mass[i])/(3.0*particle->density[i]);
         }
     }
 
     for(unsigned int i=0;i<pair->total;i++)
     {
-        particle->w[pair->i[i]] += kernel->w[i]*m/particle->density[pair->j[i]];
+        particle->w[pair->i[i]] += kernel->w[i]*particle->mass[pair->j[i]]/particle->density[pair->j[i]];
         if(particle->type[pair->j[i]]==0)
         {
-            particle->w[pair->j[i]] += kernel->w[i]*m/particle->density[pair->i[i]];
+            particle->w[pair->j[i]] += kernel->w[i]*particle->mass[pair->i[i]]/particle->density[pair->i[i]];
         }
     }
 
@@ -33,16 +34,16 @@ void ptc_density_correct(SPH *sph)
     {
         if(particle->type[i] == 0)
         {
-            particle->density[i] = (a*2.0*m)/(3.0*particle->w[i]);
+            particle->density[i] = (a*2.0*particle->mass[i])/(3.0*particle->w[i]);
         }
     }
 
     for(unsigned int i=0;i<pair->total;i++)
     {
-        particle->density[pair->i[i]] += m*kernel->w[i]/particle->w[pair->i[i]];
+        particle->density[pair->i[i]] += particle->mass[pair->j[i]]*kernel->w[i]/particle->w[pair->i[i]];
         if(particle->type[pair->j[i]] == 0)
         {
-            particle->density[pair->j[i]] += m*kernel->w[i]/particle->w[pair->j[i]];
+            particle->density[pair->j[i]] += particle->mass[pair->i[i]]*kernel->w[i]/particle->w[pair->j[i]];
         }
     }
 }
@@ -57,6 +58,7 @@ void ptc_dummy(SPH *sph)
     pair = sph->pair;
     kernel = sph->kernel;
     wedge = sph->rigid;
+
 
     //rigid body(wall & wedge)vx,vy,accx,accy,pressure init
     for(unsigned int i=0;i<particle->total;i++)
@@ -74,7 +76,10 @@ void ptc_dummy(SPH *sph)
     //the not fluid weight term 
     for(unsigned int i=0;i<pair->total;i++)
     {
-        if(particle->type[pair->j[i]] != 0) particle->w[pair->j[i]] += kernel->w[i];
+        if(particle->type[pair->j[i]] != 0) 
+        {
+            particle->w[pair->j[i]] += kernel->w[i];
+        }
     }
     
     //rigid body(wall & wedege) pressure and velocity
@@ -115,4 +120,21 @@ void ptc_dummy(SPH *sph)
             particle->density[i] = particle->pressure[i]/pow(sph->c,2)+REF_DENSITY;
         }
     }
+}
+
+void sph_avg_time(SPH *sph)
+{
+    static unsigned int step = 0;
+    static double start;
+    static double end;
+    if(step == 0)
+    {
+        start = (double)time(nullptr);
+    }
+    else
+    {
+        end = (double)time(nullptr);
+        sph->avg_time = (end-start)/(double)step;
+    }
+    step++;
 }

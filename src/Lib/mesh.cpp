@@ -9,9 +9,6 @@ void ptc_mesh_process(SPH *sph)
     particle = sph->particle;
     mesh = sph->mesh;
 
-    unsigned int head;
-    unsigned int j=0;
-    unsigned int k=0;
     unsigned int mesh_ptc_tol=0;
     //init the head,which store the num of particle in grid
     for(unsigned int i=0;i<MESH_DEEPTH_NUM;i++)
@@ -25,6 +22,9 @@ void ptc_mesh_process(SPH *sph)
     //mesh process
     for(unsigned int i=0;i<particle->total;i++)
     {
+        unsigned int head;
+        unsigned int j=0;
+        unsigned int k=0;
         if(particle->y[i] < TOL_DOMAIN_DEEPTH && particle->y[i] >= 0)
         {
             j = (unsigned int)(particle->y[i]/MESH_SPACING);
@@ -56,6 +56,7 @@ void ptc_mesh_process(SPH *sph)
             mesh[j][k][MESH_PTC_NUM-1]++;
         }
     }
+
     for(int i=0;i<MESH_DEEPTH_NUM;i++)
     {
         for(int j=0;j<MESH_LENGTH_NUM;j++)

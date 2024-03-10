@@ -21,7 +21,7 @@ int main(void)
     sph.mesh = mesh;
 
     sph_init(&sph);    
-    
+    sph_avg_time(&sph);
     for(sph.current_step;sph.current_step<sph.total_step;sph.current_step++)
     {
         if(sph.current_step%PRINT_TIME_STEP == 0)
@@ -30,7 +30,9 @@ int main(void)
         }
         //calculate and integration
         sph_time_integral(&sph); 
+        sph_save_rigid(&sph);
         ptc_info(&sph);
+        sph_avg_time(&sph);
     }
     sph_save_last(&sph);
     sph_free(&sph);

@@ -12,9 +12,7 @@ void ptc_dif_density(SPH *sph)
     kernel = sph->kernel;
     wedge = sph->rigid;
 
-    double m = PTC_MASS;
-
-    
+    //double m = PTC_MASS;
 
     for(unsigned int i=0;i<particle->total;i++)
     {
@@ -39,7 +37,7 @@ void ptc_dif_density(SPH *sph)
             temp = (particle->vx[pair->i[i]]-(wedge->vx-wedge->omega*(particle->y[pair->j[i]]-wedge->cogy)))*kernel->dwdx[i] \
                     +(particle->vy[pair->i[i]]-(wedge->vy+wedge->omega*(particle->x[pair->j[i]]-wedge->cogx)))*kernel->dwdy[i];
         }
-        particle->dif_density[pair->i[i]] += m*temp;
-        particle->dif_density[pair->j[i]] += m*temp;
+        particle->dif_density[pair->i[i]] += particle->mass[pair->j[i]]*temp;
+        particle->dif_density[pair->j[i]] += particle->mass[pair->i[i]]*temp;
     }
 }
