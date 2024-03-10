@@ -7,7 +7,7 @@ void ptc_info_init(SPH *sph)
     particle = sph->particle;
     pair = sph->pair;
 
-    double free_surf = PTC_SPACING*(FLUID_DEEPTH_NUM-1+4)
+    double free_surf = PTC_SPACING*(FLUID_DEEPTH_NUM-1+4);
 
     if(sph->new_case_flag == 1)
     {
