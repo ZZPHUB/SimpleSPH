@@ -17,7 +17,6 @@ void ptc_kernel_parallel(SPH *sph)
     omp_lock_t lock;
     omp_init_lock(&lock);
 
-    #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<pair->total;i++)
     {      
         double r = 0;

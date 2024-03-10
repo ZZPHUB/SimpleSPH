@@ -16,13 +16,11 @@ void ptc_dif_density(SPH *sph)
 
     
 
-    #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<particle->total;i++)
     {
         particle->dif_density[i] = 0.0;
     }
     
-    #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<pair->total;i++)
     {   
         double temp = 0.0; //particles velocity differentiation

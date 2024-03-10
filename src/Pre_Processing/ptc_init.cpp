@@ -9,7 +9,6 @@ void ptc_info_init(SPH *sph)
 
     if(sph->new_case_flag == 1)
     {
-        #pragma omp parallel for num_threads(TH_NUM)
         for(int i=0;i<particle->total;i++)
         {
             particle->vx[i] = particle->vy[i] = particle->accx[i] = \

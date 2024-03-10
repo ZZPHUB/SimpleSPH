@@ -14,18 +14,14 @@ void ptc_acc(SPH *sph)
     
     double m = PTC_MASS;
     
-    #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<particle->total;i++)
     {
-        //omp_set_lock(&lock);
         particle->accx[i] = 0.0;
         if(particle->type[i] == 0)particle->accy[i] = -sph->g;
         else particle->accy[i] = 0.0;
-        //omp_unset_lock(&lock);
     }
 
     //pressure term
-    #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<pair->total;i++)
     {
         //to reduce the calculate times,define $\rho^2$ to temp para
@@ -45,7 +41,6 @@ void ptc_acc(SPH *sph)
     }
 
     //artificial viscous term
-    #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<pair->total;i++)
     {
         double temp = 0.0;

@@ -8,7 +8,6 @@ void ptc_fluid_pressure(SPH *sph)
     double c = sph->c; //ariti_sound_velocity
 
     #ifdef LINEAR_EOS
-    #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<particle->total;i++)
     {
         if(particle->type[i]==0)
@@ -18,7 +17,6 @@ void ptc_fluid_pressure(SPH *sph)
         }
     }
     #else
-    #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<particle->total;i++)
     {
         if(particle->type[i]==0)
