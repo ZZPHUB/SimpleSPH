@@ -21,7 +21,6 @@ int main(void)
     sph.mesh = mesh;
 
     sph_init(&sph);    
-    
     for(sph.current_step;sph.current_step<sph.total_step;sph.current_step++)
     {
         if(sph.current_step%PRINT_TIME_STEP == 0)

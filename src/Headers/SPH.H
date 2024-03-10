@@ -149,6 +149,8 @@ typedef struct
     double c;
     //time step size
     double d_time;
+    //to record the start and end time
+    time_t avg_time;
 }SPH;
 
 

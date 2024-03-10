@@ -32,7 +32,6 @@ void sph_time_integral(SPH *sph)
     ptc_acc(sph);
 
     //PREDICT STEP
-    #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<particle->total;i++)
     {
         particle->temp_x[i] = particle->x[i];
@@ -42,7 +41,6 @@ void sph_time_integral(SPH *sph)
         particle->temp_density[i] = particle->density[i];
     }
  
-    #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<particle->total;i++)
     {
         if(particle->type[i] == 0)
@@ -66,7 +64,6 @@ void sph_time_integral(SPH *sph)
     ptc_acc(sph);
 
     //CORRECT STEP
-    #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<particle->total;i++)
     {
         if(particle->type[i] == 0)
@@ -106,7 +103,6 @@ void sph_rigid_integral(SPH *sph)
         wedge->accy = -9.80;
 
         //calculate the wedge's acceleration and alpha
-        #pragma omp parallel for num_threads(TH_NUM)
         for(unsigned int i=0;i<particle->total;i++)
         {
             if(particle->type[i] == 1)
@@ -120,7 +116,6 @@ void sph_rigid_integral(SPH *sph)
             }
         }
         //rigid ptc time integral
-        #pragma omp parallel for num_threads(TH_NUM)
         for(unsigned int i=0;i<particle->total;i++)
         {
             double temp_vx = 0.0;

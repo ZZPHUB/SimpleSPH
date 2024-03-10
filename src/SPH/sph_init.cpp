@@ -74,6 +74,8 @@ void sph_init(SPH *sph)
     sph->d_time = DELTA_TIME;
     sph->c = ART_SOUND_VEL;
     sph->g = GRAVITY_ACC;
+    sph->start_time = 0.0;
+    sph->end_time = 0.0;
     
     
     cout << "run a new case or an old case(press 1 for new,0 for old)" << endl;
