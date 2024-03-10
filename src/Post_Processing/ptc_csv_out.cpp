@@ -1,5 +1,5 @@
 #include "PostProcess.H"
-unsigned namespace std;
+using namespace std;
 
 void sph_save_rigid(SPH *sph)
 {
@@ -16,7 +16,7 @@ void sph_save_rigid(SPH *sph)
     }
     if(sph->current_step==sph->total_step-1)
     {
-        string filename = "../data/postprocess/csv/rigid.csv"
+        string filename = "../data/postprocess/csv/rigid.csv";
         ofstream rigidfile;
         rigidfile.open(filename.c_str());
         rigidfile << "time, vy, accy" << endl;
@@ -25,6 +25,6 @@ void sph_save_rigid(SPH *sph)
             rigidfile << setiosflags(ios::scientific)<< sph->d_time*((double)sph->current_step) \
             << ", " << rigid_vy.at(i) << ", " << rigid_accy.at(i) << endl;
         }
-        rigidfile.close()
+        rigidfile.close();
     }
 }
