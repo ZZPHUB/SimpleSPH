@@ -32,6 +32,7 @@ void ptc_info_init(SPH *sph)
                     particle->density[i] = REF_DENSITY;
                     particle->mass[i] = PTC_MASS;
                 }
+            #endif
         }
     }
 }
