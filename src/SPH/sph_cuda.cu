@@ -54,8 +54,6 @@ int main(void)
 
        
    // sph_avg_time(&sph);
-    for(sph.current_step;sph.current_step<sph.total_step;sph.current_step++)
-    {
         cudaMemcpy((void *)dev_x, (void *)particle.x, particle.total*sizeof(double), cudaMemcpyHostToDevice); 
         cudaMemcpy((void *)dev_y, (void *)particle.y, particle.total*sizeof(double), cudaMemcpyHostToDevice);
         cudaMemcpy((void *)dev_vx, (void *)particle.vx, particle.total*sizeof(double), cudaMemcpyHostToDevice);
@@ -85,7 +83,7 @@ int main(void)
         for(unsigned int j=0;j<MESH_LENGTH_NUM;j++)
         {
             for(unsigned int k=0;k<MESH_PTC_NUM;k++)
-            temp = mesh[i*MESH_LENGTH_NUM+j+MESH_LENGTH_NUM*MESH_DEEPTH*k];
+            temp = mesh[i*MESH_LENGTH_NUM+j+MESH_LENGTH_NUM*MESH_DEEPTH_NUM*k];
             vtkfile << setiosflags(ios::scientific) << particle.x[temp] << " " \
             << particle.y[temp] << " " << 0.0 << endl;
         }
@@ -105,7 +103,6 @@ int main(void)
         ptc_info(&sph);
         sph_avg_time(&sph);
         */
-    }
     //sph_save_last(&sph);
     sph_free(&sph);
     return 0;
