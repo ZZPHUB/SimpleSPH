@@ -26,7 +26,7 @@ __global__ void ptc_mesh_cuda(double *x,double *y,int *mesh,int ptc_num)
     {
         mid += MESH_LENGTH_NUM - 1;
     }
-    mid += atomicAdd(&mesh[mid+MESH_PTC_NUM],1);
+    mid += MESH_DEEPTH_NUM*MESH_LENGTH_NUM*(&mesh[mid+MESH_PTC_NUM],1);
     mesh[mid] = id;
     /*
     head = mesh[j][k][MESH_PTC_NUM-1];
