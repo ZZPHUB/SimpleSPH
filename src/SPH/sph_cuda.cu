@@ -59,7 +59,7 @@ int main(void)
     CUDA_CHECK(cudaMalloc((int**)&dev_mesh,MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM*sizeof(int)));
 
        
-    sph_avg_time(&sph);
+   // sph_avg_time(&sph);
     for(sph.current_step;sph.current_step<sph.total_step;sph.current_step++)
     {
         cudaMemcpy((void *)dev_x, (void *)particle.x, particle.total*sizeof(double), cudaMemcpyHostToDevice); 
@@ -112,7 +112,7 @@ int main(void)
         sph_avg_time(&sph);
         */
     }
-    sph_save_last(&sph);
+    //sph_save_last(&sph);
     sph_free(&sph);
     return 0;
 }
