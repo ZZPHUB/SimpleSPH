@@ -5,12 +5,12 @@
 #include <time.h>
 using namespace std;
 
-__constant__ __device__ c = ART_SOUND_VEL;
-__constant__ __device__ rho_0 = REF_DENSITY;
-__constant__ __device__ mesh_lnum = MESH_LENGTH_NUM;
-__constant__ __device__ mesh_dnum = MESH_DEEPTH_NUM;
-__constant__ __device__ mesh_pnum = MESH_PTC_NUM;
-__constant__ __device__ mesh_spacing = MESH_SPACING;
+__constant__ __device__ int c = ART_SOUND_VEL;
+__constant__ __device__ int rho_0 = REF_DENSITY;
+__constant__ __device__ int mesh_lnum = MESH_LENGTH_NUM;
+__constant__ __device__ int mesh_dnum = MESH_DEEPTH_NUM;
+__constant__ __device__ int mesh_pnum = MESH_PTC_NUM;
+__constant__ __device__ int mesh_spacing = MESH_SPACING;
 
 int main(void)
 { 

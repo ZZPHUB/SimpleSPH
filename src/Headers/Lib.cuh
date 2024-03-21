@@ -2,7 +2,7 @@
 #define __LIB_H__
 
 /* Include Headers Here*/
-#include "SPH.H"
+#include "SPH.cuh"
 #include "sys/resource.h"
 #include "cmath"
 #include <iostream>
