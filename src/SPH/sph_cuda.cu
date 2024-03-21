@@ -35,6 +35,7 @@ int main(void)
     int *dev_mesh =NULL;
 
     int temp = 0;
+    int temp_1 = 0;
 
     CUDA_CHECK(cudaMalloc((double**)&dev_x,particle.total*sizeof(double)));
     CUDA_CHECK(cudaMalloc((double**)&dev_y,particle.total*sizeof(double)));
@@ -82,10 +83,11 @@ int main(void)
     {
         for(unsigned int j=0;j<MESH_LENGTH_NUM;j++)
         {
-            for(unsigned int k=0;k<MESH_PTC_NUM-1;k++)
-            temp = mesh[i*MESH_LENGTH_NUM+j+MESH_LENGTH_NUM*MESH_DEEPTH_NUM*k];
-            vtkfile << setiosflags(ios::scientific) << particle.x[temp] << " " \
-            << particle.y[temp] << " " << 0.0 << endl;
+            temp = mesh[i*MESH_LENGTH_NUM+j+MESH_LENGTH*MESH_DEEPTH_NUM*(MESH_PTC_NUM-1)];
+            for(unsigned int k=0;k<temp;k++)
+            temp_1 = mesh[i*MESH_LENGTH_NUM+j+MESH_LENGTH_NUM*MESH_DEEPTH_NUM*k];
+            vtkfile << setiosflags(ios::scientific) << particle.x[temp_1] << " " \
+            << particle.y[temp_1] << " " << 0.0 << endl;
         }
     }
     vtkfile.close();
