@@ -69,7 +69,9 @@ void ptc_acc(SPH *sph)
         temp = (dx*dvx+dy*dvy)/ \
                ((dx*dx+dy*dy+0.01*PTC_SML*PTC_SML)*\
                (particle->density[pair->i[i]]/2.0 + particle->density[pair->j[i]]/2.0));
-
+        
+        if(temp < 0.0) temp = 0.0;
+        
         particle->accx[pair->i[i]] += particle->mass[pair->j[i]]*0.01*PTC_SML*sph->c*temp*kernel->dwdx[i];
         particle->accx[pair->j[i]] -= particle->mass[pair->i[i]]*0.01*PTC_SML*sph->c*temp*kernel->dwdx[i];
         particle->accy[pair->i[i]] += particle->mass[pair->j[i]]*0.01*PTC_SML*sph->c*temp*kernel->dwdy[i];
