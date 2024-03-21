@@ -55,15 +55,14 @@ int main(void)
 
        
    // sph_avg_time(&sph);
-        cudaMemcpy((void *)dev_x, (void *)particle.x, particle.total*sizeof(double), cudaMemcpyHostToDevice); 
-        cudaMemcpy((void *)dev_y, (void *)particle.y, particle.total*sizeof(double), cudaMemcpyHostToDevice);
-        cudaMemcpy((void *)dev_vx, (void *)particle.vx, particle.total*sizeof(double), cudaMemcpyHostToDevice);
-        cudaMemcpy((void *)dev_vy, (void *)particle.vy, particle.total*sizeof(double), cudaMemcpyHostToDevice);
-        cudaMemcpy((void *)dev_rho, (void *)particle.density, particle.total*sizeof(double), cudaMemcpyHostToDevice);
-        cudaMemcpy((void *)dev_p, (void *)particle.pressure, particle.total*sizeof(double), cudaMemcpyHostToDevice);
-
+        CUDA_CHECK(cudaMemcpy((void *)dev_x, (void *)particle.x, particle.total*sizeof(double), cudaMemcpyHostToDevice)); 
+        CUDA_CHECK(cudaMemcpy((void *)dev_y, (void *)particle.y, particle.total*sizeof(double), cudaMemcpyHostToDevice)); 
+        CUDA_CHECK(cudaMemcpy((void *)dev_vx, (void *)particle.vx, particle.total*sizeof(double), cudaMemcpyHostToDevice)); 
+        CUDA_CHECK(cudaMemcpy((void *)dev_vy, (void *)particle.vy, particle.total*sizeof(double), cudaMemcpyHostToDevice)); 
+        CUDA_CHECK(cudaMemcpy((void *)dev_rho, (void *)particle.density, particle.total*sizeof(double), cudaMemcpyHostToDevice)); 
+        
         ptc_mesh_cuda<<<384,160>>>(dev_x,dev_y,dev_mesh,particle.total);
-        cudaMemcpy(mesh, dev_mesh, MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM,cudaMemcpyDeviceToHost);
+        CUDA_CHECK(cudaMemcpy(mesh, dev_mesh, sizeof(int)*MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM,cudaMemcpyDeviceToHost));
 
 
     string filename = "../data/postprocess/vtk/sph"; 
