@@ -91,9 +91,9 @@ int main(void)
         for(unsigned int j=0;j<MESH_LENGTH_NUM;j++)
         {
             for(unsigned int k=0;k<MESH_PTC_NUM;k++)
-            temp = i*MESH_LENGTH_NUM+j+k;
-            vtkfile << setiosflags(ios::scientific) << particle.x[mesh[temp]] << " " \
-            << particle.y[mesh[temp]] << " " << 0.0 << endl;
+            temp = mesh[i*MESH_LENGTH_NUM+j+k];
+            vtkfile << setiosflags(ios::scientific) << particle.x[temp] << " " \
+            << particle.y[temp] << " " << 0.0 << endl;
         }
     }
     vtkfile.close();

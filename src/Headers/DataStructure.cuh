@@ -2,7 +2,7 @@
 #define __DATASTRUCTURE__
 
 /* Data Structure Declare */
-typedef unsigned int*** SPH_MESH;
+typedef int* SPH_MESH;
 
 typedef  struct 
 {
