@@ -1,6 +1,6 @@
-VPATH = ./Lib:./Post_Processing:./Pre_Processing:./SPH:./Equations
+VPATH = ./Lib:./Post_Processing:./Pre_Processing:./SPH:
 # 正则表达式表示目录下所有.c文件
-SRC = $(notdir $(wildcard ./*/*.cpp))
+SRC = $(notdir $(wildcard ./*/*.cu))
 # 头文件路径
 INCLUDE = -I./Headers
 # 生成文SRC
@@ -17,7 +17,7 @@ endif
 
 TARGET = run
 
-CC = g++
+CC = nvcc
 
 .PHONY:all clean
 

@@ -1,4 +1,4 @@
-#include "SPH.H"
+#include "SPH.cuh"
 #include <fstream>
 #include <iomanip>
 #include <stdlib.h>
@@ -30,8 +30,6 @@ void sph_init(SPH *sph)
     particle->y = (double *)(calloc(particle->total,sizeof(double)));
     particle->vx = (double *)(calloc(particle->total,sizeof(double)));
     particle->vy = (double *)(calloc(particle->total,sizeof(double)));
-    particle->accx = (double *)(calloc(particle->total,sizeof(double))); 
-    particle->accy = (double *)(calloc(particle->total,sizeof(double)));
     particle->density = (double *)(calloc(particle->total,sizeof(double)));
     particle->temp_x = (double *)(calloc(particle->total,sizeof(double)));
     particle->temp_y = (double *)(calloc(particle->total,sizeof(double)));
@@ -40,13 +38,7 @@ void sph_init(SPH *sph)
     particle->temp_density = (double *)(calloc(particle->total,sizeof(double))); 
     particle->mass = (double *)(calloc(particle->total,sizeof(double))); 
     particle->w = (double *)(calloc(particle->total,sizeof(double)));
-    particle->dif_density = (double *)(calloc(particle->total,sizeof(double)));
     particle->pressure = (double *)(calloc(particle->total,sizeof(double)));
-    #ifdef FLAG
-    particle->visxx = (double *)(calloc(particle->total,sizeof(double)));
-    particle->visyy = (double *)(calloc(particle->total,sizeof(double)));
-    particle->visxy = (double *)(calloc(particle->total,sizeof(double)));
-    #endif
     particle->type = (int *)(calloc(particle->total,sizeof(int)));  
 
     //kernel data init
@@ -60,7 +52,8 @@ void sph_init(SPH *sph)
     pair->j = (unsigned int *)(calloc(30*particle->total,sizeof(unsigned int)));
 
     //mesh data init
-    mesh = (SPH_MESH)(calloc(MESH_DEEPTH_NUM,sizeof(unsigned int **)));
+    mesh = (SPH_MESH)(calloc(MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM,sizeof(int)));
+    /*
     for(int i=0;i<MESH_DEEPTH_NUM;i++)
     {
         mesh[i] = (unsigned int **)(calloc(MESH_LENGTH_NUM,sizeof(unsigned int *)));
@@ -69,6 +62,7 @@ void sph_init(SPH *sph)
             mesh[i][j] = (unsigned int *)(calloc(MESH_PTC_NUM,sizeof(unsigned int)));
         }
     }
+    */
     
     sph->mesh = mesh;
     sph->d_time = DELTA_TIME;

@@ -2,7 +2,7 @@
 #define __EQUATIONS_H__
 
 /* Include Headers Here */
-#include "SPH.H"
+#include "SPH.cuh"
 
 /* Extern Functions Here */
 extern void ptc_fluid_pressure(SPH *);

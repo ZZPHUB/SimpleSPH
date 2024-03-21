@@ -13,7 +13,7 @@
 #include <vtkDataArray.h>
 #include <vtkDoubleArray.h>
 
-#include "SPH.H"
+#include "SPH.cuh"
 
 /* Extern Function Here*/
 extern void ptc_rigid_generate(SPH *);
