@@ -28,6 +28,8 @@
 #define MESH_SPACING PTC_REGION_RADIUS //mesh spacing
 #define MESH_LENGTH_NUM (int)(TOL_DOMAIN_LENGTH/MESH_SPACING+1) //length-direction mesh number
 #define MESH_DEEPTH_NUM (int)(TOL_DOMAIN_DEEPTH/MESH_SPACING+1) //deepth-direction mesh number
+#define MESH_LENGTH_NUM_CUDA __double2int_rz(TOL_DOMAIN_LENGTH/MESH_SPACING+1) //length-direction mesh number
+#define MESH_DEEPTH_NUM_CUDA __double2int_rz(TOL_DOMAIN_DEEPTH/MESH_SPACING+1) //deepth-direction mesh number
 #define MESH_TOL_NUM (MESH_LENGTH_NUM*MESH_DEEPTH_NUM) //total mesh number
 #define MESH_PTC_NUM 201 //per mesh grid contain max paticle num
 
