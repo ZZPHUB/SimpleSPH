@@ -79,7 +79,7 @@ void ptc_mesh_process(SPH *sph)
 }
 
 
-__global__ void ptc_mesh_cuda(double *x,double *y,double *mesh,int ptc_num)
+__global__ void ptc_mesh_cuda(double *x,double *y,int *mesh,int ptc_num)
 {
     //const int bid = blockIdx.x;
     //const int tid = threadIdx.x;
@@ -104,7 +104,8 @@ __global__ void ptc_mesh_cuda(double *x,double *y,double *mesh,int ptc_num)
     {
         mid += mesh_lnum - 1;
     }
-    mesh[mid+atomicAdd(&mesh[mid+mesh_pnum], 1)] = id;
+    mid += atomicAdd(&mesh[mid+mesh_pnum],1);
+    mesh[mid] = id;
     /*
     head = mesh[j][k][MESH_PTC_NUM-1];
     if(head<MESH_PTC_NUM-1)
