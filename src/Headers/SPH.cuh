@@ -61,13 +61,14 @@
 
 #define LINEAR_EOS
 
-
+/*
 extern __constant__ __device__ int c;
 extern __constant__ __device__ int rho_0;
 extern __constant__ __device__ int mesh_lnum;
 extern __constant__ __device__ int mesh_dnum;
 extern __constant__ __device__ int mesh_pnum;
 extern __constant__ __device__ int mesh_spacing;
+*/
 
 /* Headers Include Here*/
 

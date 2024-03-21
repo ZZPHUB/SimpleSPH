@@ -13,8 +13,7 @@ void ptc_info_init(SPH *sph)
     {
         for(int i=0;i<particle->total;i++)
         {
-            particle->vx[i] = particle->vy[i] = particle->accx[i] = \
-            particle->accy[i]  = particle->dif_density[i] = 0;
+            particle->vx[i] = particle->vy[i] = 0;
             #ifndef ANALYSIS
                 particle->pressure[i] = 0.0;
                 particle->density[i] = REF_DENSITY;
