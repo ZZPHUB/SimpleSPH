@@ -1,4 +1,4 @@
-#include "PreProcess.H"
+#include "PreProcess.cuh"
 
 
 void ptc_fluid_generate(SPH *sph)

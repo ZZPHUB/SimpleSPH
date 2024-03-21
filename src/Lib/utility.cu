@@ -1,4 +1,4 @@
-#include "Lib.H"
+#include "Lib.cuh"
 
 void ptc_density_correct(SPH *sph)
 {

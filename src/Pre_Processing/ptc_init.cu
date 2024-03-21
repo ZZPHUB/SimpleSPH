@@ -1,4 +1,4 @@
-#include "PreProcess.H"
+#include "PreProcess.cuh"
 
 void ptc_info_init(SPH *sph)
 {

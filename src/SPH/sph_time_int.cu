@@ -1,4 +1,4 @@
-#include "SPH.H"
+#include "SPH.cuh"
 #include <fstream>
 #include <iomanip>
 #include <stdlib.h>

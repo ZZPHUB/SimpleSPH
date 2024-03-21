@@ -1,4 +1,4 @@
-#include "PreProcess.H"
+#include "PreProcess.cuh"
 using namespace std;
 
 void ptc_rigid_generate(SPH *sph)

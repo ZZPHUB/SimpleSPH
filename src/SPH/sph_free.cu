@@ -1,4 +1,4 @@
-#include "SPH.H"
+#include "SPH.cuh"
 
 void sph_free(SPH *sph)
 {

@@ -39,12 +39,13 @@ int main(void)
     CUDA_CHECK(cudaMalloc((double**)&dev_vy,particle.total*sizeof(double)));
     CUDA_CHECK(cudaMalloc((double**)&dev_rho,particle.total*sizeof(double)));
     CUDA_CHECK(cudaMalloc((double**)&dev_p,particle.total*sizeof(double)));
-
+/*
     CUDA_CHECK(cudaMalloc((double**)&dev_pair_i,size*sizeof(double)));
     CUDA_CHECK(cudaMalloc((double**)&dev_pair_j,size*sizeof(double)));
     CUDA_CHECK(cudaMalloc((double**)&dev_pair_accx,size*sizeof(double)));
     CUDA_CHECK(cudaMalloc((double**)&dev_pair_accy,size*sizeof(double)));
     CUDA_CHECK(cudaMalloc((double**)&dev_pair_drho,size*sizeof(double)));
+    */
 
     CUDA_CHECK(cudaMalloc((int**)&dev_mesh,MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM*sizeof(int)));
 

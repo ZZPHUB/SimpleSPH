@@ -1,4 +1,4 @@
-#include "Lib.H"
+#include "Lib.cuh"
 
 void ptc_info(SPH *sph)
 //void ptc_info(SPH_PARTICLE *particle,SPH_PAIR *pair,RIGID *wedge,unsigned int time)

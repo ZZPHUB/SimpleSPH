@@ -1,4 +1,4 @@
-#include "Lib.H"
+#include "Lib.cuh"
 using namespace std;
 
 void ptc_kernel_parallel(SPH *sph)
