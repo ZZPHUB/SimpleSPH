@@ -11,6 +11,9 @@ typedef  struct
     double *y;  //y coordinations of position,iterative
     double *vx; //x-direction velosity,iterative
     double *vy; //y-direction velosity,iterative
+    double *accx;//
+    double *accy;//
+    double *dif_density;//
     double *pressure;   //pressure of paritcle,non-iterative
     double *density;    //density of particle,iterative
     double *temp_x;     //for predict-correct scheme,non-iterative

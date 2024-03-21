@@ -30,6 +30,9 @@ void sph_init(SPH *sph)
     particle->y = (double *)(calloc(particle->total,sizeof(double)));
     particle->vx = (double *)(calloc(particle->total,sizeof(double)));
     particle->vy = (double *)(calloc(particle->total,sizeof(double)));
+    particle->accx = (double *)(calloc(particle->total,sizeof(double)));
+    particle->accy = (double *)(calloc(particle->total,sizeof(double)));
+    particle->dif_density = (double *)(calloc(particle->total,sizeof(double)));
     particle->density = (double *)(calloc(particle->total,sizeof(double)));
     particle->temp_x = (double *)(calloc(particle->total,sizeof(double)));
     particle->temp_y = (double *)(calloc(particle->total,sizeof(double)));
