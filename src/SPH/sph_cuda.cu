@@ -5,12 +5,12 @@
 #include <time.h>
 using namespace std;
 
-__constant__ __device__ int c = ART_SOUND_VEL;
-__constant__ __device__ int rho_0 = REF_DENSITY;
-__constant__ __device__ int mesh_lnum = MESH_LENGTH_NUM;
-__constant__ __device__ int mesh_dnum = MESH_DEEPTH_NUM;
-__constant__ __device__ int mesh_pnum = MESH_PTC_NUM;
-__constant__ __device__ int mesh_spacing = MESH_SPACING;
+__constant__  int c = ART_SOUND_VEL;
+__constant__  int rho_0 = REF_DENSITY;
+__constant__  int mesh_lnum = MESH_LENGTH_NUM;
+__constant__  int mesh_dnum = MESH_DEEPTH_NUM;
+__constant__  int mesh_pnum = MESH_PTC_NUM;
+__constant__  int mesh_spacing = MESH_SPACING;
 
 int main(void)
 { 
@@ -39,6 +39,8 @@ int main(void)
     dev_pair_i,dev_pair_j,dev_pair_accx,dev_pair_accy,dev_pair_drho = NULL;
     */
     int *dev_mesh =NULL;
+
+    int temp = 0;
 
     CUDA_CHECK(cudaMalloc((double**)&dev_x,particle.total*sizeof(double)));
     CUDA_CHECK(cudaMalloc((double**)&dev_y,particle.total*sizeof(double)));
@@ -89,7 +91,7 @@ int main(void)
         for(unsigned int j=0;j<MESH_LENGTH_NUM;j++)
         {
             for(unsigned int k=0;k<MESH_PTC_NUM;k++)
-            double temp = i*MESH_LENGTH_NUM+j+k;
+            temp = i*MESH_LENGTH_NUM+j+k;
             vtkfile << setiosflags(ios::scientific) << particle.x[mesh[temp]] << " " \
             << particle.y[mesh[temp]] << " " << 0.0 << endl;
         }
