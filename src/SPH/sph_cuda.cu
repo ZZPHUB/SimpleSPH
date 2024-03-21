@@ -29,8 +29,15 @@ int main(void)
     sph_init(&sph); 
     cudaSetDevice(0);
 
-    double *dev_x,dev_y,dev_vx,dev_vy,dev_rho,dev_p,\
+    double *dev_x;
+    double *dev_y;
+    double *dev_vx;
+    double *dev_vy;
+    double *dev_rho
+    double *dev_p;
+    /*
     dev_pair_i,dev_pair_j,dev_pair_accx,dev_pair_accy,dev_pair_drho = NULL;
+    */
     double *dev_mesh =NULL;
 
     CUDA_CHECK(cudaMalloc((double**)&dev_x,particle.total*sizeof(double)));
