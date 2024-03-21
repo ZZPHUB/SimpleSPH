@@ -53,14 +53,14 @@ int main(void)
     sph_avg_time(&sph);
     for(sph.current_step;sph.current_step<sph.total_step;sph.current_step++)
     {
-        cudaMemcpy(dev_x, particle.x, particle.total*sizeof(double), cudaMemcpyHostToDevice); 
-        cudaMemcpy(dev_y, particle.y, particle.total*sizeof(double), cudaMemcpyHostToDevice);
-        cudaMemcpy(dev_vx, particle.vx, particle.total*sizeof(double), cudaMemcpyHostToDevice);
-        cudaMemcpy(dev_vy, particle.vy, particle.total*sizeof(double), cudaMemcpyHostToDevice);
-        cudaMemcpy(dev_rho, particle.rho, particle.total*sizeof(double), cudaMemcpyHostToDevice);
-        cudaMemcpy(dev_p, particle.pressure, particle.total*sizeof(double), cudaMemcpyHostToDevice);
+        cudaMemcpy((void *)dev_x, (void *)particle.x, particle.total*sizeof(double), cudaMemcpyHostToDevice); 
+        cudaMemcpy((void *)dev_y, (void *)particle.y, particle.total*sizeof(double), cudaMemcpyHostToDevice);
+        cudaMemcpy((void *)dev_vx, (void *)particle.vx, particle.total*sizeof(double), cudaMemcpyHostToDevice);
+        cudaMemcpy((void *)dev_vy, (void *)particle.vy, particle.total*sizeof(double), cudaMemcpyHostToDevice);
+        cudaMemcpy((void *)dev_rho, (void *)particle.density, particle.total*sizeof(double), cudaMemcpyHostToDevice);
+        cudaMemcpy((void *)dev_p, (void *)particle.pressure, particle.total*sizeof(double), cudaMemcpyHostToDevice);
 
-        CUDA_CHECK(ptc_mesh_cuda<<<384,160>>>(x,y,dev_mesh,particle.total));
+        ptc_mesh_cuda<<<384,160>>>(dev_x,dev_y,dev_mesh,particle.total);
         cudaMemcpy(mesh, dev_mesh, MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM,cudaMemcpyDeviceToHost);
 
 
@@ -75,15 +75,16 @@ int main(void)
     vtkfile << "sph data" << endl;
     vtkfile << "ASCII" << endl;
     vtkfile << "DATASET UNSTRUCTURED_GRID" << endl;
-    vtkfile << "POINTS " << ptc_num << " " << "double" << endl;
+    vtkfile << "POINTS " << particle.total << " " << "double" << endl;
 
     for(unsigned int i=0;i<MESH_DEEPTH_NUM;i++)
     {
         for(unsigned int j=0;j<MESH_LENGTH_NUM;j++)
         {
             for(unsigned int k=0;k<MESH_PTC_NUM;k++)
-            vtkfile << setiosflags(ios::scientific) << particle->x[mesh[i*MESH_LENGTH_NUM+j+k]] << " " \
-            << particle->y[mesh[i*MESH_LENGTH_NUM+j+k]] << " " << 0.0 << endl;
+            double temp = i*MESH_LENGTH_NUM+j+k;
+            vtkfile << setiosflags(ios::scientific) << particle->x[mesh[temp]] << " " \
+            << particle->y[mesh[temp]] << " " << 0.0 << endl;
         }
     }
     vtkfile.close();
