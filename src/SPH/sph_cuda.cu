@@ -33,12 +33,12 @@ int main(void)
     double *dev_y;
     double *dev_vx;
     double *dev_vy;
-    double *dev_rho
+    double *dev_rho;
     double *dev_p;
     /*
     dev_pair_i,dev_pair_j,dev_pair_accx,dev_pair_accy,dev_pair_drho = NULL;
     */
-    double *dev_mesh =NULL;
+    int *dev_mesh =NULL;
 
     CUDA_CHECK(cudaMalloc((double**)&dev_x,particle.total*sizeof(double)));
     CUDA_CHECK(cudaMalloc((double**)&dev_y,particle.total*sizeof(double)));
@@ -72,7 +72,7 @@ int main(void)
 
 
     string filename = "../data/postprocess/vtk/sph"; 
-    filename += to_string(sph->current_step/PRINT_TIME_STEP);
+    filename += to_string(sph.current_step/PRINT_TIME_STEP);
     filename += ".vtk";
 
     ofstream vtkfile;
@@ -90,8 +90,8 @@ int main(void)
         {
             for(unsigned int k=0;k<MESH_PTC_NUM;k++)
             double temp = i*MESH_LENGTH_NUM+j+k;
-            vtkfile << setiosflags(ios::scientific) << particle->x[mesh[temp]] << " " \
-            << particle->y[mesh[temp]] << " " << 0.0 << endl;
+            vtkfile << setiosflags(ios::scientific) << particle.x[mesh[temp]] << " " \
+            << particle.y[mesh[temp]] << " " << 0.0 << endl;
         }
     }
     vtkfile.close();
