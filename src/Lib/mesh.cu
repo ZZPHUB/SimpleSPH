@@ -90,7 +90,7 @@ __global__ void ptc_mesh_cuda(double *x,double *y,double *mesh,int ptc_num)
 
     if(y[id] < TOL_DOMAIN_DEEPTH && y[id] >= 0)
     {
-        mid = __double2in_rz(y[id]/mesh_spacing)*mesh_lnum;
+        mid = __double2int_rz(y[id]/mesh_spacing)*mesh_lnum;
     }
     else if(y[id] >= TOL_DOMAIN_DEEPTH)
     {
@@ -98,9 +98,9 @@ __global__ void ptc_mesh_cuda(double *x,double *y,double *mesh,int ptc_num)
     }
     if(x[id] < TOL_DOMAIN_LENGTH && x[id] >= 0)
     {
-        mid += __double2in_rz(x[id]/mesh_spacing);
+        mid += __double2int_rz(x[id]/mesh_spacing);
     }
-    else if(particle->x[id] >= TOL_DOMAIN_LENGTH)
+    else if(x[id] >= TOL_DOMAIN_LENGTH)
     {
         mid += mesh_lnum - 1;
     }
