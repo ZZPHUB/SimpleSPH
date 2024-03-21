@@ -104,7 +104,7 @@ __global__ void ptc_mesh_cuda(double *x,double *y,double *mesh,int ptc_num)
     {
         mid += mesh_lnum - 1;
     }
-    mesh[mid+atomicAdd(&mesh[mid][mesh_pnum], 1)] = id;
+    mesh[mid+atomicAdd(&mesh[mid+mesh_pnum], 1)] = id;
     /*
     head = mesh[j][k][MESH_PTC_NUM-1];
     if(head<MESH_PTC_NUM-1)
