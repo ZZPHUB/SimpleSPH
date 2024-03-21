@@ -73,7 +73,7 @@ void sph_init(SPH *sph)
     sph->mesh = mesh;
     sph->d_time = DELTA_TIME;
     sph->c = ART_SOUND_VEL;
-    sph->g = GRAVITY_ACC;
+    sph->g = 0.0;
     sph->avg_time = 0.0;
     
     
