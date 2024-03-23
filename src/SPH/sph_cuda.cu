@@ -61,7 +61,7 @@ int main(void)
     CUDA_CHECK(cudaMalloc((int**)&dev_mesh,MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM*sizeof(int)));
 
     CUDA_CHECK(cudaMalloc((int**)&dev_count,sizeof(int)));
-    CUDA_CHECK(cudaMemset(dev_count,sizeof(int)));
+    CUDA_CHECK(cudaMemset(dev_count,0,sizeof(int)));
        
    // sph_avg_time(&sph);
 
@@ -77,7 +77,7 @@ int main(void)
         CUDA_CHECK(cudaDeviceSynchronize());
         sph_nnps_cuda<<<grid,block>>>(dev_mesh,dev_x,dev_y,dev_type,dev_pair_i,dev_pair_j,dev_count);
         CUDA_CHECK(cudaDeviceSynchronize());
-        CUDA_CHECK(cudaMemcpy(&host_count,dev_count,sizeof(int)),cudaMemcpyDeviceToHost);
+        CUDA_CHECK(cudaMemcpy(&host_count,dev_count,sizeof(int),cudaMemcpyDeviceToHost));
         
         //__global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_i,int *pair_j)
         //CUDA_CHECK(cudaMemcpy(mesh, dev_mesh, sizeof(int)*MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM,cudaMemcpyDeviceToHost));
