@@ -63,7 +63,7 @@ int main(void)
 
        
    // sph_avg_time(&sph);
-        CUDA_CHECK(cudaMemcpy(&count,&host_count,sizeof(int),cudaMemcpyHostToDevice));
+        CUDA_CHECK(cudaMemcpyToSymbol(count,&host_count,sizeof(int)));
         CUDA_CHECK(cudaMemcpy(dev_x, particle.x, particle.total*sizeof(double), cudaMemcpyHostToDevice)); 
         CUDA_CHECK(cudaMemcpy(dev_y, particle.y, particle.total*sizeof(double), cudaMemcpyHostToDevice)); 
         CUDA_CHECK(cudaMemcpy(dev_vx, particle.vx, particle.total*sizeof(double), cudaMemcpyHostToDevice)); 
@@ -75,7 +75,7 @@ int main(void)
         sph_mesh_cuda<<<384,160>>>(dev_x,dev_y,dev_mesh,particle.total);
         cudaDeviceSynchronize();
         sph_nnps_cuda<<<grid,block>>>(dev_mesh,dev_x,dev_y,dev_type,dev_pair_i,dev_pair_j);
-        cudaMemcpy(&host_count,&count,sizeof(int),cudaMemcpyDeviceToHost);
+        cudaMemcpyFromSymbol(&host_count,count,sizeof(int));
         
         //__global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_i,int *pair_j)
         //CUDA_CHECK(cudaMemcpy(mesh, dev_mesh, sizeof(int)*MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM,cudaMemcpyDeviceToHost));
