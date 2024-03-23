@@ -31,9 +31,9 @@ int main(void)
     int *dev_type;
     int *dev_pair_i;
     int *dev_pair_j;
-    int *dev_pair_w;
-    int *dev_pair_dwdx;
-    int *dev_pair_dwdy;
+    double *dev_pair_w;
+    double *dev_pair_dwdx;
+    double *dev_pair_dwdy;
     
     /*
     dev_pair_i,dev_pair_j,dev_pair_accx,dev_pair_accy,dev_pair_drho = NULL;
@@ -56,9 +56,9 @@ int main(void)
 
     CUDA_CHECK(cudaMalloc((int**)&dev_pair_i,32*sph.particle->total*sizeof(double)));
     CUDA_CHECK(cudaMalloc((int**)&dev_pair_j,32*sph.particle->total*sizeof(double)));
-    CUDA_CHECK(cudaMalloc((int**)&dev_pair_w,32*sph.particle->total*sizeof(double)));
-    CUDA_CHECK(cudaMalloc((int**)&dev_pair_dwdx,32*sph.particle->total*sizeof(double)));
-    CUDA_CHECK(cudaMalloc((int**)&dev_pair_dwdy,32*sph.particle->total*sizeof(double)));
+    CUDA_CHECK(cudaMalloc((double**)&dev_pair_w,32*sph.particle->total*sizeof(double)));
+    CUDA_CHECK(cudaMalloc((double**)&dev_pair_dwdx,32*sph.particle->total*sizeof(double)));
+    CUDA_CHECK(cudaMalloc((double**)&dev_pair_dwdy,32*sph.particle->total*sizeof(double)));
     /*
     CUDA_CHECK(cudaMalloc((double**)&dev_pair_accx,size*sizeof(double)));
     CUDA_CHECK(cudaMalloc((double**)&dev_pair_accy,size*sizeof(double)));
