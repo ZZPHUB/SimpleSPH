@@ -32,6 +32,7 @@ int main(void)
     double *dev_p;
     double *dev_pair_i;
     double *dev_pair_j;
+    int *dev_type;
     /*
     dev_pair_i,dev_pair_j,dev_pair_accx,dev_pair_accy,dev_pair_drho = NULL;
     */
@@ -48,9 +49,10 @@ int main(void)
     CUDA_CHECK(cudaMalloc((double**)&dev_vy,particle.total*sizeof(double)));
     CUDA_CHECK(cudaMalloc((double**)&dev_rho,particle.total*sizeof(double)));
     CUDA_CHECK(cudaMalloc((double**)&dev_p,particle.total*sizeof(double)));
+    CUDA_CHECK(cudaMalloc((int**)&dev_type,particle.total*sizeof(double)));
 
-    CUDA_CHECK(cudaMalloc((double**)&dev_pair_i,size*sizeof(double)));
-    CUDA_CHECK(cudaMalloc((double**)&dev_pair_j,size*sizeof(double)));
+    CUDA_CHECK(cudaMalloc((double**)&dev_pair_i,32*particle.total*sizeof(double)));
+    CUDA_CHECK(cudaMalloc((double**)&dev_pair_j,32*particle.total*sizeof(double)));
     /*
     CUDA_CHECK(cudaMalloc((double**)&dev_pair_accx,size*sizeof(double)));
     CUDA_CHECK(cudaMalloc((double**)&dev_pair_accy,size*sizeof(double)));
@@ -61,11 +63,12 @@ int main(void)
 
        
    // sph_avg_time(&sph);
-        CUDA_CHECK(cudaMencpy(&count,&host_count,sizeof(int),cudaMencpyHostToDevice));
+        CUDA_CHECK(cudaMencpy(&count,&host_count,sizeof(int),cudaMemcpyHostToDevice));
         CUDA_CHECK(cudaMemcpy(dev_x, particle.x, particle.total*sizeof(double), cudaMemcpyHostToDevice)); 
         CUDA_CHECK(cudaMemcpy(dev_y, particle.y, particle.total*sizeof(double), cudaMemcpyHostToDevice)); 
         CUDA_CHECK(cudaMemcpy(dev_vx, particle.vx, particle.total*sizeof(double), cudaMemcpyHostToDevice)); 
         CUDA_CHECK(cudaMemcpy(dev_vy, particle.vy, particle.total*sizeof(double), cudaMemcpyHostToDevice)); 
+        CUDA_CHECK(cudaMemcpy(dev_type, particle.type, particle.total*sizeof(double), cudaMemcpyHostToDevice)); 
         CUDA_CHECK(cudaMemcpy(dev_rho, particle.density, particle.total*sizeof(double), cudaMemcpyHostToDevice)); 
         dim3 block(64,64);
         dim3 grid(MESH_LENGTH_NUM,MESH_DEEPTH_NUM);
