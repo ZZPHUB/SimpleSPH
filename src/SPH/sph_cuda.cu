@@ -6,7 +6,7 @@
 using namespace std;
 
 int main(void)
-{ 
+{
     SPH_PARTICLE particle;
     SPH_KERNEL kernel;
     SPH_PAIR pair;
@@ -42,16 +42,16 @@ int main(void)
     int *dev_count;
 
 
-    CUDA_CHECK(cudaMalloc((double**)&dev_x,particle.total*sizeof(double)));
-    CUDA_CHECK(cudaMalloc((double**)&dev_y,particle.total*sizeof(double)));
-    CUDA_CHECK(cudaMalloc((double**)&dev_vx,particle.total*sizeof(double)));
-    CUDA_CHECK(cudaMalloc((double**)&dev_vy,particle.total*sizeof(double)));
-    CUDA_CHECK(cudaMalloc((double**)&dev_rho,particle.total*sizeof(double)));
-    CUDA_CHECK(cudaMalloc((double**)&dev_p,particle.total*sizeof(double)));
-    CUDA_CHECK(cudaMalloc((int**)&dev_type,particle.total*sizeof(double)));
+    CUDA_CHECK(cudaMalloc((double**)&dev_x,sph.particle->total*sizeof(double)));
+    CUDA_CHECK(cudaMalloc((double**)&dev_y,sph.particle->total*sizeof(double)));
+    CUDA_CHECK(cudaMalloc((double**)&dev_vx,sph.particle->total*sizeof(double)));
+    CUDA_CHECK(cudaMalloc((double**)&dev_vy,sph.particle->total*sizeof(double)));
+    CUDA_CHECK(cudaMalloc((double**)&dev_rho,sph.particle->total*sizeof(double)));
+    CUDA_CHECK(cudaMalloc((double**)&dev_p,sph.particle->total*sizeof(double)));
+    CUDA_CHECK(cudaMalloc((int**)&dev_type,sph.particle->total*sizeof(double)));
 
-    CUDA_CHECK(cudaMalloc((int**)&dev_pair_i,32*particle.total*sizeof(double)));
-    CUDA_CHECK(cudaMalloc((int**)&dev_pair_j,32*particle.total*sizeof(double)));
+    CUDA_CHECK(cudaMalloc((int**)&dev_pair_i,32*sph.particle->total*sizeof(double)));
+    CUDA_CHECK(cudaMalloc((int**)&dev_pair_j,32*sph.particle->total*sizeof(double)));
     /*
     CUDA_CHECK(cudaMalloc((double**)&dev_pair_accx,size*sizeof(double)));
     CUDA_CHECK(cudaMalloc((double**)&dev_pair_accy,size*sizeof(double)));
@@ -65,24 +65,24 @@ int main(void)
        
    // sph_avg_time(&sph);
 
-        CUDA_CHECK(cudaMemcpy(dev_x, particle.x, particle.total*sizeof(double), cudaMemcpyHostToDevice)); 
-        CUDA_CHECK(cudaMemcpy(dev_y, particle.y, particle.total*sizeof(double), cudaMemcpyHostToDevice)); 
-        CUDA_CHECK(cudaMemcpy(dev_vx, particle.vx, particle.total*sizeof(double), cudaMemcpyHostToDevice)); 
-        CUDA_CHECK(cudaMemcpy(dev_vy, particle.vy, particle.total*sizeof(double), cudaMemcpyHostToDevice)); 
-        CUDA_CHECK(cudaMemcpy(dev_type, particle.type, particle.total*sizeof(double), cudaMemcpyHostToDevice)); 
-        CUDA_CHECK(cudaMemcpy(dev_rho, particle.density, particle.total*sizeof(double), cudaMemcpyHostToDevice)); 
+        CUDA_CHECK(cudaMemcpy(dev_x, particle.x, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice)); 
+        CUDA_CHECK(cudaMemcpy(dev_y, particle.y, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice)); 
+        CUDA_CHECK(cudaMemcpy(dev_vx, particle.vx, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice)); 
+        CUDA_CHECK(cudaMemcpy(dev_vy, particle.vy, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice)); 
+        CUDA_CHECK(cudaMemcpy(dev_type, particle.type, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice)); 
+        CUDA_CHECK(cudaMemcpy(dev_rho, particle.density, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice)); 
         dim3 block(32,32);
         dim3 grid(MESH_LENGTH_NUM,MESH_DEEPTH_NUM);
-        sph_mesh_cuda<<<384,160>>>(dev_x,dev_y,dev_mesh,particle.total);
+        sph_mesh_cuda<<<384,160>>>(dev_x,dev_y,dev_mesh,sph.particle->total);
         CUDA_CHECK(cudaDeviceSynchronize());
         sph_nnps_cuda<<<grid,block>>>(dev_mesh,dev_x,dev_y,dev_type,dev_pair_i,dev_pair_j,dev_count);
         CUDA_CHECK(cudaDeviceSynchronize());
         CUDA_CHECK(cudaMemcpy(&host_count,dev_count,sizeof(int),cudaMemcpyDeviceToHost));
         
         //__global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_i,int *pair_j)
-        //CUDA_CHECK(cudaMemcpy(mesh, dev_mesh, sizeof(int)*MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM,cudaMemcpyDeviceToHost));
+        CUDA_CHECK(cudaMemcpy(sph.mesh, dev_mesh, sizeof(int)*MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM,cudaMemcpyDeviceToHost));
         printf("gpu find :%d \n",host_count);
-/*
+
     string filename = "../data/postprocess/vtk/sph"; 
     filename += to_string(sph.current_step/PRINT_TIME_STEP);
     filename += ".vtk";
@@ -94,7 +94,7 @@ int main(void)
     vtkfile << "sph data" << endl;
     vtkfile << "ASCII" << endl;
     vtkfile << "DATASET UNSTRUCTURED_GRID" << endl;
-    vtkfile << "POINTS " << particle.total << " " << "double" << endl;
+    vtkfile << "POINTS " << sph.particle->total << " " << "double" << endl;
 
     for(unsigned int i=0;i<MESH_DEEPTH_NUM;i++)
     {
@@ -104,14 +104,13 @@ int main(void)
             for(unsigned int k=0;k<temp;k++)
             {
                 temp_1 = sph.mesh[i*MESH_LENGTH_NUM+j+MESH_LENGTH_NUM*MESH_DEEPTH_NUM*k];
-                vtkfile << setiosflags(ios::scientific) << particle.x[temp_1] << " " \
-                << particle.y[temp_1] << " " << 0.0 << endl;
+                vtkfile << setiosflags(ios::scientific) << sph.particle->x[temp_1] << " " \
+                << sph.particle->y[temp_1] << " " << 0.0 << endl;
             }
         }
     }
     vtkfile.close();
 
-*/
     sph_free(&sph);
     return 0;
 }
