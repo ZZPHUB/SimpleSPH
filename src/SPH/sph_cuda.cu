@@ -71,9 +71,9 @@ int main(void)
         dim3 block(64,64);
         dim3 grid(MESH_LENGTH_NUM,MESH_DEEPTH_NUM);
         sph_mesh_cuda<<<384,160>>>(dev_x,dev_y,dev_mesh,particle.total);
-        cudaDeviceSynchronize();
+        CUDA_CHECK(cudaDeviceSynchronize());
         sph_nnps_cuda<<<grid,block>>>(dev_mesh,dev_x,dev_y,dev_type,dev_pair_i,dev_pair_j);
-        cudaMemcpyFromSymbol(&host_count,dev_count,sizeof(int));
+        CUDA_CHECK(cudaMemcpyFromSymbol(&host_count,dev_count,sizeof(int)));
         
         //__global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_i,int *pair_j)
         //CUDA_CHECK(cudaMemcpy(mesh, dev_mesh, sizeof(int)*MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM,cudaMemcpyDeviceToHost));
