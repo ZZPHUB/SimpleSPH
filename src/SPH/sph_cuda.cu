@@ -87,8 +87,8 @@ int main(void)
         CUDA_CHECK(cudaDeviceSynchronize());
         CUDA_CHECK(cudaMemcpy(&host_count,dev_count,sizeof(int),cudaMemcpyDeviceToHost));
 
-        dim3 block(512);
-        dim3 grid((int)(sph.particle->total/16)+1);
+        dim3 block_1(512);
+        dim3 grid_1((int)(sph.particle->total/16)+1);
         sph_kernel_cuda<<<grid,block>>>(dev_x,dev_y,dev_pair_w,dev_pair_dwdx,dev_pair_dwdy,dev_pair_i,dev_pair_j,host_count);
         CUDA_CHECK(cudaDeviceSynchronize());
         //sph_kernel_cuda(double *x,double *y,double *w,double *dwdx,double *dwdy,int *pair_i,int *pair_j,int pair_num)
