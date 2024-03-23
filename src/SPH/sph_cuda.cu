@@ -28,9 +28,13 @@ int main(void)
     double *dev_vy;
     double *dev_rho;
     double *dev_p;
+    int *dev_type;
     int *dev_pair_i;
     int *dev_pair_j;
-    int *dev_type;
+    int *dev_pair_w;
+    int *dev_pair_dwdx;
+    int *dev_pair_dwdy;
+    
     /*
     dev_pair_i,dev_pair_j,dev_pair_accx,dev_pair_accy,dev_pair_drho = NULL;
     */
@@ -52,6 +56,9 @@ int main(void)
 
     CUDA_CHECK(cudaMalloc((int**)&dev_pair_i,32*sph.particle->total*sizeof(double)));
     CUDA_CHECK(cudaMalloc((int**)&dev_pair_j,32*sph.particle->total*sizeof(double)));
+    CUDA_CHECK(cudaMalloc((int**)&dev_pair_w,32*sph.particle->total*sizeof(double)));
+    CUDA_CHECK(cudaMalloc((int**)&dev_pair_dwdx,32*sph.particle->total*sizeof(double)));
+    CUDA_CHECK(cudaMalloc((int**)&dev_pair_dwdy,32*sph.particle->total*sizeof(double)));
     /*
     CUDA_CHECK(cudaMalloc((double**)&dev_pair_accx,size*sizeof(double)));
     CUDA_CHECK(cudaMalloc((double**)&dev_pair_accy,size*sizeof(double)));
@@ -76,10 +83,18 @@ int main(void)
         sph_mesh_cuda<<<384,160>>>(dev_x,dev_y,dev_mesh,sph.particle->total);
         CUDA_CHECK(cudaDeviceSynchronize());
         sph_nnps_cuda<<<grid,block>>>(dev_mesh,dev_x,dev_y,dev_type,dev_pair_i,dev_pair_j,dev_count);
+        //__global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_i,int *pair_j)
         CUDA_CHECK(cudaDeviceSynchronize());
         CUDA_CHECK(cudaMemcpy(&host_count,dev_count,sizeof(int),cudaMemcpyDeviceToHost));
+
+        dim3 block(512);
+        dim3 grid((int)(sph.particle->total/16)+1);
+        sph_kernel_cuda<<<grid,block>>>(dev_x,dev_y,dev_pair_w,dev_pair_dwdx,dev_pair_dwdy,dev_pair_i,dev_pair_j,host_count);
+        CUDA_CHECK(cudaDeviceSynchronize());
+        //sph_kernel_cuda(double *x,double *y,double *w,double *dwdx,double *dwdy,int *pair_i,int *pair_j,int pair_num)
+
         
-        //__global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_i,int *pair_j)
+        
         CUDA_CHECK(cudaMemcpy(sph.mesh, dev_mesh, sizeof(int)*MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM,cudaMemcpyDeviceToHost));
         printf("gpu find :%d \n",host_count);
 
