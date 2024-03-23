@@ -76,16 +76,7 @@ int main(void)
         
         //__global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_i,int *pair_j)
         //CUDA_CHECK(cudaMemcpy(mesh, dev_mesh, sizeof(int)*MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM,cudaMemcpyDeviceToHost));
-        ptc_mesh_process(&sph);
-        ptc_nnps_mesh(&sph);
-        if(host_count == sph.pair->total)
-        {
-            printf("successfully nnpsed \n")
-        }
-        else
-        {
-            printf("gpu:%d  cpu:%d \n",host_count,sph.pair->total);
-        }
+        printf("gpu find :%d \n",host_count);
 /*
     string filename = "../data/postprocess/vtk/sph"; 
     filename += to_string(sph.current_step/PRINT_TIME_STEP);
