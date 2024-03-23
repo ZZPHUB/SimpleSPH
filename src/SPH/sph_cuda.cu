@@ -39,6 +39,10 @@ int main(void)
     int temp = 0;
     int temp_1 = 0;
     int host_count = 0;
+    int host_mesh_lnum = MESH_LENGTH_NUM;
+    int host_mesh_dnum = MESH_DEEPTH_NUM;
+    int host_mesh_tnum = host_mesh_dnum*host_mesh_lnum;
+    double host_mesh_spacing = MESH_SPACING;
 
 
     CUDA_CHECK(cudaMalloc((double**)&dev_x,particle.total*sizeof(double)));
@@ -62,6 +66,11 @@ int main(void)
        
    // sph_avg_time(&sph);
         CUDA_CHECK(cudaMemcpyToSymbol(dev_count,&host_count,sizeof(int)));
+        CUDA_CHECK(cudaMemcpyToSymbol(dev_mesh_lnum,&host_mesh_lnum,sizeof(int)));
+        CUDA_CHECK(cudaMemcpyToSymbol(dev_mesh_dnum,&host_mesh_dnum,sizeof(int)));
+        CUDA_CHECK(cudaMemcpyToSymbol(dev_mesh_tnum,&host_mesh_tnum,sizeof(int)));
+        CUDA_CHECK(cudaMemcpyToSymbol(dev_mesh_spacing,&host_mesh_spacing,sizeof(double)));
+
         CUDA_CHECK(cudaMemcpy(dev_x, particle.x, particle.total*sizeof(double), cudaMemcpyHostToDevice)); 
         CUDA_CHECK(cudaMemcpy(dev_y, particle.y, particle.total*sizeof(double), cudaMemcpyHostToDevice)); 
         CUDA_CHECK(cudaMemcpy(dev_vx, particle.vx, particle.total*sizeof(double), cudaMemcpyHostToDevice)); 

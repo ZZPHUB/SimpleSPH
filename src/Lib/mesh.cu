@@ -11,21 +11,21 @@ __global__ void sph_mesh_cuda(double *x,double *y,int *mesh,int ptc_num)
 
     if(y[id] < TOL_DOMAIN_DEEPTH && y[id] >= 0)
     {
-        mid = __double2int_rz(y[id]/MESH_SPACING)*MESH_LENGTH_NUM_CUDA;
+        mid = __double2int_rz(y[id]/dev_mesh_spacing)*dev_mesh_lnum;
     }
     else
     {
-        mid = (MESH_DEEPTH_NUM_CUDA - 1)*MESH_LENGTH_NUM_CUDA;
+        mid = (dev_mesh_dnum - 1)*dev_mesh_lnum;
     }
     if(x[id] < TOL_DOMAIN_LENGTH && x[id] >= 0)
     {
-        mid += __double2int_rz(x[id]/MESH_SPACING);
+        mid += __double2int_rz(x[id]/dev_mesh_spacing);
     }
     else
     {
-        mid += MESH_LENGTH_NUM_CUDA - 1;
+        mid += dev_mesh_lnum - 1;
     }
-    mid += MESH_DEEPTH_NUM_CUDA*MESH_LENGTH_NUM_CUDA*atomicAdd(&mesh[mid+(MESH_PTC_NUM-1)*MESH_DEEPTH_NUM_CUDA*MESH_LENGTH_NUM_CUDA],1);
+    mid += dev_mesh_tnum*atomicAdd(&mesh[mid+(MESH_PTC_NUM-1)*dev_mesh_tnum],1);
     mesh[mid] = id;
 }
 
