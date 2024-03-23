@@ -89,7 +89,7 @@ int main(void)
 
         dim3 block_1(512);
         dim3 grid_1((int)(sph.particle->total/16)+1);
-        sph_kernel_cuda<<<grid,block>>>(dev_x,dev_y,dev_pair_w,dev_pair_dwdx,dev_pair_dwdy,dev_pair_i,dev_pair_j,host_count);
+        sph_kernel_cuda<<<grid_1,block_1>>>(dev_x,dev_y,dev_pair_w,dev_pair_dwdx,dev_pair_dwdy,dev_pair_i,dev_pair_j,host_count);
         CUDA_CHECK(cudaDeviceSynchronize());
         //sph_kernel_cuda(double *x,double *y,double *w,double *dwdx,double *dwdy,int *pair_i,int *pair_j,int pair_num)
 
