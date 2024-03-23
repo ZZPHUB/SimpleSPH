@@ -25,7 +25,7 @@ __global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_
     {
         j = blockIdx.x + blockIdx.y*dev_mesh_lnum + threadIdx.y*dev_mesh_tnum;
         q = (x[mesh[i]]-x[mesh[j]])*(x[mesh[i]]-x[mesh[j]])+(y[mesh[i]]-y[mesh[j]])*(y[mesh[i]]-y[mesh[j]]);
-        q = sqrt(q);
+        q = sqrt(q)/PTC_SML;
         if(q<2.0)
         {
             if(type[mesh[i]] == 0)
@@ -51,7 +51,7 @@ __global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_
         {
             j = (blockIdx.x+1) + blockIdx.y*dev_mesh_lnum + threadIdx.y*dev_mesh_tnum;
             q = (x[mesh[i]]-x[mesh[j]])*(x[mesh[i]]-x[mesh[j]])+(y[mesh[i]]-y[mesh[j]])*(y[mesh[i]]-y[mesh[j]]);
-            q = sqrt(q);
+            q = sqrt(q)/PTC_SML;
             if(q<2.0)
             {
                 if(type[mesh[i]] == 0)
@@ -78,7 +78,7 @@ __global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_
         {
             j = blockIdx.x +( blockIdx.y+1)*dev_mesh_lnum + threadIdx.y*dev_mesh_tnum;
             q = (x[mesh[i]]-x[mesh[j]])*(x[mesh[i]]-x[mesh[j]])+(y[mesh[i]]-y[mesh[j]])*(y[mesh[i]]-y[mesh[j]]);
-            q = sqrt(q);
+            q = sqrt(q)/PTC_SML;
             if(q<2.0)
             {
                 if(type[mesh[i]] == 0)
@@ -105,7 +105,7 @@ __global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_
         {
             j = ( blockIdx.x+1) +( blockIdx.y+1)*dev_mesh_lnum + threadIdx.y*dev_mesh_tnum;
             q = (x[mesh[i]]-x[mesh[j]])*(x[mesh[i]]-x[mesh[j]])+(y[mesh[i]]-y[mesh[j]])*(y[mesh[i]]-y[mesh[j]]);
-            q = sqrt(q);
+            q = sqrt(q)/PTC_SML;
             if(q<2.0)
             {
                 if(type[mesh[i]] == 0)
@@ -132,7 +132,7 @@ __global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_
         {
             j = ( blockIdx.x+1) +( blockIdx.y-1)*dev_mesh_lnum + threadIdx.y*dev_mesh_tnum;
             q = (x[mesh[i]]-x[mesh[j]])*(x[mesh[i]]-x[mesh[j]])+(y[mesh[i]]-y[mesh[j]])*(y[mesh[i]]-y[mesh[j]]);
-            q = sqrt(q);
+            q = sqrt(q)/PTC_SML;
             if(q<2.0)
             {
                 if(type[mesh[i]] == 0)
