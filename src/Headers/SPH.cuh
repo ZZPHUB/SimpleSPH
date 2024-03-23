@@ -71,7 +71,7 @@ extern __constant__ __device__ int mesh_dnum;
 extern __constant__ __device__ int mesh_pnum;
 extern __constant__ __device__ int mesh_spacing;
 */
-extern __device__ int count;
+extern __device__ int dev_count;
 
 /* Headers Include Here*/
 

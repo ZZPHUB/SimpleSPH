@@ -24,7 +24,7 @@ __global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_
     if( threadIdx.y > threadIdx.x && threadIdx.y < mesh_near_ptc_num)
     {
         j = blockIdx.x + blockIdx.y*MESH_LENGTH_NUM_CUDA + threadIdx.y*MESH_DEEPTH_NUM_CUDA*MESH_LENGTH_NUM_CUDA;
-        q = (x[mesh[i]]-x[mesh[j]])**(x[mesh[i]]-x[mesh[j]])+(y[mesh[i]]-y[mesh[j]])**(y[mesh[i]]-y[mesh[j]]);
+        q = (x[mesh[i]]-x[mesh[j]])*(x[mesh[i]]-x[mesh[j]])+(y[mesh[i]]-y[mesh[j]])*(y[mesh[i]]-y[mesh[j]]);
         q = sqrt(q);
         if(q<2.0)
         {
@@ -50,7 +50,7 @@ __global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_
         if( threadIdx.y < mesh_near_ptc_num )
         {
             j = (blockIdx.x+1) + blockIdx.y*MESH_LENGTH_NUM_CUDA + threadIdx.y*MESH_DEEPTH_NUM_CUDA*MESH_LENGTH_NUM_CUDA;
-            q = (x[mesh[i]]-x[mesh[j]])**(x[mesh[i]]-x[mesh[j]])+(y[mesh[i]]-y[mesh[j]])**(y[mesh[i]]-y[mesh[j]]);
+            q = (x[mesh[i]]-x[mesh[j]])*(x[mesh[i]]-x[mesh[j]])+(y[mesh[i]]-y[mesh[j]])*(y[mesh[i]]-y[mesh[j]]);
             q = sqrt(q);
             if(q<2.0)
             {
@@ -77,7 +77,7 @@ __global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_
         if( threadIdx.y < mesh_near_ptc_num )
         {
             j = blockIdx.x +( blockIdx.y+1)*MESH_LENGTH_NUM_CUDA + threadIdx.y*MESH_DEEPTH_NUM_CUDA*MESH_LENGTH_NUM_CUDA;
-            q = (x[mesh[i]]-x[mesh[j]])**(x[mesh[i]]-x[mesh[j]])+(y[mesh[i]]-y[mesh[j]])**(y[mesh[i]]-y[mesh[j]]);
+            q = (x[mesh[i]]-x[mesh[j]])*(x[mesh[i]]-x[mesh[j]])+(y[mesh[i]]-y[mesh[j]])*(y[mesh[i]]-y[mesh[j]]);
             q = sqrt(q);
             if(q<2.0)
             {
@@ -104,7 +104,7 @@ __global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_
         if( threadIdx.y < mesh_near_ptc_num)
         {
             j = ( blockIdx.x+1) +( blockIdx.y+1)*MESH_LENGTH_NUM_CUDA + threadIdx.y*MESH_DEEPTH_NUM_CUDA*MESH_LENGTH_NUM_CUDA;
-            q = (x[mesh[i]]-x[mesh[j]])**(x[mesh[i]]-x[mesh[j]])+(y[mesh[i]]-y[mesh[j]])**(y[mesh[i]]-y[mesh[j]]);
+            q = (x[mesh[i]]-x[mesh[j]])*(x[mesh[i]]-x[mesh[j]])+(y[mesh[i]]-y[mesh[j]])*(y[mesh[i]]-y[mesh[j]]);
             q = sqrt(q);
             if(q<2.0)
             {
@@ -131,7 +131,7 @@ __global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_
         if( threadIdx.y < mesh_near_ptc_num)
         {
             j = ( blockIdx.x+1) +( blockIdx.y-1)*MESH_LENGTH_NUM_CUDA + threadIdx.y*MESH_DEEPTH_NUM_CUDA*MESH_LENGTH_NUM_CUDA;
-            q = (x[mesh[i]]-x[mesh[j]])**(x[mesh[i]]-x[mesh[j]])+(y[mesh[i]]-y[mesh[j]])**(y[mesh[i]]-y[mesh[j]]);
+            q = (x[mesh[i]]-x[mesh[j]])*(x[mesh[i]]-x[mesh[j]])+(y[mesh[i]]-y[mesh[j]])*(y[mesh[i]]-y[mesh[j]]);
             q = sqrt(q);
             if(q<2.0)
             {
