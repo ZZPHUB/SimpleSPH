@@ -71,11 +71,10 @@ extern __constant__ __device__ int mesh_dnum;
 extern __constant__ __device__ int mesh_pnum;
 extern __constant__ __device__ int mesh_spacing;
 */
-__device__ int dev_count;
-__device__ int dev_mesh_tnum;
-__device__ int dev_mesh_lnum;
-__device__ int dev_mesh_dnum;
-__device__ double dev_mesh_spacing;
+__device__ int dev_mesh_tnum=MESH_DEEPTH_NUM*MESH_LENGTH_NUM;
+__device__ int dev_mesh_lnum=MESH_LENGTH_NUM;
+__device__ int dev_mesh_dnum=MESH_DEEPTH_NUM;
+__device__ double dev_mesh_spacing=MESH_SPACING;
 
 
 /* Headers Include Here*/

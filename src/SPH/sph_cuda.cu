@@ -38,11 +38,8 @@ int main(void)
 
     int temp = 0;
     int temp_1 = 0;
-    int host_count = 0;
-    int host_mesh_lnum = MESH_LENGTH_NUM;
-    int host_mesh_dnum = MESH_DEEPTH_NUM;
-    int host_mesh_tnum = host_mesh_dnum*host_mesh_lnum;
-    double host_mesh_spacing = MESH_SPACING;
+    int host_count;
+    int *dev_count;
 
 
     CUDA_CHECK(cudaMalloc((double**)&dev_x,particle.total*sizeof(double)));
@@ -63,13 +60,10 @@ int main(void)
 
     CUDA_CHECK(cudaMalloc((int**)&dev_mesh,MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM*sizeof(int)));
 
+    CUDA_CHECK(cudaMalloc((int**)&dev_count,sizeof(int)));
+    CUDA_CHECK(cudaMemset(dev_count,sizeof(int)));
        
    // sph_avg_time(&sph);
-        CUDA_CHECK(cudaMemcpyToSymbol(dev_count,&host_count,sizeof(int)));
-        CUDA_CHECK(cudaMemcpyToSymbol(dev_mesh_lnum,&host_mesh_lnum,sizeof(int)));
-        CUDA_CHECK(cudaMemcpyToSymbol(dev_mesh_dnum,&host_mesh_dnum,sizeof(int)));
-        CUDA_CHECK(cudaMemcpyToSymbol(dev_mesh_tnum,&host_mesh_tnum,sizeof(int)));
-        CUDA_CHECK(cudaMemcpyToSymbol(dev_mesh_spacing,&host_mesh_spacing,sizeof(double)));
 
         CUDA_CHECK(cudaMemcpy(dev_x, particle.x, particle.total*sizeof(double), cudaMemcpyHostToDevice)); 
         CUDA_CHECK(cudaMemcpy(dev_y, particle.y, particle.total*sizeof(double), cudaMemcpyHostToDevice)); 
@@ -81,8 +75,8 @@ int main(void)
         dim3 grid(MESH_LENGTH_NUM,MESH_DEEPTH_NUM);
         sph_mesh_cuda<<<384,160>>>(dev_x,dev_y,dev_mesh,particle.total);
         CUDA_CHECK(cudaDeviceSynchronize());
-        sph_nnps_cuda<<<grid,block>>>(dev_mesh,dev_x,dev_y,dev_type,dev_pair_i,dev_pair_j);
-        CUDA_CHECK(cudaMemcpyFromSymbol(&host_count,dev_count,sizeof(int)));
+        sph_nnps_cuda<<<grid,block>>>(dev_mesh,dev_x,dev_y,dev_type,dev_pair_i,dev_pair_j,dev_count);
+        CUDA_CHECK(cudaMemcpy(&host_count,dev_count,sizeof(int)),cudaMemcpyDeviceToHost);
         
         //__global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_i,int *pair_j)
         //CUDA_CHECK(cudaMemcpy(mesh, dev_mesh, sizeof(int)*MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM,cudaMemcpyDeviceToHost));

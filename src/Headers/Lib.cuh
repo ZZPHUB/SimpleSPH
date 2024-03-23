@@ -21,7 +21,7 @@ extern void ptc_info(SPH *);
 extern void ptc_density_correct(SPH *);
 extern void sph_avg_time(SPH *);
 extern __global__ void sph_mesh_cuda(double *,double *,int *,int );
-extern __global__ void sph_nnps_cuda(int *,double *,double *,int *,int *,int *);
+extern __global__ void sph_nnps_cuda(int *,double *,double *,int *,int *,int *,int *);
 
 #include "SPH.cuh"
 #define CUDA_CHECK(call)             __cudaCheck(call, __FILE__, __LINE__)
