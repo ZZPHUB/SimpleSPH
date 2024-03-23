@@ -5,8 +5,6 @@
 #include <time.h>
 using namespace std;
 
-__device__ int dev_count;
-
 int main(void)
 { 
     SPH_PARTICLE particle;
