@@ -1,6 +1,6 @@
 #include "Lib.cuh"
 
-__global__ void sph_mesh_cuda(double *x,double *y,double *accx,double *accy,double *drho,int *type,int *mesh,int ptc_num)
+__global__ void sph_mesh_cuda(double *x,double *y,double *accx,double *accy,double *drho,int *type,int *mesh,int *count,int ptc_num)
 {
     //const int bid = blockIdx.x;
     //const int tid = threadIdx.x;
@@ -11,14 +11,11 @@ __global__ void sph_mesh_cuda(double *x,double *y,double *accx,double *accy,doub
     if(type[id] == 0) accy[id] = -GRAVITY_ACC;
     else accy[id] = 0.0;
 
-    if(id == 0)
-    {
-        printf("dev_a:%d dev_c:%d dev_h:%d dev_m:%d dev_dt:%d \n",dev_a,dev_c,dev_h,dev_m,dev_dt);
-    }
+    if(id == 0) count[0]=0;
 
     int mid;
 
-    if(y[id] < TOL_DOMAIN_DEEPTH && y[id] >= 0)
+    if(y[id] < TOL_DOMAIN_DEEPTH && y[id] >= 0.0)
     {
         mid = __double2int_rz(y[id]/dev_mesh_spacing)*dev_mesh_lnum;
     }
@@ -26,7 +23,7 @@ __global__ void sph_mesh_cuda(double *x,double *y,double *accx,double *accy,doub
     {
         mid = (dev_mesh_dnum - 1)*dev_mesh_lnum;
     }
-    if(x[id] < TOL_DOMAIN_LENGTH && x[id] >= 0)
+    if(x[id] < TOL_DOMAIN_LENGTH && x[id] >= 0.0)
     {
         mid += __double2int_rz(x[id]/dev_mesh_spacing);
     }
