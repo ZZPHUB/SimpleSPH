@@ -55,7 +55,8 @@
 #define DELTA_TIME 0.00002
 #define PRINT_TIME_STEP 400  //every 50 time step to print
 
-#define PARA (0x01|0x02|0x04|0x08)
+#define PARA 0
+//#define PARA (0x01|0x02|0x04|0x08)
 //0x01----------->density
 //0x02----------->pressure
 //0x04----------->velosity

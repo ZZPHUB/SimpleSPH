@@ -12,7 +12,8 @@ void sph_save_single(SPH *sph)
 
 
     string filename = "../data/postprocess/vtk/sph"; 
-    filename += to_string(sph->current_step/PRINT_TIME_STEP);
+    filename += to_string(sph->current_step);
+    //filename += to_string(sph->current_step/PRINT_TIME_STEP);
     filename += ".vtk";
 
     ofstream vtkfile;
