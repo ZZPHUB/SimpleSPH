@@ -121,7 +121,7 @@ int main(void)
     dim3 pair_grid((int)(sph.particle->total/16)+1);
 
     // sph_avg_time(&sph);
-    for(int i=sph.current_step;i<sph.total_step;i++)
+    for(sph.current_step;sph.current_step<sph.total_step;sph.current_step++)
     {    
     /*---------------------------------------Predict Step---------------------------------------Predict Step---------------------------------------Predict Step---------------------------------------Predict Step---------------------------------------Predict Step---------------------------------------Predict Step*/
         //CUDA_CHECK(cudaMemset(dev_mesh,0,MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM*sizeof(int)));
@@ -133,15 +133,15 @@ int main(void)
         //__global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_i,int *pair_j)
         CUDA_CHECK(cudaDeviceSynchronize());
 
-        sph_kernel_cuda<<<pair_grid,pair_block>>>(dev_x,dev_y,dev_kernel_w,dev_kernel_dwdx,dev_kernel_dwdy,dev_w,dev_pair_i,dev_pair_j,dev_count);
+        //sph_kernel_cuda<<<pair_grid,pair_block>>>(dev_x,dev_y,dev_kernel_w,dev_kernel_dwdx,dev_kernel_dwdy,dev_w,dev_pair_i,dev_pair_j,dev_count);
         CUDA_CHECK(cudaDeviceSynchronize());
         //sph_kernel_cuda(double *x,double *y,double *w,double *dwdx,double *dwdy,doubel *ptc_w,int *pair_i,int *pair_j,int pair_num)
 
-        sph_governing_cuda<<<pair_grid,pair_block>>>(dev_x,dev_y,dev_vx,dev_vy,dev_rho,dev_p,dev_type,dev_pair_i,dev_pair_j,dev_kernel_dwdx,dev_kernel_dwdy,dev_accx,dev_accy,dev_drho,dev_rigid,dev_count,sph.particle->total);
+        //sph_governing_cuda<<<pair_grid,pair_block>>>(dev_x,dev_y,dev_vx,dev_vy,dev_rho,dev_p,dev_type,dev_pair_i,dev_pair_j,dev_kernel_dwdx,dev_kernel_dwdy,dev_accx,dev_accy,dev_drho,dev_rigid,dev_count,sph.particle->total);
         CUDA_CHECK(cudaDeviceSynchronize());
         //__global__ void sph_governing_cuda(double * x, double * y, double * vx, double * vy, double * rho, double * p, int * type, int * pair_i, int * pair_j, double * dwdx, double * dwdy, double * accx, double * accy, double * drho, double *rigid, int pair_num, int ptc_num)
         
-        sph_predict_cuda<<<ptc_grid,ptc_block>>>(dev_x,dev_y,dev_temp_x,dev_temp_y,dev_vx,dev_vy,dev_temp_vx,dev_temp_vy,dev_accx,dev_accy,dev_rho,dev_temp_rho,dev_drho,dev_p,dev_type,sph.particle->total);
+        //sph_predict_cuda<<<ptc_grid,ptc_block>>>(dev_x,dev_y,dev_temp_x,dev_temp_y,dev_vx,dev_vy,dev_temp_vx,dev_temp_vy,dev_accx,dev_accy,dev_rho,dev_temp_rho,dev_drho,dev_p,dev_type,sph.particle->total);
         CUDA_CHECK(cudaDeviceSynchronize());
         //__global__ void sph_predict_cuda(double *x,double *y,double *temp_x,double *temp_y,double *vx,double *vy,double *temp_vx,double *temp_vy,double *accx,double *accy,double *rho,double *temp_rho,double *drho,int ptc_num)
     
