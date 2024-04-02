@@ -11,6 +11,11 @@ __global__ void sph_mesh_cuda(double *x,double *y,double *accx,double *accy,doub
     if(type[id] == 0) accy[id] = -GRAVITY_ACC;
     else accy[id] = 0.0;
 
+    if(id == 0)
+    {
+        printf("dev_a:%d dev_c:%d dev_h:%d dev_m:%d dev_dt:%d \n",dev_a,dev_c,dev_h,dev_m,dev_dt);
+    }
+
     int mid;
 
     if(y[id] < TOL_DOMAIN_DEEPTH && y[id] >= 0)

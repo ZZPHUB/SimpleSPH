@@ -13,7 +13,7 @@ __global__ void sph_dummy_cuda(double *x,double *y,double *vx,double *vy,double 
     const int id = threadIdx.x + blockIdx.x * blockDim.x;
     if(id >= pair_num[0]) return;
 
-    if(type[pair_j[id]] != 0 && ptc_w[pair_j[id]] != 0)
+    if(type[pair_j[id]] != 0 && ptc_w[pair_j[id]] != 0.0)
     {
         rigid_accx = 0.0;
         rigid_accy = 0.0;

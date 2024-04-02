@@ -3,11 +3,11 @@
 
 /* Include Headers Here*/
 #include "SPH.cuh"
-#include "sys/resource.h"
-#include "cmath"
+//#include "sys/resource.h"
+//#include "cmath"
 #include <iostream>
-#include <fstream>
-#include <iomanip>
+//#include <fstream>
+//#include <iomanip>
 #include <stdlib.h>
 
 /* Extern Function Here*/
