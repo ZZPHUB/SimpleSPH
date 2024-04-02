@@ -169,6 +169,8 @@ int main(void)
         sph_dummy_cuda<<<pair_grid,pair_block>>>(dev_x,dev_y,dev_vx,dev_vy,dev_p,dev_rho,dev_w,dev_kernel_w,dev_pair_i,dev_pair_j,dev_type,dev_rigid,dev_count);
         CUDA_CHECK(cudaDeviceSynchronize());
         //__global__ void sph_dummy_cuda(double *vx,double *vy,double *p,double *rho,double *ptc_w,double *pair_w,int *pair_i,int *pair_j,int *type,double *rigid,int *pair_num)
+
+        printf("%d\n",sph.current_step);
     }
     sph_free(&sph);
     return 0;
