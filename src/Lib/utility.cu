@@ -27,9 +27,9 @@ __global__ void sph_dummy_cuda(double *x,double *y,double *vx,double *vy,double 
         else if (type[pair_j[id]] == 1)
         {
             rigid_accx = rigid[ACCX] - pow(rigid[OMEGA],2)*(x[pair_j[id]]-rigid[COGX])- \
-                              rigid[ALPHA]*(y[pair_j[id]]-rigid[COGY]);
+                              rigid[R_ALPHA]*(y[pair_j[id]]-rigid[COGY]);
             rigid_accy = rigid[ACCY] - pow(rigid[OMEGA],2)*(x[pair_j[id]]-rigid[COGY])+ \
-                              rigid[ALPHA]*(x[pair_j[id]]-rigid[COGX]);
+                              rigid[R_ALPHA]*(x[pair_j[id]]-rigid[COGX]);
         }
         temp_p = (p[pair_i[id]]+rho[pair_i[id]]*(rigid_accx*dx+(rigid_accy+GRAVITY_ACC)*dy))*pair_w[id]/ptc_w[pair_j[id]];
         temp_vx = vx[pair_i[id]]*pair_w[id]/ptc_w[pair_j[id]];
