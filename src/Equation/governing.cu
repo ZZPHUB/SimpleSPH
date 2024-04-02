@@ -18,7 +18,7 @@ double *dwdy,double *accx,double *accy,double *drho,double *rigid,int* pair_num,
     dx = x[pair_i[id]]-x[pair_j[id]];
     dy = x[pair_i[id]]-y[pair_j[id]];
 
-    accx_temp = -m*(p[pair_i[id]]/(rho[pair_i[id]]*rho[pair_i[id]])+p[pair_j[id]]/(rho[pair_j[id]]*rho[pair_j[id]]))
+    accx_temp = -dev_m*(p[pair_i[id]]/(rho[pair_i[id]]*rho[pair_i[id]])+p[pair_j[id]]/(rho[pair_j[id]]*rho[pair_j[id]]));
 
     //accx[id] = acc_temp*dwdx[id];
     //accy[id] = acc_temp*dwdy[id];
@@ -28,7 +28,7 @@ double *dwdy,double *accx,double *accy,double *drho,double *rigid,int* pair_num,
         dvx = vx[pair_i[id]]-vx[pair_j[id]];
         dvy = vy[pair_i[id]]-vy[pair_j[id]];
         rho_temp = dvx*dwdx[id]+dvy*dwdy[id];
-        rho_temp *= m;
+        rho_temp *= dev_m;
     }
     else if(type[pair_j[id]] == 1)
     {
@@ -36,25 +36,25 @@ double *dwdy,double *accx,double *accy,double *drho,double *rigid,int* pair_num,
         dvy = vy[pair_i[id]] - (2.0*(rigid[VY] + rigid[OMEGA]*(x[pair_j[id]]-rigid[COGX])) - vy[pair_j[id]]);
         rho_temp = (vx[pair_i[id]]-(rigid[VX] - rigid[OMEGA]*(y[pair_j[id]]-rigid[COGY])))*dwdx[id]+\
                    (vy[pair_i[id]]-(rigid[VY] + rigid[OMEGA]*(x[pair_j[id]]-rigid[COGX])))*dwdy[id];
-        rho_temp *= m;
+        rho_temp *= dev_m;
     }
     else if(type[pair_j[id]] == -1)
     {
         dvx = vx[pair_i[id]] - (0.0 - vx[pair_j[id]]); 
         dvy = vy[pair_i[id]] - (0.0 - vy[pair_j[id]]);
         rho_temp = vx[pair_i[id]]*dwdx[id]+vy[pair_j[id]]*dwdy[id];
-        rho_temp *= m;
+        rho_temp *= dev_m;
     }
 
     accy_temp = dx*dvx+dy*dvy;
-    if(accy_temp < 0.0) acc_temp = 0.0;
+    if(accy_temp < 0.0) accy_temp = 0.0;
     
     accx_temp += accy_temp*m*0.01*dev_h*dev_c/((dx*dx+dy*dy+0.01*dev_h*dev_h)*0.5*(rho[pair_i[id]]+rho[pair_j[id]]));
     accy_temp = accx_temp*dwdx[id];
     accx_temp *= dwdy[id];
 
     atomicAdd(&accx[pair_i[id]], accx_temp);
-    atomidAdd(&accx[pair_j[id]],-accx_temp);
+    atomicdAdd(&accx[pair_j[id]],-accx_temp);
     atomicAdd(&accy[pair_i[id]], accy_temp);
     atomicAdd(&accy[pair_j[id]],-accy_temp);
     atomicAdd(&drho[pair_i[id]],rho_temp);
