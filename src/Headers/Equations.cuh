@@ -5,9 +5,9 @@
 #include "SPH.cuh"
 
 /* Extern Functions Here */
-extern void ptc_fluid_pressure(SPH *);
-extern void ptc_dif_density(SPH *);
-extern void ptc_acc(SPH *);
-extern void ptc_viscous(SPH *);
+extern __global__ void sph_governing_cuda(double *,double *,double *,double *,\
+double *,double *,int *,int *,int *,double *,\
+double *,double *,double *,double *,double *,int* ,int );
+
 
 #endif

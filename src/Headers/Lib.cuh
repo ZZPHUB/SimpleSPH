@@ -14,9 +14,10 @@
 extern void ptc_info(SPH *);
 extern void ptc_density_correct(SPH *);
 extern void sph_avg_time(SPH *);
-extern __global__ void sph_mesh_cuda(double *,double *,int *,int );
+extern __global__ void sph_mesh_cuda(double *x,double *y,double *accx,double *accy,double *drho,int *type,int *mesh,int ptc_num);
 extern __global__ void sph_nnps_cuda(int *,double *,double *,int *,int *,int *,int *);
-extern __global__ void sph_kernel_cuda(double *,double *,double *,double *,double *,int *,int *,int );
+extern __global__ void sph_kernel_cuda(double *,double *,double *,double *,double *,double *,int *,int *,int *);
+extern __global__ void sph_dummy_cuda(double *,double *,double *,double *,double *,double *,int *,int *,int *,double *,int *);
 
 
 #include "SPH.cuh"

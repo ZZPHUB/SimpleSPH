@@ -2,6 +2,17 @@
 #define __SPH_H__
 
 #include "DataStructure.cuh"
+
+#define VX 0
+#define VY 1
+#define OMEGA 2
+#define ACCX 3
+#define ACCY 4
+#define R_ALPHA 5
+#define COGX 6
+#define COGY 7
+#define MASS 8
+#define MOI 9
 /* for fluid particles,they x-direction arrange betweent(0,12-2*PTC_SPACING) */
 /* for fluid particles,they y-direction arrange betweent(0,5-2*PTC_SPACING) */
 /* for dummy particles,they x-direction arrange betweent (-2*PTC_SPACING,0)and(12-2*PTC_SPACOING,12) */
@@ -75,8 +86,11 @@ __device__ int dev_mesh_tnum=MESH_DEEPTH_NUM*MESH_LENGTH_NUM;
 __device__ int dev_mesh_lnum=MESH_LENGTH_NUM;
 __device__ int dev_mesh_dnum=MESH_DEEPTH_NUM;
 __device__ double dev_mesh_spacing=MESH_SPACING;
-__device__ double dev_a=ALPHA;
+__device__ double dev_a=15.0/(7*PI*PTC_SML*PTC_SML);
 __device__ double dev_h=PTC_SML;
+__device__ double dev_c=10.0*sqrt(GRAVITY_ACC*FLUID_DOMAIN_DEEPTH);
+__device__ double dev_m=REF_DENSITY*PTC_SPACING*PTC_SPACING;
+__device__ double dev_dt=DELTA_TIME;
 
 
 /* Headers Include Here*/
@@ -93,6 +107,9 @@ void sph_free(SPH *);
 void sph_time_integral(SPH *);
 void sph_rigid_integral(SPH *sph);
 void ptc_dummy(SPH *);
+__global__ void sph_predict_cuda(double *x,double *y,double *temp_x,double *temp_y,double *vx,double *vy,double *temp_vx,double *temp_vy,double *accx,double *accy,double *rho,double *temp_rho,double *drho,double *p,int ptc_num);
+__global__ void sph_correct_cuda(double *x,double *y,double *temp_x,double *temp_y,double *vx,double *vy,double *temp_vx,double *temp_vy,double *accx,double *accy,double *rho,double *temp_rho,double *drho,double *p,int ptc_num)
+
 //void ptc_density_correct(SPH *);
 
 
