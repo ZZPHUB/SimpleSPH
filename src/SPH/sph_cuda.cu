@@ -140,7 +140,7 @@ int main(void)
         CUDA_CHECK(cudaDeviceSynchronize());
         //__global__ void sph_governing_cuda(double * x, double * y, double * vx, double * vy, double * rho, double * p, int * type, int * pair_i, int * pair_j, double * dwdx, double * dwdy, double * accx, double * accy, double * drho, double *rigid, int pair_num, int ptc_num)
         
-        sph_predict_cuda<<<ptc_grid,ptc_block>>>(dev_x,dev_y,dev_temp_x,dev_temp_y,dev_vx,dev_vy,dev_temp_vx,dev_temp_vy,dev_accx,dev_accy,dev_rho,dev_temp_rho,dev_drho,dev_p,sph.particle->total);
+        sph_predict_cuda<<<ptc_grid,ptc_block>>>(dev_x,dev_y,dev_temp_x,dev_temp_y,dev_vx,dev_vy,dev_temp_vx,dev_temp_vy,dev_accx,dev_accy,dev_rho,dev_temp_rho,dev_drho,dev_p,dev_type,sph.particle->total);
         CUDA_CHECK(cudaDeviceSynchronize());
         //__global__ void sph_predict_cuda(double *x,double *y,double *temp_x,double *temp_y,double *vx,double *vy,double *temp_vx,double *temp_vy,double *accx,double *accy,double *rho,double *temp_rho,double *drho,int ptc_num)
     
@@ -162,7 +162,7 @@ int main(void)
         CUDA_CHECK(cudaDeviceSynchronize());
         //__global__ void sph_governing_cuda(double * x, double * y, double * vx, double * vy, double * rho, double * p, int * type, int * pair_i, int * pair_j, double * dwdx, double * dwdy, double * accx, double * accy, double * drho, double *rigid, int pair_num, int ptc_num)
         
-        sph_correct_cuda<<<ptc_grid,ptc_block>>>(dev_x,dev_y,dev_temp_x,dev_temp_y,dev_vx,dev_vy,dev_temp_vx,dev_temp_vy,dev_accx,dev_accy,dev_rho,dev_temp_rho,dev_drho,dev_p,sph.particle->total);
+        sph_correct_cuda<<<ptc_grid,ptc_block>>>(dev_x,dev_y,dev_temp_x,dev_temp_y,dev_vx,dev_vy,dev_temp_vx,dev_temp_vy,dev_accx,dev_accy,dev_rho,dev_temp_rho,dev_drho,dev_p,dev_type,sph.particle->total);
         CUDA_CHECK(cudaDeviceSynchronize());
         //__global__ void sph_predict_cuda(double *x,double *y,double *temp_x,double *temp_y,double *vx,double *vy,double *temp_vx,double *temp_vy,double *accx,double *accy,double *rho,double *temp_rho,double *drho,int ptc_num)
 
@@ -174,7 +174,7 @@ int main(void)
     return 0;
 }
 
-__global__ void sph_predict_cuda(double *x,double *y,double *temp_x,double *temp_y,double *vx,double *vy,double *temp_vx,double *temp_vy,double *accx,double *accy,double *rho,double *temp_rho,double *drho,double *p,int ptc_num)
+__global__ void sph_predict_cuda(double *x,double *y,double *temp_x,double *temp_y,double *vx,double *vy,double *temp_vx,double *temp_vy,double *accx,double *accy,double *rho,double *temp_rho,double *drho,double *p,int *type,int ptc_num)
 {
     const int id = threadIdx.x + blockIdx.x * blockDim.x;
     if(id >= ptc_num )return;
@@ -205,7 +205,7 @@ __global__ void sph_predict_cuda(double *x,double *y,double *temp_x,double *temp
 }
 
 
-__global__ void sph_correct_cuda(double *x,double *y,double *temp_x,double *temp_y,double *vx,double *vy,double *temp_vx,double *temp_vy,double *accx,double *accy,double *rho,double *temp_rho,double *drho,double *p,int ptc_num)
+__global__ void sph_correct_cuda(double *x,double *y,double *temp_x,double *temp_y,double *vx,double *vy,double *temp_vx,double *temp_vy,double *accx,double *accy,double *rho,double *temp_rho,double *drho,double *p,int *type,int ptc_num)
 {
     const int id = threadIdx.x + blockIdx.x * blockDim.x;
     if(id >= ptc_num )return; 
