@@ -50,8 +50,8 @@ double *dwdy,double *accx,double *accy,double *drho,double *rigid,int* pair_num,
     if(accy_temp < 0.0) accy_temp = 0.0;
     
     accx_temp += accy_temp*dev_m*0.01*dev_h*dev_c/((dx*dx+dy*dy+0.01*dev_h*dev_h)*0.5*(rho[pair_i[id]]+rho[pair_j[id]]));
-    accy_temp = accx_temp*dwdx[id];
-    accx_temp *= dwdy[id];
+    accy_temp = accx_temp*dwdy[id];
+    accx_temp *= dwdx[id];
 
     atomicAdd(&accx[pair_i[id]], accx_temp);
     atomicAdd(&accx[pair_j[id]],-accx_temp);

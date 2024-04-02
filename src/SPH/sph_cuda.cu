@@ -173,6 +173,12 @@ int main(void)
 
         CUDA_CHECK(cudaMemcpy(sph.particle->x,dev_x,sph.particle->total*sizeof(double),cudaMemcpyDeviceToHost));
         CUDA_CHECK(cudaMemcpy(sph.particle->y,dev_y,sph.particle->total*sizeof(double),cudaMemcpyDeviceToHost));
+        CUDA_CHECK(cudaMemcpy(sph.particle->vx,dev_vy,sph.particle->total*sizeof(double),cudaMemcpyDeviceToHost));
+        CUDA_CHECK(cudaMemcpy(sph.particle->vx,dev_vx,sph.particle->total*sizeof(double),cudaMemcpyDeviceToHost));
+        CUDA_CHECK(cudaMemcpy(sph.particle->accx,dev_accx,sph.particle->total*sizeof(double),cudaMemcpyDeviceToHost));
+        CUDA_CHECK(cudaMemcpy(sph.particle->accy,dev_accy,sph.particle->total*sizeof(double),cudaMemcpyDeviceToHost));
+        CUDA_CHECK(cudaMemcpy(sph.particle->pressure,dev_p,sph.particle->total*sizeof(double),cudaMemcpyDeviceToHost));
+        CUDA_CHECK(cudaMemcpy(sph.particle->density,dev_rho,sph.particle->total*sizeof(double),cudaMemcpyDeviceToHost));
         sph_save_single(&sph);
         printf("%d\n",sph.current_step);
     }
