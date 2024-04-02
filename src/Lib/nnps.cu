@@ -15,6 +15,7 @@ __global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_
     int mesh_near_ptc_num;
     if( blockIdx.x >= dev_mesh_lnum || blockIdx.y >= dev_mesh_dnum ) return;
     mesh_ptc_num = mesh[ blockIdx.x + blockIdx.y*dev_mesh_lnum + dev_mesh_tnum*(MESH_PTC_NUM-1)];
+    mesh[ blockIdx.x + blockIdx.y*dev_mesh_lnum + dev_mesh_tnum*(MESH_PTC_NUM-1)] = 0;
     if( threadIdx.x >= mesh_ptc_num)return;
     i = blockIdx.x + blockIdx.y*dev_mesh_lnum + threadIdx.x*dev_mesh_tnum;
     

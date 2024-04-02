@@ -124,7 +124,7 @@ int main(void)
     for(int i=sph.current_step;i<sph.total_step;i++)
     {    
     /*---------------------------------------Predict Step---------------------------------------Predict Step---------------------------------------Predict Step---------------------------------------Predict Step---------------------------------------Predict Step---------------------------------------Predict Step*/
-        CUDA_CHECK(cudaMemset(dev_mesh,0,32*sph.particle->total*sizeof(int)));
+        //CUDA_CHECK(cudaMemset(dev_mesh,0,MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM*sizeof(int)));
         sph_mesh_cuda<<<ptc_grid,ptc_block>>>(dev_x,dev_y,dev_accx,dev_accy,dev_drho,dev_type,dev_mesh,sph.particle->total);
         CUDA_CHECK(cudaDeviceSynchronize());
         //__global__ void sph_mesh_cuda(double *x,double *y,double *accx,double *accy,double *drho,int *type,int *mesh,int ptc_num)
