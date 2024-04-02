@@ -12,7 +12,7 @@ LD = -L /usr/lib/x86_64-linux-gnu -lvtkChartsCore-9.1 -lvtkCommonColor-9.1 -lvtk
 ifeq ($(ver), debug)
 CPPFLAGS = -c -g -Ddebug 
 else
-CPPFLAGS = -c 
+CPPFLAGS = -c -arch=compute_75 -code=sm_75
 endif
 
 TARGET = run
@@ -30,7 +30,7 @@ $(TARGET): $(OBJ)
 
 # 上一句目标文件依赖一大堆.o文件，这句表示所有.o都由相应名字的.cpp文件自动生成
 $(BUILD_DIR)/%.o:%.cu
-	$(CC) $(CPPFLAGS)-Xcompiler -fopenmp $(INCLUDE) -I /usr/include/vtk-9.1 -o $@ $^ 
+	$(CC) $(CPPFLAGS) -Xcompiler -fopenmp $(INCLUDE) -I /usr/include/vtk-9.1 -o $@ $^ 
 
 # make clean删除所有.o和目标文件
 clean:

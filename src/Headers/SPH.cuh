@@ -88,7 +88,7 @@ __device__ int dev_mesh_dnum=MESH_DEEPTH_NUM;
 __device__ double dev_mesh_spacing=MESH_SPACING;
 __device__ double dev_a=15.0/(7*PI*PTC_SML*PTC_SML);
 __device__ double dev_h=PTC_SML;
-__device__ double dev_c=10.0*sqrt(GRAVITY_ACC*FLUID_DOMAIN_DEEPTH);
+__device__ double dev_c=10.0*(GRAVITY_ACC*FLUID_DOMAIN_DEEPTH)*(GRAVITY_ACC*FLUID_DOMAIN_DEEPTH);
 __device__ double dev_m=REF_DENSITY*PTC_SPACING*PTC_SPACING;
 __device__ double dev_dt=DELTA_TIME;
 
