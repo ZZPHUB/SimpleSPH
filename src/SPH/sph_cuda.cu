@@ -146,7 +146,7 @@ int main(void)
         //__global__ void sph_predict_cuda(double *x,double *y,double *temp_x,double *temp_y,double *vx,double *vy,double *temp_vx,double *temp_vy,double *accx,double *accy,double *rho,double *temp_rho,double *drho,int ptc_num)
     
     /*---------------------------------------Correct Step---------------------------------------Correct Step---------------------------------------Correct Step---------------------------------------Correct Step---------------------------------------Correct Step---------------------------------------Correct Step*/
-
+        /*
         sph_mesh_cuda<<<ptc_grid,ptc_block>>>(dev_x,dev_y,dev_accx,dev_accy,dev_drho,dev_type,dev_mesh,sph.particle->total);
         CUDA_CHECK(cudaDeviceSynchronize());
 
@@ -165,7 +165,8 @@ int main(void)
         sph_correct_cuda<<<ptc_grid,ptc_block>>>(dev_x,dev_y,dev_temp_x,dev_temp_y,dev_vx,dev_vy,dev_temp_vx,dev_temp_vy,dev_accx,dev_accy,dev_rho,dev_temp_rho,dev_drho,dev_p,dev_type,sph.particle->total);
         CUDA_CHECK(cudaDeviceSynchronize());
         //__global__ void sph_predict_cuda(double *x,double *y,double *temp_x,double *temp_y,double *vx,double *vy,double *temp_vx,double *temp_vy,double *accx,double *accy,double *rho,double *temp_rho,double *drho,int ptc_num)
-
+         
+        */
         sph_dummy_cuda<<<pair_grid,pair_block>>>(dev_x,dev_y,dev_vx,dev_vy,dev_p,dev_rho,dev_w,dev_kernel_w,dev_pair_i,dev_pair_j,dev_type,dev_rigid,dev_count);
         CUDA_CHECK(cudaDeviceSynchronize());
         //__global__ void sph_dummy_cuda(double *vx,double *vy,double *p,double *rho,double *ptc_w,double *pair_w,int *pair_i,int *pair_j,int *type,double *rigid,int *pair_num)
