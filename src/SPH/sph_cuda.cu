@@ -166,7 +166,7 @@ int main(void)
         CUDA_CHECK(cudaDeviceSynchronize());
         //__global__ void sph_predict_cuda(double *x,double *y,double *temp_x,double *temp_y,double *vx,double *vy,double *temp_vx,double *temp_vy,double *accx,double *accy,double *rho,double *temp_rho,double *drho,int ptc_num)
 
-        sph_dummy_cuda<<<pair_grid,pair_block>>>(dev_vx,dev_vy,dev_p,dev_rho,dev_w,dev_kernel_w,dev_pair_i,dev_pair_j,type,dev_rigid,dev_count);
+        sph_dummy_cuda<<<pair_grid,pair_block>>>(dev_x,dev_y,dev_vx,dev_vy,dev_p,dev_rho,dev_w,dev_kernel_w,dev_pair_i,dev_pair_j,type,dev_rigid,dev_count);
         CUDA_CHECK(cudaDeviceSynchronize());
         //__global__ void sph_dummy_cuda(double *vx,double *vy,double *p,double *rho,double *ptc_w,double *pair_w,int *pair_i,int *pair_j,int *type,double *rigid,int *pair_num)
     }
