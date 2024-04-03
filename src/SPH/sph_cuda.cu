@@ -183,7 +183,7 @@ int main(void)
         CUDA_CHECK(cudaMemcpy(&host_count,dev_count,sizeof(int),cudaMemcpyDeviceToHost));
         sph_save_single(&sph);
         
-        printf("current step is:%d\n pair_num is:%d",sph.current_step,host_count);
+        printf("current step is:%d pair_num is:%d \n",sph.current_step,host_count);
     }
     sph_free(&sph);
     return 0;
