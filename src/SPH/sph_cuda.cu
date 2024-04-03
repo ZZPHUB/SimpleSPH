@@ -52,9 +52,6 @@ int main(void)
     double *dev_rigid = NULL;
     double host_rigid[10];
 
-    int temp=0;
-    int temp_1 = 0;
-
     host_rigid[VX] = sph.rigid->vx;
     host_rigid[VY] = sph.rigid->vy;
     host_rigid[ACCX] = sph.rigid->accx;
