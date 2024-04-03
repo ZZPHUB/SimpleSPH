@@ -24,7 +24,7 @@ __global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_
     mesh_near_ptc_num = mesh_ptc_num;
     if( blockIdx.z> threadIdx.x && blockIdx.z< mesh_near_ptc_num)
     {
-        j = blockIdx.x + blockIdx.y*dev_mesh_lnum + threadIdx.y*dev_mesh_tnum;
+        j = blockIdx.x + blockIdx.y*dev_mesh_lnum + blockIdx.z*dev_mesh_tnum;
         q = (x[mesh[i]]-x[mesh[j]])*(x[mesh[i]]-x[mesh[j]])+(y[mesh[i]]-y[mesh[j]])*(y[mesh[i]]-y[mesh[j]]);
         q = sqrt(q)/PTC_SML;
         if(q<2.0)
@@ -50,7 +50,7 @@ __global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_
         mesh_near_ptc_num = mesh[ (blockIdx.x+1) + blockIdx.y*dev_mesh_lnum + dev_mesh_tnum*(MESH_PTC_NUM-2)];
         if( blockIdx.z< mesh_near_ptc_num )
         {
-            j = (blockIdx.x+1) + blockIdx.y*dev_mesh_lnum + threadIdx.y*dev_mesh_tnum;
+            j = ( blockIdx.x +1) + blockIdx.y*dev_mesh_lnum + blockIdx.z*dev_mesh_tnum;
             q = (x[mesh[i]]-x[mesh[j]])*(x[mesh[i]]-x[mesh[j]])+(y[mesh[i]]-y[mesh[j]])*(y[mesh[i]]-y[mesh[j]]);
             q = sqrt(q)/PTC_SML;
             if(q<2.0)
@@ -77,7 +77,7 @@ __global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_
         mesh_near_ptc_num = mesh[ blockIdx.x + ( blockIdx.y+1)*dev_mesh_lnum + dev_mesh_tnum*(MESH_PTC_NUM-2)];
         if( blockIdx.z< mesh_near_ptc_num )
         {
-            j = blockIdx.x +( blockIdx.y+1)*dev_mesh_lnum + threadIdx.y*dev_mesh_tnum;
+            j = blockIdx.x +( blockIdx.y+1)*dev_mesh_lnum + blockIdx.z*dev_mesh_tnum;
             q = (x[mesh[i]]-x[mesh[j]])*(x[mesh[i]]-x[mesh[j]])+(y[mesh[i]]-y[mesh[j]])*(y[mesh[i]]-y[mesh[j]]);
             q = sqrt(q)/PTC_SML;
             if(q<2.0)
@@ -104,7 +104,7 @@ __global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_
         mesh_near_ptc_num = mesh[( blockIdx.x+1) + ( blockIdx.y+1)*dev_mesh_lnum + dev_mesh_tnum*(MESH_PTC_NUM-2)];
         if( blockIdx.z< mesh_near_ptc_num)
         {
-            j = ( blockIdx.x+1) +( blockIdx.y+1)*dev_mesh_lnum + threadIdx.y*dev_mesh_tnum;
+            j = ( blockIdx.x+1) +( blockIdx.y+1)*dev_mesh_lnum + blockIdx.z*dev_mesh_tnum;
             q = (x[mesh[i]]-x[mesh[j]])*(x[mesh[i]]-x[mesh[j]])+(y[mesh[i]]-y[mesh[j]])*(y[mesh[i]]-y[mesh[j]]);
             q = sqrt(q)/PTC_SML;
             if(q<2.0)
@@ -131,7 +131,7 @@ __global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_
         mesh_near_ptc_num = mesh[( blockIdx.x+1) + ( blockIdx.y-1)*dev_mesh_lnum + dev_mesh_tnum*(MESH_PTC_NUM-2)];
         if( blockIdx.z< mesh_near_ptc_num)
         {
-            j = ( blockIdx.x+1) +( blockIdx.y-1)*dev_mesh_lnum + threadIdx.y*dev_mesh_tnum;
+            j = ( blockIdx.x+1) +( blockIdx.y-1)*dev_mesh_lnum + blockIdx.z*dev_mesh_tnum;
             q = (x[mesh[i]]-x[mesh[j]])*(x[mesh[i]]-x[mesh[j]])+(y[mesh[i]]-y[mesh[j]])*(y[mesh[i]]-y[mesh[j]]);
             q = sqrt(q)/PTC_SML;
             if(q<2.0)
