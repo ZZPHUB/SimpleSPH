@@ -7,6 +7,11 @@ double *dwdy,double *accx,double *accy,double *drho,double *rigid,int* pair_num,
     const int id = threadIdx.x + blockIdx.x * blockDim.x;
     if(id >= pair_num[0] )return;
 
+    if(rho[pair_i[id]] == 0.0 || rho[pair_j[id]] == 0.0)
+    {
+        printf("id:%d pair_i:%d pair_j:%d pair_num:%d ptc_num:%d\n",id,pair_i[id],pair_j[id],*pair_num,ptc_num);
+    }
+
     double dx;
     double dy;
     double dvx;
