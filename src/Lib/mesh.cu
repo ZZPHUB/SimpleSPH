@@ -31,7 +31,7 @@ __global__ void sph_mesh_cuda(double *x,double *y,double *accx,double *accy,doub
     {
         mid += dev_mesh_lnum - 1;
     }
-    mid += dev_mesh_tnum*atomicAdd(&mesh[mid+(MESH_PTC_NUM-1)*dev_mesh_tnum],1);
+    mid += dev_mesh_tnum*atomicAdd(&mesh[mid+(MESH_PTC_NUM-2)*dev_mesh_tnum],1);
     mesh[mid] = id;
 }
 

@@ -42,7 +42,7 @@
 #define MESH_LENGTH_NUM_CUDA __double2int_rz(TOL_DOMAIN_LENGTH/MESH_SPACING+1) //length-direction mesh number
 #define MESH_DEEPTH_NUM_CUDA __double2int_rz(TOL_DOMAIN_DEEPTH/MESH_SPACING+1) //deepth-direction mesh number
 #define MESH_TOL_NUM (MESH_LENGTH_NUM*MESH_DEEPTH_NUM) //total mesh number
-#define MESH_PTC_NUM 33 //per mesh grid contain max paticle num
+#define MESH_PTC_NUM 65 //per mesh grid contain max paticle num
 
 #define REF_DENSITY 1000.0    //reference density for eos
 #define GRAVITY_ACC 9.80     //gravity acceleration defin here

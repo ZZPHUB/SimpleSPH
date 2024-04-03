@@ -104,7 +104,7 @@ int main(void)
     CUDA_CHECK(cudaMemcpy(dev_vx, particle.vx, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice)); 
     CUDA_CHECK(cudaMemcpy(dev_vy, particle.vy, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice)); 
     CUDA_CHECK(cudaMemcpy(dev_type, particle.type, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice)); 
-    CUDA_CHECK(cudaMemcpy(dev_rho, particle.density, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice));
+    CUDA_CHECK(cudaMemcpy(dev_rho, sph.particle->density, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice));
     CUDA_CHECK(cudaMemcpy(dev_accx, particle.accx, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice));
     CUDA_CHECK(cudaMemcpy(dev_accy, particle.accx, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice));
     CUDA_CHECK(cudaMemcpy(dev_drho, particle.accx, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice));
@@ -114,8 +114,8 @@ int main(void)
     dim3 ptc_block(256);
     dim3 ptc_grid((int)(sph.particle->total/256)+1);
     //define the seed for mesh data structure
-    dim3 mesh_block(32,32);
-    dim3 mesh_grid(MESH_LENGTH_NUM,MESH_DEEPTH_NUM);
+    dim3 mesh_block(64);
+    dim3 mesh_grid(MESH_LENGTH_NUM,MESH_DEEPTH_NUM,64);
     //define the seed for pair data structre
     dim3 pair_block(512);
     dim3 pair_grid((int)(sph.particle->total/16)+1);
