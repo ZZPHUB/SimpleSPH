@@ -11,7 +11,7 @@ __global__ void sph_mesh_cuda(double *x,double *y,double *accx,double *accy,doub
     if(type[id] == 0) accy[id] = -GRAVITY_ACC;
     else accy[id] = 0.0;
 
-    if(id == 0) count[0]=0;
+    if(id == 0) *count=0;
 
     int mid;
 

@@ -184,7 +184,6 @@ int main(void)
         //__global__ void sph_predict_cuda(double *x,double *y,double *temp_x,double *temp_y,double *vx,double *vy,double *temp_vx,double *temp_vy,double *accx,double *accy,double *rho,double *temp_rho,double *drho,int ptc_num)
     
     /*---------------------------------------Correct Step---------------------------------------Correct Step---------------------------------------Correct Step---------------------------------------Correct Step---------------------------------------Correct Step---------------------------------------Correct Step*/
-        /*
         sph_mesh_cuda<<<ptc_grid,ptc_block>>>(dev_x,dev_y,dev_accx,dev_accy,dev_drho,dev_type,dev_mesh,dev_count,sph.particle->total);
         CUDA_CHECK(cudaDeviceSynchronize());
 
@@ -208,7 +207,6 @@ int main(void)
         sph_dummy_cuda<<<pair_grid,pair_block>>>(dev_x,dev_y,dev_vx,dev_vy,dev_p,dev_rho,dev_w,dev_kernel_w,dev_pair_i,dev_pair_j,dev_type,dev_rigid,dev_count);
         CUDA_CHECK(cudaDeviceSynchronize());
         //__global__ void sph_dummy_cuda(double *vx,double *vy,double *p,double *rho,double *ptc_w,double *pair_w,int *pair_i,int *pair_j,int *type,double *rigid,int *pair_num)
-*/
         CUDA_CHECK(cudaMemcpy(sph.particle->x,dev_x,sph.particle->total*sizeof(double),cudaMemcpyDeviceToHost));
         CUDA_CHECK(cudaMemcpy(sph.particle->y,dev_y,sph.particle->total*sizeof(double),cudaMemcpyDeviceToHost));
         CUDA_CHECK(cudaMemcpy(sph.particle->vx,dev_vy,sph.particle->total*sizeof(double),cudaMemcpyDeviceToHost));
@@ -217,9 +215,10 @@ int main(void)
         CUDA_CHECK(cudaMemcpy(sph.particle->accy,dev_accy,sph.particle->total*sizeof(double),cudaMemcpyDeviceToHost));
         CUDA_CHECK(cudaMemcpy(sph.particle->pressure,dev_p,sph.particle->total*sizeof(double),cudaMemcpyDeviceToHost));
         CUDA_CHECK(cudaMemcpy(sph.particle->density,dev_rho,sph.particle->total*sizeof(double),cudaMemcpyDeviceToHost));
+        CUDA_CHECK(cudaMemcpy(&host_count,dev_count,sizeof(int),cudaMemcpyDeviceToHost));
         sph_save_single(&sph);
         
-        printf("current step is:%d\n",sph.current_step);
+        printf("current step is:%d\n pair_num is:%d",sph.current_step,host_count);
     }
     sph_free(&sph);
     return 0;
