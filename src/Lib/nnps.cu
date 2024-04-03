@@ -32,14 +32,14 @@ __global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_
             if(type[mesh[i]] == 0)
             {
                 count_temp = atomicAdd(count,1);
-                pair_i[count_temp] = i;
-                pair_j[count_temp] = j;
+                pair_i[count_temp] = mesh[i];
+                pair_j[count_temp] = mesh[j];
             }
             else if(type[mesh[j]] == 0)
             {
                 count_temp = atomicAdd(count,1);
-                pair_i[count_temp] = j;
-                pair_j[count_temp] = i;
+                pair_i[count_temp] = mesh[j];
+                pair_j[count_temp] = mesh[i];
             }
         }
     }
@@ -58,14 +58,14 @@ __global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_
                 if(type[mesh[i]] == 0)
                 {
                     count_temp = atomicAdd(count,1);
-                    pair_i[count_temp] = i;
-                    pair_j[count_temp] = j;
+                    pair_i[count_temp] = mesh[i];
+                    pair_j[count_temp] = mesh[j];
                 }
                 else if(type[mesh[j]] == 0)
                 {
                     count_temp = atomicAdd(count,1);
-                    pair_i[count_temp] = j;
-                    pair_j[count_temp] = i;
+                    pair_i[count_temp] = mesh[j];
+                    pair_j[count_temp] = mesh[i];
                 }
             }
         }
@@ -85,14 +85,14 @@ __global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_
                 if(type[mesh[i]] == 0)
                 {
                     count_temp = atomicAdd(count,1);
-                    pair_i[count_temp] = i;
-                    pair_j[count_temp] = j;
+                    pair_i[count_temp] = mesh[i];
+                    pair_j[count_temp] = mesh[j];
                 }
                 else if(type[mesh[j]] == 0)
                 {
                     count_temp = atomicAdd(count,1);
-                    pair_i[count_temp] = j;
-                    pair_j[count_temp] = i;
+                    pair_i[count_temp] = mesh[j];
+                    pair_j[count_temp] = mesh[i];
                 }
             }
         }
@@ -112,14 +112,14 @@ __global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_
                 if(type[mesh[i]] == 0)
                 {
                     count_temp = atomicAdd(count,1);
-                    pair_i[count_temp] = i;
-                    pair_j[count_temp] = j;
+                    pair_i[count_temp] = mesh[i];
+                    pair_j[count_temp] = mesh[j];
                 }
                 else if(type[mesh[j]] == 0)
                 {
                     count_temp = atomicAdd(count,1);
-                    pair_i[count_temp] = j;
-                    pair_j[count_temp] = i;
+                    pair_i[count_temp] = mesh[j];
+                    pair_j[count_temp] = mesh[i];
                 }
             }
         }
@@ -139,14 +139,14 @@ __global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_
                 if(type[mesh[i]] == 0)
                 {
                     count_temp = atomicAdd(count,1);
-                    pair_i[count_temp] = i;
-                    pair_j[count_temp] = j;
+                    pair_i[count_temp] = mesh[i];
+                    pair_j[count_temp] = mesh[j];
                 }
                 else if(type[mesh[j]] == 0)
                 {
                     count_temp = atomicAdd(count,1);
-                    pair_i[count_temp] = j;
-                    pair_j[count_temp] = i;
+                    pair_i[count_temp] = mesh[j];
+                    pair_j[count_temp] = mesh[i];
                 }
             }
         }
