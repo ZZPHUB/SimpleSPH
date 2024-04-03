@@ -52,6 +52,9 @@ int main(void)
     double *dev_rigid = NULL;
     double host_rigid[10];
 
+    int temp=0;
+    int temp_1 = 0;
+
     host_rigid[VX] = sph.rigid->vx;
     host_rigid[VY] = sph.rigid->vy;
     host_rigid[ACCX] = sph.rigid->accx;
@@ -127,6 +130,35 @@ int main(void)
         //CUDA_CHECK(cudaMemset(dev_mesh,0,MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM*sizeof(int)));
         sph_mesh_cuda<<<ptc_grid,ptc_block>>>(dev_x,dev_y,dev_accx,dev_accy,dev_drho,dev_type,dev_mesh,dev_count,sph.particle->total);
         CUDA_CHECK(cudaDeviceSynchronize());
+        CUDA_CHECK(cudaMemcpy(sph.mesh,dev_mesh,MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM*sizeof(int),cudaMemcpyDeviceToHost));
+        CUDA_CHECK(cudaDeviceSynchronize());
+        string filename = "../data/postprocess/vtk/sph_mesh"; 
+    filename += to_string(sph.current_step);
+    filename += ".vtk";
+
+    ofstream vtkfile;
+    vtkfile.open(filename.c_str());
+
+    vtkfile << "# vtk DataFile Version 3.0" << endl;
+    vtkfile << "sph data" << endl;
+    vtkfile << "ASCII" << endl;
+    vtkfile << "DATASET UNSTRUCTURED_GRID" << endl;
+    vtkfile << "POINTS " << sph.particle->total << " " << "double" << endl;
+
+    for(unsigned int i=0;i<MESH_DEEPTH_NUM;i++)
+    {
+        for(unsigned int j=0;j<MESH_LENGTH_NUM;j++)
+        {
+            temp = sph.mesh[i*MESH_LENGTH_NUM+j+MESH_LENGTH_NUM*MESH_DEEPTH_NUM*(MESH_PTC_NUM-1)];
+            for(unsigned int k=0;k<temp;k++)
+            {
+                temp_1 = sph.mesh[i*MESH_LENGTH_NUM+j+MESH_LENGTH_NUM*MESH_DEEPTH_NUM*k];
+                vtkfile << setiosflags(ios::scientific) << sph.particle->x[temp_1] << " " \
+                << sph.particle->y[temp_1] << " " << 0.0 << endl;
+            }
+        }
+    }
+    vtkfile.close();
         //__global__ void sph_mesh_cuda(double *x,double *y,double *accx,double *accy,double *drho,int *type,int *mesh,int ptc_num)
 
         sph_nnps_cuda<<<mesh_grid,mesh_block>>>(dev_mesh,dev_x,dev_y,dev_type,dev_pair_i,dev_pair_j,dev_count);
