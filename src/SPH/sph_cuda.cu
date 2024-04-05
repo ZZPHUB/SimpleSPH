@@ -114,8 +114,8 @@ int main(void)
     dim3 ptc_block(256);
     dim3 ptc_grid((int)(sph.particle->total/256)+1);
     //define the seed for mesh data structure
-    dim3 mesh_block(64);
-    dim3 mesh_grid(MESH_LENGTH_NUM,MESH_DEEPTH_NUM,64);
+    dim3 mesh_block(32,32);
+    dim3 mesh_grid(MESH_LENGTH_NUM,MESH_DEEPTH_NUM);
     //define the seed for pair data structre
     dim3 pair_block(512);
     dim3 pair_grid((int)(sph.particle->total/16)+1);
