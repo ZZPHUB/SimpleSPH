@@ -16,7 +16,7 @@ __global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_
     int mesh_local_num;
     int mesh_near_num;
     //if( blockIdx.x >= dev_mesh_lnum || blockIdx.y >= dev_mesh_dnum ) return;
-    const int mesh_id = blockIdx.x + blockIdx.y * blockDim.x;
+    const int mesh_id = blockIdx.x + blockIdx.y * gridDim.x;
 
 
     mesh_local_num = mesh[ mesh_id + dev_mesh_tnum*(MESH_PTC_NUM-2)];
@@ -49,10 +49,10 @@ __global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_
     }
 
     //mesh[x,y]-->mesh[x+1,y]
-    if( blockIdx.x < ( blockDim.x-1))
+    if( blockIdx.x < ( gridDim.x-1))
     {
         mesh_near_num = mesh[mesh_id + 1 + dev_mesh_tnum*(MESH_PTC_NUM-2)];
-        for(k=0;k<mesh_near_num;k++)
+        for(int k=0;k<mesh_near_num;k++)
         {
             j = mesh_id + 1 +dev_mesh_tnum*k;
             q = (x[mesh[i]]-x[mesh[j]])*(x[mesh[i]]-x[mesh[j]])+(y[mesh[i]]-y[mesh[j]])*(y[mesh[i]]-y[mesh[j]]);
@@ -76,12 +76,12 @@ __global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_
     }
 
     //mesh[x,y]-->mesh[x+1,y+1]
-    if( blockIdx.x<( blockDim.x-1) && blockIdx.y<( blockDim.y-1))
+    if( blockIdx.x<( gridDim.x-1) && blockIdx.y<( gridDim.y-1))
     {
-        mesh_near_num = mesh[mesh_id + 1 + blockDim.x + dev_mesh_tnum*(MESH_PTC_NUM-2)];
-        for(k=0;k<mesh_near_num;k++)
+        mesh_near_num = mesh[mesh_id + 1 + gridDim.x + dev_mesh_tnum*(MESH_PTC_NUM-2)];
+        for(int k=0;k<mesh_near_num;k++)
         {
-            j = mesh_id + 1 + blockDim.x + dev_mesh_tnum*k;
+            j = mesh_id + 1 + gridDim.x + dev_mesh_tnum*k;
             q = (x[mesh[i]]-x[mesh[j]])*(x[mesh[i]]-x[mesh[j]])+(y[mesh[i]]-y[mesh[j]])*(y[mesh[i]]-y[mesh[j]]);
             q = sqrt(q)/dev_h;
             if(q<2.0)
@@ -103,12 +103,12 @@ __global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_
     }
 
     //mesh[x,y]-->mesh[x,y+1]
-    if( blockIdx.y<( blockDim.y-1))
+    if( blockIdx.y<( gridDim.y-1))
     {
-        mesh_near_num = mesh[mesh_id + blockDim.x + dev_mesh_tnum*(MESH_PTC_NUM-2)]
-        for(k=0;k<mesh_near_num;k++)
+        mesh_near_num = mesh[mesh_id + gridDim.x + dev_mesh_tnum*(MESH_PTC_NUM-2)];
+        for(int k=0;k<mesh_near_num;k++)
         {
-            j = mesh_id + blockDim.x + dev_mesh_tnum*k;
+            j = mesh_id + gridDim.x + dev_mesh_tnum*k;
             q = (x[mesh[i]]-x[mesh[j]])*(x[mesh[i]]-x[mesh[j]])+(y[mesh[i]]-y[mesh[j]])*(y[mesh[i]]-y[mesh[j]]);
             q = sqrt(q)/dev_h;
             if(q<2.0)
@@ -130,12 +130,12 @@ __global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_
     }
 
     //mesh[x,y]-->mesh[x-1,y+1]
-    if( blockIdx.x>0 && blockIdx.y<( blockDim.y-1))
+    if( blockIdx.x>0 && blockIdx.y<( gridDim.y-1))
     {
-        mesh_near_num = mesh[mesh_id - 1 + blockDim.x + dev_mesh_tnum*(MESH_PTC_NUM-2)]
-        for(k=0;k<mesh_near_num;k++)
+        mesh_near_num = mesh[mesh_id - 1 + gridDim.x + dev_mesh_tnum*(MESH_PTC_NUM-2)];
+        for(int k=0;k<mesh_near_num;k++)
         {
-            j = mesh_id - 1 + blockDim.x + dev_mesh_tnum*k;
+            j = mesh_id - 1 + gridDim.x + dev_mesh_tnum*k;
             q = (x[mesh[i]]-x[mesh[j]])*(x[mesh[i]]-x[mesh[j]])+(y[mesh[i]]-y[mesh[j]])*(y[mesh[i]]-y[mesh[j]]);
             q = sqrt(q)/dev_h;
             if(q<2.0)
