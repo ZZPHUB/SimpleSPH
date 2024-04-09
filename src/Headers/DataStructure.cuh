@@ -65,35 +65,6 @@ typedef struct
 
 typedef struct 
 {
-    /* SPH Program Struct */
-    SPH_PARTICLE *particle;
-    SPH_RIGID *rigid;
-    SPH_PAIR *pair;
-    SPH_KERNEL *kernel;
-    SPH_CUDA *cuda;
-    SPH_MESH mesh;
-    //current time step
-    int current_step;
-    //total time steps
-    int total_step;
-
-    //current process flags
-    int new_case_flag;  // if 1 then creat a new case,or continue to run the old case
-    int init_impac_flag; //if 1 then run the init step,or run the impac step
-    int save_last_flag; //if 1 then save the last step,or donnot save it
-
-    //gravity acceleration
-    double g;
-    //artificial sound speed
-    double c;
-    //time step size
-    double d_time;
-    //to record the start and end time
-    double avg_time;
-}SPH;
-
-typedef struct 
-{
     double *x;
     double *y;
     double *vx;
@@ -121,6 +92,37 @@ typedef struct
     double *dwdx;
     double *dwdy;
 }SPH_CUDA;
+
+typedef struct 
+{
+    /* SPH Program Struct */
+    SPH_PARTICLE *particle;
+    SPH_RIGID *rigid;
+    SPH_PAIR *pair;
+    SPH_KERNEL *kernel;
+    SPH_CUDA *cuda;
+    SPH_MESH mesh;
+    //current time step
+    int current_step;
+    //total time steps
+    int total_step;
+
+    //current process flags
+    int new_case_flag;  // if 1 then creat a new case,or continue to run the old case
+    int init_impac_flag; //if 1 then run the init step,or run the impac step
+    int save_last_flag; //if 1 then save the last step,or donnot save it
+
+    //gravity acceleration
+    double g;
+    //artificial sound speed
+    double c;
+    //time step size
+    double d_time;
+    //to record the start and end time
+    double avg_time;
+}SPH;
+
+
 
 
 #endif
