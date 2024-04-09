@@ -21,7 +21,7 @@ int main(void)
     sph.rigid = &wedge;
     sph.cuda = cuda;
     sph.mesh = mesh;
-    
+
     cudaSetDevice(0);
     sph_init(&sph); 
     
@@ -129,30 +129,6 @@ int main(void)
     }
     */
     sph_free(&sph);
-    cudaFree(dev_x);
-    cudaFree(dev_y);
-    cudaFree(dev_vx);
-    cudaFree(dev_vy);
-    cudaFree(dev_accx);
-    cudaFree(dev_accy);
-    cudaFree(dev_rho);
-    cudaFree(dev_drho);
-    cudaFree(dev_w);
-    cudaFree(dev_p);
-    cudaFree(dev_type);
-    cudaFree(dev_temp_x);
-    cudaFree(dev_temp_y);
-    cudaFree(dev_temp_vx);
-    cudaFree(dev_temp_vy);
-    cudaFree(dev_temp_rho);
-    cudaFree(dev_pair_i);
-    cudaFree(dev_pair_j);
-    cudaFree(dev_kernel_w);
-    cudaFree(dev_kernel_dwdx);
-    cudaFree(dev_kernel_dwdy);
-    cudaFree(dev_mesh);
-    cudaFree(dev_count);
-    cudaFree(dev_rigid);
     cudaDeviceReset();
     return 0;
 }

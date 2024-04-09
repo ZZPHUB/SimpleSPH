@@ -74,6 +74,7 @@ typedef struct
     double *rho;
     double *drho;
     double *p;
+    double *ptc_w;
     int *type;
 
     double *temp_x;
@@ -88,7 +89,7 @@ typedef struct
     int *pair_i;
     int *pair_j;
 
-    double *w;
+    double *pair_w;
     double *dwdx;
     double *dwdy;
 }SPH_CUDA;
