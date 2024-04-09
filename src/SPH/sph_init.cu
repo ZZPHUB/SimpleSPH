@@ -108,7 +108,7 @@ void sph_init(SPH *sph)
     cudaMemcpy(temp_cuda.y, particle->y, particle->total*sizeof(double), cudaMemcpyHostToDevice); 
     cudaMemcpy(temp_cuda.vx, particle->vx, particle->total*sizeof(double), cudaMemcpyHostToDevice); 
     cudaMemcpy(temp_cuda.vy, particle->vy, particle->total*sizeof(double), cudaMemcpyHostToDevice); 
-    cudaMemcpy(temp_cuda.type, particle->type, particle->total*sizeof(double), cudaMemcpyHostToDevice); 
+    cudaMemcpy(temp_cuda.type, particle->type, particle->total*sizeof(int), cudaMemcpyHostToDevice); 
     cudaMemcpy(temp_cuda.rho, particle->density, particle->total*sizeof(double), cudaMemcpyHostToDevice);
     cudaMemcpy(temp_cuda.accx, particle->accx, particle->total*sizeof(double), cudaMemcpyHostToDevice);
     cudaMemcpy(temp_cuda.accy, particle->accx, particle->total*sizeof(double), cudaMemcpyHostToDevice);
