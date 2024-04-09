@@ -13,7 +13,7 @@ void sph_time_integral(SPH *sph)
     pair = sph->pair;
     kernel = sph->kernel;
 
-    if(sph->g < 9.8) sph->g = 4.9*(1.0+sin(PI*(-0.5+(double)sph->current_step/40000.0)));
+    //if(sph->g < 9.8) sph->g = 4.9*(1.0+sin(PI*(-0.5+(double)sph->current_step/40000.0)));
 
     //generate the nnps mesh
     ptc_mesh_process(sph);

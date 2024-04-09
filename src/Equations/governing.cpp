@@ -10,7 +10,7 @@ void sph_governing(SPH *sph)
     pair = sph->pair;
     kernel = sph->kernel;
     wedge = sph->rigid;
-    
+
     #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<particle->total;i++)
     {
@@ -19,7 +19,7 @@ void sph_governing(SPH *sph)
         if(particle->type[i] == 0)
         {
             particle->accy[i] = -sph->g;
-            particle->pressure[i] = c*c*(particle->density[i]-REF_DENSITY); 
+            particle->pressure[i] = sph->c*sph->c*(particle->density[i]-REF_DENSITY); 
         }
         else particle->accy[i] = 0.0;
     }
