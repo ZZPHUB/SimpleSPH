@@ -13,42 +13,19 @@ int main(void)
     SPH_PAIR pair;
     SPH_RIGID wedge;
     SPH_MESH mesh = NULL;
+    SPH_CUDA *cuda;
     SPH sph;
     sph.particle = &particle;
     sph.kernel = &kernel;
     sph.pair = &pair;
     sph.rigid = &wedge;
+    sph.cuda = cuda;
     sph.mesh = mesh;
-
-    sph_init(&sph); 
-    cudaSetDevice(0);
-
-    double *dev_x = NULL;
-    double *dev_y = NULL;
-    double *dev_vx = NULL;
-    double *dev_vy = NULL;
-    double *dev_rho = NULL;
-    double *dev_temp_x = NULL;
-    double *dev_temp_y = NULL;
-    double *dev_temp_vx = NULL;
-    double *dev_temp_vy = NULL;
-    double *dev_temp_rho = NULL;
-    double *dev_p = NULL;
-    double *dev_accx = NULL;
-    double *dev_accy = NULL;
-    double *dev_drho = NULL;
-    double *dev_w = NULL;
-    int *dev_type = NULL;
-
-    int *dev_pair_i = NULL;
-    int *dev_pair_j = NULL;
-
-    double *dev_kernel_w = NULL;
-    double *dev_kernel_dwdx = NULL;
-    double *dev_kernel_dwdy = NULL;
     
-    int *dev_mesh = NULL;
-
+    cudaSetDevice(0);
+    sph_init(&sph); 
+    
+/*
     double *dev_rigid = NULL;
     double host_rigid[10];
 
@@ -66,30 +43,6 @@ int main(void)
     int host_count;
     int *dev_count;
 
-
-    CUDA_CHECK(cudaMalloc((double**)&dev_x,sph.particle->total*sizeof(double)));
-    CUDA_CHECK(cudaMalloc((double**)&dev_y,sph.particle->total*sizeof(double)));
-    CUDA_CHECK(cudaMalloc((double**)&dev_vx,sph.particle->total*sizeof(double)));
-    CUDA_CHECK(cudaMalloc((double**)&dev_vy,sph.particle->total*sizeof(double)));
-    CUDA_CHECK(cudaMalloc((double**)&dev_rho,sph.particle->total*sizeof(double)));
-    CUDA_CHECK(cudaMalloc((double**)&dev_temp_x,sph.particle->total*sizeof(double)));
-    CUDA_CHECK(cudaMalloc((double**)&dev_temp_y,sph.particle->total*sizeof(double)));
-    CUDA_CHECK(cudaMalloc((double**)&dev_temp_vx,sph.particle->total*sizeof(double)));
-    CUDA_CHECK(cudaMalloc((double**)&dev_temp_vy,sph.particle->total*sizeof(double)));
-    CUDA_CHECK(cudaMalloc((double**)&dev_temp_rho,sph.particle->total*sizeof(double)));
-    CUDA_CHECK(cudaMalloc((double**)&dev_p,sph.particle->total*sizeof(double)));
-    CUDA_CHECK(cudaMalloc((double**)&dev_accx,sph.particle->total*sizeof(double)));
-    CUDA_CHECK(cudaMalloc((double**)&dev_accy,sph.particle->total*sizeof(double)));
-    CUDA_CHECK(cudaMalloc((double**)&dev_drho,sph.particle->total*sizeof(double)));
-    CUDA_CHECK(cudaMalloc((double**)&dev_w,sph.particle->total*sizeof(double)));
-    CUDA_CHECK(cudaMalloc((int**)&dev_type,sph.particle->total*sizeof(double)));
-
-    CUDA_CHECK(cudaMalloc((int**)&dev_pair_i,32*sph.particle->total*sizeof(double)));
-    CUDA_CHECK(cudaMalloc((int**)&dev_pair_j,32*sph.particle->total*sizeof(double)));
-
-    CUDA_CHECK(cudaMalloc((double**)&dev_kernel_w,32*sph.particle->total*sizeof(double)));
-    CUDA_CHECK(cudaMalloc((double**)&dev_kernel_dwdx,32*sph.particle->total*sizeof(double)));
-    CUDA_CHECK(cudaMalloc((double**)&dev_kernel_dwdy,32*sph.particle->total*sizeof(double)));
     
     CUDA_CHECK(cudaMalloc((int**)&dev_mesh,MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM*sizeof(int)));
 
@@ -97,19 +50,8 @@ int main(void)
     CUDA_CHECK(cudaMemset(dev_count,0,sizeof(int)));
 
     CUDA_CHECK(cudaMalloc((double**)&dev_rigid,sizeof(double)*10));
-
-    /*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-    CUDA_CHECK(cudaMemcpy(dev_x, particle.x, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice)); 
-    CUDA_CHECK(cudaMemcpy(dev_y, particle.y, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice)); 
-    CUDA_CHECK(cudaMemcpy(dev_vx, particle.vx, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice)); 
-    CUDA_CHECK(cudaMemcpy(dev_vy, particle.vy, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice)); 
-    CUDA_CHECK(cudaMemcpy(dev_type, particle.type, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice)); 
-    CUDA_CHECK(cudaMemcpy(dev_rho, sph.particle->density, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice));
-    CUDA_CHECK(cudaMemcpy(dev_accx, particle.accx, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice));
-    CUDA_CHECK(cudaMemcpy(dev_accy, particle.accx, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice));
-    CUDA_CHECK(cudaMemcpy(dev_drho, particle.accx, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice));
-    CUDA_CHECK(cudaMemcpy(dev_rigid,host_rigid,10*sizeof(double),cudaMemcpyHostToDevice));
-
+*/
+/*
     //define the seed for ptc data structure
     dim3 ptc_block(256);
     dim3 ptc_grid((int)(sph.particle->total/256)+1);
@@ -119,11 +61,13 @@ int main(void)
     //define the seed for pair data structre
     dim3 pair_block(512);
     dim3 pair_grid((int)(sph.particle->total/16)+1);
+    */
 
     // sph_avg_time(&sph);
-    for(sph.current_step;sph.current_step<sph.total_step;sph.current_step++)
-    {    
+    //for(sph.current_step;sph.current_step<sph.total_step;sph.current_step++)
+    //{    
     /*---------------------------------------Predict Step---------------------------------------Predict Step---------------------------------------Predict Step---------------------------------------Predict Step---------------------------------------Predict Step---------------------------------------Predict Step*/
+    /*
         //CUDA_CHECK(cudaMemset(dev_mesh,0,MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM*sizeof(int)));
         sph_mesh_cuda<<<ptc_grid,ptc_block>>>(dev_x,dev_y,dev_accx,dev_accy,dev_drho,dev_type,dev_mesh,dev_count,sph.particle->total);
         CUDA_CHECK(cudaDeviceSynchronize());
@@ -144,8 +88,9 @@ int main(void)
         sph_predict_cuda<<<ptc_grid,ptc_block>>>(dev_x,dev_y,dev_temp_x,dev_temp_y,dev_vx,dev_vy,dev_temp_vx,dev_temp_vy,dev_accx,dev_accy,dev_rho,dev_temp_rho,dev_drho,dev_p,dev_type,sph.particle->total);
         CUDA_CHECK(cudaDeviceSynchronize());
         //__global__ void sph_predict_cuda(double *x,double *y,double *temp_x,double *temp_y,double *vx,double *vy,double *temp_vx,double *temp_vy,double *accx,double *accy,double *rho,double *temp_rho,double *drho,int ptc_num)
-    
+    */
     /*---------------------------------------Correct Step---------------------------------------Correct Step---------------------------------------Correct Step---------------------------------------Correct Step---------------------------------------Correct Step---------------------------------------Correct Step*/
+    /*
         sph_mesh_cuda<<<ptc_grid,ptc_block>>>(dev_x,dev_y,dev_accx,dev_accy,dev_drho,dev_type,dev_mesh,dev_count,sph.particle->total);
         CUDA_CHECK(cudaDeviceSynchronize());
 
@@ -182,6 +127,7 @@ int main(void)
         
         printf("current step is:%d pair_num is:%d \n",sph.current_step,host_count);
     }
+    */
     sph_free(&sph);
     cudaFree(dev_x);
     cudaFree(dev_y);

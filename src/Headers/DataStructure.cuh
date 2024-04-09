@@ -70,6 +70,7 @@ typedef struct
     SPH_RIGID *rigid;
     SPH_PAIR *pair;
     SPH_KERNEL *kernel;
+    SPH_CUDA *cuda;
     SPH_MESH mesh;
     //current time step
     int current_step;
@@ -90,6 +91,36 @@ typedef struct
     //to record the start and end time
     double avg_time;
 }SPH;
+
+typedef struct 
+{
+    double *x;
+    double *y;
+    double *vx;
+    double *vy;
+    double *accx;
+    double *accy;
+    double *rho;
+    double *drho;
+    double *p;
+    int *type;
+
+    double *temp_x;
+    double *temp_y;
+    double *temp_vx;
+    double *temp_vy;
+    double *temp_rho;
+
+    int *mesh;
+    int *mesh_count;
+
+    int *pair_i;
+    int *pair_j;
+
+    double *w;
+    double *dwdx;
+    double *dwdy;
+}SPH_CUDA;
 
 
 #endif

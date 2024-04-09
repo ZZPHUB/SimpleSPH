@@ -13,6 +13,7 @@ void sph_init(SPH *sph)
     SPH_PARTICLE *particle;
     SPH_PAIR *pair;
     SPH_KERNEL *kernel;
+    SPH_CUDA *temp_cuda;
     SPH_MESH mesh;
     particle = sph->particle;
     pair = sph->pair;
@@ -72,8 +73,44 @@ void sph_init(SPH *sph)
     sph->c = ART_SOUND_VEL;
     sph->g = 0.0;
     sph->avg_time = 0.0;
+
+
+    /*cuda mem alloc*/
+    cudaMalloc(&(sph->cuda),sizeof(SPH_CUDA));
+    cudaMalloc(&(temp_cuda->x),particle->total*sizeof(double));
+    cudaMalloc(&(temp_cuda->y),particle->total*sizeof(double));
+    cudaMalloc(&(temp_cuda->temp_x),particle->total*sizeof(double));
+    cudaMalloc(&(temp_cuda->temp_y),particle->total*sizeof(double));
+    cudaMalloc(&(temp_cuda->vx),particle->total*sizeof(double));
+    cudaMalloc(&(temp_cuda->vy),particle->total*sizeof(double));
+    cudaMalloc(&(temp_cuda->temp_vx),particle->total*sizeof(double));
+    cudaMalloc(&(temp_cuda->temp_vy),particle->total*sizeof(double));
+    cudaMalloc(&(temp_cuda->rho),particle->total*sizeof(double));
+    cudaMalloc(&(temp_cuda->drho),particle->total*sizeof(double));
+    cudaMalloc(&(temp_cuda->temp_rho),particle->total*sizeof(double));
+    cudaMalloc(&(temp_cuda->p),particle->total*sizeof(double));
+    cudaMalloc(&(temp_cuda->type),particle->total*sizeof(int));
+
+    cudaMalloc(&(temp_cuda->w),32*particle->total*sizeof(double));
+    cudaMalloc(&(temp_cuda->dwdx),32*particle->total*sizeof(double));
+    cudaMalloc(&(temp_cuda->dwdy),32*particle->total*sizeof(double));
+    cudaMalloc(&(temp_cuda->pair_i),32*particle->total*sizeof(int));
+    cudaMalloc(&(temp_cuda->pair_j),32*particle->total*sizeof(int));
     
-    
+    cudaMalloc(&(temp_cuda->mesh),MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM);
+    cudaMalloc(&(temp_cuda->mesh_count),MESH_DEEPTH_NUM*MESH_LENGTH_NUM)
+    cudaMemcpy(sph->cuda,temp_cuda,sizeof(SPH_CUDA),cudaMemcpyHostToDevice);
+
+    /*CUDA_CHECK(cudaMemcpy(dev_x, particle.x, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice)); 
+    CUDA_CHECK(cudaMemcpy(dev_y, particle.y, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice)); 
+    CUDA_CHECK(cudaMemcpy(dev_vx, particle.vx, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice)); 
+    CUDA_CHECK(cudaMemcpy(dev_vy, particle.vy, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice)); 
+    CUDA_CHECK(cudaMemcpy(dev_type, particle.type, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice)); 
+    CUDA_CHECK(cudaMemcpy(dev_rho, sph.particle->density, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice));
+    CUDA_CHECK(cudaMemcpy(dev_accx, particle.accx, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice));
+    CUDA_CHECK(cudaMemcpy(dev_accy, particle.accx, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice));
+    CUDA_CHECK(cudaMemcpy(dev_drho, particle.accx, sph.particle->total*sizeof(double), cudaMemcpyHostToDevice));
+    CUDA_CHECK(cudaMemcpy(dev_rigid,host_rigid,10*sizeof(double),cudaMemcpyHostToDevice));*/
     cout << "run a new case or an old case(press 1 for new,0 for old)" << endl;
     cin >> sph->new_case_flag;
 
