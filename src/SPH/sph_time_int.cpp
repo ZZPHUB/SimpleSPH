@@ -26,12 +26,7 @@ void sph_time_integral(SPH *sph)
     {
         ptc_density_correct(sph);
     }
-    //get the particle pressure by eos
-    ptc_fluid_pressure(sph);
-    //get the ptc density change rate
-    ptc_dif_density(sph);
-    //get the acceleration of ptc 
-    ptc_acc(sph);
+    sph_governing(sph);
 
     //PREDICT STEP
     for(unsigned int i=0;i<particle->total;i++)
@@ -58,13 +53,7 @@ void sph_time_integral(SPH *sph)
     //get rigid body's pressure and velosity
     ptc_dummy(sph);
 
-    //get the particle pressure by eos
-    ptc_fluid_pressure(sph);
-    //get the ptc density change rate
-    ptc_dif_density(sph);
-    //get the acceleration of ptc 
-    ptc_acc(sph);
-
+    sph_governing(sph);
     //CORRECT STEP
     for(unsigned int i=0;i<particle->total;i++)
     {

@@ -12,7 +12,7 @@ void ptc_kernel_parallel(SPH *sph)
     kernel = sph->kernel;
 
     //double m = PTC_MASS;
-
+    #pragma omp parallel for num_threads(TH_NUM)
     for(unsigned int i=0;i<pair->total;i++)
     {      
         double r = 0;
