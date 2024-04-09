@@ -37,8 +37,8 @@ void sph_governing(SPH *sph)
         double dvx = 0;
         double dvy = 0;
 
-        omp_lock_t lock;
-        omp_init_lock(&lock);
+        //omp_lock_t lock;
+        //omp_init_lock(&lock);
 
         //to reduce the calculate tiems,define $p_i/\rho_i^2 + p_j/\rho_j^2$ to temp para
         temp_p = particle->pressure[pair->i[i]]/pow(particle->density[pair->i[i]],2) + particle->pressure[pair->j[i]]/pow(particle->density[pair->j[i]],2);
@@ -73,13 +73,19 @@ void sph_governing(SPH *sph)
         if(temp_acc < 0.0) temp_acc = 0.0;
         temp_acc *= 0.01*PTC_SML*sph->c;
         
-        omp_set_lock(&lock);
+        //omp_set_lock(&lock);
+        #pragma omp atomic
         particle->accx[pair->i[i]] += particle->mass[pair->j[i]]*(temp_acc - temp_p)*kernel->dwdx[i];
+        #pragma omp atomic
         particle->accx[pair->j[i]] -= particle->mass[pair->i[i]]*(temp_acc - temp_p)*kernel->dwdx[i];
+        #pragma omp atomic
         particle->accy[pair->i[i]] += particle->mass[pair->j[i]]*(temp_acc - temp_p)*kernel->dwdy[i];
+        #pragma omp atomic
         particle->accy[pair->j[i]] -= particle->mass[pair->i[i]]*(temp_acc - temp_p)*kernel->dwdy[i];
+        #pragma omp atomic
         particle->dif_density[pair->i[i]] += particle->mass[pair->j[i]]*temp_rho;
+        #pragma omp atomic
         particle->dif_density[pair->j[i]] += particle->mass[pair->i[i]]*temp_rho;      
-        omp_unset_lock(&lock);
+        //omp_unset_lock(&lock);
     }
 }
