@@ -13,13 +13,15 @@ int main(void)
     SPH_PAIR pair;
     SPH_RIGID wedge;
     SPH_MESH mesh = NULL;
-    SPH_CUDA cuda;
+    //SPH_CUDA cuda;
+    SPH_ARG arg;
     SPH sph;
     sph.particle = &particle;
     sph.kernel = &kernel;
     sph.pair = &pair;
     sph.rigid = &wedge;
-    sph.cuda = &cuda;
+    //sph.cuda = &cuda;
+    sph.host_arg = &arg;
     sph.mesh = mesh;
 
     cudaSetDevice(0);

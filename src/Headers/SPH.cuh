@@ -76,13 +76,6 @@
 #define LINEAR_EOS
 
 /*
-extern __constant__ __device__ int c;
-extern __constant__ __device__ int rho_0;
-extern __constant__ __device__ int mesh_lnum;
-extern __constant__ __device__ int mesh_dnum;
-extern __constant__ __device__ int mesh_pnum;
-extern __constant__ __device__ int mesh_spacing;
-*/
 __device__ int dev_mesh_tnum=MESH_DEEPTH_NUM*MESH_LENGTH_NUM;
 __device__ int dev_mesh_lnum=MESH_LENGTH_NUM;
 __device__ int dev_mesh_dnum=MESH_DEEPTH_NUM;
@@ -92,7 +85,7 @@ __device__ double dev_h=PTC_SML;
 __device__ double dev_c=10.0*(GRAVITY_ACC*FLUID_DOMAIN_DEEPTH)*(GRAVITY_ACC*FLUID_DOMAIN_DEEPTH);
 __device__ double dev_m=REF_DENSITY*PTC_SPACING*PTC_SPACING;
 __device__ double dev_dt=DELTA_TIME;
-
+*/
 
 /* Headers Include Here*/
 

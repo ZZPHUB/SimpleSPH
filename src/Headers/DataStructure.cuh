@@ -96,31 +96,54 @@ typedef struct
 
 typedef struct 
 {
-    /* SPH Program Struct */
-    SPH_PARTICLE *particle;
-    SPH_RIGID *rigid;
-    SPH_PAIR *pair;
-    SPH_KERNEL *kernel;
-    SPH_CUDA *cuda;
-    SPH_MESH mesh;
-    //current time step
-    int current_step;
-    //total time steps
-    int total_step;
+    double c;   //sound speed
+    double g;   //gravity acceleration
+    double ref_rho;     //reference density
+    double ptc_dx;      //ptc delta spacing
+    double r;       //ptc radius
+    double h;   //smoothed length
+    double m;   //ptc mass
+    double alpha;   //kernel function's para
+    double sst;    //single step time
+    double dt;  //delta t
 
-    //current process flags
+    double fluid_x;     //fluid length
+    double fluid_y;     //fluid depth
+    int fluid_xnum;     //fluid length direction ptc num
+    int fluid_ynum;     //fluid depth direction ptc num
+    
+    double domain_x;    //total domain length
+    double domain_y;    //total domain depth
+
+    double mesh_dx;     //mesh delta spacing
+    int mesh_xnum;      //mesh length direction num
+    int mesh_ynum;      //mesh depth direction num
+    int mesh_num;       //total mesh num
+    int mesh_volume;    //single mesh volume
+
+    int init_step;  //inital time step
+    int total_step; //total time step
+
+     //current process flags
     int new_case_flag;  // if 1 then creat a new case,or continue to run the old case
     int init_impac_flag; //if 1 then run the init step,or run the impac step
     int save_last_flag; //if 1 then save the last step,or donnot save it
 
-    //gravity acceleration
-    double g;
-    //artificial sound speed
-    double c;
-    //time step size
-    double d_time;
-    //to record the start and end time
-    double avg_time;
+    char *case_dir;
+}SPH_ARG;
+
+typedef struct 
+{
+    /* SPH Program Struct */
+    SPH_PARTICLE *particle;
+    SPH_PAIR *pair;
+    SPH_KERNEL *kernel;
+    SPH_CUDA *cuda;
+    SPH_ARG *dev_arg;
+    SPH_ARG *host_arg;
+    SPH_RIGID *host_rigid;
+    SPH_RIGID *dev_rigid;
+    SPH_MESH mesh;
 }SPH;
 
 

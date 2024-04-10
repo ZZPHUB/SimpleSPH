@@ -84,7 +84,7 @@ void sph_save_last(SPH *sph)
     SPH_PARTICLE *particle;
     SPH_RIGID *wedge;
     particle = sph->particle;
-    wedge = sph->rigid;
+    wedge = sph->host_rigid;
 
     unsigned int ptc_num = 0;
 

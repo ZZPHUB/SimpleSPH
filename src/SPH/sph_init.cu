@@ -6,8 +6,6 @@
 
 using namespace std;
 
-
-
 void sph_init(SPH *sph)
 {
     SPH_PARTICLE *particle;
@@ -69,11 +67,51 @@ void sph_init(SPH *sph)
     */
     
     sph->mesh = mesh;
-    sph->d_time = DELTA_TIME;
+    
+    /*sph->d_time = DELTA_TIME;
     sph->c = ART_SOUND_VEL;
     sph->g = 0.0;
-    sph->avg_time = 0.0;
+    sph->avg_time = 0.0;*/
 
+    //cuda arg mem alloc and cpy
+    sph->host_arg->ptc_dx = PTC_SPACING;
+    sph->host_arg->fluid_x = FLUID_DOMAIN_LENGTH;
+    sph->host_arg->fluid_y = FLUID_DOMAIN_DEEPTH;
+    sph->host_arg->domain_x = TOL_DOMAIN_LENGTH;
+    sph->host_arg->domain_y = TOL_DOMAIN_DEEPTH;
+    sph->host_arg->fluid_xnum = FLUID_LENGTH_NUM;
+    sph->host_arg->fluid_ynum = FLUID_DEEPTH_NUM;
+    sph->host_arg->mesh_dx = MESH_SPACING;
+    sph->host_arg->mesh_xnum = MESH_LENGTH_NUM;
+    sph->host_arg->mesh_ynum = MESH_DEEPTH_NUM;
+    sph->host_arg->mesh_num = sph->host_arg->mesh_xnum*sph->host_arg->mesh_ynum;
+    sph->host_arg->mesh_volume = MESH_PTC_NUM;
+    sph->host_arg->m = PTC_MASS;
+    sph->host_arg->g = GRAVITY_ACC;
+    sph->host_arg->c = ART_SOUND_VEL;
+    sph->host_arg->h = PTC_SML;
+    sph->host_arg->alpha = ALPHA;
+    sph->host_arg->dt = DELTA_TIME;
+    cout << "run a new case or an old case(press 1 for new,0 for old)" << endl;
+    cin >> sph->host_arg->new_case_flag;
+    if(sph->host_arg->new_case_flag == 1)
+    {
+        sph->host_arg->init_step = 0;
+        sph->host_arg->total_step = INIT_TIME_STEP;
+    }
+    else if(sph->host_arg->new_case_flag == 0)
+    {
+        cout << "the sph current time step is: " << endl;
+        cin >> sph->host_arg->init_step;
+        cout << "the total sph time step is: " << endl;
+        cin >> sph->host_arg->total_step;
+    }
+    cout << "run a init case or a dynamic case(press 1 for init,0 for dynamic)" << endl;
+    cin >> sph->host_arg->init_impac_flag;
+    cout << "save the last step or not(press 1 ta save,0 for not)" << endl;
+    cin >> sph->host_arg->save_last_flag;
+    cudaMalloc(&(sph->dev_arg),sizeof(SPH_ARG));
+    cudaMemcp(sph->dev_arg,sph->host_arg,sizeof(SPH_ARG),cudaMemcpyHostToDevice);
 
     /*cuda mem alloc*/
     cudaMalloc(&(sph->cuda),sizeof(SPH_CUDA));
@@ -130,29 +168,8 @@ void sph_init(SPH *sph)
     cudaMemset(temp_cuda.mesh,0,MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM*sizeof(int));
     cudaMemset(temp_cuda.mesh_count,0,MESH_DEEPTH_NUM*MESH_LENGTH_NUM*sizeof(int));
 
-
-    cout << "run a new case or an old case(press 1 for new,0 for old)" << endl;
-    cin >> sph->new_case_flag;
-
-    if(sph->new_case_flag == 1)
-    {
-        sph->current_step = 0;
-        sph->total_step = INIT_TIME_STEP;
-    }
-    else if(sph->new_case_flag == 0)
-    {
-        cout << "the sph current time step is: " << endl;
-        cin >> sph->current_step;
-        cout << "the total sph time step is: " << endl;
-        cin >> sph->total_step;
-    }
-
-    cout << "run a init case or a dynamic case(press 1 for init,0 for dynamic)" << endl;
-    cin >> sph->init_impac_flag;
-    
-    cout << "save the last step or not(press 1 ta save,0 for not)" << endl;
-    cin >> sph->save_last_flag;
-
     ptc_generate(sph);
     ptc_init(sph);
+    cudaMalloc(&(sph->dev_rigid),sizeof(SPH_RIGID));
+    cudaMemcpy(sph->dev_rigid,sph->host_rigid,sizeof(SPH_RIGID),cudaMemcpyHostToDevice);
 }

@@ -4,7 +4,7 @@ using namespace std;
 void sph_save_rigid(SPH *sph)
 {
     SPH_RIGID *wedge;
-    wedge = sph->rigid;
+    wedge = sph->host_rigid;
 
     static vector<double> rigid_vy;
     static vector<double> rigid_accy;

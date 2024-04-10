@@ -61,7 +61,7 @@ void ptc_rigid_init(SPH *sph)
     SPH_PARTICLE *particle;
     SPH_RIGID *wedge;
     particle = sph->particle;
-    wedge = sph->rigid;
+    wedge = sph->host_rigid;
 
     wedge->accx = wedge->accy = wedge->alpha = 0.0;
     wedge->mass = 12.8;
