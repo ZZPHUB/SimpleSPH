@@ -31,8 +31,9 @@ __global__ void sph_fuck_you(SPH_CUDA *cuda,SPH_ARG *arg)
     {
         mid += arg->mesh_xnum - 1;
     }
+    printf("mid is:%d\n",mid);
     mesh_index = atomicAdd(&cuda->mesh_count[mid],1);
-    mesh_index += mid;
+    mesh_index = mesh_index*arg->mesh_num + mid;
     cuda->mesh[mesh_index] = id;
 }
 
