@@ -20,6 +20,7 @@ __global__ void check_pair(SPH_CUDA *cuda,SPH_ARG *arg)
             {
                 printf("type1 index_1:%d index_2:%d pair_i:%d pair_j:%d\n",id,i,cuda->pair_i[id],cuda->pair_j[id]);
             }
+            atomicAdd(&arg->tmp,1);
         }
         else if(cuda->pair_i[id] == cuda->pair_j[i] && cuda->pair_j[id]==cuda->pair_i[i])
         {
@@ -39,6 +40,7 @@ __global__ void check_pair(SPH_CUDA *cuda,SPH_ARG *arg)
                     printf("type3 index_1:%d index_2:%d pair_i:%d pair_j:%d\n",id,i,cuda->pair_i[id],cuda->pair_j[id]);
                 }
             }
+            atomicAdd(&arg->tmp,1);
         }
     }
 }
@@ -94,6 +96,7 @@ int main(void)
     int *host_mesh;
     int *host_mesh_count;
     SPH_CUDA cuda;
+    SPH_ARG tmp_arg;
     cudaMemcpy(&cuda,sph.cuda,sizeof(SPH_CUDA),cudaMemcpyDeviceToHost);
     cudaDeviceSynchronize();
 
@@ -111,6 +114,8 @@ int main(void)
         check_pair<<<(int)(250000/1024)+1,1024>>>(sph.cuda,sph.dev_arg);
         cudaDeviceSynchronize();
 
+        cudaMemcpy(&tmp_arg,sph.dev_arg,sizeof(SPH_ARG),cudaMemcpyDeviceToHost);
+        printf("the total same pair num is:%d \n",tmp_arg.tmp);
         /*
         host_mesh = (int *)malloc(sizeof(int)*sph.host_arg->mesh_num*sph.host_arg->mesh_volume);
         host_mesh_count = (int *)malloc(sizeof(int)*sph.host_arg->mesh_num);
