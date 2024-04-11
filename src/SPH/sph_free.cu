@@ -9,7 +9,7 @@ void sph_free(SPH *sph)
     particle = sph->particle;
     pair = sph->pair;
     kernel = sph->kernel;
-    wedge = sph->rigid;
+    wedge = sph->host_rigid;
 
     cudaFree(sph->cuda);
     free(particle->x);
