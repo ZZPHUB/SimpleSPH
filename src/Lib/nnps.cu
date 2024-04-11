@@ -1,6 +1,6 @@
-#include "Lib.cuh"
+/*#include "Lib.cuh"
 
-/*__global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_i,int *pair_j,int *count)
+__global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_i,int *pair_j,int *count)
 {
 
     //blockIdx.x ---> length direction
@@ -290,5 +290,5 @@
             }
         }
     }
-    */
-}
+
+}*/

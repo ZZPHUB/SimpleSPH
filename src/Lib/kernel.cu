@@ -1,6 +1,6 @@
-#include "Lib.cuh"
+/*#include "Lib.cuh"
 
-/*
+
 __global__ void sph_kernel_cuda(double *x,double *y,double *w,double *dwdx,double *dwdy,double *ptc_w,int *pair_i,int *pair_j,int* pair_num)
 {
     double dx,dy,q;
@@ -17,13 +17,13 @@ __global__ void sph_kernel_cuda(double *x,double *y,double *w,double *dwdx,doubl
         dwdx[id] = dev_a*((-2.0+1.5*q)*dx)/pow(dev_h,2);
         dwdy[id] = dev_a*((-2.0+1.5*q)*dy)/pow(dev_h,2);
         atomicAdd(&ptc_w[pair_i[id]],w[id]);
-        atomicAdd(&ptc_w[pair_j[id]],w[id]);
+        atomicAdd(&ptc_w[pair_j[id]],w[id]);*/
         /*
             kernel->w[i] = a*(2.0/3.0-q*q+0.5*q*q*q);
             //each pair's differential kernel value in x and y direction
             kernel->dwdx[i] = a*((-2.0+1.5*q)*dx/pow(dev_h,2));
             kernel->dwdy[i] = a*((-2.0+1.5*q)*dy/pow(dev_h,2));
-        */
+        *//*
     }
     else if(q<2.0)
     {
@@ -31,14 +31,14 @@ __global__ void sph_kernel_cuda(double *x,double *y,double *w,double *dwdx,doubl
         dwdx[id] = -dev_a*0.5*((2.0-q)*(2.0-q)*dx)/(dev_h*dev_h*q);
         dwdy[id] = -dev_a*0.5*((2.0-q)*(2.0-q)*dy)/(dev_h*dev_h*q);
         atomicAdd(&ptc_w[pair_i[id]],w[id]);
-        atomicAdd(&ptc_w[pair_j[id]],w[id]);
+        atomicAdd(&ptc_w[pair_j[id]],w[id]);*/
         /*
             //each pair's kernel value
             kernel->w[i] = a*((2.0-q)*(2.0-q)*(2.0-q)/6.0); 
             //each pair's differential kernel value in x and y direction
             kernel->dwdx[i] = -a*0.5*((2.0-q)*(2.0-q)*dx/(dev_h*r));
             kernel->dwdy[i] = -a*0.5*((2.0-q)*(2.0-q)*dy/(dev_h*r));
-        */
+        *//*
     }
     else
     {
