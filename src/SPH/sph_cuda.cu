@@ -4,7 +4,10 @@
 #include <stdlib.h>
 #include <time.h>
 using namespace std;
-
+__global__ void ttry(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
+{
+    printf("%lf %lf\n",arg->dx,rigid->cogx);
+}
 
 int main(void)
 {
@@ -14,18 +17,20 @@ int main(void)
     SPH_RIGID wedge;
     SPH_MESH mesh = NULL;
     //SPH_CUDA cuda;
-    SPH_ARG arg;
+    SPH_ARG host_arg;
     SPH sph;
     sph.particle = &particle;
     sph.kernel = &kernel;
     sph.pair = &pair;
     sph.rigid = &wedge;
     //sph.cuda = &cuda;
-    sph.host_arg = &arg;
+    sph.host_arg = &host_arg;
     sph.mesh = mesh;
 
     cudaSetDevice(0);
     sph_init(&sph); 
+
+    ttry<<<1,1>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
     
 /*
     double *dev_rigid = NULL;
