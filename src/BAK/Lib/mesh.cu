@@ -1,5 +1,4 @@
 #include "Lib.cuh"
-using namespace std;
 
 void ptc_mesh_process(SPH *sph)
 //void ptc_mesh_process(SPH_PARTICLE *particle,unsigned int ***mesh)
