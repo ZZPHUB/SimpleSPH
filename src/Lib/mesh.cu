@@ -1,6 +1,6 @@
 #include "SPH.cuh"
 
-__global__ void sph_mesh_cuda(SPH_CUDA *cuda,SPH_ARG *arg)
+__global__ void sph_fuck_you(SPH_CUDA *cuda,SPH_ARG *arg)
 {
     //const int bid = blockIdx.x;
     //const int tid = threadIdx.x;

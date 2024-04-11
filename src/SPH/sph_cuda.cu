@@ -35,7 +35,7 @@ int main(void)
     dim3 pair_block(512);
     dim3 pair_grid((int)(sph.particle->total/16)+1);
 
-    sph_mesh_cuda<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
+    sph_fuck_you<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
     cudaDeviceSynchronize();
     sph_nnps_cuda<<<mesh_grid,mesh_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
     cudaDeviceSynchronize();
