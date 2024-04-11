@@ -12,7 +12,9 @@ void sph_free(SPH *sph)
     kernel = sph->kernel;
     wedge = sph->host_rigid;
     cudaMemcpy(&cuda,sph->cuda,sizeof(SPH_CUDA),cudaMemcpyDeviceToHost);
-
+    
+    cudaFree(sph->dev_arg);
+    cudaFree(sph->dev_rigid);
     cudaFree(cuda.x);
     cudaFree(cuda.y);
     cudaFree(cuda.vx);
