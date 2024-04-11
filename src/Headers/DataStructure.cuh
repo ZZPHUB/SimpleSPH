@@ -130,6 +130,11 @@ typedef struct
     int save_last_flag; //if 1 then save the last step,or donnot save it
 
     char *case_dir;
+
+    int ptc_num;    //ptc's total num
+    int pair_num;   //pair total num
+
+    int lock;   //1 to unlocked,0 to locked
 }SPH_ARG;
 
 typedef struct 

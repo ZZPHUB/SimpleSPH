@@ -1,5 +1,6 @@
 #include "Equations.cuh"
 
+/*
 __global__ void sph_governing_cuda(double *x,double *y,double *vx,double *vy,\
 double *rho,double *p,int *type,int *pair_i,int *pair_j,double *dwdx,\
 double *dwdy,double *accx,double *accy,double *drho,double *rigid,int* pair_num,int ptc_num)
@@ -71,4 +72,4 @@ double *dwdy,double *accx,double *accy,double *drho,double *rigid,int* pair_num,
     atomicAdd(&accy[pair_j[id]],-accy_temp);
     atomicAdd(&drho[pair_i[id]],rho_temp);
     atomicAdd(&drho[pair_j[id]],rho_temp);
-}
+}*/

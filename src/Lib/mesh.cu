@@ -1,37 +1,37 @@
 #include "Lib.cuh"
 
-__global__ void sph_mesh_cuda(double *x,double *y,double *accx,double *accy,double *drho,int *type,int *mesh,int *count,int ptc_num)
+__global__ void sph_mesh_cuda(SPH_CUDA *cuda,SPH_ARG *arg)
 {
     //const int bid = blockIdx.x;
     //const int tid = threadIdx.x;
     const int id = threadIdx.x + blockIdx.x * blockDim.x;
-    if(id >= ptc_num) return;
-    accx[id] = 0.0;
-    drho[id] = 0.0;
-    if(type[id] == 0) accy[id] = -GRAVITY_ACC;
-    else accy[id] = 0.0;
+    if(id >= arg->ptc_num) return;
 
-    if(id == 0) *count=0;
+    /*这里需要进行加速度和密度变化的初始化*/
 
-    int mid;
+    /*这里需要对pair_num进行初始化*/
 
-    if(y[id] < TOL_DOMAIN_DEEPTH && y[id] >= 0.0)
+    int mid = 0;
+
+    if(cuda->y[id] < arg->domain_y && cuda->y[id] >= 0.0)
     {
-        mid = __double2int_rz(y[id]/dev_mesh_spacing)*dev_mesh_lnum;
+        mid = __double2int_rz(y[id]/arg->mesh_dx)*arg->mesh_xnum;
     }
     else
     {
-        mid = (dev_mesh_dnum - 1)*dev_mesh_lnum;
+        mid = (arg->mesh_ynum - 1)*arg->mesh_xnum;
     }
-    if(x[id] < TOL_DOMAIN_LENGTH && x[id] >= 0.0)
+    if(cuda->x[id] < arg->domain_x && cuda->x[id] >= 0.0)
     {
-        mid += __double2int_rz(x[id]/dev_mesh_spacing);
+        mid += __double2int_rz(x[id]/arg->mesh_dx);
     }
     else
     {
-        mid += dev_mesh_lnum - 1;
+        mid += arg->mesh_xnum - 1;
     }
-    mid += dev_mesh_tnum*atomicAdd(&mesh[mid+(MESH_PTC_NUM-2)*dev_mesh_tnum],1);
-    mesh[mid] = id;
+    sph_cuda_lock(arg);
+    cuda->mesh[cuda->mesh_count[mid]] = id;
+    cuda->mesh_count[mid] += 1;
+    sph_cuda_unlock(arg);
 }
 

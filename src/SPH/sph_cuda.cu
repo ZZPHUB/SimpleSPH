@@ -4,10 +4,6 @@
 #include <stdlib.h>
 #include <time.h>
 using namespace std;
-__global__ void ttry(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
-{
-    printf("%lf %lf\n",arg->ptc_dx,rigid->cogx);
-}
 
 int main(void)
 {
@@ -16,15 +12,13 @@ int main(void)
     SPH_PAIR pair;
     SPH_RIGID wedge;
     SPH_MESH mesh = NULL;
-    //SPH_CUDA cuda;
-    SPH_ARG host_arg;
+    SPH_ARG arg;
     SPH sph;
     sph.particle = &particle;
     sph.kernel = &kernel;
     sph.pair = &pair;
     sph.host_rigid = &wedge;
-    //sph.cuda = &cuda;
-    sph.host_arg = &host_arg;
+    sph.host_arg = &arg;
     sph.mesh = mesh;
 
     cudaSetDevice(0);
@@ -34,20 +28,6 @@ int main(void)
     cudaDeviceSynchronize();
     
 /*
-    double *dev_rigid = NULL;
-    double host_rigid[10];
-
-    host_rigid[VX] = sph.rigid->vx;
-    host_rigid[VY] = sph.rigid->vy;
-    host_rigid[ACCX] = sph.rigid->accx;
-    host_rigid[ACCY] = sph.rigid->accy;
-    host_rigid[OMEGA] = sph.rigid->omega;
-    host_rigid[R_ALPHA] = sph.rigid->alpha;
-    host_rigid[MASS] = sph.rigid->mass;
-    host_rigid[MOI] = sph.rigid->moi;
-    host_rigid[COGX] = sph.rigid->cogx;
-    host_rigid[COGY] = sph.rigid->cogy;
-
     int host_count;
     int *dev_count;
 

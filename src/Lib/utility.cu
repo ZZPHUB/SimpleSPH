@@ -1,7 +1,7 @@
 #include "Lib.cuh"
 using namespace std;
 
-__global__ void sph_dummy_cuda(double *x,double *y,double *vx,double *vy,double *p,double *rho,double *ptc_w,double *pair_w,int *pair_i,int *pair_j,int *type,double *rigid,int *pair_num)
+/*__global__ void sph_dummy_cuda(double *x,double *y,double *vx,double *vy,double *p,double *rho,double *ptc_w,double *pair_w,int *pair_i,int *pair_j,int *type,double *rigid,int *pair_num)
 {
     double rigid_accx = 0.0;
     double rigid_accy = 0.0;
@@ -40,5 +40,17 @@ __global__ void sph_dummy_cuda(double *x,double *y,double *vx,double *vy,double 
         atomicAdd(&vx[pair_j[id]],temp_vx);
         atomicAdd(&vy[pair_j[id]],temp_vy);
     }
+}*/
+
+__device__ void sph_cuda_lock(SPH_ARG *arg)
+{
+    while(!atomicCAS(&arg->lock,1,0))
+    {
+        continue;
+    }
 }
 
+__device__ void sph_cuda_unlock(SPH_ARG *arg)
+{
+    atomicCAS(&arg->lock,0,1);
+}

@@ -110,8 +110,11 @@ void sph_init(SPH *sph)
     cin >> sph->host_arg->init_impac_flag;
     cout << "save the last step or not(press 1 ta save,0 for not)" << endl;
     cin >> sph->host_arg->save_last_flag;
+    sph->host_arg->ptc_num = particle->total;
+    sph->host_arg->pair_num = 0;
+    sph->host_arg->lock = 1;//1 to unlocked,0 to locked
     cudaMalloc(&(sph->dev_arg),sizeof(SPH_ARG));
-    cudaMemcp(sph->dev_arg,sph->host_arg,sizeof(SPH_ARG),cudaMemcpyHostToDevice);
+    cudaMemcpy(sph->dev_arg,sph->host_arg,sizeof(SPH_ARG),cudaMemcpyHostToDevice);
 
     /*cuda mem alloc*/
     cudaMalloc(&(sph->cuda),sizeof(SPH_CUDA));

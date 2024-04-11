@@ -1,5 +1,6 @@
 #include "Lib.cuh"
 
+/*
 __global__ void sph_kernel_cuda(double *x,double *y,double *w,double *dwdx,double *dwdy,double *ptc_w,int *pair_i,int *pair_j,int* pair_num)
 {
     double dx,dy,q;
@@ -43,4 +44,4 @@ __global__ void sph_kernel_cuda(double *x,double *y,double *w,double *dwdx,doubl
     {
         w[id] = dwdx[id] = dwdy[id] = 0.0;
     }
-}
+}*/

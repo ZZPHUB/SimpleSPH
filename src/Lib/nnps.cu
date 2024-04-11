@@ -1,14 +1,14 @@
 #include "Lib.cuh"
 
-__global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_i,int *pair_j,int *count)
+/*__global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_i,int *pair_j,int *count)
 {
-    /*
-    blockIdx.x ---> length direction
-    blockIdx.y ---> deepth direction
-    threadIdx.x ---> search the mesh
+
+    //blockIdx.x ---> length direction
+    //blockIdx.y ---> deepth direction
+    //threadIdx.x ---> search the mesh
     //threadIdx.y---> search the near mesh
     k ---> search the near mesh
-    */
+
 
     double q;
     int i,j;
@@ -155,7 +155,7 @@ __global__ void sph_nnps_cuda(int *mesh,double *x,double *y,int *type,int *pair_
             }
         }
     }
-
+*/
 
 
     /*
