@@ -1,4 +1,4 @@
-#include "Lib.cuh"
+#include "SPH.cuh"
 
 __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
 {

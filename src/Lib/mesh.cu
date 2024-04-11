@@ -1,4 +1,4 @@
-#include "Lib.cuh"
+#include "SPH.cuh"
 
 __global__ void sph_mesh_cuda(SPH_CUDA *cuda,SPH_ARG *arg)
 {

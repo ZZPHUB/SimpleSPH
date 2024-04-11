@@ -2,7 +2,7 @@
 #define __LIB_H__
 
 /* Include Headers Here*/
-#include "SPH.cuh"
+#include "DataStructure.cuh"
 
 /* Extern Function Here*/
 extern __global__ void sph_mesh_cuda(SPH_CUDA *,SPH_ARG *,SPH_RIGID *);
