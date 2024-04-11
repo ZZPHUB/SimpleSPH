@@ -174,5 +174,11 @@ void sph_init(SPH *sph)
     cudaMemset(temp_cuda.pair_j,0,32*particle->total*sizeof(int));
     cudaMemset(temp_cuda.mesh,0,MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM*sizeof(int));
     cudaMemset(temp_cuda.mesh_count,0,MESH_DEEPTH_NUM*MESH_LENGTH_NUM*sizeof(int));
+    
+    ​cudaError_t sph_error = ​cudaGetLastError();
+    if(sph_error != cudaSuccess)
+    {
+        printf("%s\n",cudaGetErrorName(sph_error));
+    }
 
 }
