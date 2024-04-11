@@ -32,7 +32,8 @@ __global__ void sph_fuck_you(SPH_CUDA *cuda,SPH_ARG *arg)
         mid += arg->mesh_xnum - 1;
     }
     //printf("mid is:%lf\n",mid);
-    printf("xnum is:%d,ynum is:%d\n",__double2int_rz(cuda->x[id]/arg->mesh_dx),__double2int_rz(cuda->y[id]/arg->mesh_dx));
+    //printf("xnum is:%d,ynum is:%d\n",__double2int_rz(cuda->x[id]/arg->mesh_dx),__double2int_rz(cuda->y[id]/arg->mesh_dx));
+    printf("x is:%lf,y is:%lf\n",cuda->x[id],cuda->y[id]);
     mesh_index = atomicAdd(&cuda->mesh_count[mid],1);
     mesh_index = mesh_index*arg->mesh_num + mid;
     cuda->mesh[mesh_index] = id;
