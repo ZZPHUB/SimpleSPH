@@ -78,11 +78,11 @@ int main(void)
     cudaDeviceSynchronize();
 
     host_mesh = (int *)malloc(sizeof(int)*sph.host_arg->mesh_num*sph.host_arg->mesh_volume);
-    host_mesh_count = (int *)mall0c(sizeof(int)*sph.host_arg->mesh_num);
+    host_mesh_count = (int *)malloc(sizeof(int)*sph.host_arg->mesh_num);
 
-    cudaMemcpy(host_mesh,cuda.mesh,sizeof(int)*sph.host_arg->mesh_num*sph.host_arg->mesh_volume);
+    cudaMemcpy(host_mesh,cuda.mesh,sizeof(int)*sph.host_arg->mesh_num*sph.host_arg->mesh_volume,cudaMemcpyDeviceToHost);
     cudaDeviceSynchronize();
-    cudaMemcpy(host_mesh_count,cuda.mesh_count,sizeof(int)*sph.host->mesh_num);
+    cudaMemcpy(host_mesh_count,cuda.mesh_count,sizeof(int)*sph.host_arg->mesh_num,cudaMemcpyDeviceToHost);
     cudaDeviceSynchronize();
 
     for(int i=0;i<sph.host_arg->mesh_num;i++)
