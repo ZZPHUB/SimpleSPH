@@ -68,6 +68,10 @@ void sph_init(SPH *sph)
     
     sph->mesh = mesh;
     
+    ptc_generate(sph);
+    ptc_init(sph);
+    cudaMalloc(&(sph->dev_rigid),sizeof(SPH_RIGID));
+    cudaMemcpy(sph->dev_rigid,sph->host_rigid,sizeof(SPH_RIGID),cudaMemcpyHostToDevice);
     /*sph->d_time = DELTA_TIME;
     sph->c = ART_SOUND_VEL;
     sph->g = 0.0;
@@ -171,8 +175,4 @@ void sph_init(SPH *sph)
     cudaMemset(temp_cuda.mesh,0,MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM*sizeof(int));
     cudaMemset(temp_cuda.mesh_count,0,MESH_DEEPTH_NUM*MESH_LENGTH_NUM*sizeof(int));
 
-    ptc_generate(sph);
-    ptc_init(sph);
-    cudaMalloc(&(sph->dev_rigid),sizeof(SPH_RIGID));
-    cudaMemcpy(sph->dev_rigid,sph->host_rigid,sizeof(SPH_RIGID),cudaMemcpyHostToDevice);
 }
