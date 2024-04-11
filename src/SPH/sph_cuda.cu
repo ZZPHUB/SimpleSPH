@@ -18,7 +18,7 @@ __global__ void check_pair(SPH_CUDA *cuda,SPH_ARG *arg)
         {
             printf("here is same pair\n");
         }
-        else(cuda->pair_i[id] == cuda->pair_j[i] && cuda->pair_j[id]==cuda->pair_i[i])
+        else if(cuda->pair_i[id] == cuda->pair_j[i] && cuda->pair_j[id]==cuda->pair_i[i])
         {
             if(id == i)
             {
