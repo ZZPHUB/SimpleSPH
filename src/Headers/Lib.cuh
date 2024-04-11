@@ -15,4 +15,5 @@ extern __global__ void sph_kernel_cuda(double *,double *,double *,double *,doubl
 extern __global__ void sph_dummy_cuda(double *,double *,double *,double *,double *,double *,double *,double *,int *,int *,int *,double *,int *);*/
 extern __device__ void sph_cuda_lock(SPH_ARG *);
 extern __device__ void sph_cuda_unlock(SPH_ARG *);
+
 #endif

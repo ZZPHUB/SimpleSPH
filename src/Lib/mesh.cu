@@ -30,8 +30,10 @@ __global__ void sph_mesh_cuda(SPH_CUDA *cuda,SPH_ARG *arg)
         mid += arg->mesh_xnum - 1;
     }
     sph_cuda_lock(arg);
+    
     cuda->mesh[cuda->mesh_count[mid]] = id;
     cuda->mesh_count[mid] += 1;
+
     sph_cuda_unlock(arg);
 }
 
