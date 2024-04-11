@@ -19,8 +19,8 @@ __global__ void check_mesh(SPH_CUDA *cuda,SPH_ARG *arg)
             printf("%d",cuda->mesh[mesh_id+i*arg->mesh_num]);
         }
         printf("\n");
-    }
-    __syncthreads();*/
+    }*/
+    __syncthreads();
 }
 
 int main(void)
