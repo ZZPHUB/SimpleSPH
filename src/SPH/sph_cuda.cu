@@ -5,6 +5,10 @@
 #include <time.h>
 using namespace std;
 
+__global__ void check_pair(SPH_ARG *arg)
+{
+    printf("the pair num is:%d\n",arg->pair_num);
+}
 int main(void)
 {
     SPH_PARTICLE particle;
@@ -24,8 +28,22 @@ int main(void)
     cudaSetDevice(0);
     sph_init(&sph); 
 
-    ttry<<<1,1>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
+    //define the seed for ptc data structure
+    dim3 ptc_block(256);
+    dim3 ptc_grid((int)(sph.particle->total/256)+1);
+    //define the seed for mesh data structure
+    dim3 mesh_block(32);
+    dim3 mesh_grid(MESH_LENGTH_NUM,MESH_DEEPTH_NUM);
+    //define the seed for pair data structre
+    dim3 pair_block(512);
+    dim3 pair_grid((int)(sph.particle->total/16)+1);
+
+    sph_mesh_cuda<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
     cudaDeviceSynchronize();
+    sph_nnps_cuda<<<mesh_grid,mesh_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
+    cudaDeviceSynchronize();
+
+
     
 /*
     int host_count;
@@ -40,15 +58,7 @@ int main(void)
     CUDA_CHECK(cudaMalloc((double**)&dev_rigid,sizeof(double)*10));
 */
 /*
-    //define the seed for ptc data structure
-    dim3 ptc_block(256);
-    dim3 ptc_grid((int)(sph.particle->total/256)+1);
-    //define the seed for mesh data structure
-    dim3 mesh_block(32);
-    dim3 mesh_grid(MESH_LENGTH_NUM,MESH_DEEPTH_NUM);
-    //define the seed for pair data structre
-    dim3 pair_block(512);
-    dim3 pair_grid((int)(sph.particle->total/16)+1);
+    
     */
 
     // sph_avg_time(&sph);

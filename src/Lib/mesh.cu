@@ -10,6 +10,7 @@ __global__ void sph_mesh_cuda(SPH_CUDA *cuda,SPH_ARG *arg)
     /*这里需要进行加速度和密度变化的初始化*/
 
     /*这里需要对pair_num进行初始化*/
+    if(id == 0) arg->pair_num = 0;
 
     int mid = 0;
 
@@ -30,8 +31,8 @@ __global__ void sph_mesh_cuda(SPH_CUDA *cuda,SPH_ARG *arg)
         mid += arg->mesh_xnum - 1;
     }
     sph_cuda_lock(arg);
-    
-    cuda->mesh[cuda->mesh_count[mid]] = id;
+
+    cuda->mesh[mid + arg->mesh_num*cuda->mesh_count[mid]] = id;
     cuda->mesh_count[mid] += 1;
 
     sph_cuda_unlock(arg);
