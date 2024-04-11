@@ -147,8 +147,6 @@ void sph_init(SPH *sph)
     cudaMalloc(&(temp_cuda.mesh),MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM*sizeof(int));
     cudaMalloc(&(temp_cuda.mesh_count),MESH_DEEPTH_NUM*MESH_LENGTH_NUM*sizeof(int));
 
-    cudaMemcpy(sph->cuda,&temp_cuda,sizeof(SPH_CUDA),cudaMemcpyHostToDevice);
-
     cudaMemcpy(temp_cuda.x, particle->x, particle->total*sizeof(double), cudaMemcpyHostToDevice); 
     cudaMemcpy(temp_cuda.y, particle->y, particle->total*sizeof(double), cudaMemcpyHostToDevice); 
     cudaMemcpy(temp_cuda.vx, particle->vx, particle->total*sizeof(double), cudaMemcpyHostToDevice); 
@@ -174,4 +172,6 @@ void sph_init(SPH *sph)
     cudaMemset(temp_cuda.pair_j,0,32*particle->total*sizeof(int));
     cudaMemset(temp_cuda.mesh,0,MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM*sizeof(int));
     cudaMemset(temp_cuda.mesh_count,0,MESH_DEEPTH_NUM*MESH_LENGTH_NUM*sizeof(int));
+
+    cudaMemcpy(sph->cuda,&temp_cuda,sizeof(SPH_CUDA),cudaMemcpyHostToDevice);
 }

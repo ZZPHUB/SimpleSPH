@@ -60,8 +60,8 @@ int main(void)
     dim3 pair_block(512);
     dim3 pair_grid((int)(sph.particle->total/16)+1);
 
-    check_ptc<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg);
-    cudaDeviceSynchronize();
+    //check_ptc<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg);
+    //cudaDeviceSynchronize();
     sph_fuck_you<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg);
     cudaDeviceSynchronize();
     check_mesh<<<mesh_grid,1>>>(sph.cuda,sph.dev_arg);
