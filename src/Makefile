@@ -2,7 +2,7 @@ VPATH = ./Equation:./Lib:./Post_Processing:./Pre_Processing:./SPH:
 # 正则表达式表示目录下所有.c文件
 SRC = $(notdir $(wildcard ./*/*.cu))
 # 头文件路径
-INCLUDE = -I./Headers
+INCLUDE = -I ./Headers
 # 生成文SRC
 BUILD_DIR = ./build
 OBJ = $(addprefix $(BUILD_DIR)/,$(patsubst %.cu,%.o,$(SRC))) 
@@ -12,7 +12,7 @@ LD = -L /usr/lib/x86_64-linux-gnu -lvtkChartsCore-9.1 -lvtkCommonColor-9.1 -lvtk
 ifeq ($(ver), debug)
 CPPFLAGS = -Xcompiler -fopenmp -g -Ddebug -G -arch=compute_75 -code=sm_75 
 else
-CPPFLAGS = -Xcompiler -fopenmp -arch=compute_75 -code=sm_75
+CPPFLAGS = -Xcompiler -fopenmp -arch=compute_75 -code=sm_75 
 endif
 
 TARGET = run
@@ -26,7 +26,7 @@ all: $(TARGET)
 # 第一行依赖关系：冒号后面为依赖的文件，相当于Hello: main.o a.o b.o
 # 第二行规则：$@表示目标文件，$^表示所有依赖文件，$<表示第一个依赖文件
 $(TARGET): $(OBJ)
-	$(CC) $^ $(CPPFLAGS) $(LD) -o $@ 
+	$(CC) $^ -arch=compute_75 -code=sm_75 $(LD) -o $@ 
 
 # 上一句目标文件依赖一大堆.o文件，这句表示所有.o都由相应名字的.cpp文件自动生成
 $(BUILD_DIR)/%.o:%.cu
