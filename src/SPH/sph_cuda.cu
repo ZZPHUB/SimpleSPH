@@ -6,7 +6,7 @@
 using namespace std;
 __global__ void ttry(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
 {
-    printf("%lf %lf\n",arg->dx,rigid->cogx);
+    printf("%lf %lf\n",arg->ptc_dx,rigid->cogx);
 }
 
 int main(void)
@@ -22,7 +22,7 @@ int main(void)
     sph.particle = &particle;
     sph.kernel = &kernel;
     sph.pair = &pair;
-    sph.rigid = &wedge;
+    sph.host_rigid = &wedge;
     //sph.cuda = &cuda;
     sph.host_arg = &host_arg;
     sph.mesh = mesh;
@@ -31,6 +31,7 @@ int main(void)
     sph_init(&sph); 
 
     ttry<<<1,1>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
+    cudaDeviceSynchronize();
     
 /*
     double *dev_rigid = NULL;
@@ -140,7 +141,7 @@ int main(void)
     return 0;
 }
 
-__global__ void sph_predict_cuda(double *x,double *y,double *temp_x,double *temp_y,double *vx,double *vy,double *temp_vx,double *temp_vy,double *accx,double *accy,double *rho,double *temp_rho,double *drho,double *p,int *type,int ptc_num)
+/*__global__ void sph_predict_cuda(double *x,double *y,double *temp_x,double *temp_y,double *vx,double *vy,double *temp_vx,double *temp_vy,double *accx,double *accy,double *rho,double *temp_rho,double *drho,double *p,int *type,int ptc_num)
 {
     const int id = threadIdx.x + blockIdx.x * blockDim.x;
     if(id >= ptc_num )return;
@@ -160,14 +161,14 @@ __global__ void sph_predict_cuda(double *x,double *y,double *temp_x,double *temp
         rho[id] += drho[id]*dev_dt*0.5;
         if(rho[id] < REF_DENSITY) rho[id]=REF_DENSITY;
     }
-    /*
+ 
     else
     {
         vx[id] = 0.0;
         vy[id] = 0.0;
         p[id] = 0.0;
     }
-    */
+
 }
 
 
@@ -191,7 +192,7 @@ __global__ void sph_correct_cuda(double *x,double *y,double *temp_x,double *temp
         vy[id] = 0.0;
         p[id] = 0.0;
     }
-}
+}*/
 /*
         CUDA_CHECK(cudaMemcpy(sph.mesh,dev_mesh,MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM*sizeof(int),cudaMemcpyDeviceToHost));
     string filename = "../data/postprocess/vtk/sph"; 
