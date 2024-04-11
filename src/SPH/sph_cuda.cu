@@ -64,12 +64,12 @@ int main(void)
     //cudaDeviceSynchronize();
     sph_fuck_you<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg);
     cudaDeviceSynchronize();
-    check_mesh<<<mesh_grid,1>>>(sph.cuda,sph.dev_arg);
+    //check_mesh<<<mesh_grid,1>>>(sph.cuda,sph.dev_arg);
+    //cudaDeviceSynchronize();
+    sph_nnps_cuda<<<mesh_grid,mesh_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
     cudaDeviceSynchronize();
-    //sph_nnps_cuda<<<mesh_grid,mesh_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
-    //cudaDeviceSynchronize();
-    //check_pair<<<1,1>>>(sph.dev_arg);
-    //cudaDeviceSynchronize();
+    check_pair<<<1,1>>>(sph.dev_arg);
+    cudaDeviceSynchronize();
 
     sph_free(&sph);
     cudaDeviceReset();
