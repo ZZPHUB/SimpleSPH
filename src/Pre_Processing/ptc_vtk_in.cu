@@ -66,7 +66,7 @@ void ptc_rigid_init(SPH *sph)
     wedge->accx = wedge->accy = wedge->alpha = 0.0;
     wedge->mass = 12.8;
 
-    if(sph->new_case_flag == 1 || sph->init_impac_flag == 1)
+    if(sph->host_arg->new_case_flag == 1 || sph->host_arg->init_impac_flag == 1)
     {
         wedge->vx = wedge->vy = wedge->omega = 0.0;
         wedge->cogx = FLUID_DOMAIN_LENGTH/2.0;
@@ -81,7 +81,7 @@ void ptc_rigid_init(SPH *sph)
             }
         }
     }
-    else if(sph->new_case_flag == 0 && sph->init_impac_flag == 0)
+    else if(sph->host_arg->new_case_flag == 0 && sph->host_arg->init_impac_flag == 0)
     {
         ifstream infofile;
         infofile.open("../data/preprocess/info.txt");
