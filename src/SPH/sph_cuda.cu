@@ -9,12 +9,15 @@ __global__ void check_pair(SPH_ARG *arg)
 __global__ void check_mesh(SPH_CUDA *cuda,SPH_ARG *arg)
 {
     const int mesh_id = blockIdx.x + blockIdx.y* gridDim.x;
-    printf("mesh id is:%d ptc in mesh is:%d they are:",mesh_id,cuda->mesh_count[mesh_id]);
-    for(int i=0;i<cuda->mesh_count[mesh_id];i++)
+    if(cuda->mesh_count[mesh_id] != 0)
     {
-        printf("%d",cuda->mesh[mesh_id+i*arg->mesh_num]);
+        printf("mesh id is:%d ptc in mesh is:%d they are:",mesh_id,cuda->mesh_count[mesh_id]);
+        for(int i=0;i<cuda->mesh_count[mesh_id];i++)
+        {
+            printf("%d",cuda->mesh[mesh_id+i*arg->mesh_num]);
+        }
+        printf("\n");
     }
-    printf("\n");
     __syncthreads();
 }
 
