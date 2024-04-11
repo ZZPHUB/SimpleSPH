@@ -142,5 +142,5 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
             }
         }
     }
-    cuda->mesh[mesh_id] = 0;
+    cuda->mesh_count[mesh_id] = 0;
 }

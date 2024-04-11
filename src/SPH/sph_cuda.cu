@@ -7,9 +7,29 @@ __global__ void check_ptc(SPH_CUDA *cuda,SPH_ARG *arg)
     printf("%lf %lf\n",cuda->x[id],cuda->y[id]);
 }
 
-__global__ void check_pair(SPH_ARG *arg)
+__global__ void check_pair(SPH_CUDA *cuda,SPH_ARG *arg)
 {
-    printf("the pair num is:%d\n",arg->pair_num);
+    const int id = threadIdx.x + blockIdx.x * blockDim.x;
+    if(id >= arg->pair_num) return;
+    if(id == 0)printf("the pair num is:%d\n",arg->pair_num);
+    for(int i=0;i<arg->pair_num;i++)
+    {
+        if(cuda->pair_i[id] == cuda->pair_i[i] && cuda->pair_j[id]==cuda->pair_j[i] && id!=i)
+        {
+            printf("here is same pair\n");
+        }
+        else(cuda->pair_i[id] == cuda->pair_j[i] && cuda->pair_j[id]==cuda->pair_i[i])
+        {
+            if(id == i)
+            {
+               printf("nnps error !!\n");
+            }
+            else 
+            {
+                printf("here is same pair\n");
+            }
+        }
+    }
 }
 
 __global__ void check_mesh(SPH_CUDA *cuda,SPH_ARG *arg)
@@ -77,9 +97,10 @@ int main(void)
         //cudaDeviceSynchronize();
         sph_nnps_cuda<<<mesh_grid,mesh_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
         cudaDeviceSynchronize();
-        check_pair<<<1,1>>>(sph.dev_arg);
+        check_pair<<<(int)(250000/1024)+1,1024>>>(sph.cuda,sph.dev_arg);
         cudaDeviceSynchronize();
 
+        /*
         host_mesh = (int *)malloc(sizeof(int)*sph.host_arg->mesh_num*sph.host_arg->mesh_volume);
         host_mesh_count = (int *)malloc(sizeof(int)*sph.host_arg->mesh_num);
 
@@ -92,6 +113,7 @@ int main(void)
         {
             if(host_mesh_count[j]!=0) printf("error!!!!!!\n");
         }
+        */
     }
 
     
