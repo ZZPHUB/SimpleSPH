@@ -20,7 +20,7 @@ __global__ void check_pair(SPH_CUDA *cuda,SPH_ARG *arg)
             {
                 printf("type1 index_1:%d index_2:%d pair_i:%d pair_j:%d\n",id,i,cuda->pair_i[id],cuda->pair_j[id]);
             }
-            atomicAdd(&arg->tmp,1);
+            atomicAdd(&(arg->tmp),1);
         }
         else if(cuda->pair_i[id] == cuda->pair_j[i] && cuda->pair_j[id]==cuda->pair_i[i])
         {
@@ -40,7 +40,7 @@ __global__ void check_pair(SPH_CUDA *cuda,SPH_ARG *arg)
                     printf("type3 index_1:%d index_2:%d pair_i:%d pair_j:%d\n",id,i,cuda->pair_i[id],cuda->pair_j[id]);
                 }
             }
-            atomicAdd(&arg->tmp,1);
+            atomicAdd(&(arg->tmp),1);
         }
     }
 }
