@@ -3,10 +3,6 @@
 
 /* Include Headers Here*/
 #include "SPH.cuh"
-#include <iostream>
-#include <fstream>
-#include <iomanip>
-#include <stdlib.h>
 
 /* Extern Function Here*/
 extern __global__ void sph_mesh_cuda(SPH_CUDA *,SPH_ARG *,SPH_RIGID *);

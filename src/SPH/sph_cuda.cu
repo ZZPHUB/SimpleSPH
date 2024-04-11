@@ -1,9 +1,5 @@
 #include "SPH.cuh"
-#include <fstream>
-#include <iomanip>
-#include <stdlib.h>
-#include <time.h>
-using namespace std;
+
 
 __global__ void check_pair(SPH_ARG *arg)
 {
