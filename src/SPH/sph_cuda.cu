@@ -5,6 +5,7 @@ __global__ void check_pair(SPH_ARG *arg)
 {
     printf("the pair num is:%d\n",arg->pair_num);
 }
+
 int main(void)
 {
     SPH_PARTICLE particle;
@@ -37,6 +38,8 @@ int main(void)
     sph_mesh_cuda<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
     cudaDeviceSynchronize();
     sph_nnps_cuda<<<mesh_grid,mesh_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
+    cudaDeviceSynchronize();
+    check_pair<<<1,1>>>(sph.dev_arg);
     cudaDeviceSynchronize();
 
 

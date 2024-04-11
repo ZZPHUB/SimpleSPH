@@ -41,15 +41,3 @@
     }
 }*/
 
-__device__ void sph_cuda_lock(SPH_ARG *arg)
-{
-    while(!atomicCAS(&arg->lock,1,0))
-    {
-        continue;
-    }
-}
-
-__device__ void sph_cuda_unlock(SPH_ARG *arg)
-{
-    atomicCAS(&arg->lock,0,1);
-}

@@ -30,11 +30,13 @@ __global__ void sph_mesh_cuda(SPH_CUDA *cuda,SPH_ARG *arg)
     {
         mid += arg->mesh_xnum - 1;
     }
-    sph_cuda_lock(arg);
 
+    while(!atomicCAS(&arg->lock,1,0))
+    {
+        continue;
+    } 
     cuda->mesh[mid + arg->mesh_num*cuda->mesh_count[mid]] = id;
-    cuda->mesh_count[mid] += 1;
-
-    sph_cuda_unlock(arg);
+    cuda->mesh_count[mid] += 1; 
+    atomicCAS(&arg->lock,0,1); 
 }
 
