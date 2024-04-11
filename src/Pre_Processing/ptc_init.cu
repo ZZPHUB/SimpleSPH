@@ -9,7 +9,7 @@ void ptc_info_init(SPH *sph)
 
     double free_surf = PTC_SPACING*(FLUID_DEEPTH_NUM-1+4);
 
-    if(sph->new_case_flag == 1)
+    if(sph->host_arg->new_case_flag == 1)
     {
         for(int i=0;i<particle->total;i++)
         {

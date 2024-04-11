@@ -48,13 +48,13 @@ void ptc_wall_generate(SPH *sph)
 
 void ptc_generate(SPH *sph)
 {
-    if(sph->new_case_flag == 1)
+    if(sph->host_arg->new_case_flag == 1)
     {
         ptc_fluid_generate(sph);
         ptc_wall_generate(sph);
         ptc_rigid_generate(sph);
     }
-   else if(sph->new_case_flag == 0)
+   else if(sph->host_arg->new_case_flag == 0)
    {
         ptc_read_vtk(sph);    
    } 

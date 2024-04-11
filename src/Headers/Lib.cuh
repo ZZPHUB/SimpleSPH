@@ -6,7 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
-#include <stdlib.h>>
+#include <stdlib.h>
 
 /* Extern Function Here*/
 extern __global__ void sph_mesh_cuda(double *x,double *y,double *accx,double *accy,double *drho,int *type,int *mesh,int *count,int ptc_num);
