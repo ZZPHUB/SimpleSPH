@@ -6,6 +6,17 @@ __global__ void check_pair(SPH_ARG *arg)
     printf("the pair num is:%d\n",arg->pair_num);
 }
 
+__global__ void check_mesh(SPH_CUDA *cuda,SPH_ARG *arg)
+{
+    const int mesh_id = blockIdx.x + blockIdx.y* gridDim.x;
+    printf("mesh id is:%d ptc in mesh is:%d they are:",mesh_id,cuda->mesh_count[mesh_id]);
+    for(int i=0;i<cuda->mesh_count[mesh_id];i++)
+    {
+        printf("%d",cuda->mesh[mesh_id+i*arg->mesh_num]);
+    }
+    printf("\n");
+}
+
 int main(void)
 {
     SPH_PARTICLE particle;
@@ -37,10 +48,12 @@ int main(void)
 
     sph_fuck_you<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg);
     cudaDeviceSynchronize();
-    sph_nnps_cuda<<<mesh_grid,mesh_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
+    check_mesh<<<mesh_grid,1>>>(sph.cuda,sph.dev_arg);
     cudaDeviceSynchronize();
-    check_pair<<<1,1>>>(sph.dev_arg);
-    cudaDeviceSynchronize();
+    //sph_nnps_cuda<<<mesh_grid,mesh_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
+    //cudaDeviceSynchronize();
+    //check_pair<<<1,1>>>(sph.dev_arg);
+    //cudaDeviceSynchronize();
 
     sph_free(&sph);
     cudaDeviceReset();

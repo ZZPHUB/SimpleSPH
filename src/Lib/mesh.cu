@@ -4,7 +4,6 @@ __global__ void sph_fuck_you(SPH_CUDA *cuda,SPH_ARG *arg)
 {
     //const int bid = blockIdx.x;
     //const int tid = threadIdx.x;
-    int mesh_index = 0;
     const int id = threadIdx.x + blockIdx.x * blockDim.x;
     if(id >= arg->ptc_num) return;
 
@@ -14,6 +13,7 @@ __global__ void sph_fuck_you(SPH_CUDA *cuda,SPH_ARG *arg)
     if(id == 0) arg->pair_num = 0;
 
     int mid = 0;
+    int mesh_index = 0;
 
     if(cuda->y[id] < arg->domain_y && cuda->y[id] >= 0.0)
     {
