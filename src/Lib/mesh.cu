@@ -4,6 +4,7 @@ __global__ void sph_fuck_you(SPH_CUDA *cuda,SPH_ARG *arg)
 {
     //const int bid = blockIdx.x;
     //const int tid = threadIdx.x;
+    int mesh_index = 0;
     const int id = threadIdx.x + blockIdx.x * blockDim.x;
     if(id >= arg->ptc_num) return;
 
@@ -30,13 +31,8 @@ __global__ void sph_fuck_you(SPH_CUDA *cuda,SPH_ARG *arg)
     {
         mid += arg->mesh_xnum - 1;
     }
-
-    while(!atomicCAS(&arg->lock,1,0))
-    {
-        continue;
-    } 
-    cuda->mesh[mid + arg->mesh_num*cuda->mesh_count[mid]] = id;
-    cuda->mesh_count[mid] += 1; 
-    atomicCAS(&arg->lock,0,1);
+    mesh_index = atomicAdd(&cuda->mesh_count[mid],1);
+    mesh_index += mid;
+    cuda->mesh[mesh_index] = id;
 }
 
