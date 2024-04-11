@@ -68,10 +68,6 @@ void sph_init(SPH *sph)
     
     sph->mesh = mesh;
     
-    ptc_generate(sph);
-    ptc_init(sph);
-    cudaMalloc(&(sph->dev_rigid),sizeof(SPH_RIGID));
-    cudaMemcpy(sph->dev_rigid,sph->host_rigid,sizeof(SPH_RIGID),cudaMemcpyHostToDevice);
     /*sph->d_time = DELTA_TIME;
     sph->c = ART_SOUND_VEL;
     sph->g = 0.0;
@@ -119,6 +115,11 @@ void sph_init(SPH *sph)
     sph->host_arg->lock = 1;//1 to unlocked,0 to locked
     cudaMalloc(&(sph->dev_arg),sizeof(SPH_ARG));
     cudaMemcpy(sph->dev_arg,sph->host_arg,sizeof(SPH_ARG),cudaMemcpyHostToDevice);
+
+    ptc_generate(sph);
+    ptc_init(sph);
+    cudaMalloc(&(sph->dev_rigid),sizeof(SPH_RIGID));
+    cudaMemcpy(sph->dev_rigid,sph->host_rigid,sizeof(SPH_RIGID),cudaMemcpyHostToDevice);
 
     /*cuda mem alloc*/
     cudaMalloc(&(sph->cuda),sizeof(SPH_CUDA));
