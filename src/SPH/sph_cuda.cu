@@ -60,30 +60,43 @@ int main(void)
     dim3 pair_block(512);
     dim3 pair_grid((int)(sph.particle->total/16)+1);
 
-    //check_ptc<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg);
-    //cudaDeviceSynchronize();
-    sph_mesh_cuda<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg);
-    cudaDeviceSynchronize();
-    //check_mesh<<<mesh_grid,1>>>(sph.cuda,sph.dev_arg);
-    //cudaDeviceSynchronize();
-    //sph_nnps_cuda<<<mesh_grid,mesh_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
-    //cudaDeviceSynchronize();
-    //check_pair<<<1,1>>>(sph.dev_arg);
-    //cudaDeviceSynchronize();
-
     int *host_mesh;
     int *host_mesh_count;
     SPH_CUDA cuda;
     cudaMemcpy(&cuda,sph.cuda,sizeof(SPH_CUDA),cudaMemcpyDeviceToHost);
     cudaDeviceSynchronize();
 
-    host_mesh = (int *)malloc(sizeof(int)*sph.host_arg->mesh_num*sph.host_arg->mesh_volume);
-    host_mesh_count = (int *)malloc(sizeof(int)*sph.host_arg->mesh_num);
+    for(int i=0;i<100;i++)
+    {
+        printf("current step is:%d\n",i);
+        //check_ptc<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg);
+        //cudaDeviceSynchronize();
+        sph_mesh_cuda<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg);
+        cudaDeviceSynchronize();
+        //check_mesh<<<mesh_grid,1>>>(sph.cuda,sph.dev_arg);
+        //cudaDeviceSynchronize();
+        sph_nnps_cuda<<<mesh_grid,mesh_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
+        cudaDeviceSynchronize();
+        check_pair<<<1,1>>>(sph.dev_arg);
+        cudaDeviceSynchronize();
 
-    cudaMemcpy(host_mesh,cuda.mesh,sizeof(int)*sph.host_arg->mesh_num*sph.host_arg->mesh_volume,cudaMemcpyDeviceToHost);
-    cudaDeviceSynchronize();
-    cudaMemcpy(host_mesh_count,cuda.mesh_count,sizeof(int)*sph.host_arg->mesh_num,cudaMemcpyDeviceToHost);
-    cudaDeviceSynchronize();
+        host_mesh = (int *)malloc(sizeof(int)*sph.host_arg->mesh_num*sph.host_arg->mesh_volume);
+        host_mesh_count = (int *)malloc(sizeof(int)*sph.host_arg->mesh_num);
+
+        cudaMemcpy(host_mesh,cuda.mesh,sizeof(int)*sph.host_arg->mesh_num*sph.host_arg->mesh_volume,cudaMemcpyDeviceToHost);
+        cudaDeviceSynchronize();
+        cudaMemcpy(host_mesh_count,cuda.mesh_count,sizeof(int)*sph.host_arg->mesh_num,cudaMemcpyDeviceToHost);
+        cudaDeviceSynchronize();
+
+        for(int j=0;j<sph.host_arg->mesh_num;j++)
+        {
+            if(host_mesh_count[j]!=0) printf("error!!!!!!\n");
+        }
+    }
+
+    
+
+    
 
     for(int i=0;i<sph.host_arg->mesh_num;i++)
     {
