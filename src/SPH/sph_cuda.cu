@@ -74,8 +74,8 @@ __global__ void check_mesh(SPH_CUDA *cuda,SPH_ARG *arg)
             if(mid == mesh_id) atomicAdd(&(arg->tmp),1);
             //if(mid != mesh_id) printf("mid:%d mesh_id:%d id:%d x:%lf y:%lf\n",mid,mesh_id,id,cuda->x[id],cuda->y[id]);
         }
-        //cuda->mesh_count[mesh_id] = 0;
     }
+    cuda->mesh_count[mesh_id] = 0;
     /*
     if(cuda->mesh_count[mesh_id]!=0)
     {
@@ -138,8 +138,8 @@ int main(void)
         cudaDeviceSynchronize();
         check_mesh<<<mesh_grid,1>>>(sph.cuda,sph.dev_arg);
         cudaDeviceSynchronize();
-        sph_nnps_cuda<<<mesh_grid,mesh_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
-        cudaDeviceSynchronize();
+        //sph_nnps_cuda<<<mesh_grid,mesh_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
+        //cudaDeviceSynchronize();
         //check_pair<<<(int)(250000/1024)+1,1024>>>(sph.cuda,sph.dev_arg);
         //cudaDeviceSynchronize();
 
