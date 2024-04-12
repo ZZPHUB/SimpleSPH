@@ -47,11 +47,35 @@ __global__ void check_pair(SPH_CUDA *cuda,SPH_ARG *arg)
 
 __global__ void check_mesh(SPH_CUDA *cuda,SPH_ARG *arg)
 {
+    int mid = 0;
+    int id = 0;
     const int mesh_id = blockIdx.x + blockIdx.y* gridDim.x;
+    for(int i=0;i<cuda->mesh_count[mesh_id];i++)
+    {
+        id = i*arg->mesh_num + mesh_id;
+        if(cuda->y[id] < arg->domain_y && cuda->y[id] >= 0.0)
+        {
+            mid = __double2int_rz(cuda->y[id]/arg->mesh_dx)*arg->mesh_xnum;
+        }
+        else
+        {
+            mid = (arg->mesh_ynum - 1)*arg->mesh_xnum;
+        }
+        if(cuda->x[id] < arg->domain_x && cuda->x[id] >= 0.0)
+        {
+            mid += __double2int_rz(cuda->x[id]/arg->mesh_dx);
+        }
+        else
+        {
+            mid += arg->mesh_xnum - 1;
+        }
+        if(mid != mesh_id) printf("mid is:%d mesh_id is:%d\n",mid,mesh_id);
+    }
+    /*
     if(cuda->mesh_count[mesh_id]!=0)
     {
         printf("%d %d\n",mesh_id,cuda->mesh_count[mesh_id]);
-    }
+    }*/
     /*
     if(cuda->mesh_count[mesh_id] != 0)
     {
@@ -100,15 +124,15 @@ int main(void)
     cudaMemcpy(&cuda,sph.cuda,sizeof(SPH_CUDA),cudaMemcpyDeviceToHost);
     cudaDeviceSynchronize();
 
-    for(int i=0;i<1;i++)
+    for(int i=0;i<100;i++)
     {
-        //printf("current step is:%d\n",i);
+        printf("current step is:%d\n",i);
         //check_ptc<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg);
         //cudaDeviceSynchronize();
         sph_mesh_cuda<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg);
         cudaDeviceSynchronize();
-        //check_mesh<<<mesh_grid,1>>>(sph.cuda,sph.dev_arg);
-        //cudaDeviceSynchronize();
+        check_mesh<<<mesh_grid,1>>>(sph.cuda,sph.dev_arg);
+        cudaDeviceSynchronize();
         //sph_nnps_cuda<<<mesh_grid,mesh_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
         //cudaDeviceSynchronize();
         //check_pair<<<(int)(250000/1024)+1,1024>>>(sph.cuda,sph.dev_arg);
@@ -117,6 +141,7 @@ int main(void)
         //cudaMemcpy(&tmp_arg,sph.dev_arg,sizeof(SPH_ARG),cudaMemcpyDeviceToHost);
         //printf("the total same pair num is:%d \n",tmp_arg.tmp);
         
+        /*
         host_mesh = (int *)malloc(sizeof(int)*sph.host_arg->mesh_num*sph.host_arg->mesh_volume);
         host_mesh_count = (int *)malloc(sizeof(int)*sph.host_arg->mesh_num);
 
@@ -135,6 +160,7 @@ int main(void)
             }
             printf("\n");
         }
+        */
     }
 
     /*
