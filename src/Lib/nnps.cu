@@ -192,9 +192,9 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         //(x,y)->(x,y+1)
         if( blockIdx.x<(arg->mesh_ynum-1))
         {
-            for(int j=0;j<cuda->mesh_count[mesh_id+cuda->mesh_xnum];j++)
+            for(int j=0;j<cuda->mesh_count[mesh_id+arg->mesh_xnum];j++)
             {
-                index_j = mesh_id + cuda->mesh_xnum + j*arg->mesh_num;
+                index_j = mesh_id + arg->mesh_xnum + j*arg->mesh_num;
                 dx = cuda->x[cuda->mesh[index_i]] - cuda->x[cuda->mesh[index_j]];
                 dy = cuda->y[cuda->mesh[index_i]] - cuda->y[cuda->mesh[index_j]];
                 q = sqrt(dx*dx+dy*dy)/arg->h;
@@ -219,9 +219,9 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         //(x,y)->(x+1,y+1)
         if( threadIdx.x<(arg->mesh_xnum-1) && blockIdx.x<(arg->mesh_ynum-1))
         {
-            for(int j=0;j<cuda->mesh_count[mesh_id+1+cuda->mesh_xnum];j++)
+            for(int j=0;j<cuda->mesh_count[mesh_id+1+arg->mesh_xnum];j++)
             {
-                index_j = mesh_id + 1 + cuda->mesh_xnum + j*arg->mesh_num;
+                index_j = mesh_id + 1 + arg->mesh_xnum + j*arg->mesh_num;
                 dx = cuda->x[cuda->mesh[index_i]] - cuda->x[cuda->mesh[index_j]];
                 dy = cuda->y[cuda->mesh[index_i]] - cuda->y[cuda->mesh[index_j]];
                 q = sqrt(dx*dx+dy*dy)/arg->h;
@@ -246,9 +246,9 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         //(x,y)->(x-1,y+1)
         if( threadIdx.x>0 && blockIdx.x<(arg->mesh_ynum-1))
         {
-            for(int j=0;j<cuda->mesh_count[mesh_id-1+cuda->mesh_xnum];j++)
+            for(int j=0;j<cuda->mesh_count[mesh_id-1+arg->mesh_xnum];j++)
             {
-                index_j = mesh_id - 1 + cuda->mesh_xnum + j*arg->mesh_num;
+                index_j = mesh_id - 1 + arg->mesh_xnum + j*arg->mesh_num;
                 dx = cuda->x[cuda->mesh[index_i]] - cuda->x[cuda->mesh[index_j]];
                 dy = cuda->y[cuda->mesh[index_i]] - cuda->y[cuda->mesh[index_j]];
                 q = sqrt(dx*dx+dy*dy)/arg->h;
