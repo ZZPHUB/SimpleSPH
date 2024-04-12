@@ -123,8 +123,8 @@ void sph_nnps_cpu(SPH *sph)
 __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
 {
 
-    //threadIdx.x---> (x)length direction
-    //blockIdx.x ---> (y)depth direction
+    //n---> (x)length direction
+    //m ---> (y)depth direction
 
     double dx = 0.0;
     double dy = 0.0;
@@ -170,7 +170,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                     }
                 }
                 //(x,y)->(x+1,y)
-                if( threadIdx.x<(arg->mesh_xnum-1))
+                if( n<(arg->mesh_xnum-1))
                 {
                     for(int j=0;j<cuda->mesh_count[mesh_id+1];j++)
                     {
@@ -199,7 +199,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                 }
 
                 //(x,y)->(x,y+1)
-                if( blockIdx.x<(arg->mesh_ynum-1))
+                if( m<(arg->mesh_ynum-1))
                 {
                     for(int j=0;j<cuda->mesh_count[mesh_id+arg->mesh_xnum];j++)
                     {
@@ -228,7 +228,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                 }
 
                 //(x,y)->(x+1,y+1)
-                if( threadIdx.x<(arg->mesh_xnum-1) && blockIdx.x<(arg->mesh_ynum-1))
+                if( n<(arg->mesh_xnum-1) && m<(arg->mesh_ynum-1))
                 {
                     for(int j=0;j<cuda->mesh_count[mesh_id+1+arg->mesh_xnum];j++)
                     {
@@ -257,7 +257,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                 }
 
                 //(x,y)->(x-1,y+1)
-                if( threadIdx.x>0 && blockIdx.x<(arg->mesh_ynum-1))
+                if( n>0 && m<(arg->mesh_ynum-1))
                 {
                     for(int j=0;j<cuda->mesh_count[mesh_id-1+arg->mesh_xnum];j++)
                     {
