@@ -179,10 +179,10 @@ int main(void)
         //cudaDeviceSynchronize();
         sph_nnps_cuda<<<mesh_grid,mesh_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
         cudaDeviceSynchronize();
-        check_pair<<<mesh_grid,128>>>(sph.cuda,sph.dev_arg);
-        cudaDeviceSynchronize();
-        check_mesh<<<mesh_grid,1>>>(sph.cuda,sph.dev_arg);
-        cudaDeviceSynchronize();
+        //check_pair<<<mesh_grid,128>>>(sph.cuda,sph.dev_arg);
+        //cudaDeviceSynchronize();
+        //check_mesh<<<mesh_grid,1>>>(sph.cuda,sph.dev_arg);
+        //cudaDeviceSynchronize();
 
         cudaError_t sph_error = cudaGetLastError();
         printf("%s\n",cudaGetErrorName(sph_error));
