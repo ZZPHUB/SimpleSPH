@@ -147,7 +147,7 @@ int main(void)
         cudaDeviceSynchronize();
         cudaMemcpy(sph.mesh->count,cuda.mesh_count,sizeof(int)*sph.host_arg->mesh_num,cudaMemcpyDeviceToHost);
         cudaDeviceSynchronize();
-        for(int i=0;i<sph.arg->mesh_num;i++)
+        for(int i=0;i<sph.host_arg->mesh_num;i++)
         {
             printf("%d\n",sph.mesh->count[i]);
         }
