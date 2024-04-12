@@ -61,6 +61,9 @@ __global__ void check_mesh(SPH_CUDA *cuda,SPH_ARG *arg)
     int mid = 0;
     int id = 0;
     const int mesh_id = blockIdx.x + blockIdx.y* gridDim.x;
+    atomicAdd(&arg->tmp,cuda->pair_count[mesh_id]);
+    cuda->pair_count[mesh_id]=0;
+    /*
     for(int i=0;i<cuda->mesh_count[mesh_id];i++)
     {
         id = cuda->mesh[i*arg->mesh_num + mesh_id];
@@ -86,7 +89,7 @@ __global__ void check_mesh(SPH_CUDA *cuda,SPH_ARG *arg)
             //if(mid != mesh_id) printf("mid:%d mesh_id:%d id:%d x:%lf y:%lf\n",mid,mesh_id,id,cuda->x[id],cuda->y[id]);
         }
     }
-    cuda->mesh_count[mesh_id] = 0;
+    cuda->mesh_count[mesh_id] = 0;*/
     /*
     if(cuda->mesh_count[mesh_id]!=0)
     {

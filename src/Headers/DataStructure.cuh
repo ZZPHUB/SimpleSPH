@@ -93,6 +93,7 @@ typedef struct
 
     int *pair_i;
     int *pair_j;
+    int *pair_count;
 
     double *pair_w;
     double *dwdx;
@@ -138,6 +139,7 @@ typedef struct
 
     int ptc_num;    //ptc's total num
     int pair_num;   //pair total num
+    int pair_volume; //pear mesh's pair num
     int lock;
     int tmp;   //to count some debug tmp num
 }SPH_ARG;

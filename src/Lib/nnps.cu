@@ -151,7 +151,8 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
             {
                 if(cuda->type[index_i] == 0 || cuda->type[index_j] == 0)
                 {
-                    atomicAdd(&count,1);
+                   atomicAdd(&(cuda->pair_count[mesh_id]),1);
+                   atomicAdd(&count,1);
                 }
             }
         }
@@ -168,6 +169,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                 {
                     if(cuda->type[index_i] == 0 || cuda->type[index_j] == 0)
                     {
+                        atomicAdd(&(cuda->pair_count[mesh_id]),1);
                         atomicAdd(&count,1);
                     }
                 }
@@ -186,6 +188,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                 {
                     if(cuda->type[index_i] == 0 || cuda->type[index_j] == 0)
                     {
+                        atomicAdd(&(cuda->pair_count[mesh_id]),1);
                         atomicAdd(&count,1);
                     }
                 }
@@ -204,6 +207,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                 {
                     if(cuda->type[index_i] == 0 || cuda->type[index_j] == 0)
                     {
+                        atomicAdd(&(cuda->pair_count[mesh_id]),1);
                         atomicAdd(&count,1);
                     }
                 } 
@@ -222,7 +226,8 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                 {
                     if(cuda->type[index_i] == 0 || cuda->type[index_j] == 0)
                     {
-                        atomicAdd(&count,1);
+                       atomicAdd(&(cuda->pair_count[mesh_id]),1);
+                       atomicAdd(&count,1);
                     }
                 } 
             }
@@ -231,8 +236,8 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     __syncthreads();
     if( threadIdx.x == 0 && threadIdx.y == 0)
     {
-        //atomicAdd(&(arg->pair_num),count);
+        atomicAdd(&(arg->pair_num),count);
         cuda->mesh_count[mesh_id]=0;
     }
-   // __syncthreads();
+    __syncthreads();
 }

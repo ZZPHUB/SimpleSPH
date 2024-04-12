@@ -96,6 +96,7 @@ void sph_init(SPH *sph)
     sph->host_arg->h = PTC_SML;
     sph->host_arg->alpha = ALPHA;
     sph->host_arg->dt = DELTA_TIME;
+    sph->host_arg->pair_volume = 32*sph->host_arg->ptc_num/sph->host_arg->mesh_num;
     cout << "run a new case or an old case(press 1 for new,0 for old)" << endl;
     cin >> sph->host_arg->new_case_flag;
     if(sph->host_arg->new_case_flag == 1)
@@ -150,6 +151,7 @@ void sph_init(SPH *sph)
     cudaMalloc(&(temp_cuda.dwdy),32*particle->total*sizeof(double));
     cudaMalloc(&(temp_cuda.pair_i),32*particle->total*sizeof(int));
     cudaMalloc(&(temp_cuda.pair_j),32*particle->total*sizeof(int));
+    cudaMalloc(&(temp_cuda.pair_count),MESH_DEEPTH_NUM*MESH_LENGTH_NUM*sizeof(int));
     cudaMalloc(&(temp_cuda.mesh),MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM*sizeof(int));
     cudaMalloc(&(temp_cuda.mesh_count),MESH_DEEPTH_NUM*MESH_LENGTH_NUM*sizeof(int));
 
@@ -176,6 +178,7 @@ void sph_init(SPH *sph)
     cudaMemset(temp_cuda.dwdy,0,32*particle->total*sizeof(double));
     cudaMemset(temp_cuda.pair_i,0,32*particle->total*sizeof(int));
     cudaMemset(temp_cuda.pair_j,0,32*particle->total*sizeof(int));
+    cudaMemset(temp_cuda.pair_count,0,MESH_DEEPTH_NUM*MESH_LENGTH_NUM*sizeof(int));
     cudaMemset(temp_cuda.mesh,0,MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM*sizeof(int));
     cudaMemset(temp_cuda.mesh_count,0,MESH_DEEPTH_NUM*MESH_LENGTH_NUM*sizeof(int));
 
