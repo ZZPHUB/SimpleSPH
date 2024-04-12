@@ -129,7 +129,7 @@ int main(void)
     cudaMemcpy(&cuda,sph.cuda,sizeof(SPH_CUDA),cudaMemcpyDeviceToHost);
     cudaDeviceSynchronize();
 
-    for(int i=0;i<100;i++)
+    for(int i=0;i<1;i++)
     {
         printf("current step is:%d\n",i);
         //check_ptc<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg);

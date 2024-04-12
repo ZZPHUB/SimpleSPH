@@ -44,14 +44,14 @@ void sph_init(SPH *sph)
     particle->type = (int *)(calloc(particle->total,sizeof(int)));  
 
     //kernel data init
-    kernel->w = (double *)(calloc(30*particle->total,sizeof(double)));  //this code donnot use kernel value
-    kernel->dwdx = (double *)(calloc(30*particle->total,sizeof(double)));
-    kernel->dwdy = (double *)(calloc(30*particle->total,sizeof(double)));
+    kernel->w = (double *)(calloc(32*particle->total,sizeof(double)));  //this code donnot use kernel value
+    kernel->dwdx = (double *)(calloc(32*particle->total,sizeof(double)));
+    kernel->dwdy = (double *)(calloc(32*particle->total,sizeof(double)));
    
     //pair data init
     pair->total = 0; 
-    pair->i = (unsigned int *)(calloc(30*particle->total,sizeof(unsigned int)));
-    pair->j = (unsigned int *)(calloc(30*particle->total,sizeof(unsigned int)));
+    pair->i = (unsigned int *)(calloc(32*particle->total,sizeof(unsigned int)));
+    pair->j = (unsigned int *)(calloc(32*particle->total,sizeof(unsigned int)));
 
     //mesh data init
     mesh = (SPH_MESH)(calloc(MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM,sizeof(int)));
