@@ -143,9 +143,9 @@ int main(void)
         //check_pair<<<(int)(250000/1024)+1,1024>>>(sph.cuda,sph.dev_arg);
         //cudaDeviceSynchronize();
 
-        cudaMemcpy(sph.pair->i,cuda.pair_i,sizeof(double)*32*sph.particle->total,cudaMemcpyDeviceToHost);
+        cudaMemcpy(sph.pair->i,cuda.pair_i,sizeof(int)*32*sph.particle->total,cudaMemcpyDeviceToHost);
         cudaDeviceSynchronize();
-        cudaMemcpy(sph.pair->j,cuda.pair_j,sizeof(double)*32*sph.particle->total,cudaMemcpyDeviceToHost);
+        cudaMemcpy(sph.pair->j,cuda.pair_j,sizeof(int)*32*sph.particle->total,cudaMemcpyDeviceToHost);
         cudaDeviceSynchronize();
         cudaMemcpy(&tmp_arg,sph.dev_arg,sizeof(SPH_ARG),cudaMemcpyDeviceToHost);
         cudaDeviceSynchronize();
