@@ -149,7 +149,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         {
             if(cuda->type[index_i] == 0 || cuda->type[index_j] == 0)
             {
-                atomicAdd(&count,1);
+                count+=1;
             }
         }
     }
@@ -166,7 +166,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
             {
                 if(cuda->type[index_i] == 0 || cuda->type[index_j] == 0)
                 {
-                    atomicAdd(&count,1);
+                    count+=1;
                 }
             }
         }
@@ -184,7 +184,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
             {
                 if(cuda->type[index_i] == 0 || cuda->type[index_j] == 0)
                 {
-                    atomicAdd(&count,1);
+                    count+=1;
                 }
             }
         }
@@ -202,7 +202,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
             {
                 if(cuda->type[index_i] == 0 || cuda->type[index_j] == 0)
                 {
-                    atomicAdd(&count,1);
+                    count+=1;
                 }
             } 
         }
@@ -220,7 +220,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
             {
                 if(cuda->type[index_i] == 0 || cuda->type[index_j] == 0)
                 {
-                    atomicAdd(&count,1);
+                    count+=1;
                 }
             } 
         }
