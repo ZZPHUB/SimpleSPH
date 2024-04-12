@@ -12,8 +12,31 @@ __global__ void check_pair(SPH_CUDA *cuda,SPH_ARG *arg)
     //double dx=0.0;
     //double dy=0.0;
     //double q=0.0;
-    const int id = threadIdx.x + blockIdx.x * blockDim.x;
-    if(id >= arg->pair_num) return;
+    //const int id = threadIdx.x + blockIdx.x * blockDim.x;
+    //if(id >= arg->pair_num) return;
+    const int mesh_id = blockIdx.x + blockIdx.y * gridDim.x;
+    int id = 0;
+    int tmp_id = 0;
+    if(threadIdx.x >= cuda->pair_count[id]) return;
+    else id = mesh_id*arg->pair_volume + threadIdx.x;
+    for(int i=0;i<arg->mesh_num;i++)
+    {
+        for(int j=0;j<cuda->pair_count[i];j++)
+        {
+            tmp_id = i*arg->pair_volume + j;
+            if(id != tmp_id)
+            {
+                if(cuda->pair_i[id] == cuda->pair_j[tmp_id] && cuda->pair_j[id] == cuda->pair_j[tmp_id])
+                {
+                    printf("type 1 errors\n");
+                }
+                else if(cuda->pair_i[id] == cuda->pair_j[tmp_id] && cuda->pair_j[id] == cuda->pair_i[tmp_id])
+                {
+                    printf("type 2 errors\n")
+                }
+            }
+        }
+    }
 
     /*
     dx = cuda->x[cuda->pair_i[id]] - cuda->x[cuda->pair_j[id]];
@@ -23,7 +46,7 @@ __global__ void check_pair(SPH_CUDA *cuda,SPH_ARG *arg)
 
     
     //if(id == 0)printf("the pair num is:%d\n",arg->pair_num);
-    for(int i=0;i<arg->pair_num;i++)
+    /*for(int i=0;i<arg->pair_num;i++)
     {
         if(cuda->pair_i[id] == cuda->pair_i[i] && cuda->pair_j[id]==cuda->pair_j[i] && id!=i)
         {
@@ -53,7 +76,7 @@ __global__ void check_pair(SPH_CUDA *cuda,SPH_ARG *arg)
             }
             atomicAdd(&(arg->tmp),1);
         }
-    }
+    }*/
 }
 
 __global__ void check_mesh(SPH_CUDA *cuda,SPH_ARG *arg)
@@ -154,8 +177,8 @@ int main(void)
         //cudaDeviceSynchronize();
         sph_nnps_cuda<<<mesh_grid,mesh_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
         cudaDeviceSynchronize();
-        //check_pair<<<(int)(250000/1024)+1,1024>>>(sph.cuda,sph.dev_arg);
-        //cudaDeviceSynchronize();
+        check_pair<<<mesh_grid,128>>>(sph.cuda,sph.dev_arg);
+        cudaDeviceSynchronize();
         check_mesh<<<mesh_grid,1>>>(sph.cuda,sph.dev_arg);
         cudaDeviceSynchronize();
 
