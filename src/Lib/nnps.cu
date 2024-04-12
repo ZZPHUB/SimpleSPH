@@ -135,7 +135,8 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     double q = 0.0;
     //int tmp_count;
     __shared__ int count;
-    if( blockIdx.x == 0 && blockIdx.y == 0 && threadIdx.x == 0 && threadIdx.y == 0) count=0;
+    if(threadIdx.x == 0 && threadIdx.y == 0) count=0;
+    __syncthreads();
     
     index_i = cuda->mesh[mesh_id + threadIdx.x*arg->mesh_num];
     //(x,y)->(x,y)
