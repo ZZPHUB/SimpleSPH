@@ -64,13 +64,15 @@ __global__ void check_mesh(SPH_CUDA *cuda,SPH_ARG *arg)
         if(cuda->x[id] < arg->domain_x && cuda->x[id] >= 0.0)
         {
             mid += __double2int_rz(cuda->x[id]/arg->mesh_dx);
-            if(mid != mesh_id) printf("mid:%d mesh_id:%d id:%d x:%lf y:%lf\n",mid,mesh_id,id,cuda->x[id],cuda->y[id]);
+            if(mid == mesh_id) atomicAdd(&(arg->tmp),1);
+            //if(mid != mesh_id) printf("mid:%d mesh_id:%d id:%d x:%lf y:%lf\n",mid,mesh_id,id,cuda->x[id],cuda->y[id]);
 
         }
         else
         {
             mid += arg->mesh_xnum - 1;
-            if(mid != mesh_id) printf("mid:%d mesh_id:%d id:%d x:%lf y:%lf\n",mid,mesh_id,id,cuda->x[id],cuda->y[id]);
+            if(mid == mesh_id) atomicAdd(&(arg->tmp),1);
+            //if(mid != mesh_id) printf("mid:%d mesh_id:%d id:%d x:%lf y:%lf\n",mid,mesh_id,id,cuda->x[id],cuda->y[id]);
         }
     }
     /*
