@@ -116,6 +116,7 @@ void sph_init(SPH *sph)
     cin >> sph->host_arg->save_last_flag;
     sph->host_arg->ptc_num = particle->total;
     sph->host_arg->pair_num = 0;
+    sph->host_arg->lock = 1;
     sph->host_arg->tmp = 0;
     cudaMalloc(&(sph->dev_arg),sizeof(SPH_ARG));
     cudaMemcpy(sph->dev_arg,sph->host_arg,sizeof(SPH_ARG),cudaMemcpyHostToDevice);
