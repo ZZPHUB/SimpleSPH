@@ -32,7 +32,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                 cuda->pair_j[count_temp] = cuda->mesh[j];
                 if(cuda->mesh[i] == 0 || cuda->mesh[j] == 0)
                 {
-                    printf("i:%d type:%d j:%d type:%d\n",cuda->mesh[i],cuda->type[cuda->mesh[i]],cuda->mesh[j],cuda->type[cuda->mesh[j]]);
+                    printf("i:%d type:%d j:%d type:%d\n",i,cuda->type[cuda->mesh[i]],j,cuda->type[cuda->mesh[j]]);
                 }
             }
             else if(cuda->type[cuda->mesh[j]] == 0)
@@ -42,7 +42,8 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                 cuda->pair_j[count_temp] = cuda->mesh[i];
                 if(cuda->mesh[i] == 0 || cuda->mesh[j] == 0)
                 {
-                    printf("i:%d type:%d j:%d type:%d\n",cuda->mesh[i],cuda->type[cuda->mesh[i]],cuda->mesh[j],cuda->type[cuda->mesh[j]]);
+                    //printf("i:%d type:%d j:%d type:%d\n",cuda->mesh[i],cuda->type[cuda->mesh[i]],cuda->mesh[j],cuda->type[cuda->mesh[j]]);
+                    printf("i:%d type:%d j:%d type:%d\n",i,cuda->type[cuda->mesh[i]],j,cuda->type[cuda->mesh[j]]);
                 }
             }
         }
@@ -65,7 +66,8 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                     cuda->pair_j[count_temp] = cuda->mesh[j];
                     if(cuda->mesh[i] == 0 || cuda->mesh[j] == 0)
                     {
-                        printf("i:%d type:%d j:%d type:%d\n",cuda->mesh[i],cuda->type[cuda->mesh[i]],cuda->mesh[j],cuda->type[cuda->mesh[j]]);
+                       // printf("i:%d type:%d j:%d type:%d\n",cuda->mesh[i],cuda->type[cuda->mesh[i]],cuda->mesh[j],cuda->type[cuda->mesh[j]]);
+                        printf("i:%d type:%d j:%d type:%d\n",i,cuda->type[cuda->mesh[i]],j,cuda->type[cuda->mesh[j]]);
                     }
                 }
                 else if(cuda->type[cuda->mesh[j]] == 0)
@@ -75,7 +77,8 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                     cuda->pair_j[count_temp] = cuda->mesh[i];
                     if(cuda->mesh[i] == 0 || cuda->mesh[j] == 0)
                     {
-                        printf("i:%d type:%d j:%d type:%d\n",cuda->mesh[i],cuda->type[cuda->mesh[i]],cuda->mesh[j],cuda->type[cuda->mesh[j]]);
+                        //printf("i:%d type:%d j:%d type:%d\n",cuda->mesh[i],cuda->type[cuda->mesh[i]],cuda->mesh[j],cuda->type[cuda->mesh[j]]);
+                        printf("i:%d type:%d j:%d type:%d\n",i,cuda->type[cuda->mesh[i]],j,cuda->type[cuda->mesh[j]]);
                     }
                 }
             }
@@ -99,7 +102,8 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                     cuda->pair_j[count_temp] = cuda->mesh[j];
                     if(cuda->mesh[i] == 0 || cuda->mesh[j] == 0)
                     {
-                        printf("i:%d type:%d j:%d type:%d\n",cuda->mesh[i],cuda->type[cuda->mesh[i]],cuda->mesh[j],cuda->type[cuda->mesh[j]]);
+                        //printf("i:%d type:%d j:%d type:%d\n",cuda->mesh[i],cuda->type[cuda->mesh[i]],cuda->mesh[j],cuda->type[cuda->mesh[j]]);
+                        printf("i:%d type:%d j:%d type:%d\n",i,cuda->type[cuda->mesh[i]],j,cuda->type[cuda->mesh[j]]);
                     }
                 }
                 else if(cuda->type[cuda->mesh[j]] == 0)
@@ -109,7 +113,8 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                     cuda->pair_j[count_temp] = cuda->mesh[i];
                     if(cuda->mesh[i] == 0 || cuda->mesh[j] == 0)
                     {
-                        printf("i:%d type:%d j:%d type:%d\n",cuda->mesh[i],cuda->type[cuda->mesh[i]],cuda->mesh[j],cuda->type[cuda->mesh[j]]);
+                        //printf("i:%d type:%d j:%d type:%d\n",cuda->mesh[i],cuda->type[cuda->mesh[i]],cuda->mesh[j],cuda->type[cuda->mesh[j]]);
+                        printf("i:%d type:%d j:%d type:%d\n",i,cuda->type[cuda->mesh[i]],j,cuda->type[cuda->mesh[j]]);
                     }
                 }
             }
@@ -133,7 +138,8 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                     cuda->pair_j[count_temp] = cuda->mesh[j];
                     if(cuda->mesh[i] == 0 || cuda->mesh[j] == 0)
                     {
-                        printf("i:%d type:%d j:%d type:%d\n",cuda->mesh[i],cuda->type[cuda->mesh[i]],cuda->mesh[j],cuda->type[cuda->mesh[j]]);
+                       // printf("i:%d type:%d j:%d type:%d\n",cuda->mesh[i],cuda->type[cuda->mesh[i]],cuda->mesh[j],cuda->type[cuda->mesh[j]]);
+                        printf("i:%d type:%d j:%d type:%d\n",i,cuda->type[cuda->mesh[i]],j,cuda->type[cuda->mesh[j]]);
                     }
                 }
                 else if(cuda->type[cuda->mesh[j]] == 0)
@@ -143,7 +149,8 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                     cuda->pair_j[count_temp] = cuda->mesh[i];
                     if(cuda->mesh[i] == 0 || cuda->mesh[j] == 0)
                     {
-                        printf("i:%d type:%d j:%d type:%d\n",cuda->mesh[i],cuda->type[cuda->mesh[i]],cuda->mesh[j],cuda->type[cuda->mesh[j]]);
+                        //printf("i:%d type:%d j:%d type:%d\n",cuda->mesh[i],cuda->type[cuda->mesh[i]],cuda->mesh[j],cuda->type[cuda->mesh[j]]);
+                        printf("i:%d type:%d j:%d type:%d\n",i,cuda->type[cuda->mesh[i]],j,cuda->type[cuda->mesh[j]]);
                     }
                 }
             }
@@ -167,7 +174,8 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                     cuda->pair_j[count_temp] = cuda->mesh[j];
                     if(cuda->mesh[i] == 0 || cuda->mesh[j] == 0)
                     {
-                        printf("i:%d type:%d j:%d type:%d\n",cuda->mesh[i],cuda->type[cuda->mesh[i]],cuda->mesh[j],cuda->type[cuda->mesh[j]]);
+                        //printf("i:%d type:%d j:%d type:%d\n",cuda->mesh[i],cuda->type[cuda->mesh[i]],cuda->mesh[j],cuda->type[cuda->mesh[j]]);
+                        printf("i:%d type:%d j:%d type:%d\n",i,cuda->type[cuda->mesh[i]],j,cuda->type[cuda->mesh[j]]);
                     }
                 }
                 else if(cuda->type[cuda->mesh[j]] == 0)
@@ -177,7 +185,8 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                     cuda->pair_j[count_temp] = cuda->mesh[i];
                     if(cuda->mesh[i] == 0 || cuda->mesh[j] == 0)
                     {
-                        printf("i:%d type:%d j:%d type:%d\n",cuda->mesh[i],cuda->type[cuda->mesh[i]],cuda->mesh[j],cuda->type[cuda->mesh[j]]);
+                        //printf("i:%d type:%d j:%d type:%d\n",cuda->mesh[i],cuda->type[cuda->mesh[i]],cuda->mesh[j],cuda->type[cuda->mesh[j]]);
+                        printf("i:%d type:%d j:%d type:%d\n",i,cuda->type[cuda->mesh[i]],j,cuda->type[cuda->mesh[j]]);
                     }
                 }
             }

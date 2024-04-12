@@ -143,6 +143,7 @@ int main(void)
         //check_pair<<<(int)(250000/1024)+1,1024>>>(sph.cuda,sph.dev_arg);
         //cudaDeviceSynchronize();
 
+        /*
         cudaMemcpy(sph.pair->i,cuda.pair_i,sizeof(int)*32*sph.particle->total,cudaMemcpyDeviceToHost);
         cudaDeviceSynchronize();
         cudaMemcpy(sph.pair->j,cuda.pair_j,sizeof(int)*32*sph.particle->total,cudaMemcpyDeviceToHost);
@@ -152,7 +153,7 @@ int main(void)
         for(int i=0;i<tmp_arg.pair_num;i++)
         {
             printf("id:%d i:%d j:%d\n",i,sph.pair->i[i],sph.pair->j[i]);
-        }
+        }*/
         
         
         //printf("the total same pair num is:%d \n",tmp_arg.tmp);
