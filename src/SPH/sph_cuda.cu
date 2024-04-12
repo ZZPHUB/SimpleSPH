@@ -149,7 +149,7 @@ int main(void)
         cudaDeviceSynchronize();
         //check_mesh<<<mesh_grid,1>>>(sph.cuda,sph.dev_arg);
         //cudaDeviceSynchronize();
-        sph_nnps_cuda<<<1,1>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
+        sph_nnps_cuda<<<mesh_grid,mesh_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
         cudaDeviceSynchronize();
         //check_pair<<<(int)(250000/1024)+1,1024>>>(sph.cuda,sph.dev_arg);
         //cudaDeviceSynchronize();
