@@ -144,8 +144,11 @@ int main(void)
         //cudaDeviceSynchronize();
 
         cudaMemcpy(sph.pair->i,cuda->pair_i,sizeof(double)*32*sph.particle->total,cudaMemcpyDeviceToHost);
+        cudaDeviceSynchronize();
         cudaMemcpy(sph.pair->j,cuda->pair_j,sizeof(double)*32*sph.particle->total,cudaMemcpyDeviceToHost);
+        cudaDeviceSynchronize();
         cudaMemcpy(&tmp_arg,sph.dev_arg,sizeof(SPH_ARG),cudaMemcpyDeviceToHost);
+        cudaDeviceSynchronize();
         for(int i=0;i<tmp_arg.pair_num;i++)
         {
             printf("id:%d i:%d j:%d\n",i,sph.pair->i[i],sph.pair->j[i]);
