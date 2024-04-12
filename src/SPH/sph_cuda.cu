@@ -131,7 +131,7 @@ int main(void)
             printf("mesh id is:%d mesh num is:%d they are:",j,host_mesh_count[j]);
             for(int k=0;k<host_mesh_count[j];k++)
             {
-                printf("%d,",host_mesh[j+k*sph.arg->mesh_num]);
+                printf("%d,",host_mesh[j+k*sph.host_arg->mesh_num]);
             }
             printf("\n");
         }
