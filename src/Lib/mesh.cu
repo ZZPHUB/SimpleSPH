@@ -13,6 +13,7 @@ __global__ void sph_mesh_cuda(SPH_CUDA *cuda,SPH_ARG *arg)
     if(id == 0) 
     {
         //printf("the arg tmp is:%d the pair num is:%d \n",arg->tmp,arg->pair_num);
+        printf("the pair num is:%d \n",arg->pair_num);
         arg->tmp = 0;
         arg->pair_num = 0;
     }
