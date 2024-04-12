@@ -40,7 +40,6 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         }
     }
     
-    /*
     //mesh[x,y]->mesh[x+1,y]
     if( blockIdx.x < ( gridDim.x-1))
     {
@@ -144,6 +143,5 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
             }
         }
     }
-    */
     cuda->mesh_count[mesh_id] = 0;
 }

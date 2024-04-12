@@ -122,8 +122,8 @@ int main(void)
     dim3 pair_block(512);
     dim3 pair_grid((int)(sph.particle->total/16)+1);
 
-    int *host_mesh;
-    int *host_mesh_count;
+    //int *host_mesh;
+    //int *host_mesh_count;
     SPH_CUDA cuda;
     SPH_ARG tmp_arg;
     cudaMemcpy(&cuda,sph.cuda,sizeof(SPH_CUDA),cudaMemcpyDeviceToHost);
@@ -140,10 +140,18 @@ int main(void)
         //cudaDeviceSynchronize();
         sph_nnps_cuda<<<mesh_grid,mesh_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
         cudaDeviceSynchronize();
-        check_pair<<<(int)(250000/1024)+1,1024>>>(sph.cuda,sph.dev_arg);
-        cudaDeviceSynchronize();
+        //check_pair<<<(int)(250000/1024)+1,1024>>>(sph.cuda,sph.dev_arg);
+        //cudaDeviceSynchronize();
 
-        //cudaMemcpy(&tmp_arg,sph.dev_arg,sizeof(SPH_ARG),cudaMemcpyDeviceToHost);
+        cudaMemcpy(sph.pair->i,cuda->pair_i,sizeof(double)*32*sph.particle->total,cudaMemcpyDeviceToHost);
+        cudaMemcpy(sph.pair->j,cuda->pair_j,sizeof(double)*32*sph.particle->total,cudaMemcpyDeviceToHost);
+        cudaMemcpy(&tmp_arg,sph.dev_arg,sizeof(SPH_ARG),cudaMemcpyDeviceToHost);
+        for(int i=0;i<tmp_arg.pair_num;i++)
+        {
+            printf("id:%d i:%d j:%d\n",i,sph.pair->i[i],sph.pair->j[i]);
+        }
+        
+        
         //printf("the total same pair num is:%d \n",tmp_arg.tmp);
         
         /*
@@ -164,8 +172,8 @@ int main(void)
                 printf("%d,",host_mesh[j+k*sph.host_arg->mesh_num]);
             }
             printf("\n");
-        }
-        */
+        }*/
+        
     }
 
     /*
