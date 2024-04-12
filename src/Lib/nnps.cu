@@ -5,11 +5,11 @@ void sph_nnps_cpu(SPH *sph)
     SPH_MESH *mesh;
     SPH_PARTICLE *particle;
     SPH_ARG *arg;
-    SPH_PAIR *pair;
+    //SPH_PAIR *pair;
     mesh = sph->mesh;
     particle = sph->particle;
     arg = sph->host_arg;
-    pair = sph->pair;
+    //pair = sph->pair;
 
     double q=0.0;
     double dx=0.0;
