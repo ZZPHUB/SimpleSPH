@@ -165,7 +165,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         //(x,y)->(x+1,y)
         if( threadIdx.x<(arg->mesh_xnum-1))
         {
-            for(int j=0;j<cuda->mesh_count[mesh+1];j++)
+            for(int j=0;j<cuda->mesh_count[mesh_id+1];j++)
             {
                 index_j = mesh_id + 1 + j*arg->mesh_num;
                 dx = cuda->x[cuda->mesh[index_i]] - cuda->x[cuda->mesh[index_j]];
