@@ -132,7 +132,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     double dx = 0.0;
     double dy = 0.0;
     double q = 0.0;
-    //int tmp_count;
+    int tmp_count;
     __shared__ int count;
     if(threadIdx.x == 0 && threadIdx.y == 0) count=0;
     __syncthreads();
@@ -149,10 +149,18 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
             q = sqrt(dx*dx+dy*dy)/arg->h;
             if(q<2.0)
             {
-                if(cuda->type[index_i] == 0 || cuda->type[index_j] == 0)
+                if(cuda->type[index_i] == 0)
                 {
-                   atomicAdd(&(cuda->pair_count[mesh_id]),1);
-                   atomicAdd(&count,1);
+                   //atomicAdd(&(cuda->pair_count[mesh_id]),1);
+                   tmp_count = atomicAdd(&count,1);
+                   cuda->pair_i[mesh_id*arg->pair_volume+tmp_count] = index_i;
+                   cuda->pair_j[mesh_id*arg->pair_volume+tmp_count] = index_j;
+                }
+                else if (cuda->type[index_j] == 0)
+                {
+                    tmp_count = atomicAdd(&count,1);
+                    cuda->pair_i[mesh_id*arg->pair_volume+tmp_count] = index_j;
+                    cuda->pair_j[mesh_id*arg->pair_volume+tmp_count] = index_i;
                 }
             }
         }
@@ -167,10 +175,18 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                 q = sqrt(dx*dx+dy*dy)/arg->h;
                 if(q<2.0)
                 {
-                    if(cuda->type[index_i] == 0 || cuda->type[index_j] == 0)
+                    if(cuda->type[index_i] == 0)
                     {
-                        atomicAdd(&(cuda->pair_count[mesh_id]),1);
-                        atomicAdd(&count,1);
+                        //atomicAdd(&(cuda->pair_count[mesh_id]),1);
+                        tmp_count = atomicAdd(&count,1);
+                        cuda->pair_i[mesh_id*arg->pair_volume+tmp_count] = index_i;
+                        cuda->pair_j[mesh_id*arg->pair_volume+tmp_count] = index_j;
+                    }
+                    else if (cuda->type[index_j] == 0)
+                    {
+                        tmp_count = atomicAdd(&count,1);
+                        cuda->pair_i[mesh_id*arg->pair_volume+tmp_count] = index_j;
+                        cuda->pair_j[mesh_id*arg->pair_volume+tmp_count] = index_i;
                     }
                 }
             }
@@ -186,10 +202,18 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                 q = sqrt(dx*dx+dy*dy)/arg->h;
                 if(q<2.0)
                 {
-                    if(cuda->type[index_i] == 0 || cuda->type[index_j] == 0)
+                    if(cuda->type[index_i] == 0)
                     {
-                        atomicAdd(&(cuda->pair_count[mesh_id]),1);
-                        atomicAdd(&count,1);
+                        //atomicAdd(&(cuda->pair_count[mesh_id]),1);
+                        tmp_count = atomicAdd(&count,1);
+                        cuda->pair_i[mesh_id*arg->pair_volume+tmp_count] = index_i;
+                        cuda->pair_j[mesh_id*arg->pair_volume+tmp_count] = index_j;
+                    }
+                    else if (cuda->type[index_j] == 0)
+                    {
+                        tmp_count = atomicAdd(&count,1);
+                        cuda->pair_i[mesh_id*arg->pair_volume+tmp_count] = index_j;
+                        cuda->pair_j[mesh_id*arg->pair_volume+tmp_count] = index_i;
                     }
                 }
             }
@@ -205,10 +229,18 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                 q = sqrt(dx*dx+dy*dy)/arg->h;
                 if(q<2.0)
                 {
-                    if(cuda->type[index_i] == 0 || cuda->type[index_j] == 0)
+                    if(cuda->type[index_i] == 0)
                     {
-                        atomicAdd(&(cuda->pair_count[mesh_id]),1);
-                        atomicAdd(&count,1);
+                        //atomicAdd(&(cuda->pair_count[mesh_id]),1);
+                        tmp_count = atomicAdd(&count,1);
+                        cuda->pair_i[mesh_id*arg->pair_volume+tmp_count] = index_i;
+                        cuda->pair_j[mesh_id*arg->pair_volume+tmp_count] = index_j;
+                    }
+                    else if (cuda->type[index_j] == 0)
+                    {
+                        tmp_count = atomicAdd(&count,1);
+                        cuda->pair_i[mesh_id*arg->pair_volume+tmp_count] = index_j;
+                        cuda->pair_j[mesh_id*arg->pair_volume+tmp_count] = index_i;
                     }
                 } 
             }
@@ -224,10 +256,18 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                 q = sqrt(dx*dx+dy*dy)/arg->h;
                 if(q<2.0)
                 {
-                    if(cuda->type[index_i] == 0 || cuda->type[index_j] == 0)
+                    if(cuda->type[index_i] == 0)
                     {
-                       atomicAdd(&(cuda->pair_count[mesh_id]),1);
-                       atomicAdd(&count,1);
+                        //atomicAdd(&(cuda->pair_count[mesh_id]),1);
+                        tmp_count = atomicAdd(&count,1);
+                        cuda->pair_i[mesh_id*arg->pair_volume+tmp_count] = index_i;
+                        cuda->pair_j[mesh_id*arg->pair_volume+tmp_count] = index_j;
+                    }
+                    else if (cuda->type[index_j] == 0)
+                    {
+                        tmp_count = atomicAdd(&count,1);
+                        cuda->pair_i[mesh_id*arg->pair_volume+tmp_count] = index_j;
+                        cuda->pair_j[mesh_id*arg->pair_volume+tmp_count] = index_i;
                     }
                 } 
             }
@@ -237,6 +277,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     if( threadIdx.x == 0 && threadIdx.y == 0)
     {
         atomicAdd(&(arg->pair_num),count);
+        cuda->pair_count[mesh_id]=count;
         cuda->mesh_count[mesh_id]=0;
     }
     __syncthreads();
