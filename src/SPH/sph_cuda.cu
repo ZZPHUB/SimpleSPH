@@ -165,8 +165,10 @@ int main(void)
     SPH_ARG tmp_arg;
     cudaMemcpy(&cuda,sph.cuda,sizeof(SPH_CUDA),cudaMemcpyDeviceToHost);
     cudaDeviceSynchronize();
+    int *host_pair_count = (int *)alloc(sph.host_arg.mesh_num,sizeof(int));
+    int id = 0;
 
-    for(int i=0;i<100;i++)
+    for(int i=0;i<1;i++)
     {
         printf("current step is:%d\n",i);
         //check_ptc<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg);
@@ -196,17 +198,23 @@ int main(void)
         }*/
         //sph_nnps_cpu(&sph);
 
-        /*
+        
         cudaMemcpy(sph.pair->i,cuda.pair_i,sizeof(int)*32*sph.particle->total,cudaMemcpyDeviceToHost);
         cudaDeviceSynchronize();
         cudaMemcpy(sph.pair->j,cuda.pair_j,sizeof(int)*32*sph.particle->total,cudaMemcpyDeviceToHost);
         cudaDeviceSynchronize();
         cudaMemcpy(&tmp_arg,sph.dev_arg,sizeof(SPH_ARG),cudaMemcpyDeviceToHost);
         cudaDeviceSynchronize();
-        for(int i=0;i<tmp_arg.pair_num;i++)
+        cudaMemcpy(host_pair_count,cuda.pair_count,sph.host_arg.mesh_num*sizeof(int),cudaMemcpyDeviceToHost);
+        cudaDeviceSynchronize();
+        for(int i=0;i<sph.host_arg.mesh_num;i++)
         {
-            printf("id:%d i:%d j:%d\n",i,sph.pair->i[i],sph.pair->j[i]);
-        }*/
+            for(int j=0;j<host_pair_count[i];j++)
+            {
+                id = i*sph.host_arg.pair_volume+j;
+                printf("id:%d i:%d j:%d\n",id,sph.pair->i[id],sph.pair->j[id]); 
+            }
+        }
         
         
         //printf("the total same pair num is:%d \n",tmp_arg.tmp);
