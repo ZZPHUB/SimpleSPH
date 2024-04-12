@@ -131,7 +131,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     double q = 0.0;
     int index_i = 0;
     int index_j = 0;
-    int count_temp=0;
+    //int arg->pair_num=0;
     int mesh_id = 0;
     //if( blockIdx.x >= arg->mesh_ynum) return;
     //if( threadIdx.x >= arg->mesh_xnum) return;
@@ -155,15 +155,17 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                     {
                         if(cuda->type[cuda->mesh[index_i]] == 0)
                         {
-                            count_temp = atomicAdd(&(arg->pair_num),1);
-                            cuda->pair_i[count_temp] = cuda->mesh[index_i];
-                            cuda->pair_j[count_temp] = cuda->mesh[index_j];
+                            //arg->pair_num = atomicAdd(&(arg->pair_num),1);
+                            cuda->pair_i[arg->pair_num] = cuda->mesh[index_i];
+                            cuda->pair_j[arg->pair_num] = cuda->mesh[index_j];
+                            arg->pair_num +=1;
                         }
                         else if(cuda->type[cuda->mesh[index_j]] == 0)
                         {
-                            count_temp = atomicAdd(&(arg->pair_num),1);
-                            cuda->pair_i[count_temp] = cuda->mesh[index_j];
-                            cuda->pair_j[count_temp] = cuda->mesh[index_i];
+                            //arg->pair_num = atomicAdd(&(arg->pair_num),1);
+                            cuda->pair_i[arg->pair_num] = cuda->mesh[index_j];
+                            cuda->pair_j[arg->pair_num] = cuda->mesh[index_i];
+                            arg->pair_num +=1;
                         }
                     }
                 }
@@ -180,15 +182,17 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                         {
                             if(cuda->type[cuda->mesh[index_i]] == 0)
                             {
-                                count_temp = atomicAdd(&(arg->pair_num),1);
-                                cuda->pair_i[count_temp] = cuda->mesh[index_i];
-                                cuda->pair_j[count_temp] = cuda->mesh[index_j];
+                                //arg->pair_num = atomicAdd(&(arg->pair_num),1);
+                                cuda->pair_i[arg->pair_num] = cuda->mesh[index_i];
+                                cuda->pair_j[arg->pair_num] = cuda->mesh[index_j];
+                                arg->pair_num +=1;
                             }
                             else if(cuda->type[cuda->mesh[index_j]] == 0)
                             {
-                                count_temp = atomicAdd(&(arg->pair_num),1);
-                                cuda->pair_i[count_temp] = cuda->mesh[index_j];
-                                cuda->pair_j[count_temp] = cuda->mesh[index_i];
+                                //arg->pair_num = atomicAdd(&(arg->pair_num),1);
+                                cuda->pair_i[arg->pair_num] = cuda->mesh[index_j];
+                                cuda->pair_j[arg->pair_num] = cuda->mesh[index_i];
+                                arg->pair_num +=1;
                             }
                         }
                     }   
@@ -207,15 +211,17 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                         {
                             if(cuda->type[cuda->mesh[index_i]] == 0)
                             {
-                                count_temp = atomicAdd(&(arg->pair_num),1);
-                                cuda->pair_i[count_temp] = cuda->mesh[index_i];
-                                cuda->pair_j[count_temp] = cuda->mesh[index_j];
+                                //arg->pair_num = atomicAdd(&(arg->pair_num),1);
+                                cuda->pair_i[arg->pair_num] = cuda->mesh[index_i];
+                                cuda->pair_j[arg->pair_num] = cuda->mesh[index_j];
+                                arg->pair_num +=1;
                             }
                             else if(cuda->type[cuda->mesh[index_j]] == 0)
                             {
-                                count_temp = atomicAdd(&(arg->pair_num),1);
-                                cuda->pair_i[count_temp] = cuda->mesh[index_j];
-                                cuda->pair_j[count_temp] = cuda->mesh[index_i];
+                                //arg->pair_num = atomicAdd(&(arg->pair_num),1);
+                                cuda->pair_i[arg->pair_num] = cuda->mesh[index_j];
+                                cuda->pair_j[arg->pair_num] = cuda->mesh[index_i];
+                                arg->pair_num +=1;
                             }
                         }
                     }
@@ -234,15 +240,17 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                         {
                             if(cuda->type[cuda->mesh[index_i]] == 0)
                             {
-                                count_temp = atomicAdd(&(arg->pair_num),1);
-                                cuda->pair_i[count_temp] = cuda->mesh[index_i];
-                                cuda->pair_j[count_temp] = cuda->mesh[index_j];
+                                //arg->pair_num = atomicAdd(&(arg->pair_num),1);
+                                cuda->pair_i[arg->pair_num] = cuda->mesh[index_i];
+                                cuda->pair_j[arg->pair_num] = cuda->mesh[index_j];
+                                arg->pair_num +=1;
                             }
                             else if(cuda->type[cuda->mesh[index_j]] == 0)
                             {
-                                count_temp = atomicAdd(&(arg->pair_num),1);
-                                cuda->pair_i[count_temp] = cuda->mesh[index_j];
-                                cuda->pair_j[count_temp] = cuda->mesh[index_i];
+                                //arg->pair_num = atomicAdd(&(arg->pair_num),1);
+                                cuda->pair_i[arg->pair_num] = cuda->mesh[index_j];
+                                cuda->pair_j[arg->pair_num] = cuda->mesh[index_i];
+                                arg->pair_num +=1;
                             }
                         }
                     }
@@ -261,21 +269,23 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                         {
                             if(cuda->type[cuda->mesh[index_i]] == 0)
                             {
-                                count_temp = atomicAdd(&(arg->pair_num),1);
-                                cuda->pair_i[count_temp] = cuda->mesh[index_i];
-                                cuda->pair_j[count_temp] = cuda->mesh[index_j];
+                                //arg->pair_num = atomicAdd(&(arg->pair_num),1);
+                                cuda->pair_i[arg->pair_num] = cuda->mesh[index_i];
+                                cuda->pair_j[arg->pair_num] = cuda->mesh[index_j];
+                                arg->pair_num +=1;
                             }
                             else if(cuda->type[cuda->mesh[index_j]] == 0)
                             {
-                                count_temp = atomicAdd(&(arg->pair_num),1);
-                                cuda->pair_i[count_temp] = cuda->mesh[index_j];
-                                cuda->pair_j[count_temp] = cuda->mesh[index_i];
+                                //arg->pair_num = atomicAdd(&(arg->pair_num),1);
+                                cuda->pair_i[arg->pair_num] = cuda->mesh[index_j];
+                                cuda->pair_j[arg->pair_num] = cuda->mesh[index_i];
+                                arg->pair_num +=1;
                             }
                         }
                     }
                 }
             }
+            cuda->mesh_count[mesh_id] = 0;
         }
     }
-    cuda->mesh_count[mesh_id] = 0;
 }

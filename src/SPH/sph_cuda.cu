@@ -151,8 +151,8 @@ int main(void)
         //cudaDeviceSynchronize();
         sph_nnps_cuda<<<1,1>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
         cudaDeviceSynchronize();
-        check_pair<<<(int)(250000/1024)+1,1024>>>(sph.cuda,sph.dev_arg);
-        cudaDeviceSynchronize();
+        //check_pair<<<(int)(250000/1024)+1,1024>>>(sph.cuda,sph.dev_arg);
+        //cudaDeviceSynchronize();
 
         /*cudaMemcpy(sph.mesh->ptc,cuda.mesh,sizeof(int)*sph.host_arg->mesh_num*sph.host_arg->mesh_volume,cudaMemcpyDeviceToHost);
         cudaDeviceSynchronize();
