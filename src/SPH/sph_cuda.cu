@@ -99,7 +99,7 @@ int main(void)
     SPH_KERNEL kernel;
     SPH_PAIR pair;
     SPH_RIGID wedge;
-    SPH_MESH mesh = NULL;
+    SPH_MESH mesh;
     SPH_ARG arg;
     SPH sph;
     sph.particle = &particle;
@@ -107,7 +107,7 @@ int main(void)
     sph.pair = &pair;
     sph.host_rigid = &wedge;
     sph.host_arg = &arg;
-    sph.mesh = mesh;
+    sph.mesh = &mesh;
 
     cudaSetDevice(0);
     sph_init(&sph); 
@@ -138,10 +138,14 @@ int main(void)
         cudaDeviceSynchronize();
         //check_mesh<<<mesh_grid,1>>>(sph.cuda,sph.dev_arg);
         //cudaDeviceSynchronize();
-        sph_nnps_cuda<<<mesh_grid,mesh_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
-        cudaDeviceSynchronize();
+        //sph_nnps_cuda<<<mesh_grid,mesh_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
+        //cudaDeviceSynchronize();
         //check_pair<<<(int)(250000/1024)+1,1024>>>(sph.cuda,sph.dev_arg);
         //cudaDeviceSynchronize();
+
+        cudaMemcpy(sph.mesh->ptc,cuda.mesh,sizeof(int)*sph.host_arg->mesh_num*sph.host_arg->mesh_volume,cudaMemcpyDeviceToHost);
+        cudaMemcpy(sph.mesh->count,cuda.mesh_count,sizeof(int)*sph.host_arg->mesh_num,cudaMemcpyDeviceToHost);
+        sph_nnps_cpu(&sph);
 
         /*
         cudaMemcpy(sph.pair->i,cuda.pair_i,sizeof(int)*32*sph.particle->total,cudaMemcpyDeviceToHost);

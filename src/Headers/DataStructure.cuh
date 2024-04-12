@@ -2,7 +2,12 @@
 #define __DATASTRUCTURE__
 
 /* Data Structure Declare */
-typedef int* SPH_MESH;
+typedef struct 
+{
+    /* data */
+    int *ptc;
+    int *count;
+}SPH_MESH;
 
 typedef  struct 
 {

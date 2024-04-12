@@ -11,11 +11,13 @@ void sph_init(SPH *sph)
     SPH_PARTICLE *particle;
     SPH_PAIR *pair;
     SPH_KERNEL *kernel;
-    SPH_CUDA temp_cuda;
-    SPH_MESH mesh;
+    SPH_MESH *mesh;
     particle = sph->particle;
     pair = sph->pair;
     kernel = sph->kernel;
+    mesh = sph->mesh;
+
+    SPH_CUDA temp_cuda;
 
     particle->fulid_ptc_num = FLUID_PTC_NUM;  //fluid ptc num
     particle->wall_ptc_num = WALL_PTC_NUM;    //wall ptc num
@@ -54,7 +56,9 @@ void sph_init(SPH *sph)
     pair->j = (unsigned int *)(calloc(32*particle->total,sizeof(unsigned int)));
 
     //mesh data init
-    mesh = (SPH_MESH)(calloc(MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM,sizeof(int)));
+    mesh->ptc = (int *)calloc(MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM,sizeof(int));
+    mesh->count = (int *)calloc(MESH_DEEPTH_NUM*MESH_LENGTH_NUM,sizeof(int));
+    //mesh = (SPH_MESH)(calloc(MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM,sizeof(int)));
     /*
     for(int i=0;i<MESH_DEEPTH_NUM;i++)
     {
