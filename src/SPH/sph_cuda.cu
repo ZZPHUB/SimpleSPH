@@ -9,19 +9,20 @@ __global__ void check_ptc(SPH_CUDA *cuda,SPH_ARG *arg)
 
 __global__ void check_pair(SPH_CUDA *cuda,SPH_ARG *arg)
 {
-    double dx=0.0;
-    double dy=0.0;
-    double q=0.0;
+    //double dx=0.0;
+    //double dy=0.0;
+    //double q=0.0;
     const int id = threadIdx.x + blockIdx.x * blockDim.x;
     if(id >= arg->pair_num) return;
 
+    /*
     dx = cuda->x[cuda->pair_i[id]] - cuda->x[cuda->pair_j[id]];
     dy = cuda->y[cuda->pair_i[id]] - cuda->y[cuda->pair_j[id]];
     q = sqrt(dx*dx+dy*dy)/arg->h;
-    if(q > 2.0) printf("error !!!\n");
+    if(q > 2.0) printf("error !!!\n");*/
 
     
-    /*if(id == 0)printf("the pair num is:%d\n",arg->pair_num);
+    if(id == 0)printf("the pair num is:%d\n",arg->pair_num);
     for(int i=0;i<arg->pair_num;i++)
     {
         if(cuda->pair_i[id] == cuda->pair_i[i] && cuda->pair_j[id]==cuda->pair_j[i] && id!=i)
@@ -52,7 +53,7 @@ __global__ void check_pair(SPH_CUDA *cuda,SPH_ARG *arg)
             }
             atomicAdd(&(arg->tmp),1);
         }
-    }*/
+    }
 }
 
 __global__ void check_mesh(SPH_CUDA *cuda,SPH_ARG *arg)
@@ -139,7 +140,7 @@ int main(void)
     cudaMemcpy(&cuda,sph.cuda,sizeof(SPH_CUDA),cudaMemcpyDeviceToHost);
     cudaDeviceSynchronize();
 
-    for(int i=0;i<1;i++)
+    for(int i=0;i<100;i++)
     {
         printf("current step is:%d\n",i);
         //check_ptc<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg);
@@ -150,8 +151,8 @@ int main(void)
         //cudaDeviceSynchronize();
         sph_nnps_cuda<<<mesh_grid,mesh_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
         cudaDeviceSynchronize();
-        //check_pair<<<(int)(250000/1024)+1,1024>>>(sph.cuda,sph.dev_arg);
-        //cudaDeviceSynchronize();
+        check_pair<<<(int)(250000/1024)+1,1024>>>(sph.cuda,sph.dev_arg);
+        cudaDeviceSynchronize();
 
         /*cudaMemcpy(sph.mesh->ptc,cuda.mesh,sizeof(int)*sph.host_arg->mesh_num*sph.host_arg->mesh_volume,cudaMemcpyDeviceToHost);
         cudaDeviceSynchronize();
