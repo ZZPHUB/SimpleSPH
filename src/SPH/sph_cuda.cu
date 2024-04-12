@@ -32,7 +32,7 @@ __global__ void check_pair(SPH_CUDA *cuda,SPH_ARG *arg)
                 }
                 else if(cuda->pair_i[id] == cuda->pair_j[tmp_id] && cuda->pair_j[id] == cuda->pair_i[tmp_id])
                 {
-                    printf("type 2 errors\n")
+                    printf("type 2 errors\n");
                 }
             }
         }
