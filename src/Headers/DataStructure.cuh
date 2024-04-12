@@ -153,7 +153,7 @@ typedef struct
     SPH_ARG *host_arg;
     SPH_RIGID *host_rigid;
     SPH_RIGID *dev_rigid;
-    SPH_MESH mesh;
+    SPH_MESH *mesh;
 }SPH;
 
 
