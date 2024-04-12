@@ -52,7 +52,7 @@ __global__ void check_mesh(SPH_CUDA *cuda,SPH_ARG *arg)
     const int mesh_id = blockIdx.x + blockIdx.y* gridDim.x;
     for(int i=0;i<cuda->mesh_count[mesh_id];i++)
     {
-        id = i*arg->mesh_num + mesh_id;
+        id = cuda->mesh[i*arg->mesh_num + mesh_id];
         if(cuda->y[id] < arg->domain_y && cuda->y[id] >= 0.0)
         {
             mid = __double2int_rz(cuda->y[id]/arg->mesh_dx)*arg->mesh_xnum;
@@ -64,12 +64,13 @@ __global__ void check_mesh(SPH_CUDA *cuda,SPH_ARG *arg)
         if(cuda->x[id] < arg->domain_x && cuda->x[id] >= 0.0)
         {
             mid += __double2int_rz(cuda->x[id]/arg->mesh_dx);
-            if(mid != mesh_id) printf("mid is:%d mesh_id is:%d\n",mid,mesh_id);
+            if(mid != mesh_id) printf("mid:%d mesh_id:%d id:%d x:%lf y:%lf\n",mid,mesh_id,id,cuda->x[id],cuda->y[id]);
+
         }
         else
         {
             mid += arg->mesh_xnum - 1;
-            if(mid != mesh_id) printf("mid is:%d mesh_id is:%d\n",mid,mesh_id);
+            if(mid != mesh_id) printf("mid:%d mesh_id:%d id:%d x:%lf y:%lf\n",mid,mesh_id,id,cuda->x[id],cuda->y[id]);
         }
     }
     /*
