@@ -140,7 +140,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     {
         for(int n=0;n<arg->mesh_xnum;n++)
         {
-            mesh_id = n+m*arg->mesh_num;   
+            mesh_id = n+m*arg->mesh_xnum;   
             for(int i=0;i<cuda->mesh_count[mesh_id];i++)
             {
                 index_i = mesh_id + i*arg->mesh_num;
