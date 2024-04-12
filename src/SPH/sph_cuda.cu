@@ -211,7 +211,7 @@ int main(void)
         {
             for(int j=0;j<host_pair_count[i];j++)
             {
-                id = i*sph.host_arg.pair_volume+j;
+                id = i*sph.host_arg->pair_volume+j;
                 printf("id:%d i:%d j:%d\n",id,sph.pair->i[id],sph.pair->j[id]); 
             }
         }
