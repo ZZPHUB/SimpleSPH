@@ -126,7 +126,6 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     //blockIdx.y -> mesh y direction
     //threadIdx.x -> local mesh index
     //threadIdx.y -> near mesh index
-    if( gridDim.x != arg->mesh_xnum || gridDim.y != arg->mesh_ynum) return;
     const int mesh_id = blockIdx.x + blockIdx.y * gridDim.x;
     int index_i = 0;
     int index_j = 0;
@@ -138,28 +137,13 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     if(threadIdx.x == 0 && threadIdx.y == 0) count=0;
     __syncthreads();
     
-    index_i = cuda->mesh[mesh_id + threadIdx.x*arg->mesh_num];
-    //(x,y)->(x,y)
-    if( threadIdx.y> threadIdx.x && threadIdx.y<cuda->mesh_count[mesh_id])
+    if(threadIdx.x < cuda->mesh_count[mesh_id])
     {
-        index_j = cuda->mesh[mesh_id + threadIdx.y*arg->mesh_num];
-        dx = cuda->x[index_i] - cuda->x[index_j];
-        dy = cuda->y[index_i] - cuda->y[index_j];
-        q = sqrt(dx*dx+dy*dy)/arg->h;
-        if(q<2.0)
+        index_i = cuda->mesh[mesh_id + threadIdx.x*arg->mesh_num];
+        //(x,y)->(x,y)
+        if( threadIdx.y> threadIdx.x && threadIdx.y<cuda->mesh_count[mesh_id])
         {
-            if(cuda->type[index_i] == 0 || cuda->type[index_j] == 0)
-            {
-                count+=1;
-            }
-        }
-    }
-    //(x,y)->(x+1,y)
-    if( blockIdx.x < ( gridDim.x-1))
-    {
-        if( threadIdx.y < cuda->mesh_count[mesh_id+1])
-        {
-            index_j = cuda->mesh[mesh_id + 1 + threadIdx.y*arg->mesh_num];
+            index_j = cuda->mesh[mesh_id + threadIdx.y*arg->mesh_num];
             dx = cuda->x[index_i] - cuda->x[index_j];
             dy = cuda->y[index_i] - cuda->y[index_j];
             q = sqrt(dx*dx+dy*dy)/arg->h;
@@ -171,59 +155,77 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                 }
             }
         }
-    }
-    //(x,y)->(x,y+1)
-    if( blockIdx.y < ( gridDim.y -1))
-    {
-        if( threadIdx.y < cuda->mesh_count[mesh_id+ gridDim.x])
+        //(x,y)->(x+1,y)
+        if( blockIdx.x < ( gridDim.x-1))
         {
-            index_j = cuda->mesh[mesh_id + gridDim.x + threadIdx.y*arg->mesh_num];
-            dx = cuda->x[index_i] - cuda->x[index_j];
-            dy = cuda->y[index_i] - cuda->y[index_j];
-            q = sqrt(dx*dx+dy*dy)/arg->h;
-            if(q<2.0)
+            if( threadIdx.y < cuda->mesh_count[mesh_id+1])
             {
-                if(cuda->type[index_i] == 0 || cuda->type[index_j] == 0)
+                index_j = cuda->mesh[mesh_id + 1 + threadIdx.y*arg->mesh_num];
+                dx = cuda->x[index_i] - cuda->x[index_j];
+                dy = cuda->y[index_i] - cuda->y[index_j];
+                q = sqrt(dx*dx+dy*dy)/arg->h;
+                if(q<2.0)
                 {
-                    count+=1;
+                    if(cuda->type[index_i] == 0 || cuda->type[index_j] == 0)
+                    {
+                        count+=1;
+                    }
                 }
             }
         }
-    }
-    //(x,y)->(x+1,y+1)
-    if( blockIdx.x<( gridDim.x-1) && blockIdx.y<( gridDim.y-1))
-    {
-        if(threadIdx.y < cuda->mesh_count[mesh_id+ 1+ gridDim.x])
+        //(x,y)->(x,y+1)
+        if( blockIdx.y < ( gridDim.y -1))
         {
-           index_j = cuda->mesh[mesh_id + 1+  gridDim.x + threadIdx.y*arg->mesh_num];
-            dx = cuda->x[index_i] - cuda->x[index_j];
-            dy = cuda->y[index_i] - cuda->y[index_j];
-            q = sqrt(dx*dx+dy*dy)/arg->h;
-            if(q<2.0)
+            if( threadIdx.y < cuda->mesh_count[mesh_id+ gridDim.x])
             {
-                if(cuda->type[index_i] == 0 || cuda->type[index_j] == 0)
+                index_j = cuda->mesh[mesh_id + gridDim.x + threadIdx.y*arg->mesh_num];
+                dx = cuda->x[index_i] - cuda->x[index_j];
+                dy = cuda->y[index_i] - cuda->y[index_j];
+                q = sqrt(dx*dx+dy*dy)/arg->h;
+                if(q<2.0)
                 {
-                    count+=1;
+                    if(cuda->type[index_i] == 0 || cuda->type[index_j] == 0)
+                    {
+                        count+=1;
+                    }
                 }
-            } 
+            }
         }
-    }
-    //(x,y)->(x-1,y+1)
-    if( blockIdx.x>0 && blockIdx.y<( gridDim.y-1))
-    {
-        if(threadIdx.y < cuda->mesh_count[mesh_id- 1+ gridDim.x])
+        //(x,y)->(x+1,y+1)
+        if( blockIdx.x<( gridDim.x-1) && blockIdx.y<( gridDim.y-1))
         {
-           index_j = cuda->mesh[mesh_id - 1+  gridDim.x + threadIdx.y*arg->mesh_num];
-            dx = cuda->x[index_i] - cuda->x[index_j];
-            dy = cuda->y[index_i] - cuda->y[index_j];
-            q = sqrt(dx*dx+dy*dy)/arg->h;
-            if(q<2.0)
+            if(threadIdx.y < cuda->mesh_count[mesh_id+ 1+ gridDim.x])
             {
-                if(cuda->type[index_i] == 0 || cuda->type[index_j] == 0)
+               index_j = cuda->mesh[mesh_id + 1+  gridDim.x + threadIdx.y*arg->mesh_num];
+                dx = cuda->x[index_i] - cuda->x[index_j];
+                dy = cuda->y[index_i] - cuda->y[index_j];
+                q = sqrt(dx*dx+dy*dy)/arg->h;
+                if(q<2.0)
                 {
-                    count+=1;
-                }
-            } 
+                    if(cuda->type[index_i] == 0 || cuda->type[index_j] == 0)
+                    {
+                        count+=1;
+                    }
+                } 
+            }
+        }
+        //(x,y)->(x-1,y+1)
+        if( blockIdx.x>0 && blockIdx.y<( gridDim.y-1))
+        {
+            if(threadIdx.y < cuda->mesh_count[mesh_id- 1+ gridDim.x])
+            {
+               index_j = cuda->mesh[mesh_id - 1+  gridDim.x + threadIdx.y*arg->mesh_num];
+                dx = cuda->x[index_i] - cuda->x[index_j];
+                dy = cuda->y[index_i] - cuda->y[index_j];
+                q = sqrt(dx*dx+dy*dy)/arg->h;
+                if(q<2.0)
+                {
+                    if(cuda->type[index_i] == 0 || cuda->type[index_j] == 0)
+                    {
+                        count+=1;
+                    }
+                } 
+            }
         }
     }
     __syncthreads();
