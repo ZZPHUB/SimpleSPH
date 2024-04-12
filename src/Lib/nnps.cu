@@ -20,7 +20,7 @@ void sph_nnps_cpu(SPH *sph)
     arg->pair_num = 0;
     for(int i=0;i<arg->mesh_xnum;i++)
     {
-        for(int j=0;i<arg->mesh_ynum;j++)
+        for(int j=0;j<arg->mesh_ynum;j++)
         {
             mesh_id = i+j*arg->mesh_xnum;
             for(int m=0;m<mesh->count[mesh_id];m++)
