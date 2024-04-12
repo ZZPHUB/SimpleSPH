@@ -189,3 +189,172 @@ void ptc_nnps_check(SPH_PAIR *pair,SPH_PAIR *pair_direct,unsigned int *total)
         }
         }
 }
+__global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
+{
+
+    //n---> (x)length direction
+    //m ---> (y)depth direction
+
+    double dx = 0.0;
+    double dy = 0.0;
+    double q = 0.0;
+    int index_i = 0;
+    int index_j = 0;
+    //int arg->pair_num=0;
+    int mesh_id = 0;
+    //if( blockIdx.x >= arg->mesh_ynum) return;
+    //if( threadIdx.x >= arg->mesh_xnum) return;
+    //const int mesh_id = threadIdx.x + blockIdx.x * blockDim.x;
+    for(int m =0;m<arg->mesh_ynum;m++)
+    {
+        for(int n=0;n<arg->mesh_xnum;n++)
+        {
+            mesh_id = n+m*arg->mesh_xnum;   
+            for(int i=0;i<cuda->mesh_count[mesh_id];i++)
+            {
+                index_i = mesh_id + i*arg->mesh_num;
+                //(x,y)->(x,y)
+                for(int j=i+1;j<cuda->mesh_count[mesh_id];j++)
+                {
+                    index_j = mesh_id + j*arg->mesh_num;
+                    dx = cuda->x[cuda->mesh[index_i]] - cuda->x[cuda->mesh[index_j]];
+                    dy = cuda->y[cuda->mesh[index_i]] - cuda->y[cuda->mesh[index_j]];
+                    q = sqrt(dx*dx+dy*dy)/arg->h;
+                    if(q<2.0)
+                    {
+                        if(cuda->type[cuda->mesh[index_i]] == 0)
+                        {
+                            //arg->pair_num = atomicAdd(&(arg->pair_num),1);
+                            cuda->pair_i[arg->pair_num] = cuda->mesh[index_i];
+                            cuda->pair_j[arg->pair_num] = cuda->mesh[index_j];
+                            arg->pair_num +=1;
+                        }
+                        else if(cuda->type[cuda->mesh[index_j]] == 0)
+                        {
+                            //arg->pair_num = atomicAdd(&(arg->pair_num),1);
+                            cuda->pair_i[arg->pair_num] = cuda->mesh[index_j];
+                            cuda->pair_j[arg->pair_num] = cuda->mesh[index_i];
+                            arg->pair_num +=1;
+                        }
+                    }
+                }
+                //(x,y)->(x+1,y)
+                if( n<(arg->mesh_xnum-1))
+                {
+                    for(int j=0;j<cuda->mesh_count[mesh_id+1];j++)
+                    {
+                        index_j = mesh_id + 1 + j*arg->mesh_num;
+                        dx = cuda->x[cuda->mesh[index_i]] - cuda->x[cuda->mesh[index_j]];
+                        dy = cuda->y[cuda->mesh[index_i]] - cuda->y[cuda->mesh[index_j]];
+                        q = sqrt(dx*dx+dy*dy)/arg->h;
+                        if(q<2.0)
+                        {
+                            if(cuda->type[cuda->mesh[index_i]] == 0)
+                            {
+                                //arg->pair_num = atomicAdd(&(arg->pair_num),1);
+                                cuda->pair_i[arg->pair_num] = cuda->mesh[index_i];
+                                cuda->pair_j[arg->pair_num] = cuda->mesh[index_j];
+                                arg->pair_num +=1;
+                            }
+                            else if(cuda->type[cuda->mesh[index_j]] == 0)
+                            {
+                                //arg->pair_num = atomicAdd(&(arg->pair_num),1);
+                                cuda->pair_i[arg->pair_num] = cuda->mesh[index_j];
+                                cuda->pair_j[arg->pair_num] = cuda->mesh[index_i];
+                                arg->pair_num +=1;
+                            }
+                        }
+                    }   
+                }
+
+                //(x,y)->(x,y+1)
+                if( m<(arg->mesh_ynum-1))
+                {
+                    for(int j=0;j<cuda->mesh_count[mesh_id+arg->mesh_xnum];j++)
+                    {
+                        index_j = mesh_id + arg->mesh_xnum + j*arg->mesh_num;
+                        dx = cuda->x[cuda->mesh[index_i]] - cuda->x[cuda->mesh[index_j]];
+                        dy = cuda->y[cuda->mesh[index_i]] - cuda->y[cuda->mesh[index_j]];
+                        q = sqrt(dx*dx+dy*dy)/arg->h;
+                        if(q<2.0)
+                        {
+                            if(cuda->type[cuda->mesh[index_i]] == 0)
+                            {
+                                //arg->pair_num = atomicAdd(&(arg->pair_num),1);
+                                cuda->pair_i[arg->pair_num] = cuda->mesh[index_i];
+                                cuda->pair_j[arg->pair_num] = cuda->mesh[index_j];
+                                arg->pair_num +=1;
+                            }
+                            else if(cuda->type[cuda->mesh[index_j]] == 0)
+                            {
+                                //arg->pair_num = atomicAdd(&(arg->pair_num),1);
+                                cuda->pair_i[arg->pair_num] = cuda->mesh[index_j];
+                                cuda->pair_j[arg->pair_num] = cuda->mesh[index_i];
+                                arg->pair_num +=1;
+                            }
+                        }
+                    }
+                }
+
+                //(x,y)->(x+1,y+1)
+                if( n<(arg->mesh_xnum-1) && m<(arg->mesh_ynum-1))
+                {
+                    for(int j=0;j<cuda->mesh_count[mesh_id+1+arg->mesh_xnum];j++)
+                    {
+                        index_j = mesh_id + 1 + arg->mesh_xnum + j*arg->mesh_num;
+                        dx = cuda->x[cuda->mesh[index_i]] - cuda->x[cuda->mesh[index_j]];
+                        dy = cuda->y[cuda->mesh[index_i]] - cuda->y[cuda->mesh[index_j]];
+                        q = sqrt(dx*dx+dy*dy)/arg->h;
+                        if(q<2.0)
+                        {
+                            if(cuda->type[cuda->mesh[index_i]] == 0)
+                            {
+                                //arg->pair_num = atomicAdd(&(arg->pair_num),1);
+                                cuda->pair_i[arg->pair_num] = cuda->mesh[index_i];
+                                cuda->pair_j[arg->pair_num] = cuda->mesh[index_j];
+                                arg->pair_num +=1;
+                            }
+                            else if(cuda->type[cuda->mesh[index_j]] == 0)
+                            {
+                                //arg->pair_num = atomicAdd(&(arg->pair_num),1);
+                                cuda->pair_i[arg->pair_num] = cuda->mesh[index_j];
+                                cuda->pair_j[arg->pair_num] = cuda->mesh[index_i];
+                                arg->pair_num +=1;
+                            }
+                        }
+                    }
+                }
+
+                //(x,y)->(x-1,y+1)
+                if( n>0 && m<(arg->mesh_ynum-1))
+                {
+                    for(int j=0;j<cuda->mesh_count[mesh_id-1+arg->mesh_xnum];j++)
+                    {
+                        index_j = mesh_id - 1 + arg->mesh_xnum + j*arg->mesh_num;
+                        dx = cuda->x[cuda->mesh[index_i]] - cuda->x[cuda->mesh[index_j]];
+                        dy = cuda->y[cuda->mesh[index_i]] - cuda->y[cuda->mesh[index_j]];
+                        q = sqrt(dx*dx+dy*dy)/arg->h;
+                        if(q<2.0)
+                        {
+                            if(cuda->type[cuda->mesh[index_i]] == 0)
+                            {
+                                //arg->pair_num = atomicAdd(&(arg->pair_num),1);
+                                cuda->pair_i[arg->pair_num] = cuda->mesh[index_i];
+                                cuda->pair_j[arg->pair_num] = cuda->mesh[index_j];
+                                arg->pair_num +=1;
+                            }
+                            else if(cuda->type[cuda->mesh[index_j]] == 0)
+                            {
+                                //arg->pair_num = atomicAdd(&(arg->pair_num),1);
+                                cuda->pair_i[arg->pair_num] = cuda->mesh[index_j];
+                                cuda->pair_j[arg->pair_num] = cuda->mesh[index_i];
+                                arg->pair_num +=1;
+                            }
+                        }
+                    }
+                }
+            }
+            cuda->mesh_count[mesh_id] = 0;
+        }
+    }
+}
