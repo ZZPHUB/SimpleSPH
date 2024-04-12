@@ -156,6 +156,8 @@ int main(void)
         cudaDeviceSynchronize();
         //check_pair<<<(int)(250000/1024)+1,1024>>>(sph.cuda,sph.dev_arg);
         //cudaDeviceSynchronize();
+        check_mesh<<<mesh_grid,1>>>(sph.cuda,sph.dev_arg);
+        cudaDeviceSynchronize();
 
         cudaError_t sph_error = cudaGetLastError();
         printf("%s\n",cudaGetErrorName(sph_error));
