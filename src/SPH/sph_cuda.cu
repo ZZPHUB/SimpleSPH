@@ -144,7 +144,9 @@ int main(void)
         //cudaDeviceSynchronize();
 
         cudaMemcpy(sph.mesh->ptc,cuda.mesh,sizeof(int)*sph.host_arg->mesh_num*sph.host_arg->mesh_volume,cudaMemcpyDeviceToHost);
+        cudaDeviceSynchronize();
         cudaMemcpy(sph.mesh->count,cuda.mesh_count,sizeof(int)*sph.host_arg->mesh_num,cudaMemcpyDeviceToHost);
+        cudaDeviceSynchronize();
         sph_nnps_cpu(&sph);
 
         /*
