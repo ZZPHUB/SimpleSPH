@@ -120,7 +120,7 @@ void sph_nnps_cpu(SPH *sph)
 }
 
 
-__global__ void sph_nnps_mesh(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
+__global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
 {
     //blockIdx.x -> mesh x direction
     //blockIdx.y -> mesh y direction
