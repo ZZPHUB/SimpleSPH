@@ -74,6 +74,7 @@ __global__ void check_mesh(SPH_CUDA *cuda,SPH_ARG *arg)
             if(mid == mesh_id) atomicAdd(&(arg->tmp),1);
             //if(mid != mesh_id) printf("mid:%d mesh_id:%d id:%d x:%lf y:%lf\n",mid,mesh_id,id,cuda->x[id],cuda->y[id]);
         }
+        cuda->mesh_count[mesh_id] = 0;
     }
     /*
     if(cuda->mesh_count[mesh_id]!=0)
