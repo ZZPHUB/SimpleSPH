@@ -14,7 +14,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     int count_temp=0;
     const int mesh_id = blockIdx.x + blockIdx.y * gridDim.x;
     if( threadIdx.x >= cuda->mesh_count[mesh_id]) return;
-    if(threadIdx.y == 0)atomicAdd(&(arg->tmp),1);
+    //if(threadIdx.y == 0)atomicAdd(&(arg->tmp),1);
     i = mesh_id + threadIdx.x*arg->mesh_num;
     
     //mesh[x,y]->mesh[x,y]

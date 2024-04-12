@@ -18,7 +18,7 @@ __global__ void check_pair(SPH_CUDA *cuda,SPH_ARG *arg)
         {
             if(cuda->pair_i[id]!=0 && cuda->pair_j[id]!=0)
             {
-                printf("type1 index_1:%d index_2:%d pair_i:%d pair_j:%d\n",id,i,cuda->pair_i[id],cuda->pair_j[id]);
+                //printf("type1 index_1:%d index_2:%d pair_i:%d pair_j:%d\n",id,i,cuda->pair_i[id],cuda->pair_j[id]);
             }
             atomicAdd(&(arg->tmp),1);
         }
@@ -29,7 +29,7 @@ __global__ void check_pair(SPH_CUDA *cuda,SPH_ARG *arg)
                 //printf("type2 nnps error !!\n");
                 if(cuda->pair_i[id]!=0 && cuda->pair_j[id]!=0)
                 {
-                    printf("type2 index_1:%d index_2:%d pair_i:%d pair_j:%d\n",id,i,cuda->pair_i[id],cuda->pair_j[id]);
+                    //printf("type2 index_1:%d index_2:%d pair_i:%d pair_j:%d\n",id,i,cuda->pair_i[id],cuda->pair_j[id]);
                 }
             }
             else 
@@ -37,7 +37,7 @@ __global__ void check_pair(SPH_CUDA *cuda,SPH_ARG *arg)
                 //printf("here is same pair\n");
                 if(cuda->pair_i[id]!=0 && cuda->pair_j[id]!=0)
                 {
-                    printf("type3 index_1:%d index_2:%d pair_i:%d pair_j:%d\n",id,i,cuda->pair_i[id],cuda->pair_j[id]);
+                    //printf("type3 index_1:%d index_2:%d pair_i:%d pair_j:%d\n",id,i,cuda->pair_i[id],cuda->pair_j[id]);
                 }
             }
             atomicAdd(&(arg->tmp),1);
@@ -140,8 +140,8 @@ int main(void)
         //cudaDeviceSynchronize();
         sph_nnps_cuda<<<mesh_grid,mesh_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
         cudaDeviceSynchronize();
-        //check_pair<<<(int)(250000/1024)+1,1024>>>(sph.cuda,sph.dev_arg);
-        //cudaDeviceSynchronize();
+        check_pair<<<(int)(250000/1024)+1,1024>>>(sph.cuda,sph.dev_arg);
+        cudaDeviceSynchronize();
 
         //cudaMemcpy(&tmp_arg,sph.dev_arg,sizeof(SPH_ARG),cudaMemcpyDeviceToHost);
         //printf("the total same pair num is:%d \n",tmp_arg.tmp);
