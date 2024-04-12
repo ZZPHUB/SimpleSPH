@@ -165,7 +165,7 @@ int main(void)
     SPH_ARG tmp_arg;
     cudaMemcpy(&cuda,sph.cuda,sizeof(SPH_CUDA),cudaMemcpyDeviceToHost);
     cudaDeviceSynchronize();
-    int *host_pair_count = (int *)alloc(sph.host_arg.mesh_num,sizeof(int));
+    int *host_pair_count = (int *)calloc(sph.host_arg->mesh_num,sizeof(int));
     int id = 0;
 
     for(int i=0;i<1;i++)
@@ -205,9 +205,9 @@ int main(void)
         cudaDeviceSynchronize();
         cudaMemcpy(&tmp_arg,sph.dev_arg,sizeof(SPH_ARG),cudaMemcpyDeviceToHost);
         cudaDeviceSynchronize();
-        cudaMemcpy(host_pair_count,cuda.pair_count,sph.host_arg.mesh_num*sizeof(int),cudaMemcpyDeviceToHost);
+        cudaMemcpy(host_pair_count,cuda.pair_count,sph.host_arg->mesh_num*sizeof(int),cudaMemcpyDeviceToHost);
         cudaDeviceSynchronize();
-        for(int i=0;i<sph.host_arg.mesh_num;i++)
+        for(int i=0;i<sph.host_arg->mesh_num;i++)
         {
             for(int j=0;j<host_pair_count[i];j++)
             {
