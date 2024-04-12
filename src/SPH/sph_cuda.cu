@@ -154,6 +154,9 @@ int main(void)
         //check_pair<<<(int)(250000/1024)+1,1024>>>(sph.cuda,sph.dev_arg);
         //cudaDeviceSynchronize();
 
+        cudaError_t sph_error = cudaGetLastError();
+        printf("%s\n",cudaGetErrorName(sph_error));
+
         /*cudaMemcpy(sph.mesh->ptc,cuda.mesh,sizeof(int)*sph.host_arg->mesh_num*sph.host_arg->mesh_volume,cudaMemcpyDeviceToHost);
         cudaDeviceSynchronize();
         cudaMemcpy(sph.mesh->count,cuda.mesh_count,sizeof(int)*sph.host_arg->mesh_num,cudaMemcpyDeviceToHost);
