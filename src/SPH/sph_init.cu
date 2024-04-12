@@ -96,6 +96,7 @@ void sph_init(SPH *sph)
     sph->host_arg->h = PTC_SML;
     sph->host_arg->alpha = ALPHA;
     sph->host_arg->dt = DELTA_TIME;
+    sph->host_arg->ptc_num = particle->total;
     sph->host_arg->pair_volume = 32*sph->host_arg->ptc_num/sph->host_arg->mesh_num;
     cout << "run a new case or an old case(press 1 for new,0 for old)" << endl;
     cin >> sph->host_arg->new_case_flag;
@@ -115,7 +116,7 @@ void sph_init(SPH *sph)
     cin >> sph->host_arg->init_impac_flag;
     cout << "save the last step or not(press 1 ta save,0 for not)" << endl;
     cin >> sph->host_arg->save_last_flag;
-    sph->host_arg->ptc_num = particle->total;
+    //sph->host_arg->ptc_num = particle->total;
     sph->host_arg->pair_num = 0;
     sph->host_arg->lock = 1;
     sph->host_arg->tmp = 0;
