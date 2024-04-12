@@ -100,23 +100,23 @@ int main(void)
     cudaMemcpy(&cuda,sph.cuda,sizeof(SPH_CUDA),cudaMemcpyDeviceToHost);
     cudaDeviceSynchronize();
 
-    for(int i=0;i<100;i++)
+    for(int i=0;i<1;i++)
     {
-        printf("current step is:%d\n",i);
+        //printf("current step is:%d\n",i);
         //check_ptc<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg);
         //cudaDeviceSynchronize();
         sph_mesh_cuda<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg);
         cudaDeviceSynchronize();
         //check_mesh<<<mesh_grid,1>>>(sph.cuda,sph.dev_arg);
         //cudaDeviceSynchronize();
-        sph_nnps_cuda<<<mesh_grid,mesh_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
-        cudaDeviceSynchronize();
-        check_pair<<<(int)(250000/1024)+1,1024>>>(sph.cuda,sph.dev_arg);
-        cudaDeviceSynchronize();
+        //sph_nnps_cuda<<<mesh_grid,mesh_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
+        //cudaDeviceSynchronize();
+        //check_pair<<<(int)(250000/1024)+1,1024>>>(sph.cuda,sph.dev_arg);
+        //cudaDeviceSynchronize();
 
-        cudaMemcpy(&tmp_arg,sph.dev_arg,sizeof(SPH_ARG),cudaMemcpyDeviceToHost);
-        printf("the total same pair num is:%d \n",tmp_arg.tmp);
-        /*
+        //cudaMemcpy(&tmp_arg,sph.dev_arg,sizeof(SPH_ARG),cudaMemcpyDeviceToHost);
+        //printf("the total same pair num is:%d \n",tmp_arg.tmp);
+        
         host_mesh = (int *)malloc(sizeof(int)*sph.host_arg->mesh_num*sph.host_arg->mesh_volume);
         host_mesh_count = (int *)malloc(sizeof(int)*sph.host_arg->mesh_num);
 
@@ -127,19 +127,21 @@ int main(void)
 
         for(int j=0;j<sph.host_arg->mesh_num;j++)
         {
-            if(host_mesh_count[j]!=0) printf("error!!!!!!\n");
+            //if(host_mesh_count[j]!=0) printf("error!!!!!!\n");
+            printf("mesh id is:%d mesh num is:%d they are:",j,host_mesh_count[j]);
+            for(int k=0;k<host_mesh_count[j];k++)
+            {
+                printf("%d,",host_mesh[j+k*sph.arg->mesh_num]);
+            }
+            printf("\n");
         }
-        */
     }
 
-    
-
-    
-
+    /*
     for(int i=0;i<sph.host_arg->mesh_num;i++)
     {
         printf("mesh id is:%d mesh num is:%d\n",i,host_mesh_count[i]);
-    }
+    }*/
 
     sph_free(&sph);
     cudaDeviceReset();
