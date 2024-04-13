@@ -5,11 +5,11 @@ void sph_nnps_cpu(SPH *sph)
     SPH_MESH *mesh;
     SPH_PARTICLE *particle;
     SPH_ARG *arg;
-    //SPH_PAIR *pair;
+    SPH_PAIR *pair;
     mesh = sph->mesh;
     particle = sph->particle;
     arg = sph->host_arg;
-    //pair = sph->pair;
+    pair = sph->pair;
 
     double q=0.0;
     double dx=0.0;
@@ -35,8 +35,16 @@ void sph_nnps_cpu(SPH *sph)
                     q = sqrt(dx*dx+dy*dy)/arg->h;
                     if(q<2.0)
                     {
-                        if(particle->type[mesh->ptc[index_i]]==0 || particle->type[mesh->ptc[index_j]]==0)
+                        if(particle->type[mesh->ptc[index_i]]==0 )
                         {
+                            pair->i[arg->pair_num] = mseh->ptc[index_i];
+                            pair->j[arg->pair_num] = mesh->ptc[index_j];
+                            arg->pair_num ++;
+                        }
+                        else if(particle->type[mesh->ptc[index_j]]==0)
+                        {
+                            pair->i[arg->pair_num] = mseh->ptc[index_j];
+                            pair->j[arg->pair_num] = mesh->ptc[index_i];
                             arg->pair_num ++;
                         }
                     }
@@ -52,8 +60,16 @@ void sph_nnps_cpu(SPH *sph)
                         q = sqrt(dx*dx+dy*dy)/arg->h;
                         if(q<2.0)
                         {
-                            if(particle->type[mesh->ptc[index_i]]==0 || particle->type[mesh->ptc[index_j]]==0)
+                            if(particle->type[mesh->ptc[index_i]]==0 )
+                            {   
+                                pair->i[arg->pair_num] = mseh->ptc[index_i];
+                                pair->j[arg->pair_num] = mesh->ptc[index_j];
+                                arg->pair_num ++;
+                            }
+                            else if(particle->type[mesh->ptc[index_j]]==0)
                             {
+                                pair->i[arg->pair_num] = mseh->ptc[index_j];
+                                pair->j[arg->pair_num] = mesh->ptc[index_i];
                                 arg->pair_num ++;
                             }
                         } 
@@ -70,8 +86,16 @@ void sph_nnps_cpu(SPH *sph)
                         q = sqrt(dx*dx+dy*dy)/arg->h;
                         if(q<2.0)
                         {
-                            if(particle->type[mesh->ptc[index_i]]==0 || particle->type[mesh->ptc[index_j]]==0)
+                            if(particle->type[mesh->ptc[index_i]]==0 )
                             {
+                                pair->i[arg->pair_num] = mseh->ptc[index_i];
+                                pair->j[arg->pair_num] = mesh->ptc[index_j];
+                                arg->pair_num ++;
+                            }
+                            else if(particle->type[mesh->ptc[index_j]]==0)
+                            {
+                                pair->i[arg->pair_num] = mseh->ptc[index_j];
+                                pair->j[arg->pair_num] = mesh->ptc[index_i];
                                 arg->pair_num ++;
                             }
                         } 
@@ -88,8 +112,16 @@ void sph_nnps_cpu(SPH *sph)
                         q = sqrt(dx*dx+dy*dy)/arg->h;
                         if(q<2.0)
                         {
-                            if(particle->type[mesh->ptc[index_i]]==0 || particle->type[mesh->ptc[index_j]]==0)
+                            if(particle->type[mesh->ptc[index_i]]==0 )
                             {
+                                pair->i[arg->pair_num] = mseh->ptc[index_i];
+                                pair->j[arg->pair_num] = mesh->ptc[index_j];
+                                arg->pair_num ++;
+                            }
+                            else if(particle->type[mesh->ptc[index_j]]==0)
+                            {
+                                pair->i[arg->pair_num] = mseh->ptc[index_j];
+                                pair->j[arg->pair_num] = mesh->ptc[index_i];
                                 arg->pair_num ++;
                             }
                         } 
@@ -106,8 +138,16 @@ void sph_nnps_cpu(SPH *sph)
                         q = sqrt(dx*dx+dy*dy)/arg->h;
                         if(q<2.0)
                         {
-                            if(particle->type[mesh->ptc[index_i]]==0 || particle->type[mesh->ptc[index_j]]==0)
+                            if(particle->type[mesh->ptc[index_i]]==0 )
                             {
+                                pair->i[arg->pair_num] = mseh->ptc[index_i];
+                                pair->j[arg->pair_num] = mesh->ptc[index_j];
+                                arg->pair_num ++;
+                            }
+                            else if(particle->type[mesh->ptc[index_j]]==0)
+                            {
+                                pair->i[arg->pair_num] = mseh->ptc[index_j];
+                                pair->j[arg->pair_num] = mesh->ptc[index_i];
                                 arg->pair_num ++;
                             }
                         }
