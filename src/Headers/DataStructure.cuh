@@ -151,6 +151,7 @@ typedef struct
     SPH_PAIR *pair;
     SPH_KERNEL *kernel;
     SPH_CUDA *cuda;
+    SPH_CUDA *tmp_cuda;
     SPH_ARG *dev_arg;
     SPH_ARG *host_arg;
     SPH_RIGID *host_rigid;

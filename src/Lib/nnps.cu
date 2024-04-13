@@ -1,4 +1,4 @@
-#include "SPH.cuh"
+#include "Lib.cuh"
 
 void sph_nnps_cpu(SPH *sph)
 {

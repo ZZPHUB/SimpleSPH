@@ -69,6 +69,8 @@
 /* Extern Functions Here*/
 void sph_init(SPH *);
 void sph_free(SPH *);
+__global__ void sph_predict_cuda(SPH_CUDA *,SPH_ARG *,SPH_RIGID *);
+__global__ void sph_correct_cuda(SPH_CUDA *,SPH_ARG *,SPH_RIGID *);
 
 
 #endif
