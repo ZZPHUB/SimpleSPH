@@ -63,7 +63,9 @@
 
 
 #include "Lib.cuh"
+#include "Equations.cuh"
 #include "PreProcess.cuh"
+#include "PostProcess.cuh"
 
 
 /* Extern Functions Here*/

@@ -73,6 +73,25 @@ int main(void)
         sph_dummy_cuda<<<pair_grid,pair_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
         cudaDeviceSynchronize();
 
+        cudaMemcpy(sph.particle->x,sph.tmp_cuda->x,sizeof(double)*sph.particle->total,cudaMemcpyDeviceToHost);
+        cudaDeviceSynchronize();
+        cudaMemcpy(sph.particle->y,sph.tmp_cuda->y,sizeof(double)*sph.particle->total,cudaMemcpyDeviceToHost);
+        cudaDeviceSynchronize();
+        cudaMemcpy(sph.particle->vx,sph.tmp_cuda->vx,sizeof(double)*sph.particle->total,cudaMemcpyDeviceToHost);
+        cudaDeviceSynchronize();
+        cudaMemcpy(sph.particle->vy,sph.tmp_cuda->vy,sizeof(double)*sph.particle->total,cudaMemcpyDeviceToHost);
+        cudaDeviceSynchronize();
+        cudaMemcpy(sph.particle->accx,sph.tmp_cuda->accx,sizeof(double)*sph.particle->total,cudaMemcpyDeviceToHost);
+        cudaDeviceSynchronize();
+        cudaMemcpy(sph.particle->accy,sph.tmp_cuda->accy,sizeof(double)*sph.particle->total,cudaMemcpyDeviceToHost);
+        cudaDeviceSynchronize();
+        cudaMemcpy(sph.particle->density,sph.tmp_cuda->rho,sizeof(double)*sph.particle->total,cudaMemcpyDeviceToHost);
+        cudaDeviceSynchronize();
+        cudaMemcpy(sph.particle->pressure,sph.tmp_cuda->p,sizeof(double)*sph.particle->total,cudaMemcpyDeviceToHost);
+        cudaDeviceSynchronize();
+
+        sph_save_single(&sph);
+
         cudaError_t sph_error = cudaGetLastError();
         printf("%s\n",cudaGetErrorName(sph_error));
     }
