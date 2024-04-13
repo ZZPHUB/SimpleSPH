@@ -198,7 +198,7 @@ int main(void)
     cudaMalloc(&cpu_pair_i,sizeof(int)*32*sph.particle->total);
     cudaMalloc(&cpu_pair_j,sizeof(int)*32*sph.particle->total);
 
-    for(int i=0;i<1;i++)
+    for(int i=0;i<100;i++)
     {
         printf("current step is:%d\n",i);
         //check_ptc<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg);
