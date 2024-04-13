@@ -12,9 +12,9 @@ __global__ void check_nnps(SPH_CUDA *cuda,SPH_ARG *arg,int *pair_i,int *pair_j,i
     int id = 0;
     if( threadIdx.x >= cuda->pair_count[mesh_id]) return;
     else id = mesh_id*arg->pair_volume + threadIdx.x;
+    int j=0;
     for(int i=0;i<p_num;i++)
-    {
-        int j=0;
+    {   
         if(cuda->pair_i[id] == pair_i[i] && cuda->pair_j[id] == pair_j[i])
         {
             j++;
