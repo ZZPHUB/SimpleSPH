@@ -87,16 +87,16 @@ void sph_rigid_integral(SPH *sph)
         wedge->accy = -9.80;
 
         //calculate the wedge's acceleration and alpha
-        #pragma omp parallel for num_threads(TH_NUM)
+        //#pragma omp parallel for num_threads(TH_NUM)
         for(unsigned int i=0;i<particle->total;i++)
         {
             if(particle->type[i] == 1)
             {
-                #pragma omp atomic
+                //#pragma omp atomic
                 wedge->accx += particle->accx[i]*particle->mass[i]/wedge->mass;
-                #pragma omp atomic
+                //#pragma omp atomic
                 wedge->accy += particle->accy[i]*particle->mass[i]/wedge->mass;
-                #pragma omp atomic
+                //#pragma omp atomic
                 wedge->alpha += (particle->accy[i]*(particle->x[i]-wedge->cogx)-\
                 particle->accx[i]*(particle->y[i]-wedge->cogy))*particle->mass[i]/wedge->mass;
             }
@@ -113,9 +113,9 @@ void sph_rigid_integral(SPH *sph)
                 temp_vx += (wedge->accx-pow(wedge->omega,2)*(particle->x[i]-wedge->cogx)-wedge->alpha*(particle->y[i]-wedge->cogy))*sph->d_time;
                 temp_vy += (wedge->accy-pow(wedge->omega,2)*(particle->y[i]-wedge->cogy)+wedge->alpha*(particle->x[i]-wedge->cogx))*sph->d_time;
 
-                #pragma omp atomic
+                //#pragma omp atomic
                 particle->x[i] += temp_vx*sph->d_time;
-                #pragma omp atomic
+                //#pragma omp atomic
                 particle->y[i] += temp_vy*sph->d_time;
             }
         }
