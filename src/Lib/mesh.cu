@@ -9,7 +9,8 @@ __global__ void sph_mesh_cuda(SPH_CUDA *cuda,SPH_ARG *arg)
 
     /*这里需要进行加速度和密度变化的初始化*/
     cuda->accx[id] = 0.0;
-    cuda->accy[id] = 0.0;
+    if(cuda->type[id] == 0)cuda->accy[id] = -arg->g;
+    else cuda->accy = 0.0;
     cuda->drho[id] = 0.0;
     cuda->ptc_w[id] = 0.0;
 
