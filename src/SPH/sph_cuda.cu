@@ -212,14 +212,10 @@ int main(void)
         cudaDeviceSynchronize();
         cudaMemcpy(sph.mesh->count,cuda.mesh_count,sizeof(int)*sph.host_arg->mesh_num,cudaMemcpyDeviceToHost);
         cudaDeviceSynchronize();
-        
+        sph_nnps_cpu(&sph);
+
         sph_nnps_cuda<<<mesh_grid,mesh_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
         cudaDeviceSynchronize();
-        check_pair<<<pair_grid,pair_block>>>(sph.cuda,sph.dev_arg);
-        cudaDeviceSynchronize();
-        check_mesh<<<mesh_grid,1>>>(sph.cuda,sph.dev_arg);
-        cudaDeviceSynchronize();
-
 
         
         /*
@@ -227,7 +223,7 @@ int main(void)
         {
             printf("%d\n",sph.mesh->count[i]);
         }*/
-        sph_nnps_cpu(&sph);
+        
         cudaMemcpy(cpu_pair_i,sph.pair->i,sizeof(int)*32*sph.particle->total,cudaMemcpyHostToDevice);
         cudaDeviceSynchronize();
         cudaMemcpy(cpu_pair_j,sph.pair->j,sizeof(int)*32*sph.particle->total,cudaMemcpyHostToDevice);
@@ -235,7 +231,10 @@ int main(void)
 
         check_nnps<<<pair_grid,pair_block>>>(sph.cuda,sph.dev_arg,cpu_pair_i,cpu_pair_j,sph.host_arg->pair_num);
         cudaDeviceSynchronize();
-        
+        check_pair<<<pair_grid,pair_block>>>(sph.cuda,sph.dev_arg);
+        cudaDeviceSynchronize();
+        check_mesh<<<mesh_grid,1>>>(sph.cuda,sph.dev_arg);
+        cudaDeviceSynchronize();
 
 
         cudaError_t sph_error = cudaGetLastError();
