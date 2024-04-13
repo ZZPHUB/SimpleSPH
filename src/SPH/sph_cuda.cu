@@ -45,7 +45,7 @@ int main(void)
 
     for(sph.host_arg->init_step;sph.host_arg->init_step<sph.host_arg->total_step;sph.host_arg->init_step++)
     {
-        printf("current step is:%d\n",i);
+        printf("current step is:%d\n",sph.host_arg->init_step);
         
         sph_mesh_cuda<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg);
         cudaDeviceSynchronize();

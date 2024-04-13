@@ -51,13 +51,13 @@ __global__ void sph_governing_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         if(tmp_acc_v < 0.0) tmp_acc_v = 0.0;
         tmp_acc_v = (tmp_acc_v*0.01*arg->h*arg->c)/((dx*dx+dy*dy+0.01*arg->h)*0.5*(cuda->rho[index_i]+cuda->rho[index_j]));
 
-        accx = arg->m * ( tmp_acc_v - tmp_acc_p) *dwdx[id];
-        accy = arg->m * ( tmp_acc_v - tmp_acc_p) *dwdy[id];
+        accx = arg->m * ( tmp_acc_v - tmp_acc_p) *cuda->dwdx[id];
+        accy = arg->m * ( tmp_acc_v - tmp_acc_p) *cuda->dwdy[id];
 
         atomicAdd(&(cuda->accx[index_i]),accx);
         atomicAdd(&(cuda->accx[index_j]),-accx);
         atomicAdd(&(cuda->accy[index_i]),accy);
-        atomicAdd(&(cuda->accy[index_j]),-accy):
+        atomicAdd(&(cuda->accy[index_j]),-accy);
         atomicAdd(&(cuda->drho[index_i]),drho);
         atomicAdd(&(cuda->drho[index_j]),drho);
     }

@@ -13,13 +13,13 @@ __global__ void sph_dummy_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     int index_j = 0;
     int id = 0;
     const int mesh_id = blockIdx.x + blockIdx.y * gridDim.x;
-    if(threadIdx < cuda->pair_count[mesh_id])
+    if( threadIdx.x < cuda->pair_count[mesh_id])
     {
         id = mesh_id * arg->pair_volume + threadIdx.x;
         index_i = cuda->pair_i[id];
         index_j = cuda->pair_j[id];
 
-        if(cuda->type[index_j] != 0 cuda->ptc_w[index_j] != 0.0)
+        if(cuda->type[index_j] != 0  && cuda->ptc_w[index_j] != 0.0)
         {
             if(cuda->type[index_j] == -1)
             {
@@ -40,7 +40,7 @@ __global__ void sph_dummy_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
             atomicAdd(&(cuda->p[index_j]),tmp_prho);
             
             tmp_prho /= arg->c*arg->c;
-            atomicadd(&(cuda->rho[index_j]),tmp_prho);
+            atomicAdd(&(cuda->rho[index_j]),tmp_prho);
 
             tmp_vx = cuda->vx[index_i]*cuda->pair_w[id]/cuda->ptc_w[index_j];
             atomicAdd(&(cuda->vx[index_j]),tmp_vx);
