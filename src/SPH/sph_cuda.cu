@@ -23,7 +23,7 @@ __global__ void check_nnps(SPH_CUDA *cuda,SPH_ARG *arg,int *pair_i,int *pair_j,i
         {
             j++;
         }
-        else if(cuda->pair_i[id] = cuda->pair_j[id])
+        else if(cuda->pair_i[id] == cuda->pair_j[id])
         {
             j++;
         }
