@@ -90,7 +90,7 @@ void sph_save_last(SPH *sph)
 
     ptc_num = particle->total;
 
-    if(sph->save_last_flag == 1)
+    if(sph->host_arg->save_last_flag == 1)
     {
         ofstream vtkfile;
         vtkfile.open("../data/postprocess/save.vtk");

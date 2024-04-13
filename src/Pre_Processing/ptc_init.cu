@@ -3,11 +3,11 @@
 void ptc_info_init(SPH *sph)
 {
     SPH_PARTICLE *particle;
-    SPH_PAIR *pair;
+    //SPH_PAIR *pair;
     particle = sph->particle;
-    pair = sph->pair;
+    //pair = sph->pair;
 
-    double free_surf = PTC_SPACING*(FLUID_DEEPTH_NUM-1+4);
+   
 
     if(sph->host_arg->new_case_flag == 1)
     {
@@ -19,6 +19,7 @@ void ptc_info_init(SPH *sph)
                 particle->density[i] = REF_DENSITY;
                 particle->mass[i] = PTC_MASS;
             #else
+                 double free_surf = PTC_SPACING*(FLUID_DEEPTH_NUM-1+4);
                 if(particle->y[i] < free_surf)
                 {
                     particle->pressure[i] = REF_DENSITY*GRAVITY_ACC*(free_surf-particle->y[i]);
