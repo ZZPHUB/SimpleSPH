@@ -87,4 +87,6 @@ void sph_governing(SPH *sph)
         particle->dif_density[pair->j[i]] += particle->mass[pair->i[i]]*temp_rho;      
         omp_unset_lock(&lock);
     }
+
+    omp_destroy_lock(&lock);
 }

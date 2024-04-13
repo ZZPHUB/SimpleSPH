@@ -187,6 +187,7 @@ void ptc_nnps_mesh(SPH *sph)
             }
         }
     }
+    omp_destroy_lock(&lock);
 }
 
 void ptc_nnps_check(SPH_PAIR *pair,SPH_PAIR *pair_direct,unsigned int *total)
