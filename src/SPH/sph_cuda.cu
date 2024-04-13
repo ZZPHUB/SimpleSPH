@@ -73,7 +73,7 @@ int main(void)
         sph_dummy_cuda<<<pair_grid,pair_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
         cudaDeviceSynchronize();
 
-        if(sph.host_arg->init_step/400 == 0)
+        if(sph.host_arg->init_step%400 == 0)
         {
             cudaMemcpy(sph.particle->x,sph.tmp_cuda->x,sizeof(double)*sph.particle->total,cudaMemcpyDeviceToHost);
             cudaDeviceSynchronize();
