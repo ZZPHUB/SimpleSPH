@@ -37,13 +37,13 @@ void sph_nnps_cpu(SPH *sph)
                     {
                         if(particle->type[mesh->ptc[index_i]]==0 )
                         {
-                            pair->i[arg->pair_num] = mseh->ptc[index_i];
+                            pair->i[arg->pair_num] = mesh->ptc[index_i];
                             pair->j[arg->pair_num] = mesh->ptc[index_j];
                             arg->pair_num ++;
                         }
                         else if(particle->type[mesh->ptc[index_j]]==0)
                         {
-                            pair->i[arg->pair_num] = mseh->ptc[index_j];
+                            pair->i[arg->pair_num] = mesh->ptc[index_j];
                             pair->j[arg->pair_num] = mesh->ptc[index_i];
                             arg->pair_num ++;
                         }
@@ -62,13 +62,13 @@ void sph_nnps_cpu(SPH *sph)
                         {
                             if(particle->type[mesh->ptc[index_i]]==0 )
                             {   
-                                pair->i[arg->pair_num] = mseh->ptc[index_i];
+                                pair->i[arg->pair_num] = mesh->ptc[index_i];
                                 pair->j[arg->pair_num] = mesh->ptc[index_j];
                                 arg->pair_num ++;
                             }
                             else if(particle->type[mesh->ptc[index_j]]==0)
                             {
-                                pair->i[arg->pair_num] = mseh->ptc[index_j];
+                                pair->i[arg->pair_num] = mesh->ptc[index_j];
                                 pair->j[arg->pair_num] = mesh->ptc[index_i];
                                 arg->pair_num ++;
                             }
@@ -88,13 +88,13 @@ void sph_nnps_cpu(SPH *sph)
                         {
                             if(particle->type[mesh->ptc[index_i]]==0 )
                             {
-                                pair->i[arg->pair_num] = mseh->ptc[index_i];
+                                pair->i[arg->pair_num] = mesh->ptc[index_i];
                                 pair->j[arg->pair_num] = mesh->ptc[index_j];
                                 arg->pair_num ++;
                             }
                             else if(particle->type[mesh->ptc[index_j]]==0)
                             {
-                                pair->i[arg->pair_num] = mseh->ptc[index_j];
+                                pair->i[arg->pair_num] = mesh->ptc[index_j];
                                 pair->j[arg->pair_num] = mesh->ptc[index_i];
                                 arg->pair_num ++;
                             }
@@ -114,13 +114,13 @@ void sph_nnps_cpu(SPH *sph)
                         {
                             if(particle->type[mesh->ptc[index_i]]==0 )
                             {
-                                pair->i[arg->pair_num] = mseh->ptc[index_i];
+                                pair->i[arg->pair_num] = mesh->ptc[index_i];
                                 pair->j[arg->pair_num] = mesh->ptc[index_j];
                                 arg->pair_num ++;
                             }
                             else if(particle->type[mesh->ptc[index_j]]==0)
                             {
-                                pair->i[arg->pair_num] = mseh->ptc[index_j];
+                                pair->i[arg->pair_num] = mesh->ptc[index_j];
                                 pair->j[arg->pair_num] = mesh->ptc[index_i];
                                 arg->pair_num ++;
                             }
@@ -140,13 +140,13 @@ void sph_nnps_cpu(SPH *sph)
                         {
                             if(particle->type[mesh->ptc[index_i]]==0 )
                             {
-                                pair->i[arg->pair_num] = mseh->ptc[index_i];
+                                pair->i[arg->pair_num] = mesh->ptc[index_i];
                                 pair->j[arg->pair_num] = mesh->ptc[index_j];
                                 arg->pair_num ++;
                             }
                             else if(particle->type[mesh->ptc[index_j]]==0)
                             {
-                                pair->i[arg->pair_num] = mseh->ptc[index_j];
+                                pair->i[arg->pair_num] = mesh->ptc[index_j];
                                 pair->j[arg->pair_num] = mesh->ptc[index_i];
                                 arg->pair_num ++;
                             }
