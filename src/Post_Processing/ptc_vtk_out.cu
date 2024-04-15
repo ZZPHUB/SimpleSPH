@@ -173,7 +173,7 @@ void sph_save_last(SPH *sph)
 
         infofile.close();
 
-        system("cp ../data/postprocess/save.vtk ../data/preprocess/init.vtk");
-        system("cp ../data/postprocess/info.txt ../data/preprocess/info.txt");
+        //system("cp ../data/postprocess/save.vtk ../data/preprocess/init.vtk");
+        //system("cp ../data/postprocess/info.txt ../data/preprocess/info.txt");
     }
 }

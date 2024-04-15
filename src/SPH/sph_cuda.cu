@@ -74,6 +74,11 @@ int main(void)
         cudaDeviceSynchronize();
         sph_dummy_cuda<<<pair_grid, pair_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
         cudaDeviceSynchronize();
+        if(sph.host_arg->init_impac_flag == 0)
+        {
+            sph_rigid_cuda<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
+            cudaDeviceSynchronize();
+        }
 
         if (sph.host_arg->init_step % PRINT_TIME_STEP == 0)
         {
@@ -97,6 +102,29 @@ int main(void)
         cudaError_t sph_error = cudaGetLastError();
         printf("%s\n", cudaGetErrorName(sph_error));
     }
+
+    //save the last frame
+    cudaMemcpy(sph.particle->x, sph.tmp_cuda->x, sizeof(double) * sph.particle->total, cudaMemcpyDeviceToHost);
+    cudaDeviceSynchronize();
+    cudaMemcpy(sph.particle->y, sph.tmp_cuda->y, sizeof(double) * sph.particle->total, cudaMemcpyDeviceToHost);
+    cudaDeviceSynchronize();
+    cudaMemcpy(sph.particle->vx, sph.tmp_cuda->vx, sizeof(double) * sph.particle->total, cudaMemcpyDeviceToHost);
+    cudaDeviceSynchronize();
+    cudaMemcpy(sph.particle->vy, sph.tmp_cuda->vy, sizeof(double) * sph.particle->total, cudaMemcpyDeviceToHost);
+    cudaDeviceSynchronize();
+    cudaMemcpy(sph.particle->accx, sph.tmp_cuda->accx, sizeof(double) * sph.particle->total, cudaMemcpyDeviceToHost);
+    cudaDeviceSynchronize();
+    cudaMemcpy(sph.particle->accy, sph.tmp_cuda->accy, sizeof(double) * sph.particle->total, cudaMemcpyDeviceToHost);
+    cudaDeviceSynchronize();
+    cudaMemcpy(sph.particle->density, sph.tmp_cuda->rho, sizeof(double) * sph.particle->total, cudaMemcpyDeviceToHost);
+    cudaDeviceSynchronize();
+    cudaMemcpy(sph.particle->pressure, sph.tmp_cuda->p, sizeof(double) * sph.particle->total, cudaMemcpyDeviceToHost);
+    cudaDeviceSynchronize();
+    cudaMemcpy(sph.particle->type,sph.tmp_cuda->type,sizeof(int)*sph.particle->total,cudaMemcpyDeviceToHost);
+    cudaDeviceSynchronize();
+    cudaMemcpy(sph.host_rigid,sph.dev_rigid,sizeof(SPH_RIGID),cudaMemcpyDeviceToHost);
+    sph_save_last(&sph);
+
     sph_free(&sph);
     cudaDeviceReset();
     return 0;
@@ -150,7 +178,17 @@ __global__ void sph_correct_cuda(SPH_CUDA *cuda, SPH_ARG *arg, SPH_RIGID *rigid)
                 cuda->rho[id] = arg->ref_rho;
             cuda->p[id] = arg->c * arg->c * (cuda->rho[id] - arg->ref_rho);
         }
-        else
+        else if(cuda->type[id] == 1)
+        {
+            cuda->p[id] = 0.0;
+            cuda->rho[id] = 0.0;
+            cuda->vx[id] = 0.0;
+            cuda->vy[id] = 0.0;
+            cuda->rho[id] = arg->ref_rho;
+            cuda->x[id] = cuda->temp_x[id] + arg->dt*(rigid->vx - rigid->omega(cuda->y[id]-rigid->cogy));
+            cuda->y[id] = cuda->temp_y[id] + arg->dt*(rigid->vy + rigid->omega(cuda->x[id]-rigid->cogx));
+        }
+        else if(cuda->type[id] == -1)
         {
             cuda->p[id] = 0.0;
             cuda->rho[id] = 0.0;
@@ -159,4 +197,40 @@ __global__ void sph_correct_cuda(SPH_CUDA *cuda, SPH_ARG *arg, SPH_RIGID *rigid)
             cuda->rho[id] = arg->ref_rho;
         }
     }
+}
+
+__global__ void sph_rigid_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
+{
+    __shared__ double accx = 0.0;
+    __shared__ double accy = 0.0;
+    __shared__ double alpha = 0.0;
+    const int id = threadIdx.x + blockIdx.x * blockDim.x;
+    if(id == 0)
+    {
+        rigid->accx = 0.0;
+        rigid->accy = -arg->g;
+        rigid->alpha = 0.0;
+        rigid->cogx = cuda->x[rigid->cog_ptc_id];
+        rigid->cogy = cuda->y[rigid->cog_ptc_id];
+    }
+    if(id < arg->ptc_num)
+    {
+        if(cuda->type[id] == 1)
+        {
+            accx += cuda->accx[id]*arg->m/rigid->m;
+            accy += cuda->accy[id]*arg->m/rigid->m;
+            alpha += (cuda->accx[id]*(cuda->x[id]-rigid->cogx)-cuda->accy[id]*(cuda->y[id]-rigid->cogy))*arg->m/rigid->m;
+        }   
+    }
+    __syncthreads();
+    if( threadIdx.x == 0)
+    {
+        atomicAdd(&(rigid->accx),accx);
+        atomicAdd(&(rigid->accy),accy);
+        atomicAdd(&(rigid->alpha),alpha);
+        atomicAdd(&(rigid->vx),accx*arg->dt);
+        atomicAdd(&(rigid->vy),accy*arg->dt);
+        atomicAdd(&(rigid->omega),alpha*arg->dt);
+    }
+    __syncthreads();
 }

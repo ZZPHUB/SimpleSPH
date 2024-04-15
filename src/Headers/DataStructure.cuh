@@ -65,7 +65,8 @@ typedef struct
     double cogy;    //y-direction center of gravity coordinate 
     double mass;    //rigid body mass 
     double moi;     //rigid body moment of inertia
-    double total;   //rigid body ptc num
+    int cog_ptc_id;
+    int total;   //rigid body ptc num
 }SPH_RIGID;
 
 typedef struct 

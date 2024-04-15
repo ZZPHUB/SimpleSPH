@@ -65,6 +65,7 @@ void ptc_rigid_init(SPH *sph)
 
     wedge->accx = wedge->accy = wedge->alpha = 0.0;
     wedge->mass = 12.8;
+    wedge->cog_ptc_id = ?;
 
     if(sph->host_arg->new_case_flag == 1 || sph->host_arg->init_impac_flag == 1)
     {
