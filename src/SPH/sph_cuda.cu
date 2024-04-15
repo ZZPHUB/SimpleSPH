@@ -185,8 +185,8 @@ __global__ void sph_correct_cuda(SPH_CUDA *cuda, SPH_ARG *arg, SPH_RIGID *rigid)
             cuda->vx[id] = 0.0;
             cuda->vy[id] = 0.0;
             cuda->rho[id] = arg->ref_rho;
-            cuda->x[id] = cuda->temp_x[id] + arg->dt*(rigid->vx - rigid->omega(cuda->y[id]-rigid->cogy));
-            cuda->y[id] = cuda->temp_y[id] + arg->dt*(rigid->vy + rigid->omega(cuda->x[id]-rigid->cogx));
+            cuda->x[id] = cuda->temp_x[id] + arg->dt*(rigid->vx - rigid->omega*(cuda->y[id]-rigid->cogy));
+            cuda->y[id] = cuda->temp_y[id] + arg->dt*(rigid->vy + rigid->omega*(cuda->x[id]-rigid->cogx));
         }
         else if(cuda->type[id] == -1)
         {
