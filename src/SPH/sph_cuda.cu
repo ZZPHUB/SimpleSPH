@@ -201,10 +201,17 @@ __global__ void sph_correct_cuda(SPH_CUDA *cuda, SPH_ARG *arg, SPH_RIGID *rigid)
 
 __global__ void sph_rigid_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
 {
-    __shared__ double accx = 0.0;
-    __shared__ double accy = 0.0;
-    __shared__ double alpha = 0.0;
+    __shared__ double accx;
+    __shared__ double accy;
+    __shared__ double alpha;
     const int id = threadIdx.x + blockIdx.x * blockDim.x;
+    if(threadIdx.x == 0)
+    {
+        accx = 0.0;
+        accy = 0.0;
+        alpha = 0.0;
+    }
+    __syncthreads();
     if(id == 0)
     {
         rigid->accx = 0.0;
@@ -217,9 +224,9 @@ __global__ void sph_rigid_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     {
         if(cuda->type[id] == 1)
         {
-            accx += cuda->accx[id]*arg->m/rigid->m;
-            accy += cuda->accy[id]*arg->m/rigid->m;
-            alpha += (cuda->accx[id]*(cuda->x[id]-rigid->cogx)-cuda->accy[id]*(cuda->y[id]-rigid->cogy))*arg->m/rigid->m;
+            accx += cuda->accx[id]*arg->m/rigid->mass;
+            accy += cuda->accy[id]*arg->m/rigid->mass;
+            alpha += (cuda->accx[id]*(cuda->x[id]-rigid->cogx)-cuda->accy[id]*(cuda->y[id]-rigid->cogy))*arg->m/rigid->mass;
         }   
     }
     __syncthreads();
