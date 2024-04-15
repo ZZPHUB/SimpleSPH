@@ -97,11 +97,9 @@ int main(void)
         cudaError_t sph_error = cudaGetLastError();
         printf("%s\n", cudaGetErrorName(sph_error));
     }
-}
-
-sph_free(&sph);
-cudaDeviceReset();
-return 0;
+    sph_free(&sph);
+    cudaDeviceReset();
+    return 0;
 }
 
 __global__ void sph_predict_cuda(SPH_CUDA *cuda, SPH_ARG *arg, SPH_RIGID *rigid)
