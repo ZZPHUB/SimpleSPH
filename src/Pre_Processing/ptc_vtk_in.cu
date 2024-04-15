@@ -65,13 +65,15 @@ void ptc_rigid_init(SPH *sph)
 
     wedge->accx = wedge->accy = wedge->alpha = 0.0;
     wedge->mass = 12.8;
-    wedge->cog_ptc_id = ?;
+    wedge->cog_ptc_id = 245939;
 
     if(sph->host_arg->new_case_flag == 1 || sph->host_arg->init_impac_flag == 1)
     {
         wedge->vx = wedge->vy = wedge->omega = 0.0;
-        wedge->cogx = FLUID_DOMAIN_LENGTH/2.0;
-        wedge->cogy = FLUID_DOMAIN_DEEPTH+4.0*PTC_SPACING+0.032;
+        //wedge->cogx = FLUID_DOMAIN_LENGTH/2.0;
+        //wedge->cogy = FLUID_DOMAIN_DEEPTH+4.0*PTC_SPACING+0.032;
+        wedge->cogx = particle->x[wedge->cog_ptc_id];
+        wedge->cogy = particle->y[wedge->cog_ptc_id];
 
         //calculate the moi of the wedge
         for(unsigned int i=0;i<particle->total;i++)
