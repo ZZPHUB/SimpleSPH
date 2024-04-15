@@ -52,7 +52,6 @@ int main(void)
         sph_nnps_cuda<<<mesh_grid,mesh_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
         if(sph.host_arg->init_step%PRINT_TIME_STEP == 1)
         {
-
             sph_save_single(&sph);
         }
         cudaDeviceSynchronize();
