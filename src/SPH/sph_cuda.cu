@@ -50,6 +50,11 @@ int main(void)
         sph_mesh_cuda<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg);
         cudaDeviceSynchronize();
         sph_nnps_cuda<<<mesh_grid,mesh_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
+        if(sph.host_arg->init_step%PRINT_TIME_STEP == 1)
+        {
+
+            sph_save_single(&sph);
+        }
         cudaDeviceSynchronize();
         sph_kernel_cuda<<<pair_grid,pair_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
         cudaDeviceSynchronize();
@@ -91,8 +96,6 @@ int main(void)
             cudaDeviceSynchronize();
             cudaMemcpy(sph.particle->pressure,sph.tmp_cuda->p,sizeof(double)*sph.particle->total,cudaMemcpyDeviceToHost);
             cudaDeviceSynchronize();
-
-            sph_save_single(&sph);
         }
 
     
