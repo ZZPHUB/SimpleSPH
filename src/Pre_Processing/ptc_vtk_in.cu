@@ -96,8 +96,8 @@ void ptc_rigid_init(SPH *sph)
                 }
             }
         }
-        wedge->cogx = particle->x[i];
-        wedge->cogy = particle->y[i];
+        wedge->cogx = particle->x[wedge->cog_ptc_id];
+        wedge->cogy = particle->y[wedge->cog_ptc_id];
 
         //calculate the moi of the wedge
         for(unsigned int i=0;i<particle->total;i++)
