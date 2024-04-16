@@ -22,7 +22,7 @@ void ptc_rigid_generate(SPH *sph)
     for(vtkIdType i=0;i<vtkdata->GetNumberOfPoints();i++)
     {
         vtkdata->GetPoint(i,x);
-        if(x[2]==0 &&(x[0]!=0 || x[1]!= 0))
+        if(x[2]==0)
         {
             particle->x[tol] = x[0]+FLUID_DOMAIN_LENGTH/2.0;
             particle->y[tol] = x[1]+FLUID_DOMAIN_DEEPTH-8.0*PTC_SPACING;
@@ -48,7 +48,7 @@ unsigned int ptc_rigid_num(void)
     for(vtkIdType i=0;i<vtkdata->GetNumberOfPoints();i++)
     {
         vtkdata->GetPoint(i,x);
-        if(x[2]==0 && (x[0]!=0 || x[1]!= 0))
+        if(x[2]==0)
         {
             tol++;
         }
