@@ -172,6 +172,10 @@ void sph_save_last(SPH *sph)
         infofile << setiosflags(ios::scientific) << wedge->moi << endl;
         //infofile << "#the wedge's cog_ptc_id << endl"
         infofile << wedge->cog_ptc_id << endl;
+        //wedge's offset in x direction
+        infofile << wedge->offset_x << endl;
+        //wedge's offset in y direction
+        infofile << wedge->offset_y << endl;
 
         infofile.close();
 

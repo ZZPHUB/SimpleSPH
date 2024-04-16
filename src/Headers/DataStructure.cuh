@@ -63,6 +63,8 @@ typedef struct
     double alpha;   //rigid body angular acceleration
     double cogx;    //x-direction center of gravity coordinate
     double cogy;    //y-direction center of gravity coordinate 
+    double offset_x;    //offset in x direction
+    double offset_y;    //offset in y direction
     double mass;    //rigid body mass 
     double moi;     //rigid body moment of inertia
     int cog_ptc_id;
