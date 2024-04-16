@@ -7,7 +7,7 @@ void ptc_rigid_generate(SPH *sph)
     SPH_PARTICLE *particle;
     particle = sph->particle;
     
-    std::string filename = "../data/preprocess/wedge005.vtk";
+    std::string filename = "../data/preprocess/wedge.vtk";
 
     double x[3] = {0};
     unsigned int tol=0;
@@ -34,7 +34,7 @@ void ptc_rigid_generate(SPH *sph)
 
 unsigned int ptc_rigid_num(void)
 {
-    std::string filename = "../data/preprocess/wedge005.vtk";
+    std::string filename = "../data/preprocess/wedge.vtk";
 
     double x[3];
     unsigned int tol=0;
