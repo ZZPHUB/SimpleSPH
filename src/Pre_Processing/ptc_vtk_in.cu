@@ -65,15 +65,41 @@ void ptc_rigid_init(SPH *sph)
 
     wedge->accx = wedge->accy = wedge->alpha = 0.0;
     wedge->mass = 12.8;
-    wedge->cog_ptc_id = 245939;
+    //wedge->cog_ptc_id = 245939;
 
     if(sph->host_arg->new_case_flag == 1 || sph->host_arg->init_impac_flag == 1)
     {
         wedge->vx = wedge->vy = wedge->omega = 0.0;
         //wedge->cogx = FLUID_DOMAIN_LENGTH/2.0;
         //wedge->cogy = FLUID_DOMAIN_DEEPTH+4.0*PTC_SPACING+0.032;
-        wedge->cogx = particle->x[wedge->cog_ptc_id];
-        wedge->cogy = particle->y[wedge->cog_ptc_id];
+        //wedge->cogx = particle->x[wedge->cog_ptc_id];
+        //wedge->cogy = particle->y[wedge->cog_ptc_id];
+        double tmp_cogx = 0;
+        double tmp_cogy = 0;
+        double r = 10000;
+        //calculate the center of gravity of wedge
+        for(unsigned int i=0;i<particle->total;i++)
+        {
+            if(particle->type[i] == 1)
+            {
+                tmp_cogx += particle->x[i]/(double)(particle->rigid_ptc_num);
+                tmp_cogy += particle->y[i]/(double)(particle->rigid_ptc_num);
+            }
+        }
+        for(unsigned int i=0;i<particle->total;i++)
+        {
+            if (particle->type[i] == 1)
+            {
+                if(r > (pow((tmp_cogx-particle->x[i]),2)+pow((tmp_cogy-particle->y[i]),2)))
+                {
+                    r = sqrt(pow((tmp_cogx-particle->x[i]),2)+pow((tmp_cogy-particle->y[i]),2));
+                    wedge->cog_ptc_id = i;
+                    wedge->cogx = particle->x[i];
+                    wedge->cogy = particle->y[i];
+                }
+            }
+        }
+        printf("the center of gravity of rigid is:%d\n",wedge->cog_ptc_id);
 
         //calculate the moi of the wedge
         for(unsigned int i=0;i<particle->total;i++)
@@ -103,6 +129,8 @@ void ptc_rigid_init(SPH *sph)
         wedge->cogy = stod(line.c_str());
         getline(infofile,line);//moi
         wedge->moi = stod(line.c_str());
+        getline(infofile,line);//cog_ptc_id
+        wedge->cog_ptc_id = stoi(line.c_str());
 
         infofile.close();
     }   

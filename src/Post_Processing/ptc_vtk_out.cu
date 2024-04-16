@@ -170,6 +170,8 @@ void sph_save_last(SPH *sph)
         infofile << setiosflags(ios::scientific) << wedge->cogy << endl;
         //infofile << "#the wedge's moi" << endl;
         infofile << setiosflags(ios::scientific) << wedge->moi << endl;
+        //infofile << "#the wedge's cog_ptc_id << endl"
+        infofile << wedge->cog_ptc_id << endl;
 
         infofile.close();
 
