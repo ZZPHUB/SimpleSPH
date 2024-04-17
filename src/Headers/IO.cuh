@@ -4,6 +4,7 @@
 /* Headers Include Here*/
 #include "SPH.cuh"
 #include <string>
+#include <fstream>
 
 /* Extern Function Here*/
 extern void ptc_rigid_generate(SPH *);
