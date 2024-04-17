@@ -83,8 +83,8 @@ void sph_init(SPH *sph)
     sph->host_arg->ptc_dx = PTC_SPACING;
     sph->host_arg->fluid_x = FLUID_DOMAIN_LENGTH;
     sph->host_arg->fluid_y = FLUID_DOMAIN_DEEPTH;
-    sph->host_arg->domain_x = TOL_DOMAIN_LENGTH;
-    sph->host_arg->domain_y = TOL_DOMAIN_DEEPTH;
+    sph->host_arg->mesh_x = TOL_DOMAIN_LENGTH;
+    sph->host_arg->mesh_y = TOL_DOMAIN_DEEPTH;
     sph->host_arg->fluid_xnum = FLUID_LENGTH_NUM;
     sph->host_arg->fluid_ynum = FLUID_DEEPTH_NUM;
     sph->host_arg->mesh_dx = MESH_SPACING;

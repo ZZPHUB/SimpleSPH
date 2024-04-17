@@ -26,7 +26,7 @@ __global__ void sph_mesh_cuda(SPH_CUDA *cuda,SPH_ARG *arg)
     int mid = 0;
     int mesh_index = 0;
 
-    if(cuda->y[id] < arg->domain_y && cuda->y[id] >= 0.0)
+    if(cuda->y[id] < arg->mesh_y && cuda->y[id] >= 0.0)
     {
         mid = __double2int_rz(cuda->y[id]/arg->mesh_dx)*arg->mesh_xnum;
     }
@@ -34,7 +34,7 @@ __global__ void sph_mesh_cuda(SPH_CUDA *cuda,SPH_ARG *arg)
     {
         mid = (arg->mesh_ynum - 1)*arg->mesh_xnum;
     }
-    if(cuda->x[id] < arg->domain_x && cuda->x[id] >= 0.0)
+    if(cuda->x[id] < arg->mesh_x && cuda->x[id] >= 0.0)
     {
         mid += __double2int_rz(cuda->x[id]/arg->mesh_dx);
     }

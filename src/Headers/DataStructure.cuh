@@ -65,6 +65,7 @@ typedef struct
     double cogy;    //y-direction center of gravity coordinate 
     double offset_x;    //offset in x direction
     double offset_y;    //offset in y direction
+    double offset_angl;  //offset in angular
     double mass;    //rigid body mass 
     double moi;     //rigid body moment of inertia
     int cog_ptc_id;
@@ -108,22 +109,22 @@ typedef struct
     double c;   //sound speed
     double g;   //gravity acceleration
     double ref_rho;     //reference density
-    double ptc_dx;      //ptc delta spacing
     double r;       //ptc radius
     double h;   //smoothed length
     double m;   //ptc mass
     double alpha;   //kernel function's para
     double sst;    //single step time
     double dt;  //delta t
+    int wall_layer;
 
     double fluid_x;     //fluid length
     double fluid_y;     //fluid depth
     int fluid_xnum;     //fluid length direction ptc num
     int fluid_ynum;     //fluid depth direction ptc num
+    double ptc_dx;      //ptc delta spacing
     
-    double domain_x;    //total domain length
-    double domain_y;    //total domain depth
-
+    double mesh_x;    //total domain length
+    double mesh_y;    //total domain depth
     double mesh_dx;     //mesh delta spacing
     int mesh_xnum;      //mesh length direction num
     int mesh_ynum;      //mesh depth direction num
@@ -132,6 +133,7 @@ typedef struct
 
     int init_step;  //inital time step
     int total_step; //total time step
+    int print_step; //print time step
 
      //current process flags
     int new_case_flag;  // if 1 then creat a new case,or continue to run the old case

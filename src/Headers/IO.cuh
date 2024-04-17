@@ -1,18 +1,7 @@
-#ifndef __PREPROCESS_H__
-#define __PREPROCESS_H__
-
+#ifndef __IO_H__
+#define __IO_H__
 
 /* Headers Include Here*/
-#include <vtkUnstructuredGridReader.h>
-#include <vtkSmartPointer.h>
-#include <vtkType.h>
-#include <vtkUnstructuredGrid.h>
-#include <vtkPointSet.h>
-#include <vtkDataSetReader.h>
-#include <vtkPointData.h>
-#include <vtkDataArray.h>
-#include <vtkDoubleArray.h>
-
 #include "SPH.cuh"
 
 /* Extern Function Here*/
@@ -23,4 +12,8 @@ extern void ptc_read_vtk(SPH *);
 extern void ptc_generate(SPH *);
 extern void ptc_info_init(SPH *);
 extern void ptc_init(SPH *);
+
+extern void sph_save_single(SPH *);
+extern void sph_save_last(SPH *);
+
 #endif

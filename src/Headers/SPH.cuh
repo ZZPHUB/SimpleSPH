@@ -61,11 +61,9 @@
 #define LINEAR_EOS
 
 
-#include <omp.h>
 #include "Lib.cuh"
+#include "IO.cuh"
 #include "Equations.cuh"
-#include "PreProcess.cuh"
-#include "PostProcess.cuh"
 
 
 /* Extern Functions Here*/
