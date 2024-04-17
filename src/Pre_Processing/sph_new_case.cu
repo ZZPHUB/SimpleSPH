@@ -15,6 +15,7 @@ int main(void)
     sph.host_arg = &arg;
     sph.host_rigid = &rigid;
     sph.particle = &particle;
+    arg.case_dir = "."
     //get info from input
     get_input(&sph);
     fluid_ptc_generate(&sph);
