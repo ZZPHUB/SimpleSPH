@@ -2,7 +2,7 @@ VPATH = ./Equation:./Lib:./Post_Processing:./Pre_Processing:./SPH:./IO
 # 正则表达式表示目录下所有.c文件
 SRC = $(notdir $(wildcard ./*/*.cu))
 # 头文件路径
-INCLUDE = -I ./Headers -I ./ThirdParty/json/include -I /usr/include/vtk-9.1 
+INCLUDE = -I ./Headers -I ../ThirdParty/json/include -I /usr/include/vtk-9.1 
 # 生成文SRC
 BUILD_DIR = ./build
 SPH_RUN_OBJ = $(BUILD_DIR)/sph_cuda.o 
