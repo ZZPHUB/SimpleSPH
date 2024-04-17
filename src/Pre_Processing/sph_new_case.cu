@@ -1,4 +1,4 @@
-#include "PreProcess.cuh"
+#include "SPH.cuh"
 #include <iostream>
 using namespace std;
 
@@ -46,7 +46,7 @@ void get_input(SPH *sph)
     arg->fluid_xnum = (int)(arg->fluid_x/arg->ptc_dx)+1-2*arg->wall_layer;
     arg->fluid_ynum = (int)(arg->fluid_y/arg->ptc_dx)+1-arg->wall_layer;
     particle->fulid_ptc_num = arg->fluid_xnum*arg->fluid_ynum;
-    particle->wall_ptc_num = ((int)(arg->fluid_x/arg->ptc_dx)+1)*((int)(1.1*arg->fluid_y/arg->ptc_dx)+1)\
+    particle->wall_ptc_num = ((int)(arg->fluid_x/arg->ptc_dx)+1)*((int)(1.1*arg->fluid_y/arg->ptc_dx)+1)-\
                              ((int)(arg->fluid_x/arg->ptc_dx)+1-2*arg->wall_layer)*((int)(1.1*arg->fluid_y/arg->ptc_dx)+1-arg->wall_layer);
 
     arg->mesh_dx = arg->r;
@@ -87,16 +87,16 @@ void get_input(SPH *sph)
     rigid->cogx = 0.0;
     rigid->cogy = 0.0; 
 
-    return 0;
+    //return 0;
 }
 
 void fluid_ptc_generate(SPH *sph)
 {
-    return 0;
+    //return 0;
 }
 
 void rigid_ptc_generate(SPH *sph)
 {
-    return 0;
+    //return 0;
 }
 

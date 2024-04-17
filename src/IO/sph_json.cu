@@ -85,7 +85,7 @@ void sph_write_info(SPH *sph)
     
     std::string info_file = arg->case_dir;
     info_file += "/last_case_info.txt";
-    std::ifstream f(info_file.c_str());
+    std::ofstream f(info_file.c_str());
     json sph_info;
 
     //arg->fluid_x = sph_info["fluid"]["x"];
