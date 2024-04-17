@@ -1,0 +1,3 @@
+[submodule "ThirdParty/json"]
+	path = ThirdParty/json
+	url = git@github.com:ZZP-DMU/json.git
