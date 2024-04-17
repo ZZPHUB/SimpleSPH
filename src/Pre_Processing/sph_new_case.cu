@@ -15,7 +15,7 @@ int main(int argc,char *argv[])
     sph.host_arg = &arg;
     sph.host_rigid = &rigid;
     sph.particle = &particle;
-    if(argc != 2) printf("\033[0;32;31m Error in %s:%d\n",__FILE__,__LINE__);
+    if(argc != 2) printf("\033[0;32;31m Error in %s:%d\033[m\n",__FILE__,__LINE__);
     arg.case_dir = argv[1];
     get_input(&sph);
     fluid_ptc_generate(&sph);
