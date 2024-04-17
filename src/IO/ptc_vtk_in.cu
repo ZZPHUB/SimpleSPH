@@ -20,7 +20,7 @@ void ptc_rigid_generate(SPH *sph)
 
     double x[3] = {0};
     unsigned int tol=0;
-    tol = particle->fulid_ptc_num+particle->wall_ptc_num;
+    tol = particle->fluid_ptc_num+particle->wall_ptc_num;
 
     vtkSmartPointer<vtkUnstructuredGridReader> reader = vtkSmartPointer<vtkUnstructuredGridReader>::New();
     reader->SetFileName(filename.c_str());
