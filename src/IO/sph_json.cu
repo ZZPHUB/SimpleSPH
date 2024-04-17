@@ -14,7 +14,7 @@ void sph_read_info(SPH *sph)
     particle = sph->particle;
 
     std::string info_file = arg->case_dir;
-    info_file += "/init_case_info.txt";
+    info_file += "/init_case_info.json";
     std::ifstream f(info_file.c_str());
     json sph_info = json::parse(f);
 
@@ -84,7 +84,7 @@ void sph_write_info(SPH *sph)
     particle = sph->particle;
     
     std::string info_file = arg->case_dir;
-    info_file += "/last_case_info.txt";
+    info_file += "/last_case_info.json";
     std::ofstream f(info_file.c_str());
     json sph_info;
 

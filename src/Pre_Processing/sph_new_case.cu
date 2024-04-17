@@ -6,7 +6,7 @@ void get_input(SPH *);
 void fluid_ptc_generate(SPH *);
 void rigid_ptc_generate(SPH *);
 
-int main(void)
+int main(int argc,char *argv[])
 {
     SPH_ARG arg;
     SPH_RIGID rigid;
@@ -15,7 +15,7 @@ int main(void)
     sph.host_arg = &arg;
     sph.host_rigid = &rigid;
     sph.particle = &particle;
-    arg.case_dir = "."
+    arg.case_dir = argv[1];
     //get info from input
     get_input(&sph);
     fluid_ptc_generate(&sph);
