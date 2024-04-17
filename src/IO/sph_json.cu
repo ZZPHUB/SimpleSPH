@@ -137,7 +137,7 @@ void sph_write_info(SPH *sph)
     sph_info["arg"]["r"] = arg->r;
     //arg->ptc_num = sph_info["arg"]["ptc_num"];
     if(arg->ptc_num == particle->total) sph_info["arg"]["ptc_num"] = arg->ptc_num;
-    else printf("\033[0;32;31;m Error in %c:%d\n",__FILE__,__LINE__);
+    else printf("\033[0;32;31;m Error in %s:%d\n",__FILE__,__LINE__);
     //arg->wall_layer = sph_info["arg"]["wall_layer"];
     sph_info["arg"]["wall_layer"] = arg->wall_layer;
     
@@ -189,7 +189,7 @@ void sph_write_info(SPH *sph)
     sph_info["rigid"]["moi"] = rigid->moi;
     //rigid->total = sph_info["rigid"]["rigid_num"];
     if(particle->rigid_ptc_num == rigid->total) sph_info["rigid"]["rigid_num"] = rigid->total;
-    else printf("\033[0;32;31;m Error in %c:%d\n",__FILE__,__LINE__); 
+    else printf("\033[0;32;31;m Error in %s:%d\n",__FILE__,__LINE__); 
 
     f << sph_info << std::endl;
 }
