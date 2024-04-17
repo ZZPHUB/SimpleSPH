@@ -23,7 +23,7 @@ void sph_read_info(SPH *sph)
     arg->ptc_dx = sph_info["fluid"]["dx"];
     arg->fluid_xnum = sph_info["fluid"]["xnum"];
     arg->fluid_ynum = sph_info["fluid"]["ynum"];
-    particle->fulid_ptc_num = sph_info["fluid"]["fluid_num"];
+    particle->fluid_ptc_num = sph_info["fluid"]["fluid_num"];
     particle->wall_ptc_num = sph_info["fluid"]["wall_num"];
 
     arg->mesh_dx = sph_info["mesh"]["dx"];
@@ -99,7 +99,7 @@ void sph_write_info(SPH *sph)
     //arg->fluid_ynum = sph_info["fluid"]["ynum"];
     sph_info["fluid"]["ynum"] = arg->fluid_ynum;
     //particle->fulid_ptc_num = sph_info["fluid"]["fluid_num"];
-    sph_info["fluid"]["fluid_num"] = particle->fulid_ptc_num;
+    sph_info["fluid"]["fluid_num"] = particle->fluid_ptc_num;
     //particle->wall_ptc_num = sph_info["fluid"]["wall_num"];
     sph_info["fluid"]["wall_num"] = particle->wall_ptc_num;
 
@@ -136,7 +136,8 @@ void sph_write_info(SPH *sph)
     //arg->r = sph_info["arg"]["r"];
     sph_info["arg"]["r"] = arg->r;
     //arg->ptc_num = sph_info["arg"]["ptc_num"];
-    sph_info["arg"]["ptc_num"] = arg->ptc_num;
+    if(arg->ptc_num == particle->total) sph_info["arg"]["ptc_num"] = arg->ptc_num;
+    else printf("\033[0;32;31;m Error in %c:%d\n",__FILE__,__LINE__);
     //arg->wall_layer = sph_info["arg"]["wall_layer"];
     sph_info["arg"]["wall_layer"] = arg->wall_layer;
     
@@ -186,8 +187,9 @@ void sph_write_info(SPH *sph)
     sph_info["rigid"]["mass"] = rigid->mass;
     //rigid->moi = sph_info["rigid"]["moi"];
     sph_info["rigid"]["moi"] = rigid->moi;
-    //rigid->total = sph_info["rigid"]["rigid_num"]; 
-    sph_info["rigid"]["rigid_num"] = rigid->total;
+    //rigid->total = sph_info["rigid"]["rigid_num"];
+    if(particle->rigid_ptc_num == rigid->total) sph_info["rigid"]["rigid_num"] = rigid->total;
+    else printf("\033[0;32;31;m Error in %c:%d\n",__FILE__,__LINE__); 
 
     f << sph_info << std::endl;
 }

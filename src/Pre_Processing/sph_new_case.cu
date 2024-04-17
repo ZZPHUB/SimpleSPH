@@ -16,7 +16,6 @@ int main(int argc,char *argv[])
     sph.host_rigid = &rigid;
     sph.particle = &particle;
     arg.case_dir = argv[1];
-    //get info from input
     get_input(&sph);
     fluid_ptc_generate(&sph);
     rigid_ptc_generate(&sph);
@@ -46,9 +45,12 @@ void get_input(SPH *sph)
     arg->wall_layer = 2;
     arg->fluid_xnum = (int)(arg->fluid_x/arg->ptc_dx)+1-2*arg->wall_layer;
     arg->fluid_ynum = (int)(arg->fluid_y/arg->ptc_dx)+1-arg->wall_layer;
-    particle->fulid_ptc_num = arg->fluid_xnum*arg->fluid_ynum;
-    particle->wall_ptc_num = ((int)(arg->fluid_x/arg->ptc_dx)+1)*((int)(1.1*arg->fluid_y/arg->ptc_dx)+1)-\
+    particle->rigid_ptc_num = 0;
+    particle->fluid_ptc_num = arg->fluid_xnum*arg->fluid_ynum;
+    particle->wall_ptc_num = ((int)(arg->fluid_x/arg->ptc_dx)+1)*((int)(1.1*arg->fluid_y/arg->ptc_dx)+1)- \
                              ((int)(arg->fluid_x/arg->ptc_dx)+1-2*arg->wall_layer)*((int)(1.1*arg->fluid_y/arg->ptc_dx)+1-arg->wall_layer);
+    particle->total = particle->fluid_ptc_num + particle->wall_ptc_num;
+    arg->ptc_num = particle->total;
 
     arg->mesh_dx = arg->r;
     arg->mesh_x = arg->fluid_x;
@@ -87,6 +89,7 @@ void get_input(SPH *sph)
     rigid->cog_ptc_id = 0.0;
     rigid->cogx = 0.0;
     rigid->cogy = 0.0; 
+    rigid->total = 0;
 
     //return 0;
 }

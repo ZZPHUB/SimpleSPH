@@ -30,7 +30,7 @@ typedef  struct
     double *w; //sum of kernel value
     int *type; //particle type:0 denote fulid;1 denote rigid;-1 denote dummy particles
 
-    unsigned int fulid_ptc_num;  //total fluid particle number
+    unsigned int fluid_ptc_num;  //total fluid particle number
     unsigned int wall_ptc_num;   //total wall particle number
     unsigned int rigid_ptc_num;  //total rigid particle number
     unsigned int total; //total particles number
