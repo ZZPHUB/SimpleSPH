@@ -1,4 +1,13 @@
-#include "PreProcess.cuh"
+#include "IO.cuh"
+#include <vtkUnstructuredGridReader.h>
+#include <vtkSmartPointer.h>
+#include <vtkType.h>
+#include <vtkUnstructuredGrid.h>
+#include <vtkPointSet.h>
+#include <vtkDataSetReader.h>
+#include <vtkPointData.h>
+#include <vtkDataArray.h>
+#include <vtkDoubleArray.h>
 using namespace std;
 
 void ptc_rigid_generate(SPH *sph)
