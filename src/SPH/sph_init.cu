@@ -21,11 +21,11 @@ void sph_init(SPH *sph)
 
     
 
-    particle->fulid_ptc_num = FLUID_PTC_NUM;  //fluid ptc num
+    particle->fluid_ptc_num = FLUID_PTC_NUM;  //fluid ptc num
     particle->wall_ptc_num = WALL_PTC_NUM;    //wall ptc num
     particle->rigid_ptc_num = ptc_rigid_num(); //rigid ptc num
     //get all of the particle number
-    particle->total = particle->fulid_ptc_num+particle->wall_ptc_num+particle->rigid_ptc_num; 
+    particle->total = particle->fluid_ptc_num+particle->wall_ptc_num+particle->rigid_ptc_num; 
 
     /************stack is too small,so init data in heap***************/
     //particle data init
