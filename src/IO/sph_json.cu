@@ -1,6 +1,4 @@
 #include "IO.cuh"
-#include <fstream>
-#include <string>
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 
