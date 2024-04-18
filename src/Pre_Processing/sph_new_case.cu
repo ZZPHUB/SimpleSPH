@@ -313,8 +313,8 @@ void rigid_init(SPH *sph)
             tmp_cogy += particle->y[i];
         }
     }
-    tmp_cogx /= (double)particle->rigid_ptc_num;
-    tmp_cogy /= (double)particle->rigid_ptc_num;
+    tmp_cogx /= (double)arg->rigid_ptc_num;
+    tmp_cogy /= (double)arg->rigid_ptc_num;
 
     for(int i=0;i<arg->ptc_num;i++)
     {
