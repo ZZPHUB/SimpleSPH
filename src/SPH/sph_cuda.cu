@@ -29,10 +29,10 @@ int main(int argc,char *argv[])
     dim3 ptc_grid((int)(sph.particle->total / 256) + 1);
     // define the seed for mesh data structure
     dim3 mesh_block(32, 32);
-    dim3 mesh_grid(MESH_LENGTH_NUM, MESH_DEEPTH_NUM);
+    dim3 mesh_grid(sph.host_arg->mesh_xnum, sph.host_arg->mesh_ynum);
     // define the seed for pair data structre
     dim3 pair_block(128);
-    dim3 pair_grid(MESH_LENGTH_NUM, MESH_DEEPTH_NUM);
+    dim3 pair_grid(sph.host_arg->mesh_xnum, sph.host_arg->mesh_ynum);
 
     // SPH_CUDA cuda;
     // SPH_ARG tmp_arg;
@@ -51,7 +51,7 @@ int main(int argc,char *argv[])
         sph_mesh_cuda<<<ptc_grid, ptc_block>>>(sph.cuda, sph.dev_arg);
         cudaDeviceSynchronize();
         sph_nnps_cuda<<<mesh_grid, mesh_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
-        if (sph.host_arg->init_step % PRINT_TIME_STEP == 1)
+        if (sph.host_arg->init_step % sph.host_arg->print_step == 1)
         {
             sph_save_single(&sph);
         }
@@ -83,7 +83,7 @@ int main(int argc,char *argv[])
             cudaDeviceSynchronize();
         }
 
-        if (sph.host_arg->init_step % PRINT_TIME_STEP == 0)
+        if (sph.host_arg->init_step % sph.host_arg->print_step == 0)
         {
             cudaMemcpy(sph.particle->x, sph.tmp_cuda->x, sizeof(double) * sph.particle->total, cudaMemcpyDeviceToHost);
             cudaDeviceSynchronize();

@@ -52,8 +52,8 @@ void sph_init(SPH *sph)
     pair->j = (unsigned int *)(calloc(32*particle->total,sizeof(unsigned int)));
 
     //mesh data init
-    mesh->ptc = (int *)calloc(MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM,sizeof(int));
-    mesh->count = (int *)calloc(MESH_DEEPTH_NUM*MESH_LENGTH_NUM,sizeof(int));
+    mesh->ptc = (int *)calloc(sph->host_arg->mesh_num*sph->host_arg->mesh_volume,sizeof(int));
+    mesh->count = (int *)calloc(sph->host_arg->mesh_num,sizeof(int));
     sph->mesh = mesh;
 
     sph_read_vtk(sph);
@@ -88,9 +88,9 @@ void sph_init(SPH *sph)
     cudaMalloc(&(temp_cuda->dwdy),32*particle->total*sizeof(double));
     cudaMalloc(&(temp_cuda->pair_i),32*particle->total*sizeof(int));
     cudaMalloc(&(temp_cuda->pair_j),32*particle->total*sizeof(int));
-    cudaMalloc(&(temp_cuda->pair_count),MESH_DEEPTH_NUM*MESH_LENGTH_NUM*sizeof(int));
-    cudaMalloc(&(temp_cuda->mesh),MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM*sizeof(int));
-    cudaMalloc(&(temp_cuda->mesh_count),MESH_DEEPTH_NUM*MESH_LENGTH_NUM*sizeof(int));
+    cudaMalloc(&(temp_cuda->pair_count),sph->host_arg->mesh_num*sizeof(int));
+    cudaMalloc(&(temp_cuda->mesh),sph->host_arg->mesh_num*sph->host_arg->mesh_volume*sizeof(int));
+    cudaMalloc(&(temp_cuda->mesh_count),sph->host_arg->mesh_num*sizeof(int));
 
     cudaMemcpy(temp_cuda->x, particle->x, particle->total*sizeof(double), cudaMemcpyHostToDevice); 
     cudaMemcpy(temp_cuda->y, particle->y, particle->total*sizeof(double), cudaMemcpyHostToDevice); 
@@ -115,9 +115,9 @@ void sph_init(SPH *sph)
     cudaMemset(temp_cuda->dwdy,0,32*particle->total*sizeof(double));
     cudaMemset(temp_cuda->pair_i,0,32*particle->total*sizeof(int));
     cudaMemset(temp_cuda->pair_j,0,32*particle->total*sizeof(int));
-    cudaMemset(temp_cuda->pair_count,0,MESH_DEEPTH_NUM*MESH_LENGTH_NUM*sizeof(int));
-    cudaMemset(temp_cuda->mesh,0,MESH_DEEPTH_NUM*MESH_LENGTH_NUM*MESH_PTC_NUM*sizeof(int));
-    cudaMemset(temp_cuda->mesh_count,0,MESH_DEEPTH_NUM*MESH_LENGTH_NUM*sizeof(int));
+    cudaMemset(temp_cuda->pair_count,0,sph->host_arg->mesh_num*sizeof(int));
+    cudaMemset(temp_cuda->mesh,0,sph->host_arg->mesh_num*sph->host_arg->mesh_volume*sizeof(int));
+    cudaMemset(temp_cuda->mesh_count,0,sph->host_arg->mesh_num*sizeof(int));
 
     cudaMemcpy(sph->cuda,temp_cuda,sizeof(SPH_CUDA),cudaMemcpyHostToDevice);
 }
