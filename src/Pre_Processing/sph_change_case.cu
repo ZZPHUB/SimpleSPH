@@ -59,7 +59,7 @@ int main(int argc,char *argv[])
     sph_read_vtk(&sph);
 
     tmp_arg.rigid_ptc_num = new_rigid_num(&tmp_sph);
-    tmp_arg.ptc_num = tmp_particle.fluid_ptc_num + tmp_particle.wall_ptc_num + tmp_particle.rigid_ptc_num;
+    tmp_arg.ptc_num = tmp_arg.fluid_ptc_num + tmp_arg.wall_ptc_num + tmp_arg.rigid_ptc_num;
     tmp_particle.x = (double *)calloc(tmp_arg.ptc_num,sizeof(double));
     tmp_particle.y = (double *)calloc(tmp_arg.ptc_num,sizeof(double));
     tmp_particle.vx = (double *)calloc(tmp_arg.ptc_num,sizeof(double));
@@ -87,7 +87,7 @@ int main(int argc,char *argv[])
     }
     rigid_ptc_generate(&tmp_sph);
     rigid_init(&tmp_sph);
-    sph_write_vtk(&tmp_sph);
+    sph_save_last(&tmp_sph);
     
     return 0;
 }
@@ -100,6 +100,7 @@ int new_rigid_num(SPH *sph)
     vtkSmartPointer<vtkUnstructuredGridReader> reader = vtkSmartPointer<vtkUnstructuredGridReader>::New();
     reader->SetFileName(filename.c_str());
     reader->Update();
+    int x[3];
     
     vtkUnstructuredGrid *vtkdata;
     vtkdata = reader->GetOutput();
@@ -169,8 +170,8 @@ void rigid_init(SPH *sph)
             tmp_cogy += particle->y[i];
         }
     }
-    tmp_cogx /= (double)particle->rigid_ptc_num;
-    tmp_cogy /= (double)particle->rigid_ptc_num;
+    tmp_cogx /= (double)arg->rigid_ptc_num;
+    tmp_cogy /= (double)arg->rigid_ptc_num;
 
     for(int i=0;i<arg->ptc_num;i++)
     {
