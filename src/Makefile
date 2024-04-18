@@ -41,5 +41,5 @@ $(BUILD_DIR)/%.o:%.cu
 
 # make clean删除所有.o和目标文件
 clean:
-	rm -f $(OBJ) $(TARGET) ../data/postprocess/csv/* ../data/postprocess/vtk/* 
+	rm -f $(OBJ) $(SPH_NEW_OBJ) $(SPH_RUN_OBJ) $(TARGET) ../data/postprocess/csv/* ../data/postprocess/vtk/* 
 
