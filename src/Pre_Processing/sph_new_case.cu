@@ -34,9 +34,9 @@ int main(int argc,char *argv[])
     arg.case_dir = argv[1];
     get_input(&sph);
     get_rigid_num(&sph);
-    particle->x = (double *)calloc(particle->total,sizeof(double));
-    particle->y = (double *)calloc(particle->total,sizeof(double));
-    particle->type = (int *)calloc(particle->total,sizeof(int));
+    particle.x = (double *)calloc(particle.total,sizeof(double));
+    particle.y = (double *)calloc(particle.total,sizeof(double));
+    particle.type = (int *)calloc(particle.total,sizeof(int));
     fluid_ptc_generate(&sph);
     rigid_ptc_generate(&sph);
 
@@ -221,7 +221,7 @@ void rigid_ptc_generate(SPH *sph)
         if(x[2]==0)
         {
             particle->x[index] = x[0] + arg->fluid_x/2.0;
-            particle->y[index] = y[0] + arg->fluid_y*1.1;
+            particle->y[index] = x[1] + arg->fluid_y*1.1;
             particle->type[index] = 1;
             index++;
         }
@@ -239,7 +239,7 @@ void write_vtk(SPH *sph)
     rigid = sph->host_rigid;
     
     string filename = arg->case_dir; 
-    filename += "/init.vtk"
+    filename += "/init.vtk";
 
     ofstream vtkfile;
     vtkfile.open(filename.c_str());
@@ -305,7 +305,7 @@ void rigid_init(SPH *sph)
 
     double tmp_cogx = 0.0;
     double tmp_cogy = 0.0;
-    doubel tmp_r = 10000.0;
+    double tmp_r = 10000.0;
 
     for(int i=0;i<particle->total;i++)
     {
@@ -324,7 +324,7 @@ void rigid_init(SPH *sph)
         {
             if(tmp_r >= (pow((particle->x[i]-tmp_cogx),2)+pow((particle->y[i]-tmp_cogy),2)) )
             {
-                r = pow((particle->x[i]-tmp_cogx),2)+pow((particle->y[i]-tmp_cogy),2);
+                tmp_r = pow((particle->x[i]-tmp_cogx),2)+pow((particle->y[i]-tmp_cogy),2);
                 rigid->cog_ptc_id = i;
             }
         }
