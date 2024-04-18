@@ -175,7 +175,7 @@ void fluid_ptc_generate(SPH *sph)
     {
         for(int y=0;y<((int)(1.1*arg->fluid_y/arg->ptc_dx)+1);y++)
         {
-            if(x < arg->wall_layer || x> (arg->fluid_xnum-1))
+            if(x < arg->wall_layer || x > (arg->fluid_xnum+arg->wall_layer-1))
             {
                 particle->x[index] = x*arg->ptc_dx;
                 particle->y[index] = y*arg->ptc_dx;
