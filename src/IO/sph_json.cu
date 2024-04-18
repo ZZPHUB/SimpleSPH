@@ -59,7 +59,6 @@ void sph_read_info(SPH *sph)
     arg->lock = 1;
     arg->pair_num = 0;
     particle->total = arg->ptc_num;
-    assert(particle->total == (particle->fluid_ptc_num+particle->rigid_ptc_num+particle->wall_ptc_num));
 
     rigid->vx = sph_info["rigid"]["vx"];
     rigid->vy = sph_info["rigid"]["vy"];
@@ -77,6 +76,7 @@ void sph_read_info(SPH *sph)
     rigid->moi = sph_info["rigid"]["moi"];
     rigid->total = sph_info["rigid"]["rigid_num"];
     particle->rigid_ptc_num = rigid->total;
+    assert(particle->total == (particle->fluid_ptc_num+particle->rigid_ptc_num+particle->wall_ptc_num));
 }
 
 void sph_write_info(SPH *sph)
