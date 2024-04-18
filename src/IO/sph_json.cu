@@ -1,4 +1,5 @@
 #include "IO.cuh"
+#include <assert.h>
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 
@@ -57,6 +58,8 @@ void sph_read_info(SPH *sph)
     arg->tmp = 0;
     arg->lock = 1;
     arg->pair_num = 0;
+    particle->total = arg->ptc_num;
+    assert(particle->total == (particle->fluid_ptc_num+particle->rigid_ptc_num+particle->wall_ptc_num));
 
     rigid->vx = sph_info["rigid"]["vx"];
     rigid->vy = sph_info["rigid"]["vy"];
