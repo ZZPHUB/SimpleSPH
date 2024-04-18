@@ -1,10 +1,25 @@
 #include "SPH.cuh"
 #include <iostream>
+#include <iomanip>
+#include <string>
+#include <vtkUnstructuredGridReader.h>
+#include <vtkSmartPointer.h>
+#include <vtkType.h>
+#include <vtkUnstructuredGrid.h>
+#include <vtkPointSet.h>
+#include <vtkDataSetReader.h>
+#include <vtkPointData.h>
+#include <vtkDataArray.h>
+#include <vtkDoubleArray.h>
+
 using namespace std;
 
 void get_input(SPH *);
+void get_rigid_num(SPH *);
 void fluid_ptc_generate(SPH *);
 void rigid_ptc_generate(SPH *);
+void write_vtk(SPH *);
+void rigid_init(SPH *);
 
 int main(int argc,char *argv[])
 {
@@ -18,9 +33,17 @@ int main(int argc,char *argv[])
     if(argc != 2) printf("\033[0;32;31m Error in %s:%d\033[m\n",__FILE__,__LINE__);
     arg.case_dir = argv[1];
     get_input(&sph);
+    get_rigid_num(&sph);
+    particle->x = (double *)calloc(particle->total,sizeof(double));
+    particle->y = (double *)calloc(particle->total,sizeof(double));
+    particle->type = (int *)calloc(particle->total,sizeof(int));
     fluid_ptc_generate(&sph);
     rigid_ptc_generate(&sph);
+
+    rigid_init(&sph);
+
     sph_write_info(&sph);
+    write_vtk(&sph);
 
     return 0;
 }
@@ -91,17 +114,229 @@ void get_input(SPH *sph)
     rigid->cogx = 0.0;
     rigid->cogy = 0.0; 
     rigid->total = 0;
+}
 
-    //return 0;
+void get_rigid_num(SPH *sph)
+{
+    SPH_ARG *arg;
+    SPH_PARTICLE *particle;
+    SPH_RIGID *rigid;
+    arg = sph->host_arg;
+    particle = sph->particle;
+    rigid = sph->host_rigid;
+
+    std::string filename = arg->case_dir;
+    filename += "/wedge.vtk";
+
+    rigid->total = 0;
+
+    double x[3];
+    //unsigned int tol=0;
+
+    vtkSmartPointer<vtkUnstructuredGridReader> reader = vtkSmartPointer<vtkUnstructuredGridReader>::New();
+    reader->SetFileName(filename.c_str());
+    reader->Update();
+    
+    vtkUnstructuredGrid *vtkdata;
+    vtkdata = reader->GetOutput();
+    for(vtkIdType i=0;i<vtkdata->GetNumberOfPoints();i++)
+    {
+        vtkdata->GetPoint(i,x);
+        if(x[2]==0)
+        {
+            rigid->total++;
+        }
+    }
+    particle->rigid_ptc_num = rigid->total;
+    particle->total = particle->fluid_ptc_num+particle->wall_ptc_num+particle->rigid_ptc_num;
+    arg->ptc_num = particle->total;
 }
 
 void fluid_ptc_generate(SPH *sph)
 {
-    //return 0;
+    SPH_ARG *arg;
+    SPH_PARTICLE *particle;
+    SPH_RIGID *rigid;
+    arg = sph->host_arg;
+    particle = sph->particle;
+    rigid = sph->host_rigid;
+    int index = 0;
+    for(int x=0;x<arg->fluid_xnum;x++)
+    {
+        for(int y=0;y<arg->fluid_ynum;y++)
+        {
+            particle->x[index] = (x+arg->wall_layer)*arg->ptc_dx;
+            particle->y[index] = (y+arg->wall_layer)*arg->ptc_dx;
+            particle->type[index] = 0;
+            index++;
+        }
+    }
+    for(int x=0;x<(arg->fluid_xnum+2*arg->wall_layer);x++)
+    {
+        for(int y=0;y<((int)(1.1*arg->fluid_y/arg->ptc_dx)+1);y++)
+        {
+            if(x < arg->wall_layer || x> (arg->fluid_xnum-1))
+            {
+                particle->x[index] = x*arg->ptc_dx;
+                particle->y[index] = y*arg->ptc_dx;
+                particle->type[index] = -1;
+                index++;
+            }
+            else if (y < arg->wall_layer)
+            {
+                particle->x[index] = x*arg->ptc_dx;
+                particle->y[index] = y*arg->ptc_dx;
+                particle->type[index] = -1;
+                index++;
+            }
+        }
+    }
+    if(index != (particle->fluid_ptc_num+particle->wall_ptc_num)) printf("\033[0;32;31m Error in %s:%d\033[m\n",__FILE__,__LINE__);
 }
 
 void rigid_ptc_generate(SPH *sph)
 {
-    //return 0;
+    SPH_ARG *arg;
+    SPH_PARTICLE *particle;
+    SPH_RIGID *rigid;
+    arg = sph->host_arg;
+    particle = sph->particle;
+    rigid = sph->host_rigid;
+
+    std::string filename = arg->case_dir;
+    filename += "/wedge.vtk"; 
+
+    double x[3];
+    int index = particle->fluid_ptc_num+particle->wall_ptc_num;
+
+    vtkSmartPointer<vtkUnstructuredGridReader> reader = vtkSmartPointer<vtkUnstructuredGridReader>::New();
+    reader->SetFileName(filename.c_str());
+    reader->Update();
+    
+    vtkUnstructuredGrid *vtkdata;
+    vtkdata = reader->GetOutput();
+    for(vtkIdType i=0;i<vtkdata->GetNumberOfPoints();i++)
+    {
+        vtkdata->GetPoint(i,x);
+        if(x[2]==0)
+        {
+            particle->x[index] = x[0] + arg->fluid_x/2.0;
+            particle->y[index] = y[0] + arg->fluid_y*1.1;
+            particle->type[index] = 1;
+            index++;
+        }
+    }
+    if(index != particle->total) printf("\033[0;32;31m Error in %s:%d\033[m\n",__FILE__,__LINE__);
 }
 
+void write_vtk(SPH *sph)
+{
+    SPH_ARG *arg;
+    SPH_PARTICLE *particle;
+    SPH_RIGID *rigid;
+    arg = sph->host_arg;
+    particle = sph->particle;
+    rigid = sph->host_rigid;
+    
+    string filename = arg->case_dir; 
+    filename += "/init.vtk"
+
+    ofstream vtkfile;
+    vtkfile.open(filename.c_str());
+
+    vtkfile << "# vtk DataFile Version 3.0" << endl;
+    vtkfile << "sph data" << endl;
+    vtkfile << "ASCII" << endl;
+    vtkfile << "DATASET UNSTRUCTURED_GRID" << endl;
+    vtkfile << "POINTS " << particle->total << " " << "double" << endl;
+
+    for(unsigned int i=0;i<particle->total;i++)
+    {
+        vtkfile << setiosflags(ios::scientific) << particle->x[i] << " " \
+        << particle->y[i] << " " << 0.0 << endl;
+    }
+
+    vtkfile << "POINT_DATA" << " " << particle->total << endl;
+
+    vtkfile << "SCALARS "<< "density double 1" << endl;
+    vtkfile << "LOOKUP_TABLE DEFAULT" << endl;
+    for(unsigned int i=0;i<particle->total;i++)
+    {
+        vtkfile << setiosflags(ios::scientific) << arg->ref_rho << endl;
+    }
+    vtkfile << "SCALARS "<< "pressure double 1" << endl;
+    vtkfile << "LOOKUP_TABLE DEFAULT" << endl;
+    for(unsigned int i=0;i<particle->total;i++)
+    {
+        vtkfile << setiosflags(ios::scientific) << 0.0 << endl;
+    }
+    vtkfile << "SCALARS" << "type int 1" << endl;
+    vtkfile << "LOOKUP_TABLE DEFAULT" << endl;
+    for(unsigned int i=0;i<particle->total;i++)
+    {
+        vtkfile << particle->type[i] << endl; 
+    }
+    vtkfile << "VECTORS "<< "velocity double" << endl;
+    for(unsigned int i=0;i<particle->total;i++)
+    {
+        vtkfile << setiosflags(ios::scientific) << 0.0 <<" " << 0.0 << " " \
+        << 0.0 << endl;
+
+    }
+    vtkfile << "VECTORS "<< "acceleration double" << endl;
+    for(unsigned int i=0;i<particle->total;i++)
+    {
+        vtkfile << setiosflags(ios::scientific) << 0.0 <<" " << 0.0 << " " \
+        << 0.0 << endl;
+    }
+
+    vtkfile.close();
+
+}
+
+void rigid_init(SPH *sph)
+{
+    SPH_ARG *arg;
+    SPH_PARTICLE *particle;
+    SPH_RIGID *rigid;
+    arg = sph->host_arg;
+    particle = sph->particle;
+    rigid = sph->host_rigid;
+
+    double tmp_cogx = 0.0;
+    double tmp_cogy = 0.0;
+    doubel tmp_r = 10000.0;
+
+    for(int i=0;i<particle->total;i++)
+    {
+        if(particle->type[i] == 1)
+        {
+            tmp_cogx += particle->x[i];
+            tmp_cogy += particle->y[i];
+        }
+    }
+    tmp_cogx /= (double)particle->rigid_ptc_num;
+    tmp_cogy /= (double)particle->rigid_ptc_num;
+
+    for(int i=0;i<particle->total;i++)
+    {
+        if(particle->type[i] == 1)
+        {
+            if(tmp_r >= (pow((particle->x[i]-tmp_cogx),2)+pow((particle->y[i]-tmp_cogy),2)) )
+            {
+                r = pow((particle->x[i]-tmp_cogx),2)+pow((particle->y[i]-tmp_cogy),2);
+                rigid->cog_ptc_id = i;
+            }
+        }
+    }
+    rigid->cogx = particle->x[rigid->cog_ptc_id];
+    rigid->cogy = particle->y[rigid->cog_ptc_id];
+
+    for(int i=0;i<particle->total;i++)
+    {
+        if(particle->type[i] == 1)
+        {
+            rigid->moi += (arg->m/rigid->mass)*(pow((particle->x[i]-rigid->cogx),2)+pow((particle->y[i]-rigid->cogy),2));
+        }
+    }
+}

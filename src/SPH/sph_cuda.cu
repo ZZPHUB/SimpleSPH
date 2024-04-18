@@ -226,7 +226,7 @@ __global__ void sph_rigid_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         {
             accx += cuda->accx[id]*arg->m/rigid->mass;
             accy += cuda->accy[id]*arg->m/rigid->mass;
-            alpha += (cuda->accx[id]*(cuda->x[id]-rigid->cogx)-cuda->accy[id]*(cuda->y[id]-rigid->cogy))*arg->m/rigid->mass;
+            alpha += (cuda->accx[id]*(cuda->x[id]-rigid->cogx)-cuda->accy[id]*(cuda->y[id]-rigid->cogy))*arg->m/rigid->moi;
         }   
     }
     __syncthreads();
