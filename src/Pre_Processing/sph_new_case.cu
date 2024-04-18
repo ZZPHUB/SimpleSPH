@@ -270,7 +270,7 @@ void write_vtk(SPH *sph)
     {
         vtkfile << setiosflags(ios::scientific) << 0.0 << endl;
     }
-    vtkfile << "SCALARS" << "type int 1" << endl;
+    vtkfile << "SCALARS " << "type int 1" << endl;
     vtkfile << "LOOKUP_TABLE DEFAULT" << endl;
     for(unsigned int i=0;i<particle->total;i++)
     {
