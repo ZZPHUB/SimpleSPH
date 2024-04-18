@@ -20,7 +20,7 @@ void sph_read_vtk(SPH *sph)
     rigid = sph->host_rigid;
 
     string filename = arg->case_dir;
-    filename += "/init.vtk"
+    filename += "/init.vtk";
 
     vtkSmartPointer<vtkUnstructuredGridReader> reader = vtkSmartPointer<vtkUnstructuredGridReader>::New();
     reader->SetFileName(filename.c_str());
@@ -190,7 +190,7 @@ void sph_save_last(SPH *sph)
     arg = sph->host_arg;
 
     string filename = arg->case_dir;
-    filename += "/last.vtk"
+    filename += "/last.vtk";
     unsigned int ptc_num = 0;
     ptc_num = particle->total;
 
