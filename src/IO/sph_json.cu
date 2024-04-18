@@ -7,10 +7,10 @@ void sph_read_info(SPH *sph)
 {
     SPH_ARG *arg;
     SPH_RIGID *rigid;
-    SPH_PARTICLE *particle;
+    //SPH_PARTICLE *particle;
     arg = sph->host_arg;
     rigid = sph->host_rigid;
-    particle = sph->particle;
+    //particle = sph->particle;
 
     std::string info_file = arg->case_dir;
     info_file += "/init_info.json";
@@ -86,10 +86,10 @@ void sph_write_info(SPH *sph)
 {
     SPH_ARG *arg;
     SPH_RIGID *rigid;
-    SPH_PARTICLE *particle;
+    //SPH_PARTICLE *particle;
     arg = sph->host_arg;
     rigid = sph->host_rigid;
-    particle = sph->particle;
+    //particle = sph->particle;
     
     std::string info_file = arg->case_dir;
     info_file += "/last_info.json";

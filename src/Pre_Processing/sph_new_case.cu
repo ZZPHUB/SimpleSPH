@@ -56,8 +56,8 @@ void get_input(SPH *sph)
     arg = sph->host_arg;
     SPH_RIGID *rigid;
     rigid = sph->host_rigid;
-    SPH_PARTICLE *particle;
-    particle = sph->particle;
+    //SPH_PARTICLE *particle;
+    //particle = sph->particle;
 
     cout << "fluid length (fluid_x) is:" << endl;
     cin >> arg->fluid_x;
@@ -120,11 +120,11 @@ void get_input(SPH *sph)
 void get_rigid_num(SPH *sph)
 {
     SPH_ARG *arg;
-    SPH_PARTICLE *particle;
-    SPH_RIGID *rigid;
+    //SPH_PARTICLE *particle;
+    //SPH_RIGID *rigid;
     arg = sph->host_arg;
-    particle = sph->particle;
-    rigid = sph->host_rigid;
+    //particle = sph->particle;
+    //rigid = sph->host_rigid;
 
     std::string filename = arg->case_dir;
     filename += "/wedge.vtk";
@@ -153,10 +153,10 @@ void fluid_ptc_generate(SPH *sph)
 {
     SPH_ARG *arg;
     SPH_PARTICLE *particle;
-    SPH_RIGID *rigid;
+    //SPH_RIGID *rigid;
     arg = sph->host_arg;
     particle = sph->particle;
-    rigid = sph->host_rigid;
+    //rigid = sph->host_rigid;
     int index = 0;
     for(int x=0;x<arg->fluid_xnum;x++)
     {
@@ -196,10 +196,10 @@ void rigid_ptc_generate(SPH *sph)
 {
     SPH_ARG *arg;
     SPH_PARTICLE *particle;
-    SPH_RIGID *rigid;
+    //SPH_RIGID *rigid;
     arg = sph->host_arg;
     particle = sph->particle;
-    rigid = sph->host_rigid;
+    //rigid = sph->host_rigid;
 
     std::string filename = arg->case_dir;
     filename += "/wedge.vtk"; 
@@ -231,10 +231,10 @@ void write_vtk(SPH *sph)
 {
     SPH_ARG *arg;
     SPH_PARTICLE *particle;
-    SPH_RIGID *rigid;
+    //SPH_RIGID *rigid;
     arg = sph->host_arg;
     particle = sph->particle;
-    rigid = sph->host_rigid;
+    //rigid = sph->host_rigid;
     
     string filename = arg->case_dir; 
     filename += "/init.vtk";

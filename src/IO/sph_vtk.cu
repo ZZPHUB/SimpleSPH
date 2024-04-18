@@ -14,10 +14,10 @@ void sph_read_vtk(SPH *sph)
 {
     SPH_PARTICLE *particle;
     SPH_ARG *arg;
-    SPH_RIGID *rigid;
+    //SPH_RIGID *rigid;
     particle = sph->particle;
     arg = sph->host_arg;
-    rigid = sph->host_rigid;
+    //rigid = sph->host_rigid;
 
     string filename = arg->case_dir;
     filename += "/init.vtk";
@@ -102,10 +102,10 @@ void sph_save_single(SPH *sph)
 {
     SPH_PARTICLE *particle;
     SPH_ARG *arg;
-    SPH_RIGID *rigid;
+    //SPH_RIGID *rigid;
     particle = sph->particle;
     arg = sph->host_arg;
-    rigid = sph->host_rigid;
+    //rigid = sph->host_rigid;
 
     unsigned int ptc_num = 0;
     ptc_num = arg->ptc_num;
@@ -183,10 +183,10 @@ void sph_save_single(SPH *sph)
 void sph_save_last(SPH *sph)
 {
     SPH_PARTICLE *particle;
-    SPH_RIGID *rigid;
+    //SPH_RIGID *rigid;
     SPH_ARG *arg;
     particle = sph->particle;
-    rigid = sph->host_rigid;
+    //rigid = sph->host_rigid;
     arg = sph->host_arg;
 
     string filename = arg->case_dir;
