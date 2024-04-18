@@ -2,6 +2,7 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
+#include <assert.h>
 #include <vtkUnstructuredGridReader.h>
 #include <vtkSmartPointer.h>
 #include <vtkType.h>
@@ -30,7 +31,8 @@ int main(int argc,char *argv[])
     sph.host_arg = &arg;
     sph.host_rigid = &rigid;
     sph.particle = &particle;
-    if(argc != 2) printf("\033[0;32;31m Error in %s:%d\033[m\n",__FILE__,__LINE__);
+    //if(argc != 2) printf("\033[0;32;31m Error in %s:%d\033[m\n",__FILE__,__LINE__);
+    assert(argc == 2);
     arg.case_dir = argv[1];
     get_input(&sph);
     get_rigid_num(&sph);
@@ -191,7 +193,8 @@ void fluid_ptc_generate(SPH *sph)
             }
         }
     }
-    if(index != (particle->fluid_ptc_num+particle->wall_ptc_num)) printf("\033[0;32;31m Error in %s:%d\033[m\n",__FILE__,__LINE__);
+    //if(index != (particle->fluid_ptc_num+particle->wall_ptc_num)) printf("\033[0;32;31m Error in %s:%d\033[m\n",__FILE__,__LINE__);
+    assert(index == (particle->fluid_ptc_num+particle->wall_ptc_num));
 }
 
 void rigid_ptc_generate(SPH *sph)
@@ -226,7 +229,8 @@ void rigid_ptc_generate(SPH *sph)
             index++;
         }
     }
-    if(index != particle->total) printf("\033[0;32;31m Error in %s:%d\033[m\n",__FILE__,__LINE__);
+    //if(index != particle->total) printf("\033[0;32;31m Error in %s:%d\033[m\n",__FILE__,__LINE__);
+    assert(index == particle->total);
 }
 
 void write_vtk(SPH *sph)

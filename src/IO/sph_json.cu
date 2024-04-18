@@ -53,6 +53,10 @@ void sph_read_info(SPH *sph)
     arg->new_case_flag = sph_info["flag"]["new_case_flag"];
     arg->init_impac_flag = sph_info["flag"]["init_impac_flag"];
     arg->save_last_flag = sph_info["flag"]["save_last_flag"];
+    //some para arg not tmp_arg
+    arg->tmp = 0;
+    arg->lock = 1;
+    arg->pair_num = 0;
 
     rigid->vx = sph_info["rigid"]["vx"];
     rigid->vy = sph_info["rigid"]["vy"];
