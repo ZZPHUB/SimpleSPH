@@ -1,6 +1,7 @@
 #include "SPH.cuh"
+#include <assert.h>
 
-int main(void)
+int main(int argc,char *argv[])
 {
     SPH_PARTICLE particle;
     SPH_KERNEL kernel;
@@ -17,6 +18,8 @@ int main(void)
     sph.host_arg = &arg;
     sph.mesh = &mesh;
     sph.tmp_cuda = &tmp_cuda;
+    assert("argc == 2");
+    arg.case_dir = argv[1];
 
     cudaSetDevice(0);
     sph_init(&sph);
