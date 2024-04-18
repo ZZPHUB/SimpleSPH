@@ -27,7 +27,7 @@ CC = nvcc
 
 .PHONY:run new clean
 
-all: $(TARGET1) $(TARGET2)
+all: $(TARGET1) $(TARGET2) $(TARGET3)
 
 # 第一行依赖关系：冒号后面为依赖的文件，相当于Hello: main.o a.o b.o
 # 第二行规则：$@表示目标文件，$^表示所有依赖文件，$<表示第一个依赖文件

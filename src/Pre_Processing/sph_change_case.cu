@@ -39,12 +39,9 @@ int main(int argc,char *argv[])
     tmp_sph.host_rigid = &tmp_rigid;
     tmp_sph.particle = &tmp_particle;
 
-    memcpy(&tmp_arg,&arg,sizeof(SPH_ARG));
-    memcpy(&tmp_rigid,&rigid,sizeof(SPH_RIGID));
-
     assert(argc == 3);
     sph.host_arg->case_dir = argv[1];
-    tmp_sph.host_arg->case_dir = argv[2];
+    //tmp_sph.host_arg->case_dir = argv[2];
 
     sph_read_info(&sph);
     particle.x = (double *)calloc(arg.ptc_num,sizeof(double));
@@ -58,6 +55,10 @@ int main(int argc,char *argv[])
     particle.type = (int *)calloc(arg.ptc_num,sizeof(int));
     sph_read_vtk(&sph);
 
+    memcpy(&tmp_arg,&arg,sizeof(SPH_ARG));
+    memcpy(&tmp_rigid,&rigid,sizeof(SPH_RIGID));
+
+    tmp_sph.host_arg->case_dir = argv[2];
     tmp_arg.rigid_ptc_num = new_rigid_num(&tmp_sph);
     tmp_arg.ptc_num = tmp_arg.fluid_ptc_num + tmp_arg.wall_ptc_num + tmp_arg.rigid_ptc_num;
     tmp_particle.x = (double *)calloc(tmp_arg.ptc_num,sizeof(double));
@@ -87,6 +88,7 @@ int main(int argc,char *argv[])
     }
     rigid_ptc_generate(&tmp_sph);
     rigid_init(&tmp_sph);
+    tmp_sph.host_arg->case_dir = argv[1];
     sph_save_last(&tmp_sph);
     
     return 0;
