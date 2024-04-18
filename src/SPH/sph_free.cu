@@ -49,7 +49,7 @@ void sph_free(SPH *sph)
     free(particle->dif_density);
     free(particle->pressure);
     free(particle->type);
-    free(particle->mass);
+    //free(particle->mass);
 
     free(kernel->w);
     free(kernel->dwdx);
