@@ -30,10 +30,10 @@ typedef  struct
     double *w; //sum of kernel value
     int *type; //particle type:0 denote fulid;1 denote rigid;-1 denote dummy particles
 
-    unsigned int fluid_ptc_num;  //total fluid particle number
-    unsigned int wall_ptc_num;   //total wall particle number
-    unsigned int rigid_ptc_num;  //total rigid particle number
-    unsigned int total; //total particles number
+    //unsigned int fluid_ptc_num;  //total fluid particle number
+    //unsigned int wall_ptc_num;   //total wall particle number
+    //unsigned int rigid_ptc_num;  //total rigid particle number
+    //unsigned int total; //total particles number
 }SPH_PARTICLE;
 
 typedef struct 
@@ -69,7 +69,7 @@ typedef struct
     double mass;    //rigid body mass 
     double moi;     //rigid body moment of inertia
     int cog_ptc_id;
-    int total;   //rigid body ptc num
+    //int total;   //rigid body ptc num
 }SPH_RIGID;
 
 typedef struct 
@@ -143,6 +143,10 @@ typedef struct
     char *case_dir;
 
     int ptc_num;    //ptc's total num
+    int fluid_ptc_num;  //fluid's total num
+    int wall_ptc_num;   //wall's total num
+    int rigid_ptc_num;   //rigid_ptc_num
+
     int pair_num;   //pair total num
     int pair_volume; //pear mesh's pair num
     int lock;

@@ -26,7 +26,7 @@ int main(int argc,char *argv[])
 
     // define the seed for ptc data structure
     dim3 ptc_block(256);
-    dim3 ptc_grid((int)(sph.particle->total / 256) + 1);
+    dim3 ptc_grid((int)(sph.host_arg->ptc_num / 256) + 1);
     // define the seed for mesh data structure
     dim3 mesh_block(32, 32);
     dim3 mesh_grid(sph.host_arg->mesh_xnum, sph.host_arg->mesh_ynum);
@@ -42,8 +42,8 @@ int main(int argc,char *argv[])
     // int id = 0;
     // int *cpu_pair_i;
     // int *cpu_pair_j;
-    // cudaMalloc(&cpu_pair_i,sizeof(int)*32*sph.particle->total);
-    // cudaMalloc(&cpu_pair_j,sizeof(int)*32*sph.particle->total);
+    // cudaMalloc(&cpu_pair_i,sizeof(int)*32*sph.host_arg->ptc_num);
+    // cudaMalloc(&cpu_pair_j,sizeof(int)*32*sph.host_arg->ptc_num);
 
     for (sph.host_arg->init_step; sph.host_arg->init_step < sph.host_arg->total_step; sph.host_arg->init_step++)
     {
@@ -85,21 +85,21 @@ int main(int argc,char *argv[])
 
         if (sph.host_arg->init_step % sph.host_arg->print_step == 0)
         {
-            cudaMemcpy(sph.particle->x, sph.tmp_cuda->x, sizeof(double) * sph.particle->total, cudaMemcpyDeviceToHost);
+            cudaMemcpy(sph.particle->x, sph.tmp_cuda->x, sizeof(double) * sph.host_arg->ptc_num, cudaMemcpyDeviceToHost);
             cudaDeviceSynchronize();
-            cudaMemcpy(sph.particle->y, sph.tmp_cuda->y, sizeof(double) * sph.particle->total, cudaMemcpyDeviceToHost);
+            cudaMemcpy(sph.particle->y, sph.tmp_cuda->y, sizeof(double) * sph.host_arg->ptc_num, cudaMemcpyDeviceToHost);
             cudaDeviceSynchronize();
-            cudaMemcpy(sph.particle->vx, sph.tmp_cuda->vx, sizeof(double) * sph.particle->total, cudaMemcpyDeviceToHost);
+            cudaMemcpy(sph.particle->vx, sph.tmp_cuda->vx, sizeof(double) * sph.host_arg->ptc_num, cudaMemcpyDeviceToHost);
             cudaDeviceSynchronize();
-            cudaMemcpy(sph.particle->vy, sph.tmp_cuda->vy, sizeof(double) * sph.particle->total, cudaMemcpyDeviceToHost);
+            cudaMemcpy(sph.particle->vy, sph.tmp_cuda->vy, sizeof(double) * sph.host_arg->ptc_num, cudaMemcpyDeviceToHost);
             cudaDeviceSynchronize();
-            cudaMemcpy(sph.particle->accx, sph.tmp_cuda->accx, sizeof(double) * sph.particle->total, cudaMemcpyDeviceToHost);
+            cudaMemcpy(sph.particle->accx, sph.tmp_cuda->accx, sizeof(double) * sph.host_arg->ptc_num, cudaMemcpyDeviceToHost);
             cudaDeviceSynchronize();
-            cudaMemcpy(sph.particle->accy, sph.tmp_cuda->accy, sizeof(double) * sph.particle->total, cudaMemcpyDeviceToHost);
+            cudaMemcpy(sph.particle->accy, sph.tmp_cuda->accy, sizeof(double) * sph.host_arg->ptc_num, cudaMemcpyDeviceToHost);
             cudaDeviceSynchronize();
-            cudaMemcpy(sph.particle->density, sph.tmp_cuda->rho, sizeof(double) * sph.particle->total, cudaMemcpyDeviceToHost);
+            cudaMemcpy(sph.particle->density, sph.tmp_cuda->rho, sizeof(double) * sph.host_arg->ptc_num, cudaMemcpyDeviceToHost);
             cudaDeviceSynchronize();
-            cudaMemcpy(sph.particle->pressure, sph.tmp_cuda->p, sizeof(double) * sph.particle->total, cudaMemcpyDeviceToHost);
+            cudaMemcpy(sph.particle->pressure, sph.tmp_cuda->p, sizeof(double) * sph.host_arg->ptc_num, cudaMemcpyDeviceToHost);
             cudaDeviceSynchronize();
         }
         cudaError_t sph_error = cudaGetLastError();
@@ -107,23 +107,23 @@ int main(int argc,char *argv[])
     }
 
     //save the last frame
-    cudaMemcpy(sph.particle->x, sph.tmp_cuda->x, sizeof(double) * sph.particle->total, cudaMemcpyDeviceToHost);
+    cudaMemcpy(sph.particle->x, sph.tmp_cuda->x, sizeof(double) * sph.host_arg->ptc_num, cudaMemcpyDeviceToHost);
     cudaDeviceSynchronize();
-    cudaMemcpy(sph.particle->y, sph.tmp_cuda->y, sizeof(double) * sph.particle->total, cudaMemcpyDeviceToHost);
+    cudaMemcpy(sph.particle->y, sph.tmp_cuda->y, sizeof(double) * sph.host_arg->ptc_num, cudaMemcpyDeviceToHost);
     cudaDeviceSynchronize();
-    cudaMemcpy(sph.particle->vx, sph.tmp_cuda->vx, sizeof(double) * sph.particle->total, cudaMemcpyDeviceToHost);
+    cudaMemcpy(sph.particle->vx, sph.tmp_cuda->vx, sizeof(double) * sph.host_arg->ptc_num, cudaMemcpyDeviceToHost);
     cudaDeviceSynchronize();
-    cudaMemcpy(sph.particle->vy, sph.tmp_cuda->vy, sizeof(double) * sph.particle->total, cudaMemcpyDeviceToHost);
+    cudaMemcpy(sph.particle->vy, sph.tmp_cuda->vy, sizeof(double) * sph.host_arg->ptc_num, cudaMemcpyDeviceToHost);
     cudaDeviceSynchronize();
-    cudaMemcpy(sph.particle->accx, sph.tmp_cuda->accx, sizeof(double) * sph.particle->total, cudaMemcpyDeviceToHost);
+    cudaMemcpy(sph.particle->accx, sph.tmp_cuda->accx, sizeof(double) * sph.host_arg->ptc_num, cudaMemcpyDeviceToHost);
     cudaDeviceSynchronize();
-    cudaMemcpy(sph.particle->accy, sph.tmp_cuda->accy, sizeof(double) * sph.particle->total, cudaMemcpyDeviceToHost);
+    cudaMemcpy(sph.particle->accy, sph.tmp_cuda->accy, sizeof(double) * sph.host_arg->ptc_num, cudaMemcpyDeviceToHost);
     cudaDeviceSynchronize();
-    cudaMemcpy(sph.particle->density, sph.tmp_cuda->rho, sizeof(double) * sph.particle->total, cudaMemcpyDeviceToHost);
+    cudaMemcpy(sph.particle->density, sph.tmp_cuda->rho, sizeof(double) * sph.host_arg->ptc_num, cudaMemcpyDeviceToHost);
     cudaDeviceSynchronize();
-    cudaMemcpy(sph.particle->pressure, sph.tmp_cuda->p, sizeof(double) * sph.particle->total, cudaMemcpyDeviceToHost);
+    cudaMemcpy(sph.particle->pressure, sph.tmp_cuda->p, sizeof(double) * sph.host_arg->ptc_num, cudaMemcpyDeviceToHost);
     cudaDeviceSynchronize();
-    cudaMemcpy(sph.particle->type,sph.tmp_cuda->type,sizeof(int)*sph.particle->total,cudaMemcpyDeviceToHost);
+    cudaMemcpy(sph.particle->type,sph.tmp_cuda->type,sizeof(int)*sph.host_arg->ptc_num,cudaMemcpyDeviceToHost);
     cudaDeviceSynchronize();
     cudaMemcpy(sph.host_rigid,sph.dev_rigid,sizeof(SPH_RIGID),cudaMemcpyDeviceToHost);
     sph_save_last(&sph);

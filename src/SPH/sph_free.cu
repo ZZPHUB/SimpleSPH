@@ -5,12 +5,10 @@ void sph_free(SPH *sph)
     SPH_PARTICLE *particle;
     SPH_PAIR *pair;
     SPH_KERNEL *kernel;
-    SPH_RIGID *wedge;
     SPH_CUDA *cuda;
     particle = sph->particle;
     pair = sph->pair;
     kernel = sph->kernel;
-    wedge = sph->host_rigid;
     cuda = sph->tmp_cuda;
     //cudaMemcpy(&cuda,sph->cuda,sizeof(SPH_CUDA),cudaMemcpyDeviceToHost);
     

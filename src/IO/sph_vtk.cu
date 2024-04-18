@@ -31,7 +31,7 @@ void sph_read_vtk(SPH *sph)
     vtkUnstructuredGrid *vtkdata;
     vtkdata = reader->GetOutput();
 
-    if(vtkdata->GetNumberOfPoints() != particle->total)
+    if(vtkdata->GetNumberOfPoints() != arg->ptc_num)
     {
         while(true)
         {
@@ -108,7 +108,7 @@ void sph_save_single(SPH *sph)
     rigid = sph->host_rigid;
 
     unsigned int ptc_num = 0;
-    ptc_num = particle->total;
+    ptc_num = arg->ptc_num;
 
 
     string filename = arg->case_dir; 
@@ -126,7 +126,7 @@ void sph_save_single(SPH *sph)
     vtkfile << "DATASET UNSTRUCTURED_GRID" << endl;
     vtkfile << "POINTS " << ptc_num << " " << "double" << endl;
 
-    for(unsigned int i=0;i<particle->total;i++)
+    for(unsigned int i=0;i<arg->ptc_num;i++)
     {
         vtkfile << setiosflags(ios::scientific) << particle->x[i] << " " \
         << particle->y[i] << " " << 0.0 << endl;
@@ -139,7 +139,7 @@ void sph_save_single(SPH *sph)
     {
         vtkfile << "SCALARS "<< "density double 1" << endl;
         vtkfile << "LOOKUP_TABLE DEFAULT" << endl;
-        for(unsigned int i=0;i<particle->total;i++)
+        for(unsigned int i=0;i<arg->ptc_num;i++)
         {
             vtkfile << setiosflags(ios::scientific) << particle->density[i] << endl;
         }
@@ -149,7 +149,7 @@ void sph_save_single(SPH *sph)
     {
         vtkfile << "SCALARS "<< "pressure double 1" << endl;
         vtkfile << "LOOKUP_TABLE DEFAULT" << endl;
-        for(unsigned int i=0;i<particle->total;i++)
+        for(unsigned int i=0;i<arg->ptc_num;i++)
         {
             vtkfile << setiosflags(ios::scientific) << particle->pressure[i] << endl;
         }
@@ -158,7 +158,7 @@ void sph_save_single(SPH *sph)
     if(PARA&0x04)
     {
         vtkfile << "VECTORS "<< "velocity double" << endl;
-        for(unsigned int i=0;i<particle->total;i++)
+        for(unsigned int i=0;i<arg->ptc_num;i++)
         {
             vtkfile << setiosflags(ios::scientific) << particle->vx[i] <<" " << particle->vy[i] << " " \
             << 0.0 << endl;
@@ -169,7 +169,7 @@ void sph_save_single(SPH *sph)
     if(PARA&0x08)
     {
         vtkfile << "VECTORS "<< "acceleration double" << endl;
-        for(unsigned int i=0;i<particle->total;i++)
+        for(unsigned int i=0;i<arg->ptc_num;i++)
         {
             vtkfile << setiosflags(ios::scientific) << particle->accx[i] <<" " << particle->accy[i] << " " \
             << 0.0 << endl;
@@ -192,7 +192,7 @@ void sph_save_last(SPH *sph)
     string filename = arg->case_dir;
     filename += "/last.vtk";
     unsigned int ptc_num = 0;
-    ptc_num = particle->total;
+    ptc_num = arg->ptc_num;
 
     if(sph->host_arg->save_last_flag == 1)
     {
@@ -205,7 +205,7 @@ void sph_save_last(SPH *sph)
         vtkfile << "DATASET UNSTRUCTURED_GRID" << endl;
         vtkfile << "POINTS " << ptc_num << " " << "double" << endl;
 
-        for(unsigned int i=0;i<particle->total;i++)
+        for(unsigned int i=0;i<arg->ptc_num;i++)
         {
             vtkfile << setiosflags(ios::scientific) << particle->x[i] << " " \
             << particle->y[i] << " " << 0.0 << endl;
@@ -216,34 +216,34 @@ void sph_save_last(SPH *sph)
         //ptc type
         vtkfile << "SCALARS "<< "type int 1" << endl;
         vtkfile << "LOOKUP_TABLE DEFAULT" << endl;
-        for(unsigned int i=0;i<particle->total;i++)
+        for(unsigned int i=0;i<arg->ptc_num;i++)
         {
             vtkfile  << particle->type[i] << endl;
         }
         //mass
         /*vtkfile << "SCALARS "<< "mass double 1" << endl;
         vtkfile << "LOOKUP_TABLE DEFAULT" << endl;
-        for(unsigned int i=0;i<particle->total;i++)
+        for(unsigned int i=0;i<arg->ptc_num;i++)
         {
             vtkfile << particle->mass[i] << endl;
         }*/
         //density
         vtkfile << "SCALARS "<< "density double 1" << endl;
         vtkfile << "LOOKUP_TABLE DEFAULT" << endl;
-        for(unsigned int i=0;i<particle->total;i++)
+        for(unsigned int i=0;i<arg->ptc_num;i++)
         {
             vtkfile << setiosflags(ios::scientific) << particle->density[i] << endl;
         }
         //pressure
         vtkfile << "SCALARS "<< "pressure double 1" << endl;
         vtkfile << "LOOKUP_TABLE DEFAULT" << endl;
-        for(unsigned int i=0;i<particle->total;i++)
+        for(unsigned int i=0;i<arg->ptc_num;i++)
         {
             vtkfile << setiosflags(ios::scientific) << particle->pressure[i] << endl;
         }
         //velocity
         vtkfile << "VECTORS "<< "velocity double" << endl;
-        for(unsigned int i=0;i<particle->total;i++)
+        for(unsigned int i=0;i<arg->ptc_num;i++)
         {
             vtkfile << setiosflags(ios::scientific) << particle->vx[i] <<" " << particle->vy[i] << " " \
             << 0.0 << endl;
@@ -251,7 +251,7 @@ void sph_save_last(SPH *sph)
         }
         //acceleration
         vtkfile << "VECTORS "<< "acceleration double" << endl;
-        for(unsigned int i=0;i<particle->total;i++)
+        for(unsigned int i=0;i<arg->ptc_num;i++)
         {
             vtkfile << setiosflags(ios::scientific) << particle->accx[i] <<" " << particle->accy[i] << " " \
             << 0.0 << endl;

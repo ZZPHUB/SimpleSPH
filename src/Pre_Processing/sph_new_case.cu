@@ -36,9 +36,9 @@ int main(int argc,char *argv[])
     arg.case_dir = argv[1];
     get_input(&sph);
     get_rigid_num(&sph);
-    particle.x = (double *)calloc(particle.total,sizeof(double));
-    particle.y = (double *)calloc(particle.total,sizeof(double));
-    particle.type = (int *)calloc(particle.total,sizeof(int));
+    particle.x = (double *)calloc(arg.ptc_num,sizeof(double));
+    particle.y = (double *)calloc(arg.ptc_num,sizeof(double));
+    particle.type = (int *)calloc(arg.ptc_num,sizeof(int));
     fluid_ptc_generate(&sph);
     rigid_ptc_generate(&sph);
 
@@ -71,12 +71,12 @@ void get_input(SPH *sph)
     arg->wall_layer = 2;
     arg->fluid_xnum = (int)(arg->fluid_x/arg->ptc_dx)+1-2*arg->wall_layer;
     arg->fluid_ynum = (int)(arg->fluid_y/arg->ptc_dx)+1-arg->wall_layer;
-    particle->rigid_ptc_num = 0;
-    particle->fluid_ptc_num = arg->fluid_xnum*arg->fluid_ynum;
-    particle->wall_ptc_num = ((int)(arg->fluid_x/arg->ptc_dx)+1)*((int)(1.1*arg->fluid_y/arg->ptc_dx)+1)- \
-                             ((int)(arg->fluid_x/arg->ptc_dx)+1-2*arg->wall_layer)*((int)(1.1*arg->fluid_y/arg->ptc_dx)+1-arg->wall_layer);
-    particle->total = particle->fluid_ptc_num + particle->wall_ptc_num;
-    arg->ptc_num = particle->total;
+
+    arg->rigid_ptc_num = 0;
+    arg->fluid_ptc_num = arg->fluid_xnum*arg->fluid_ynum;
+    arg->wall_ptc_num = ((int)(arg->fluid_x/arg->ptc_dx)+1)*((int)(1.1*arg->fluid_y/arg->ptc_dx)+1)- \
+                             ((int)(arg->fluid_x/arg->ptc_dx)+1-2*arg->wall_layer)*((int)(1.1*arg->fluid_y/arg->ptc_dx)+1-arg->wall_layer); 
+    arg->ptc_num = arg->rigid_ptc_num + arg->fluid_ptc_num + arg->wall_ptc_num;
 
     arg->mesh_dx = arg->r;
     arg->mesh_x = arg->fluid_x;
@@ -115,7 +115,6 @@ void get_input(SPH *sph)
     rigid->cog_ptc_id = 0.0;
     rigid->cogx = 0.0;
     rigid->cogy = 0.0; 
-    rigid->total = 0;
 }
 
 void get_rigid_num(SPH *sph)
@@ -130,10 +129,8 @@ void get_rigid_num(SPH *sph)
     std::string filename = arg->case_dir;
     filename += "/wedge.vtk";
 
-    rigid->total = 0;
-
+    arg->rigid_ptc_num = 0;
     double x[3];
-    //unsigned int tol=0;
 
     vtkSmartPointer<vtkUnstructuredGridReader> reader = vtkSmartPointer<vtkUnstructuredGridReader>::New();
     reader->SetFileName(filename.c_str());
@@ -146,12 +143,10 @@ void get_rigid_num(SPH *sph)
         vtkdata->GetPoint(i,x);
         if(x[2]==0)
         {
-            rigid->total++;
+            arg->rigid_ptc_num++;
         }
     }
-    particle->rigid_ptc_num = rigid->total;
-    particle->total = particle->fluid_ptc_num+particle->wall_ptc_num+particle->rigid_ptc_num;
-    arg->ptc_num = particle->total;
+    arg->ptc_num += arg->rigid_ptc_num;
 }
 
 void fluid_ptc_generate(SPH *sph)
@@ -194,7 +189,7 @@ void fluid_ptc_generate(SPH *sph)
         }
     }
     //if(index != (particle->fluid_ptc_num+particle->wall_ptc_num)) printf("\033[0;32;31m Error in %s:%d\033[m\n",__FILE__,__LINE__);
-    assert(index == (particle->fluid_ptc_num+particle->wall_ptc_num));
+    assert(index == (arg->fluid_ptc_num + arg->wall_ptc_num));
 }
 
 void rigid_ptc_generate(SPH *sph)
@@ -210,7 +205,7 @@ void rigid_ptc_generate(SPH *sph)
     filename += "/wedge.vtk"; 
 
     double x[3];
-    int index = particle->fluid_ptc_num+particle->wall_ptc_num;
+    int index = arg->fluid_ptc_num + arg->wall_ptc_num;
 
     vtkSmartPointer<vtkUnstructuredGridReader> reader = vtkSmartPointer<vtkUnstructuredGridReader>::New();
     reader->SetFileName(filename.c_str());
@@ -229,8 +224,7 @@ void rigid_ptc_generate(SPH *sph)
             index++;
         }
     }
-    //if(index != particle->total) printf("\033[0;32;31m Error in %s:%d\033[m\n",__FILE__,__LINE__);
-    assert(index == particle->total);
+    assert(index == arg->ptc_num);
 }
 
 void write_vtk(SPH *sph)
@@ -252,43 +246,43 @@ void write_vtk(SPH *sph)
     vtkfile << "sph data" << endl;
     vtkfile << "ASCII" << endl;
     vtkfile << "DATASET UNSTRUCTURED_GRID" << endl;
-    vtkfile << "POINTS " << particle->total << " " << "double" << endl;
+    vtkfile << "POINTS " << arg->ptc_num << " " << "double" << endl;
 
-    for(unsigned int i=0;i<particle->total;i++)
+    for(unsigned int i=0;i<arg->ptc_num;i++)
     {
         vtkfile << setiosflags(ios::scientific) << particle->x[i] << " " \
         << particle->y[i] << " " << 0.0 << endl;
     }
 
-    vtkfile << "POINT_DATA" << " " << particle->total << endl;
+    vtkfile << "POINT_DATA" << " " << arg->ptc_num << endl;
 
     vtkfile << "SCALARS "<< "density double 1" << endl;
     vtkfile << "LOOKUP_TABLE DEFAULT" << endl;
-    for(unsigned int i=0;i<particle->total;i++)
+    for(unsigned int i=0;i<arg->ptc_num;i++)
     {
         vtkfile << setiosflags(ios::scientific) << arg->ref_rho << endl;
     }
     vtkfile << "SCALARS "<< "pressure double 1" << endl;
     vtkfile << "LOOKUP_TABLE DEFAULT" << endl;
-    for(unsigned int i=0;i<particle->total;i++)
+    for(unsigned int i=0;i<arg->ptc_num;i++)
     {
         vtkfile << setiosflags(ios::scientific) << 0.0 << endl;
     }
     vtkfile << "SCALARS " << "type int 1" << endl;
     vtkfile << "LOOKUP_TABLE DEFAULT" << endl;
-    for(unsigned int i=0;i<particle->total;i++)
+    for(unsigned int i=0;i<arg->ptc_num;i++)
     {
         vtkfile << particle->type[i] << endl; 
     }
     vtkfile << "VECTORS "<< "velocity double" << endl;
-    for(unsigned int i=0;i<particle->total;i++)
+    for(unsigned int i=0;i<arg->ptc_num;i++)
     {
         vtkfile << setiosflags(ios::scientific) << 0.0 <<" " << 0.0 << " " \
         << 0.0 << endl;
 
     }
     vtkfile << "VECTORS "<< "acceleration double" << endl;
-    for(unsigned int i=0;i<particle->total;i++)
+    for(unsigned int i=0;i<arg->ptc_num;i++)
     {
         vtkfile << setiosflags(ios::scientific) << 0.0 <<" " << 0.0 << " " \
         << 0.0 << endl;
@@ -311,7 +305,7 @@ void rigid_init(SPH *sph)
     double tmp_cogy = 0.0;
     double tmp_r = 10000.0;
 
-    for(int i=0;i<particle->total;i++)
+    for(int i=0;i<arg->ptc_num;i++)
     {
         if(particle->type[i] == 1)
         {
@@ -322,7 +316,7 @@ void rigid_init(SPH *sph)
     tmp_cogx /= (double)particle->rigid_ptc_num;
     tmp_cogy /= (double)particle->rigid_ptc_num;
 
-    for(int i=0;i<particle->total;i++)
+    for(int i=0;i<arg->ptc_num;i++)
     {
         if(particle->type[i] == 1)
         {
@@ -336,7 +330,7 @@ void rigid_init(SPH *sph)
     rigid->cogx = particle->x[rigid->cog_ptc_id];
     rigid->cogy = particle->y[rigid->cog_ptc_id];
 
-    for(int i=0;i<particle->total;i++)
+    for(int i=0;i<arg->ptc_num;i++)
     {
         if(particle->type[i] == 1)
         {

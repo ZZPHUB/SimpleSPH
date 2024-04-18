@@ -13,43 +13,45 @@ void sph_init(SPH *sph)
     SPH_KERNEL *kernel;
     SPH_MESH *mesh;
     SPH_CUDA *temp_cuda;
+    SPH_ARG *arg;
     particle = sph->particle;
     pair = sph->pair;
     kernel = sph->kernel;
     mesh = sph->mesh;
     temp_cuda = sph->tmp_cuda;
+    arg = sph->host_arg;
 
     sph_read_info(sph);
 
     /************stack is too small,so init data in heap***************/
     //particle data init
-    particle->x = (double *)(calloc(particle->total,sizeof(double)));
-    particle->y = (double *)(calloc(particle->total,sizeof(double)));
-    particle->vx = (double *)(calloc(particle->total,sizeof(double)));
-    particle->vy = (double *)(calloc(particle->total,sizeof(double)));
-    particle->accx = (double *)(calloc(particle->total,sizeof(double)));
-    particle->accy = (double *)(calloc(particle->total,sizeof(double)));
-    particle->dif_density = (double *)(calloc(particle->total,sizeof(double)));
-    particle->density = (double *)(calloc(particle->total,sizeof(double)));
-    particle->temp_x = (double *)(calloc(particle->total,sizeof(double)));
-    particle->temp_y = (double *)(calloc(particle->total,sizeof(double)));
-    particle->temp_vx = (double *)(calloc(particle->total,sizeof(double)));
-    particle->temp_vy = (double *)(calloc(particle->total,sizeof(double)));
-    particle->temp_density = (double *)(calloc(particle->total,sizeof(double))); 
-    //particle->mass = (double *)(calloc(particle->total,sizeof(double))); 
-    particle->w = (double *)(calloc(particle->total,sizeof(double)));
-    particle->pressure = (double *)(calloc(particle->total,sizeof(double)));
-    particle->type = (int *)(calloc(particle->total,sizeof(int)));  
+    particle->x = (double *)(calloc(arg->ptc_num,sizeof(double)));
+    particle->y = (double *)(calloc(arg->ptc_num,sizeof(double)));
+    particle->vx = (double *)(calloc(arg->ptc_num,sizeof(double)));
+    particle->vy = (double *)(calloc(arg->ptc_num,sizeof(double)));
+    particle->accx = (double *)(calloc(arg->ptc_num,sizeof(double)));
+    particle->accy = (double *)(calloc(arg->ptc_num,sizeof(double)));
+    particle->dif_density = (double *)(calloc(arg->ptc_num,sizeof(double)));
+    particle->density = (double *)(calloc(arg->ptc_num,sizeof(double)));
+    particle->temp_x = (double *)(calloc(arg->ptc_num,sizeof(double)));
+    particle->temp_y = (double *)(calloc(arg->ptc_num,sizeof(double)));
+    particle->temp_vx = (double *)(calloc(arg->ptc_num,sizeof(double)));
+    particle->temp_vy = (double *)(calloc(arg->ptc_num,sizeof(double)));
+    particle->temp_density = (double *)(calloc(arg->ptc_num,sizeof(double))); 
+    //particle->mass = (double *)(calloc(arg->ptc_num,sizeof(double))); 
+    particle->w = (double *)(calloc(arg->ptc_num,sizeof(double)));
+    particle->pressure = (double *)(calloc(arg->ptc_num,sizeof(double)));
+    particle->type = (int *)(calloc(arg->ptc_num,sizeof(int)));  
 
     //kernel data init
-    kernel->w = (double *)(calloc(32*particle->total,sizeof(double)));  //this code donnot use kernel value
-    kernel->dwdx = (double *)(calloc(32*particle->total,sizeof(double)));
-    kernel->dwdy = (double *)(calloc(32*particle->total,sizeof(double)));
+    kernel->w = (double *)(calloc(32*arg->ptc_num,sizeof(double)));  //this code donnot use kernel value
+    kernel->dwdx = (double *)(calloc(32*arg->ptc_num,sizeof(double)));
+    kernel->dwdy = (double *)(calloc(32*arg->ptc_num,sizeof(double)));
    
     //pair data init
     pair->total = 0; 
-    pair->i = (unsigned int *)(calloc(32*particle->total,sizeof(unsigned int)));
-    pair->j = (unsigned int *)(calloc(32*particle->total,sizeof(unsigned int)));
+    pair->i = (unsigned int *)(calloc(32*arg->ptc_num,sizeof(unsigned int)));
+    pair->j = (unsigned int *)(calloc(32*arg->ptc_num,sizeof(unsigned int)));
 
     //mesh data init
     mesh->ptc = (int *)calloc(sph->host_arg->mesh_num*sph->host_arg->mesh_volume,sizeof(int));
@@ -66,55 +68,55 @@ void sph_init(SPH *sph)
 
     /*cuda mem alloc*/
     cudaMalloc(&(sph->cuda),sizeof(SPH_CUDA));
-    cudaMalloc(&(temp_cuda->x),particle->total*sizeof(double));
-    cudaMalloc(&(temp_cuda->y),particle->total*sizeof(double));
-    cudaMalloc(&(temp_cuda->temp_x),particle->total*sizeof(double));
-    cudaMalloc(&(temp_cuda->temp_y),particle->total*sizeof(double));
-    cudaMalloc(&(temp_cuda->vx),particle->total*sizeof(double));
-    cudaMalloc(&(temp_cuda->vy),particle->total*sizeof(double));
-    cudaMalloc(&(temp_cuda->temp_vx),particle->total*sizeof(double));
-    cudaMalloc(&(temp_cuda->temp_vy),particle->total*sizeof(double));
-    cudaMalloc(&(temp_cuda->accx),particle->total*sizeof(double));
-    cudaMalloc(&(temp_cuda->accy),particle->total*sizeof(double));
-    cudaMalloc(&(temp_cuda->rho),particle->total*sizeof(double));
-    cudaMalloc(&(temp_cuda->drho),particle->total*sizeof(double));
-    cudaMalloc(&(temp_cuda->temp_rho),particle->total*sizeof(double));
-    cudaMalloc(&(temp_cuda->p),particle->total*sizeof(double));
-    cudaMalloc(&(temp_cuda->type),particle->total*sizeof(int));
-    cudaMalloc(&(temp_cuda->ptc_w),particle->total*sizeof(double));
+    cudaMalloc(&(temp_cuda->x),arg->ptc_num*sizeof(double));
+    cudaMalloc(&(temp_cuda->y),arg->ptc_num*sizeof(double));
+    cudaMalloc(&(temp_cuda->temp_x),arg->ptc_num*sizeof(double));
+    cudaMalloc(&(temp_cuda->temp_y),arg->ptc_num*sizeof(double));
+    cudaMalloc(&(temp_cuda->vx),arg->ptc_num*sizeof(double));
+    cudaMalloc(&(temp_cuda->vy),arg->ptc_num*sizeof(double));
+    cudaMalloc(&(temp_cuda->temp_vx),arg->ptc_num*sizeof(double));
+    cudaMalloc(&(temp_cuda->temp_vy),arg->ptc_num*sizeof(double));
+    cudaMalloc(&(temp_cuda->accx),arg->ptc_num*sizeof(double));
+    cudaMalloc(&(temp_cuda->accy),arg->ptc_num*sizeof(double));
+    cudaMalloc(&(temp_cuda->rho),arg->ptc_num*sizeof(double));
+    cudaMalloc(&(temp_cuda->drho),arg->ptc_num*sizeof(double));
+    cudaMalloc(&(temp_cuda->temp_rho),arg->ptc_num*sizeof(double));
+    cudaMalloc(&(temp_cuda->p),arg->ptc_num*sizeof(double));
+    cudaMalloc(&(temp_cuda->type),arg->ptc_num*sizeof(int));
+    cudaMalloc(&(temp_cuda->ptc_w),arg->ptc_num*sizeof(double));
 
-    cudaMalloc(&(temp_cuda->pair_w),32*particle->total*sizeof(double));
-    cudaMalloc(&(temp_cuda->dwdx),32*particle->total*sizeof(double));
-    cudaMalloc(&(temp_cuda->dwdy),32*particle->total*sizeof(double));
-    cudaMalloc(&(temp_cuda->pair_i),32*particle->total*sizeof(int));
-    cudaMalloc(&(temp_cuda->pair_j),32*particle->total*sizeof(int));
+    cudaMalloc(&(temp_cuda->pair_w),32*arg->ptc_num*sizeof(double));
+    cudaMalloc(&(temp_cuda->dwdx),32*arg->ptc_num*sizeof(double));
+    cudaMalloc(&(temp_cuda->dwdy),32*arg->ptc_num*sizeof(double));
+    cudaMalloc(&(temp_cuda->pair_i),32*arg->ptc_num*sizeof(int));
+    cudaMalloc(&(temp_cuda->pair_j),32*arg->ptc_num*sizeof(int));
     cudaMalloc(&(temp_cuda->pair_count),sph->host_arg->mesh_num*sizeof(int));
     cudaMalloc(&(temp_cuda->mesh),sph->host_arg->mesh_num*sph->host_arg->mesh_volume*sizeof(int));
     cudaMalloc(&(temp_cuda->mesh_count),sph->host_arg->mesh_num*sizeof(int));
 
-    cudaMemcpy(temp_cuda->x, particle->x, particle->total*sizeof(double), cudaMemcpyHostToDevice); 
-    cudaMemcpy(temp_cuda->y, particle->y, particle->total*sizeof(double), cudaMemcpyHostToDevice); 
-    cudaMemcpy(temp_cuda->vx, particle->vx, particle->total*sizeof(double), cudaMemcpyHostToDevice); 
-    cudaMemcpy(temp_cuda->vy, particle->vy, particle->total*sizeof(double), cudaMemcpyHostToDevice); 
-    cudaMemcpy(temp_cuda->type, particle->type, particle->total*sizeof(int), cudaMemcpyHostToDevice); 
-    cudaMemcpy(temp_cuda->rho, particle->density, particle->total*sizeof(double), cudaMemcpyHostToDevice);
-    cudaMemcpy(temp_cuda->accx, particle->accx, particle->total*sizeof(double), cudaMemcpyHostToDevice);
-    cudaMemcpy(temp_cuda->accy, particle->accx, particle->total*sizeof(double), cudaMemcpyHostToDevice);
-    cudaMemcpy(temp_cuda->drho, particle->dif_density, particle->total*sizeof(double), cudaMemcpyHostToDevice);
+    cudaMemcpy(temp_cuda->x, particle->x, arg->ptc_num*sizeof(double), cudaMemcpyHostToDevice); 
+    cudaMemcpy(temp_cuda->y, particle->y, arg->ptc_num*sizeof(double), cudaMemcpyHostToDevice); 
+    cudaMemcpy(temp_cuda->vx, particle->vx, arg->ptc_num*sizeof(double), cudaMemcpyHostToDevice); 
+    cudaMemcpy(temp_cuda->vy, particle->vy, arg->ptc_num*sizeof(double), cudaMemcpyHostToDevice); 
+    cudaMemcpy(temp_cuda->type, particle->type, arg->ptc_num*sizeof(int), cudaMemcpyHostToDevice); 
+    cudaMemcpy(temp_cuda->rho, particle->density, arg->ptc_num*sizeof(double), cudaMemcpyHostToDevice);
+    cudaMemcpy(temp_cuda->accx, particle->accx, arg->ptc_num*sizeof(double), cudaMemcpyHostToDevice);
+    cudaMemcpy(temp_cuda->accy, particle->accx, arg->ptc_num*sizeof(double), cudaMemcpyHostToDevice);
+    cudaMemcpy(temp_cuda->drho, particle->dif_density, arg->ptc_num*sizeof(double), cudaMemcpyHostToDevice);
     
-    cudaMemset(temp_cuda->p,0,particle->total*sizeof(double));
-    cudaMemset(temp_cuda->temp_x,0,particle->total*sizeof(double));
-    cudaMemset(temp_cuda->temp_y,0,particle->total*sizeof(double));
-    cudaMemset(temp_cuda->temp_vx,0,particle->total*sizeof(double));
-    cudaMemset(temp_cuda->temp_vy,0,particle->total*sizeof(double));
-    cudaMemset(temp_cuda->temp_rho,0,particle->total*sizeof(double));
-    cudaMemset(temp_cuda->ptc_w,0,particle->total*sizeof(double));
+    cudaMemset(temp_cuda->p,0,arg->ptc_num*sizeof(double));
+    cudaMemset(temp_cuda->temp_x,0,arg->ptc_num*sizeof(double));
+    cudaMemset(temp_cuda->temp_y,0,arg->ptc_num*sizeof(double));
+    cudaMemset(temp_cuda->temp_vx,0,arg->ptc_num*sizeof(double));
+    cudaMemset(temp_cuda->temp_vy,0,arg->ptc_num*sizeof(double));
+    cudaMemset(temp_cuda->temp_rho,0,arg->ptc_num*sizeof(double));
+    cudaMemset(temp_cuda->ptc_w,0,arg->ptc_num*sizeof(double));
 
-    cudaMemset(temp_cuda->pair_w,0,32*particle->total*sizeof(double));
-    cudaMemset(temp_cuda->dwdx,0,32*particle->total*sizeof(double));
-    cudaMemset(temp_cuda->dwdy,0,32*particle->total*sizeof(double));
-    cudaMemset(temp_cuda->pair_i,0,32*particle->total*sizeof(int));
-    cudaMemset(temp_cuda->pair_j,0,32*particle->total*sizeof(int));
+    cudaMemset(temp_cuda->pair_w,0,32*arg->ptc_num*sizeof(double));
+    cudaMemset(temp_cuda->dwdx,0,32*arg->ptc_num*sizeof(double));
+    cudaMemset(temp_cuda->dwdy,0,32*arg->ptc_num*sizeof(double));
+    cudaMemset(temp_cuda->pair_i,0,32*arg->ptc_num*sizeof(int));
+    cudaMemset(temp_cuda->pair_j,0,32*arg->ptc_num*sizeof(int));
     cudaMemset(temp_cuda->pair_count,0,sph->host_arg->mesh_num*sizeof(int));
     cudaMemset(temp_cuda->mesh,0,sph->host_arg->mesh_num*sph->host_arg->mesh_volume*sizeof(int));
     cudaMemset(temp_cuda->mesh_count,0,sph->host_arg->mesh_num*sizeof(int));
