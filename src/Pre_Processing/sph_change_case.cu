@@ -100,7 +100,7 @@ int new_rigid_num(SPH *sph)
     vtkSmartPointer<vtkUnstructuredGridReader> reader = vtkSmartPointer<vtkUnstructuredGridReader>::New();
     reader->SetFileName(filename.c_str());
     reader->Update();
-    int x[3];
+    double x[3];
     
     vtkUnstructuredGrid *vtkdata;
     vtkdata = reader->GetOutput();
