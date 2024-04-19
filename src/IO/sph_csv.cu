@@ -16,4 +16,5 @@ void sph_write_csv(SPH *sph)
     rigid_info << arg->init_step*arg->dt << "," << rigid->cogx << "," << rigid->cogy << "," << rigid->vx << "," <<
     rigid->vy << "," << rigid->omega << "," << rigid->accx << "," << rigid->accy << "," << rigid->alpha << endl;
 
+    rigid_info.close();
 }
