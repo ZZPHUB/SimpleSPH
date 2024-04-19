@@ -77,15 +77,16 @@ int main(int argc,char *argv[])
         cudaDeviceSynchronize();
         sph_governing_cuda<<<pair_grid, pair_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
         cudaDeviceSynchronize();
-        sph_correct_cuda<<<ptc_grid, ptc_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
-        cudaDeviceSynchronize();
-        sph_dummy_cuda<<<pair_grid, pair_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
-        cudaDeviceSynchronize();
         if(sph.host_arg->init_impac_flag == 0)
         {
             sph_rigid_cuda<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
             cudaDeviceSynchronize();
         }
+        sph_correct_cuda<<<ptc_grid, ptc_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
+        cudaDeviceSynchronize();
+        sph_dummy_cuda<<<pair_grid, pair_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
+        cudaDeviceSynchronize();
+        
 
         if (sph.host_arg->init_step % sph.host_arg->print_step == 0)
         {
