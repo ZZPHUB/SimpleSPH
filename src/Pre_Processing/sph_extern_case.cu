@@ -81,7 +81,7 @@ int main(int argc,char *argv[])
                 {
                     if(particle.type[j] != 1)
                     {
-                        tmp_x.push_back(particle.x[j]+(offset_xnum-2*arg.wall_layer)*arg.ptc_dx);
+                        tmp_x.push_back(particle.x[j]+(offset_xnum-arg.wall_layer)*arg.ptc_dx);
                         tmp_y.push_back(particle.y[j]);
                         tmp_vx.push_back(particle.vx[j]);
                         tmp_vy.push_back(particle.vy[j]);
@@ -104,7 +104,7 @@ int main(int argc,char *argv[])
                 {
                     if(particle.type[j] != 1)
                     {
-                        tmp_x.push_back(particle.x[j]+(offset_xnum-2*arg.wall_layer)*arg.ptc_dx);
+                        tmp_x.push_back(particle.x[j]+(offset_xnum-arg.wall_layer)*arg.ptc_dx);
                         tmp_y.push_back(particle.y[j]);
                         tmp_vx.push_back(particle.vx[j]);
                         tmp_vy.push_back(particle.vy[j]);
@@ -135,7 +135,7 @@ int main(int argc,char *argv[])
     tmp_fluid_num = tmp_fluid_xnum*tmp_fluid_ynum;
     tmp_wall_num = ((int)(tmp_fluid_x/arg.ptc_dx) + 1)*((int)(1.1*tmp_fluid_y/arg.ptc_dx)+1) -\
                    ((int)(tmp_fluid_x/arg.ptc_dx + 1 - 2*arg.wall_layer))*((int)(1.1*tmp_fluid_y/arg.ptc_dx)+1 - arg.wall_layer);
-    double rigid_offset = arg.fluid_x/2.0 - rigid.cogx;
+    double rigid_offset = tmp_fluid_x/2.0 - rigid.cogx;
 
     int loop_rigid_num = 0;
     for(int i=0;i<arg.ptc_num;i++)
