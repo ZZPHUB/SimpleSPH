@@ -107,7 +107,7 @@ int main(int argc,char *argv[])
             cudaDeviceSynchronize();
             if(sph.host_arg->init_impac_flag == 0)
             {
-                cudaMemcpy(sph.host_rigid,sph.dev_rigid,sizeof(SPH_ARG),cudaMemcpyDeviceToHost);
+                cudaMemcpy(sph.host_rigid,sph.dev_rigid,sizeof(SPH_RIGID),cudaMemcpyDeviceToHost);
                 cudaDeviceSynchronize();
             }
             
@@ -178,6 +178,14 @@ __global__ void sph_predict_cuda(SPH_CUDA *cuda, SPH_ARG *arg, SPH_RIGID *rigid)
 __global__ void sph_correct_cuda(SPH_CUDA *cuda, SPH_ARG *arg, SPH_RIGID *rigid)
 {
     const int id = threadIdx.x + blockIdx.x * blockDim.x;
+    if(id == 0)
+    {
+        rigid->accx = 0.0;
+        rigid->accy = -arg->g;
+        rigid->alpha = 0.0;
+        rigid->cogx = cuda->x[rigid->cog_ptc_id];
+        rigid->cogy = cuda->y[rigid->cog_ptc_id];
+    }
     if (id < arg->ptc_num)
     {
         if (cuda->type[id] == 0)
@@ -218,14 +226,6 @@ __global__ void sph_rigid_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     __shared__ double accy;
     __shared__ double alpha;
     const int id = threadIdx.x + blockIdx.x * blockDim.x;
-    if(id == 0)
-    {
-        rigid->accx = 0.0;
-        rigid->accy = -arg->g;
-        rigid->alpha = 0.0;
-        rigid->cogx = cuda->x[rigid->cog_ptc_id];
-        rigid->cogy = cuda->y[rigid->cog_ptc_id];
-    }
     if(threadIdx.x == 0)
     {
         accx = 0.0;

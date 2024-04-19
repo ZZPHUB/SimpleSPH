@@ -110,6 +110,7 @@ void get_input(SPH *sph)
     rigid->accy = 0.0;
     rigid->alpha = 0.0;
     rigid->mass = 12.8;
+    rigid->moi = 0.0;
     rigid->offset_x = 0.0;
     rigid->offset_y = 0.0;
     rigid->offset_angl = 0.0;
@@ -335,7 +336,8 @@ void rigid_init(SPH *sph)
     {
         if(particle->type[i] == 1)
         {
-            rigid->moi += (arg->m/rigid->mass)*(pow((particle->x[i]-rigid->cogx),2)+pow((particle->y[i]-rigid->cogy),2));
+            rigid->moi += (rigid->mass)*(pow((particle->x[i]-rigid->cogx),2)+pow((particle->y[i]-rigid->cogy),2));
         }
     }
+    rigid->moi /= arg->rigid_ptc_num;
 }
