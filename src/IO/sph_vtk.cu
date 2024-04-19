@@ -14,10 +14,10 @@ void sph_read_vtk(SPH *sph)
 {
     SPH_PARTICLE *particle;
     SPH_ARG *arg;
-    //SPH_RIGID *rigid;
+    SPH_RIGID *rigid;
     particle = sph->particle;
     arg = sph->host_arg;
-    //rigid = sph->host_rigid;
+    rigid = sph->host_rigid;
 
     string filename = arg->case_dir;
     filename += "/init.vtk";
@@ -95,6 +95,15 @@ void sph_read_vtk(SPH *sph)
             cout << "some case are null" << endl;
         }
         
+    }
+
+    for(int i=0;i<arg->ptc_num;i++)
+    {
+        if(particle->type[i] == 1)
+        {
+            particle->x[i] += rigid->offset_x-rigid->offset_angl*(particle->y[i]-rigid->cogy);
+            particle->y[i] += rigid->offset_y+rigid->offset_angl*(particle->x[i]-rigid->cogx);
+        }
     }
 }
 
