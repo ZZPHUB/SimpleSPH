@@ -49,6 +49,10 @@ int main(int argc,char *argv[])
     {
         printf("current step is:%d ", sph.host_arg->init_step);
         sph_mesh_cuda<<<ptc_grid, ptc_block>>>(sph.cuda, sph.dev_arg);
+        if (sph.host_arg->init_step % sph.host_arg->print_step == 2 && sph.host_arg->init_impac_flag == 0)
+        {
+            sph_write_csv(&sph);
+        }
         cudaDeviceSynchronize();
         sph_nnps_cuda<<<mesh_grid, mesh_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
         if (sph.host_arg->init_step % sph.host_arg->print_step == 1)
@@ -101,6 +105,12 @@ int main(int argc,char *argv[])
             cudaDeviceSynchronize();
             cudaMemcpy(sph.particle->pressure, sph.tmp_cuda->p, sizeof(double) * sph.host_arg->ptc_num, cudaMemcpyDeviceToHost);
             cudaDeviceSynchronize();
+            if(sph.host_arg->init_impac_flag == 0)
+            {
+                cudaMemcpy(sph.host_rigid,sph.dev_rigid,sizeof(SPH_ARG),cudaMemcpyDeviceToHost);
+                cudaDeviceSynchronize();
+            }
+            
         }
         cudaError_t sph_error = cudaGetLastError();
         printf("%s\n", cudaGetErrorName(sph_error));
@@ -208,13 +218,6 @@ __global__ void sph_rigid_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     __shared__ double accy;
     __shared__ double alpha;
     const int id = threadIdx.x + blockIdx.x * blockDim.x;
-    if(threadIdx.x == 0)
-    {
-        accx = 0.0;
-        accy = 0.0;
-        alpha = 0.0;
-    }
-    __syncthreads();
     if(id == 0)
     {
         rigid->accx = 0.0;
@@ -223,6 +226,13 @@ __global__ void sph_rigid_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         rigid->cogx = cuda->x[rigid->cog_ptc_id];
         rigid->cogy = cuda->y[rigid->cog_ptc_id];
     }
+    if(threadIdx.x == 0)
+    {
+        accx = 0.0;
+        accy = 0.0;
+        alpha = 0.0;
+    }
+    __syncthreads();
     if(id < arg->ptc_num)
     {
         if(cuda->type[id] == 1)

@@ -14,5 +14,5 @@ extern void sph_save_single(SPH *);
 extern void sph_save_last(SPH *);
 extern void sph_read_info(SPH *);
 extern void sph_write_info(SPH *);
-
+extern void sph_write_csv(SPH *);
 #endif
