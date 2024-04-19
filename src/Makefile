@@ -42,7 +42,7 @@ $(TARGET2): $(SPH_NEW_OBJ) $(OBJ)
 $(TARGET3): $(SPH_CHA_OBJ) $(OBJ)
 	$(CC) $^ $(CPPFLAGS) $(LD) -o $@ 
 
-$(TARGET4): $(SPH_CHA_OBJ) $(OBJ)
+$(TARGET4): $(SPH_EXT_OBJ) $(OBJ)
 	$(CC) $^ $(CPPFLAGS) $(LD) -o $@ 
 
 # 上一句目标文件依赖一大堆.o文件，这句表示所有.o都由相应名字的.cpp文件自动生成
@@ -51,5 +51,5 @@ $(BUILD_DIR)/%.o:%.cu
 
 # make clean删除所有.o和目标文件
 clean:
-	rm -f $(OBJ) $(SPH_NEW_OBJ) $(SPH_RUN_OBJ) $(SPH_CHA_OBJ) $(TARGET4) $(TARGET) ../data/postprocess/csv/* ../data/postprocess/vtk/* 
+	rm -f $(OBJ) $(SPH_NEW_OBJ) $(SPH_RUN_OBJ) $(SPH_CHA_OBJ) $(SPH_EXT_OBJ) $(TARGET1) $(TARGET2) $(TARGET3) $(TARGET4) ../data/postprocess/csv/* ../data/postprocess/vtk/* 
 
