@@ -96,8 +96,8 @@ void sph_read_vtk(SPH *sph)
         }
         
     }
-    rigid->cogx = particle.x[rigid->cog_ptc_id];
-    rigid->cogy = particle.y[rigid->cog_ptc_id];
+    rigid->cogx = particle->x[rigid->cog_ptc_id];
+    rigid->cogy = particle->y[rigid->cog_ptc_id];
     for(int i=0;i<arg->ptc_num;i++)
     {
         if(particle->type[i] == 1)
@@ -106,8 +106,8 @@ void sph_read_vtk(SPH *sph)
             particle->y[i] += rigid->offset_y+rigid->offset_angl*(particle->x[i]-rigid->cogx);
         }
     }
-    rigid->cogx = particle.x[rigid->cog_ptc_id];
-    rigid->cogy = particle.y[rigid->cog_ptc_id];
+    rigid->cogx = particle->x[rigid->cog_ptc_id];
+    rigid->cogy = particle->y[rigid->cog_ptc_id];
 }
 
 void sph_save_single(SPH *sph)
