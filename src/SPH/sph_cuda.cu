@@ -226,6 +226,7 @@ __global__ void sph_rigid_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         rigid->alpha = 0.0;
         rigid->cogx = cuda->x[rigid->cog_ptc_id];
         rigid->cogy = cuda->y[rigid->cog_ptc_id];
+        rigid->vy += -arg->g*arg->dt;
     }
     if(threadIdx.x == 0)
     {
