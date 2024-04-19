@@ -77,15 +77,15 @@ int main(int argc,char *argv[])
         cudaDeviceSynchronize();
         sph_governing_cuda<<<pair_grid, pair_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
         cudaDeviceSynchronize();
+        sph_correct_cuda<<<ptc_grid, ptc_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
+        cudaDeviceSynchronize();
+        sph_dummy_cuda<<<pair_grid, pair_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
+        cudaDeviceSynchronize();
         if(sph.host_arg->init_impac_flag == 0)
         {
             sph_rigid_cuda<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
             cudaDeviceSynchronize();
         }
-        sph_correct_cuda<<<ptc_grid, ptc_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
-        cudaDeviceSynchronize();
-        sph_dummy_cuda<<<pair_grid, pair_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
-        cudaDeviceSynchronize();
         
 
         if (sph.host_arg->init_step % sph.host_arg->print_step == 0)
@@ -238,9 +238,9 @@ __global__ void sph_rigid_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     {
         if(cuda->type[id] == 1)
         {
-            accx += cuda->accx[id]*arg->m/rigid->mass;
-            accy += cuda->accy[id]*arg->m/rigid->mass;
-            alpha += (cuda->accy[id]*(cuda->x[id]-rigid->cogx)-cuda->accx[id]*(cuda->y[id]-rigid->cogy))*arg->m/rigid->moi;
+            atomicAdd(&accx,cuda->accx[id]*arg->m/rigid->mass);
+            atomicAdd(&accy,cuda->accy[id]*arg->m/rigid->mass);
+            atomicAdd(&alpha,(cuda->accy[id]*(cuda->x[id]-rigid->cogx)-cuda->accx[id]*(cuda->y[id]-rigid->cogy))*arg->m/rigid->moi);
         }   
     }
     __syncthreads();
