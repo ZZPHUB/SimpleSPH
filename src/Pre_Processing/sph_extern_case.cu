@@ -163,8 +163,8 @@ int main(int argc,char *argv[])
     assert(loop_fluid_num == tmp_fluid_num);
     assert(loop_wall_num == tmp_wall_num);
     assert(loop_rigid_num == arg.rigid_ptc_num);
-    rigid.cogx = particle.x[rigid.cog_ptc_id];
-    rigid.cogy = particle.y[rigid.cog_ptc_id];    
+    //rigid.cogx = particle.x[rigid.cog_ptc_id];
+    //rigid.cogy = particle.y[rigid.cog_ptc_id];    
 
     arg.fluid_x = tmp_fluid_x;
     arg.fluid_y = tmp_fluid_y;
@@ -203,6 +203,7 @@ int main(int argc,char *argv[])
     particle.density = (double *)calloc(arg.ptc_num,sizeof(double));
     particle.pressure = (double *)calloc(arg.ptc_num,sizeof(double));
     particle.type = (int *)calloc(arg.ptc_num,sizeof(int));
+
     
     assert( tmp_x.size() == arg.ptc_num);
     for(int i=0;i<arg.ptc_num;i++)
@@ -218,6 +219,9 @@ int main(int argc,char *argv[])
         particle.type[i] = tmp_type.at(i);
     }
 
+    rigid.cogx = particle.x[rigid.cog_ptc_id];
+    rigid.cogy = particle.y[rigid.cog_ptc_id]; 
+    
     sph_save_last(&sph);    
     return 0;
 }
