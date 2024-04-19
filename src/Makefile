@@ -8,6 +8,7 @@ BUILD_DIR = ./build
 SPH_RUN_OBJ = $(BUILD_DIR)/sph_cuda.o 
 SPH_NEW_OBJ = $(BUILD_DIR)/sph_new_case.o
 SPH_CHA_OBJ = $(BUILD_DIR)/sph_change_case.o
+SPH_EXT_OBJ = $(BUILD_DIR)/sph_extern_case.o
 TMP_OBJ = $(addprefix $(BUILD_DIR)/,$(patsubst %.cu,%.o,$(SRC))) 
 OBJ = $(filter-out $(SPH_RUN_OBJ) $(SPH_NEW_OBJ) $(SPH_CHA_OBJ),$(TMP_OBJ))
 # vtk链接库路径以及需要链接的库
@@ -22,12 +23,13 @@ endif
 TARGET1 = sph_run
 TARGET2 = sph_new
 TARGET3 = sph_change
+TARGET4 = sph_extern
 
 CC = nvcc
 
-.PHONY:run new clean
+.PHONY:all clean
 
-all: $(TARGET1) $(TARGET2) $(TARGET3)
+all: $(TARGET1) $(TARGET2) $(TARGET3) $(TARGET4)
 
 # 第一行依赖关系：冒号后面为依赖的文件，相当于Hello: main.o a.o b.o
 # 第二行规则：$@表示目标文件，$^表示所有依赖文件，$<表示第一个依赖文件
@@ -40,11 +42,14 @@ $(TARGET2): $(SPH_NEW_OBJ) $(OBJ)
 $(TARGET3): $(SPH_CHA_OBJ) $(OBJ)
 	$(CC) $^ $(CPPFLAGS) $(LD) -o $@ 
 
+$(TARGET4): $(SPH_CHA_OBJ) $(OBJ)
+	$(CC) $^ $(CPPFLAGS) $(LD) -o $@ 
+
 # 上一句目标文件依赖一大堆.o文件，这句表示所有.o都由相应名字的.cpp文件自动生成
 $(BUILD_DIR)/%.o:%.cu
 	$(CC) -c $(CPPFLAGS) $(INCLUDE) -o $@ $^ 
 
 # make clean删除所有.o和目标文件
 clean:
-	rm -f $(OBJ) $(SPH_NEW_OBJ) $(SPH_RUN_OBJ) $(SPH_CHA_OBJ) $(TARGET) ../data/postprocess/csv/* ../data/postprocess/vtk/* 
+	rm -f $(OBJ) $(SPH_NEW_OBJ) $(SPH_RUN_OBJ) $(SPH_CHA_OBJ) $(TARGET4) $(TARGET) ../data/postprocess/csv/* ../data/postprocess/vtk/* 
 
