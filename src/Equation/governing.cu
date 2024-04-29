@@ -4,8 +4,7 @@ __global__ void sph_governing_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
 {
     double accx = 0.0;
     double accy = 0.0;
-    double drho_i = 0.0;
-    double drho_j = 0.0;
+    double drho = 0.0;
     double tmp_acc_p = 0.0;
     double tmp_acc_v = 0.0;
     int index_i = 0.0;
@@ -29,23 +28,23 @@ __global__ void sph_governing_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         {
             dvx = cuda->vx[index_i] - cuda->vx[index_j];
             dvy = cuda->vy[index_i] - cuda->vy[index_j];
-            drho_i = (cuda->vx[index_i]-cuda->vx[index_j])*cuda->dwdx[id]+(cuda->vy[index_i]-cuda->vy[index_j])*cuda->dwdy[id];
-            drho_i *= arg->m;
+            drho = (cuda->vx[index_i]-cuda->vx[index_j])*cuda->dwdx[id]+(cuda->vy[index_i]-cuda->vy[index_j])*cuda->dwdy[id];
+            drho *= arg->m;
         }
         else if(cuda->type[index_j] == -1)
         {
             dvx = cuda->vx[index_i] - (0.0 - cuda->vx[index_j]);
             dvy = cuda->vy[index_i] - (0.0 - cuda->vy[index_j]);
-            drho_i = cuda->vx[index_i]*cuda->dwdx[id]+cuda->vy[index_i]*cuda->dwdy[id];
-            drho_i *= arg->m;
+            drho = cuda->vx[index_i]*cuda->dwdx[id]+cuda->vy[index_i]*cuda->dwdy[id];
+            drho *= arg->m;
         }
         else if(cuda->type[index_j] == 1)
         {
             dvx = cuda->vx[index_i] - (2.0*(rigid->vx - rigid->omega*(cuda->y[index_j]-rigid->cogy)) - cuda->vx[index_j]);
             dvy = cuda->vy[index_i] - (2.0*(rigid->vy + rigid->omega*(cuda->x[index_j]-rigid->cogx)) - cuda->vy[index_j]);
-            drho_i = (cuda->vx[index_i] - (rigid->vx - rigid->omega*(cuda->y[index_j]-rigid->cogy)))*cuda->dwdx[id]+\
+            drho = (cuda->vx[index_i] - (rigid->vx - rigid->omega*(cuda->y[index_j]-rigid->cogy)))*cuda->dwdx[id]+\
                       (cuda->vy[index_i] - (rigid->vy + rigid->omega*(cuda->x[index_j]-rigid->cogx)))*cuda->dwdy[id];
-            drho_i *= arg->m;
+            drho *= arg->m;
         }
 
         tmp_acc_v = dx*dvx+dy*dvy;
@@ -56,15 +55,15 @@ __global__ void sph_governing_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         accy = arg->m * ( tmp_acc_v - tmp_acc_p) *cuda->dwdy[id];
 
         drho_j = drho_i;
-        drho_i += 0.01*arg->h*arg->c*2*(cuda->rho[index_i]/cuda->rho[index_j]-1)*arg->m*(dx*cuda->dwdx[id]+dy*cuda->dwdy[id])/(dx*dx+dy*dy);
-        drho_j += 0.01*arg->h*arg->c*2*(cuda->rho[index_j]/cuda->rho[index_i]-1)*arg->m*(dx*cuda->dwdx[id]+dy*cuda->dwdy[id])/(dx*dx+dy*dy); 
+        //drho_i += 0.01*arg->h*arg->c*2*(cuda->rho[index_i]/cuda->rho[index_j]-1)*arg->m*(dx*cuda->dwdx[id]+dy*cuda->dwdy[id])/(dx*dx+dy*dy);
+        //drho_j += 0.01*arg->h*arg->c*2*(cuda->rho[index_j]/cuda->rho[index_i]-1)*arg->m*(dx*cuda->dwdx[id]+dy*cuda->dwdy[id])/(dx*dx+dy*dy); 
         
         atomicAdd(&(cuda->accx[index_i]),accx);
         atomicAdd(&(cuda->accx[index_j]),-accx);
         atomicAdd(&(cuda->accy[index_i]),accy);
         atomicAdd(&(cuda->accy[index_j]),-accy);
-        atomicAdd(&(cuda->drho[index_i]),drho_i);
-        atomicAdd(&(cuda->drho[index_j]),drho_j);
+        atomicAdd(&(cuda->drho[index_i]),drho);
+        atomicAdd(&(cuda->drho[index_j]),drho);
     }
     __syncthreads();
     if( threadIdx.x == 0)cuda->pair_count[mesh_id] = 0;
