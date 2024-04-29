@@ -193,7 +193,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                 {
                     //atomicAdd(&(cuda->pair_count[mesh_id]),1);
                     tmp_count = atomicAdd(&count,1);
-                    if(tmp_count >= arg->pair_volume) printf("Error in %s:%d\n",__FILE__,__LINE__);
+                    if(tmp_count >= arg->pair_volume) printf("Error in %s:%d---%d\n",__FILE__,__LINE__,tmp_count);
                     tmp_count += mesh_id*arg->pair_volume;
                     cuda->pair_i[tmp_count] = index_i;
                     cuda->pair_j[tmp_count] = index_j;
@@ -201,7 +201,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                 else if (cuda->type[index_j] == 0)
                 {
                     tmp_count = atomicAdd(&count,1);
-                    if(tmp_count >= arg->pair_volume) printf("Error in %s:%d\n",__FILE__,__LINE__);
+                    if(tmp_count >= arg->pair_volume) printf("Error in %s:%d---%d\n",__FILE__,__LINE__,tmp_count);
                     tmp_count += mesh_id*arg->pair_volume;
                     cuda->pair_i[tmp_count] = index_j;
                     cuda->pair_j[tmp_count] = index_i;
@@ -223,7 +223,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                     {
                         //atomicAdd(&(cuda->pair_count[mesh_id]),1);
                         tmp_count = atomicAdd(&count,1);
-                        if(tmp_count >= arg->pair_volume) printf("Error in %s:%d\n",__FILE__,__LINE__);
+                        if(tmp_count >= arg->pair_volume) printf("Error in %s:%d---%d\n",__FILE__,__LINE__,tmp_count);
                         tmp_count += mesh_id*arg->pair_volume;
                         cuda->pair_i[tmp_count] = index_i;
                         cuda->pair_j[tmp_count] = index_j;
@@ -231,7 +231,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                     else if (cuda->type[index_j] == 0)
                     {
                         tmp_count = atomicAdd(&count,1);
-                        if(tmp_count >= arg->pair_volume) printf("Error in %s:%d\n",__FILE__,__LINE__);
+                        if(tmp_count >= arg->pair_volume) printf("Error in %s:%d---%d\n",__FILE__,__LINE__,tmp_count);
                         tmp_count += mesh_id*arg->pair_volume;
                         cuda->pair_i[tmp_count] = index_j;
                         cuda->pair_j[tmp_count] = index_i;
@@ -254,7 +254,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                     {
                         //atomicAdd(&(cuda->pair_count[mesh_id]),1);
                         tmp_count = atomicAdd(&count,1);
-                        if(tmp_count >= arg->pair_volume) printf("Error in %s:%d\n",__FILE__,__LINE__);
+                        if(tmp_count >= arg->pair_volume) printf("Error in %s:%d---%d\n",__FILE__,__LINE__,tmp_count);
                         tmp_count += mesh_id*arg->pair_volume;
                         cuda->pair_i[tmp_count] = index_i;
                         cuda->pair_j[tmp_count] = index_j;
@@ -262,7 +262,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                     else if (cuda->type[index_j] == 0)
                     {
                         tmp_count = atomicAdd(&count,1);
-                        if(tmp_count >= arg->pair_volume) printf("Error in %s:%d\n",__FILE__,__LINE__);
+                        if(tmp_count >= arg->pair_volume) printf("Error in %s:%d---%d\n",__FILE__,__LINE__,tmp_count);
                         tmp_count += mesh_id*arg->pair_volume;
                         cuda->pair_i[tmp_count] = index_j;
                         cuda->pair_j[tmp_count] = index_i;
@@ -285,7 +285,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                     {
                         //atomicAdd(&(cuda->pair_count[mesh_id]),1);
                         tmp_count = atomicAdd(&count,1);
-                        if(tmp_count >= arg->pair_volume) printf("Error in %s:%d\n",__FILE__,__LINE__);
+                        if(tmp_count >= arg->pair_volume) printf("Error in %s:%d---%d\n",__FILE__,__LINE__,tmp_count);
                         tmp_count += mesh_id*arg->pair_volume;
                         cuda->pair_i[tmp_count] = index_i;
                         cuda->pair_j[tmp_count] = index_j;
@@ -293,7 +293,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                     else if (cuda->type[index_j] == 0)
                     {
                         tmp_count = atomicAdd(&count,1);
-                        if(tmp_count >= arg->pair_volume) printf("Error in %s:%d\n",__FILE__,__LINE__);
+                        if(tmp_count >= arg->pair_volume) printf("Error in %s:%d---%d\n",__FILE__,__LINE__,tmp_count);
                         tmp_count += mesh_id*arg->pair_volume;
                         cuda->pair_i[tmp_count] = index_j;
                         cuda->pair_j[tmp_count] = index_i;
@@ -316,7 +316,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                     {
                         //atomicAdd(&(cuda->pair_count[mesh_id]),1);
                         tmp_count = atomicAdd(&count,1);
-                        if(tmp_count >= arg->pair_volume) printf("Error in %s:%d\n",__FILE__,__LINE__);
+                        if(tmp_count >= arg->pair_volume) printf("Error in %s:%d---%d\n",__FILE__,__LINE__,tmp_count);
                         tmp_count += mesh_id*arg->pair_volume;
                         cuda->pair_i[tmp_count] = index_i;
                         cuda->pair_j[tmp_count] = index_j;
@@ -324,7 +324,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                     else if (cuda->type[index_j] == 0)
                     {
                         tmp_count = atomicAdd(&count,1);
-                        if(tmp_count >= arg->pair_volume) printf("Error in %s:%d\n",__FILE__,__LINE__);
+                        if(tmp_count >= arg->pair_volume) printf("Error in %s:%d---%d\n",__FILE__,__LINE__,tmp_count);
                         tmp_count += mesh_id*arg->pair_volume;
                         cuda->pair_i[tmp_count] = index_j;
                         cuda->pair_j[tmp_count] = index_i;
