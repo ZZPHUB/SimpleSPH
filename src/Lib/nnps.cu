@@ -208,6 +208,10 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                 }
             }
         }
+    }
+    __syncthreads();
+    if(threadIdx.x < cuda->mesh_count[mesh_id])
+    {
         //(x,y)->(x+1,y)
         if( blockIdx.x < ( gridDim.x-1))
         {
@@ -239,6 +243,10 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                 }
             }
         }
+    }
+    __syncthreads();
+    if(threadIdx.x < cuda->mesh_count[mesh_id])
+    {
         //(x,y)->(x,y+1)
         if( blockIdx.y < ( gridDim.y -1))
         {
@@ -270,6 +278,10 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                 }
             }
         }
+    }
+    __syncthreads();
+    if(threadIdx.x < cuda->mesh_count[mesh_id])
+    {
         //(x,y)->(x+1,y+1)
         if( blockIdx.x<( gridDim.x-1) && blockIdx.y<( gridDim.y-1))
         {
@@ -301,6 +313,10 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                 } 
             }
         }
+    }
+    __syncthreads();
+    if(threadIdx.x < cuda->mesh_count[mesh_id])
+    {
         //(x,y)->(x-1,y+1)
         if( blockIdx.x>0 && blockIdx.y<( gridDim.y-1))
         {
