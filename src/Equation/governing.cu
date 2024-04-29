@@ -13,11 +13,11 @@ __global__ void sph_governing_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     double dy = 0.0;
     double dvx = 0.0;
     double dvy = 0.0;
-    const int mesh_id = blockIdx.x + blockIdx.y * gridDim.x;
+    const int pair_id = ( blockIdx.x + blockIdx.y * gridDim.x) * gridDim.z + blockIdx.z;
     int id = 0;
-    if( threadIdx.x < cuda->pair_count[mesh_id]) 
+    if( threadIdx.x < cuda->pair_count[pair_id]) 
     {
-        id = mesh_id*arg->pair_volume + threadIdx.x;
+        id = pair_id*arg->pair_volume + threadIdx.x;
         index_i = cuda->pair_i[id];
         index_j = cuda->pair_j[id];
 
@@ -66,5 +66,5 @@ __global__ void sph_governing_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         atomicAdd(&(cuda->drho[index_j]),drho);
     }
     __syncthreads();
-    //if( threadIdx.x == 0)cuda->pair_count[mesh_id] = 0;
+    //if( threadIdx.x == 0)cuda->pair_count[pair_id] = 0;
 }

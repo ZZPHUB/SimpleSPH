@@ -156,6 +156,9 @@ typedef struct
 
     int pair_num;   //pair total num
     int pair_volume; //pear mesh's pair num
+    int pair_mesh_num; //5 times of mesh num
+    int pair_list_num; //some times of pair list
+
     int lock;
     int tmp;   //to count some debug tmp num
 

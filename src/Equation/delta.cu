@@ -17,7 +17,7 @@ __global__ void sph_L_init(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
 
 __global__ void sph_L_sum(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
 {
-    const int mesh_id = blockIdx.x + blockIdx.y * gridDim.x;
+    const int pair_id = ( blockIdx.x + blockIdx.y * gridDim.x) * gridDim.z + blockIdx.z;
     int id = 0;
     int index_i = 0;
     int index_j = 0;
@@ -26,9 +26,9 @@ __global__ void sph_L_sum(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     double tmp_Lyx = 0.0;
     double tmp_Lyy = 0.0;
 
-    if( threadIdx.x < cuda->pair_count[mesh_id])
+    if( threadIdx.x < cuda->pair_count[pair_id])
     {
-        id = mesh_id * arg->pair_volume + threadIdx.x;
+        id = pair_id * arg->pair_volume + threadIdx.x;
         index_i = cuda->pair_i[id];
         index_j = cuda->pair_j[id];
 
@@ -81,7 +81,7 @@ __global__ void sph_L_inver(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
 
 __global__ void sph_L_rho(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
 {
-    const int mesh_id = blockIdx.x + blockIdx.y * gridDim.x;
+    const int pair_id = ( blockIdx.x + blockIdx.y * gridDim.x) * gridDim.z + blockIdx.z;
     int id = 0;
     int index_i = 0;
     int index_j = 0;
@@ -89,9 +89,9 @@ __global__ void sph_L_rho(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     double tmp_Lrho_y_i = 0.0;
     double tmp_Lrho_x_j = 0.0;
     double tmp_Lrho_y_j = 0.0;
-    if( threadIdx.x < cuda->pair_count[mesh_id])
+    if( threadIdx.x < cuda->pair_count[pair_id])
     {
-        id = mesh_id * arg->pair_volume + threadIdx.x;
+        id = pair_id * arg->pair_volume + threadIdx.x;
         index_i = cuda->pair_i[id];
         index_j = cuda->pair_j[id];
 
@@ -109,16 +109,16 @@ __global__ void sph_L_rho(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
 
 __global__ void sph_delta_term(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
 {
-    const int mesh_id = blockIdx.x + blockIdx.y * gridDim.x;
+    const int pair_id = ( blockIdx.x + blockIdx.y * gridDim.x) * gridDim.z + blockIdx.z;
     int id = 0;
     int index_i = 0;
     int index_j = 0;
     double drho = 0.0;
     double dx = 0.0;
     double dy = 0.0;
-    if( threadIdx.x < cuda->pair_count[mesh_id])
+    if( threadIdx.x < cuda->pair_count[pair_id])
     {
-        id =mesh_id * arg->pair_volume + threadIdx.x;
+        id =pair_id * arg->pair_volume + threadIdx.x;
         index_i = cuda->pair_i[id];
         index_j = cuda->pair_j[id];
         dx = cuda->x[index_i] - cuda->x[index_j];
@@ -132,13 +132,13 @@ __global__ void sph_delta_term(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         atomicAdd(&(cuda->drho[index_j]),-drho/cuda->rho[index_i]);
     }
     __syncthreads();
-    if( threadIdx.x == 0) cuda->pair_count[mesh_id] = 0;
+    if( threadIdx.x == 0) cuda->pair_count[pair_id] = 0;
 }
 
 void sph_delta_cuda(SPH *sph)
 {
     dim3 pair_block(sph->host_arg->pair_volume);
-    dim3 pair_grid(sph->host_arg->mesh_xnum, sph->host_arg->mesh_ynum);
+    dim3 pair_grid(sph->host_arg->mesh_xnum, sph->host_arg->mesh_ynum,5);
     dim3 ptc_block(256);
     dim3 ptc_grid((int)(sph->host_arg->ptc_num / 256) + 1);
 

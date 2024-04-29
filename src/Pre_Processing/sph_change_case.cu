@@ -60,8 +60,12 @@ int main(int argc,char *argv[])
 
     tmp_sph.host_arg->case_dir = argv[2];
     tmp_arg.rigid_ptc_num = new_rigid_num(&tmp_sph);
-    tmp_arg.pair_volume = (int)(64*tmp_arg.ptc_num/tmp_arg.mesh_num);
+    //tmp_arg.pair_volume = (int)(64*tmp_arg.ptc_num/tmp_arg.mesh_num);
     //tmp_arg.pair_volume = 1024;
+    tmp_arg.pair_list_num = 64*arg.ptc_num;
+    tmp_arg.pair_mesh_num = 5*arg.mesh_num;
+    tmp_arg.pair_volume = (int)(arg.pair_list_num/arg.pair_mesh_num);
+
     tmp_arg.ptc_num = tmp_arg.fluid_ptc_num + tmp_arg.wall_ptc_num + tmp_arg.rigid_ptc_num;
     tmp_particle.x = (double *)calloc(tmp_arg.ptc_num,sizeof(double));
     tmp_particle.y = (double *)calloc(tmp_arg.ptc_num,sizeof(double));
