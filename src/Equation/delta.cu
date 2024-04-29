@@ -34,10 +34,10 @@ __global__ void sph_L_sum(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
 
         //dx = cuda->x[index_i] - cuda->x[index_j];
         //dy = cuda->y[index_i] - cuda->y[index_j];
-        tmp_Lxx = (cuda->x[index_i] - cuda->x[index_j])*cuda->dwdx[id]*arg->m;
-        tmp_Lxy = (cuda->x[index_i] - cuda->x[index_j])*cuda->dwdy[id]*arg->m;
-        tmp_Lyx = (cuda->y[index_i] - cuda->y[index_j])*cuda->dwdx[id]*arg->m;
-        tmp_Lyy = (cuda->y[index_i] - cuda->y[index_j])*cuda->dwdy[id]*arg->m;
+        tmp_Lxx = (cuda->x[index_j] - cuda->x[index_i])*cuda->dwdx[id]*arg->m;
+        tmp_Lxy = (cuda->x[index_j] - cuda->x[index_i])*cuda->dwdy[id]*arg->m;
+        tmp_Lyx = (cuda->y[index_j] - cuda->y[index_i])*cuda->dwdx[id]*arg->m;
+        tmp_Lyy = (cuda->y[index_j] - cuda->y[index_i])*cuda->dwdy[id]*arg->m;
 
         atomicAdd(&(cuda->Lxx[index_i]),tmp_Lxx/cuda->rho[index_j]);
         atomicAdd(&(cuda->Lxy[index_i]),tmp_Lxy/cuda->rho[index_j]);
