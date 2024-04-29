@@ -34,10 +34,10 @@ __global__ void sph_L_sum(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
 
         //dx = cuda->x[index_i] - cuda->x[index_j];
         //dy = cuda->y[index_i] - cuda->y[index_j];
-        tmp_Lxx = (cuda->x[index_i] - cuda->x[index_j])*cuda->dwdx[id]*arg->m;
-        tmp_Lxy = (cuda->x[index_i] - cuda->x[index_j])*cuda->dwdy[id]*arg->m;
-        tmp_Lyx = (cuda->y[index_i] - cuda->y[index_j])*cuda->dwdx[id]*arg->m;
-        tmp_Lyy = (cuda->y[index_i] - cuda->y[index_j])*cuda->dwdy[id]*arg->m;
+        tmp_Lxx = (cuda->x[index_j] - cuda->x[index_i])*cuda->dwdx[id]*arg->m;
+        tmp_Lxy = (cuda->x[index_j] - cuda->x[index_i])*cuda->dwdy[id]*arg->m;
+        tmp_Lyx = (cuda->y[index_j] - cuda->y[index_i])*cuda->dwdx[id]*arg->m;
+        tmp_Lyy = (cuda->y[index_j] - cuda->y[index_i])*cuda->dwdy[id]*arg->m;
 
         atomicAdd(&(cuda->Lxx[index_i]),tmp_Lxx/cuda->rho[index_j]);
         atomicAdd(&(cuda->Lxy[index_i]),tmp_Lxy/cuda->rho[index_j]);
@@ -95,13 +95,13 @@ __global__ void sph_L_rho(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         index_i = cuda->pair_i[id];
         index_j = cuda->pair_j[id];
 
-        tmp_Lrho_x_i = (cuda->rho[index_i]-cuda->rho[index_j])*(cuda->Lxx[index_i]*cuda->dwdx[id] + cuda->Lxy[index_i]*cuda->dwdy[id])*arg->m/cuda->rho[index_j];
-        tmp_Lrho_y_i = (cuda->rho[index_i]-cuda->rho[index_j])*(cuda->Lyx[index_i]*cuda->dwdx[id] + cuda->Lyy[index_i]*cuda->dwdy[id])*arg->m/cuda->rho[index_j];
+        tmp_Lrho_x_i = (cuda->rho[index_j]-cuda->rho[index_i])*(cuda->Lxx[index_i]*cuda->dwdx[id] + cuda->Lxy[index_i]*cuda->dwdy[id])*arg->m/cuda->rho[index_j];
+        tmp_Lrho_y_i = (cuda->rho[index_j]-cuda->rho[index_i])*(cuda->Lyx[index_i]*cuda->dwdx[id] + cuda->Lyy[index_i]*cuda->dwdy[id])*arg->m/cuda->rho[index_j];
         atomicAdd(&(cuda->Lrho_x[index_i]),tmp_Lrho_x_i);
         atomicAdd(&(cuda->Lrho_y[index_i]),tmp_Lrho_y_i);
 
-        tmp_Lrho_x_j = (cuda->rho[index_i]-cuda->rho[index_j])*(cuda->Lxx[index_j]*cuda->dwdx[id] + cuda->Lxy[index_j]*cuda->dwdy[id])*arg->m/cuda->rho[index_i];
-        tmp_Lrho_y_j = (cuda->rho[index_i]-cuda->rho[index_j])*(cuda->Lyx[index_j]*cuda->dwdx[id] + cuda->Lyy[index_j]*cuda->dwdy[id])*arg->m/cuda->rho[index_i];
+        tmp_Lrho_x_j = (cuda->rho[index_j]-cuda->rho[index_i])*(cuda->Lxx[index_j]*cuda->dwdx[id] + cuda->Lxy[index_j]*cuda->dwdy[id])*arg->m/cuda->rho[index_i];
+        tmp_Lrho_y_j = (cuda->rho[index_j]-cuda->rho[index_i])*(cuda->Lyx[index_j]*cuda->dwdx[id] + cuda->Lyy[index_j]*cuda->dwdy[id])*arg->m/cuda->rho[index_i];
         atomicAdd(&(cuda->Lrho_x[index_j]),tmp_Lrho_x_j);
         atomicAdd(&(cuda->Lrho_y[index_j]),tmp_Lrho_y_j);
     }
