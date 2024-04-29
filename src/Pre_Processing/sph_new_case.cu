@@ -67,9 +67,9 @@ void get_input(SPH *sph)
     cout << "particle spacing (ptc_dx) is:" << endl;
     cin >> arg->ptc_dx;
 
-    arg->h = 1.0005*arg->ptc_dx;
+    arg->h = 2.0*arg->ptc_dx;
     arg->r = 2.0*arg->h;
-    arg->wall_layer = 2;
+    arg->wall_layer = 4;
     arg->fluid_xnum = (int)(arg->fluid_x/arg->ptc_dx)+1-2*arg->wall_layer;
     arg->fluid_ynum = (int)(arg->fluid_y/arg->ptc_dx)+1-arg->wall_layer;
 
