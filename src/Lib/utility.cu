@@ -59,7 +59,10 @@ __global__ void sph_check_rho(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     {
         if(cuda->type[id] != 0)
         {
-            if(cuda->rho[id] < arg->ref_rho) cuda->rho[id] == arg->ref_rho;
+            if(cuda->rho[id] < arg->ref_rho) 
+            {
+                cuda->rho[id] = arg->ref_rho;
+                cuda->p[id] = 0.0;
         }
     }
 }
