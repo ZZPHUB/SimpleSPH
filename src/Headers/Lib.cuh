@@ -6,7 +6,7 @@
 #include "SPH.cuh"
 
 /* Extern Function Here*/
-extern __global__ void sph_mesh_cuda(SPH_CUDA *,SPH_ARG *);
+extern __global__ void sph_mesh_cuda(SPH_CUDA *,SPH_ARG *,SPH_RIGID *);
 extern __global__ void sph_nnps_cuda(SPH_CUDA *,SPH_ARG *,SPH_RIGID *);
 extern __global__ void sph_dummy_cuda(SPH_CUDA *,SPH_ARG *,SPH_RIGID *);
 extern __global__ void sph_kernel_cuda(SPH_CUDA *,SPH_ARG *,SPH_RIGID *);

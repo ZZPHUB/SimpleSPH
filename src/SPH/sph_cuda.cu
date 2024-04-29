@@ -50,7 +50,7 @@ int main(int argc,char *argv[])
         printf("current step is:%d ", sph.host_arg->init_step);
 
         //mesh
-        sph_mesh_cuda<<<ptc_grid, ptc_block>>>(sph.cuda, sph.dev_arg);
+        sph_mesh_cuda<<<ptc_grid, ptc_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
         if (sph.host_arg->init_step % sph.host_arg->print_step == 2 && sph.host_arg->init_impac_flag == 0)
         {
             sph_write_csv(&sph);
@@ -91,7 +91,7 @@ int main(int argc,char *argv[])
 
 
         //mesh
-        sph_mesh_cuda<<<ptc_grid, ptc_block>>>(sph.cuda, sph.dev_arg);
+        sph_mesh_cuda<<<ptc_grid, ptc_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
         cudaDeviceSynchronize();
 
         //nnps
