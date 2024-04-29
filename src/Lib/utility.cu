@@ -50,5 +50,4 @@ __global__ void sph_dummy_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         }   
     }
     __syncthreads();
-    if( threadIdx.x == 0)cuda->pair_count[mesh_id] = 0;
 }

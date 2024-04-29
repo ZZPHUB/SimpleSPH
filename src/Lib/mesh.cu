@@ -8,9 +8,20 @@ __global__ void sph_mesh_cuda(SPH_CUDA *cuda,SPH_ARG *arg)
     if(id >= arg->ptc_num) return;
 
     /*这里需要进行加速度和密度变化的初始化*/
+    
+    if(cuda->type[id] == 0)
+    {
+        cuda->accy[id] = -arg->g;
+    }
+    else 
+    {
+        cuda->accy[id] = 0.0;
+        cuda->p[id] = 0.0;
+        cuda->rho[id] = arg->ref_rho;
+        cuda->vx[id] = 0.0;
+        cuda->vy[id] = 0.0;
+    }
     cuda->accx[id] = 0.0;
-    if(cuda->type[id] == 0)cuda->accy[id] = -arg->g;
-    else cuda->accy[id] = 0.0;
     cuda->drho[id] = 0.0;
     cuda->ptc_w[id] = 0.0;
 
@@ -21,6 +32,8 @@ __global__ void sph_mesh_cuda(SPH_CUDA *cuda,SPH_ARG *arg)
         printf("the pair num is:%d \n",arg->pair_num);
         arg->tmp = 0;
         arg->pair_num = 0;
+        rigid->cogx = cuda->x[rigid->cog_ptc_id];
+        rigid->cogy = cuda->y[rigid->cog_ptc_id];
     }
 
     int mid = 0;

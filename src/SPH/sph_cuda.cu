@@ -48,44 +48,82 @@ int main(int argc,char *argv[])
     for (sph.host_arg->init_step; sph.host_arg->init_step < sph.host_arg->total_step; sph.host_arg->init_step++)
     {
         printf("current step is:%d ", sph.host_arg->init_step);
+
+        //mesh
         sph_mesh_cuda<<<ptc_grid, ptc_block>>>(sph.cuda, sph.dev_arg);
         if (sph.host_arg->init_step % sph.host_arg->print_step == 2 && sph.host_arg->init_impac_flag == 0)
         {
             sph_write_csv(&sph);
         }
         cudaDeviceSynchronize();
+        
+        //nnps
         sph_nnps_cuda<<<mesh_grid, mesh_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
         if (sph.host_arg->init_step % sph.host_arg->print_step == 1)
         {
             sph_save_single(&sph);
         }
         cudaDeviceSynchronize();
+
+        //kernel
         sph_kernel_cuda<<<pair_grid, pair_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
         cudaDeviceSynchronize();
-        sph_governing_cuda<<<pair_grid, pair_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
-        cudaDeviceSynchronize();
-        sph_predict_cuda<<<ptc_grid, ptc_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
-        cudaDeviceSynchronize();
+
+        //dummy
         sph_dummy_cuda<<<pair_grid, pair_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
         cudaDeviceSynchronize();
 
-        sph_mesh_cuda<<<ptc_grid, ptc_block>>>(sph.cuda, sph.dev_arg);
-        cudaDeviceSynchronize();
-        sph_nnps_cuda<<<mesh_grid, mesh_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
-        cudaDeviceSynchronize();
-        sph_kernel_cuda<<<pair_grid, pair_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
-        cudaDeviceSynchronize();
+        //governing
         sph_governing_cuda<<<pair_grid, pair_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
         cudaDeviceSynchronize();
-        sph_correct_cuda<<<ptc_grid, ptc_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
-        cudaDeviceSynchronize();
-        sph_dummy_cuda<<<pair_grid, pair_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
-        cudaDeviceSynchronize();
+
+        //rigid
         if(sph.host_arg->init_impac_flag == 0)
         {
             sph_rigid_cuda<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
             cudaDeviceSynchronize();
         }
+
+        //predict
+        sph_predict_cuda<<<ptc_grid, ptc_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
+        cudaDeviceSynchronize();
+        
+
+
+        //mesh
+        sph_mesh_cuda<<<ptc_grid, ptc_block>>>(sph.cuda, sph.dev_arg);
+        cudaDeviceSynchronize();
+
+        //nnps
+        sph_nnps_cuda<<<mesh_grid, mesh_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
+        cudaDeviceSynchronize();
+
+        //kernel
+        sph_kernel_cuda<<<pair_grid, pair_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
+        cudaDeviceSynchronize();
+
+        //dummy
+        sph_dummy_cuda<<<pair_grid, pair_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
+        cudaDeviceSynchronize();
+
+        //governing
+        sph_governing_cuda<<<pair_grid, pair_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
+        cudaDeviceSynchronize();
+
+        //rigid
+        if(sph.host_arg->init_impac_flag == 0)
+        {
+            sph_rigid_cuda<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
+            cudaDeviceSynchronize();
+        }
+
+        //correct
+        sph_correct_cuda<<<ptc_grid, ptc_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
+        cudaDeviceSynchronize();
+
+
+
+        
         
 
         if (sph.host_arg->init_step % sph.host_arg->print_step == 0)
@@ -161,17 +199,13 @@ __global__ void sph_predict_cuda(SPH_CUDA *cuda, SPH_ARG *arg, SPH_RIGID *rigid)
             cuda->vx[id] += cuda->accx[id] * arg->dt * 0.5;
             cuda->vy[id] += cuda->accy[id] * arg->dt * 0.5;
             cuda->rho[id] += cuda->drho[id] * arg->dt * 0.5;
-            if (cuda->rho[id] < arg->ref_rho)
-                cuda->rho[id] = arg->ref_rho;
+            if (cuda->rho[id] < arg->ref_rho) cuda->rho[id] = arg->ref_rho;
             cuda->p[id] = arg->c * arg->c * (cuda->rho[id] - arg->ref_rho);
         }
-        else
+        else if (cuda->type[id] == 1)
         {
-            cuda->p[id] = 0.0;
-            cuda->rho[id] = 0.0;
-            cuda->vx[id] = 0.0;
-            cuda->vy[id] = 0.0;
-            cuda->rho[id] = arg->ref_rho;
+            cuda->x[id] = cuda->temp_x[id] + arg->dt*0.5*(rigid->vx - rigid->omega*(cuda->y[id]-rigid->cogy));
+            cuda->y[id] = cuda->temp_y[id] + arg->dt*0.5*(rigid->vy + rigid->omega*(cuda->x[id]-rigid->cogx));
         }
     }
 }
@@ -188,27 +222,13 @@ __global__ void sph_correct_cuda(SPH_CUDA *cuda, SPH_ARG *arg, SPH_RIGID *rigid)
             cuda->vx[id] = cuda->temp_vx[id] + cuda->accx[id] * arg->dt;
             cuda->vy[id] = cuda->temp_vy[id] + cuda->accy[id] * arg->dt;
             cuda->rho[id] = cuda->temp_rho[id] + cuda->drho[id] * arg->dt;
-            if (cuda->rho[id] < arg->ref_rho)
-                cuda->rho[id] = arg->ref_rho;
+            if (cuda->rho[id] < arg->ref_rho) cuda->rho[id] = arg->ref_rho;
             cuda->p[id] = arg->c * arg->c * (cuda->rho[id] - arg->ref_rho);
         }
         else if(cuda->type[id] == 1)
         {
-            cuda->p[id] = 0.0;
-            cuda->rho[id] = 0.0;
-            cuda->vx[id] = 0.0;
-            cuda->vy[id] = 0.0;
-            cuda->rho[id] = arg->ref_rho;
-            cuda->x[id] = cuda->temp_x[id] + arg->dt*(rigid->vx - rigid->omega*(cuda->y[id]-rigid->cogy));
-            cuda->y[id] = cuda->temp_y[id] + arg->dt*(rigid->vy + rigid->omega*(cuda->x[id]-rigid->cogx));
-        }
-        else if(cuda->type[id] == -1)
-        {
-            cuda->p[id] = 0.0;
-            cuda->rho[id] = 0.0;
-            cuda->vx[id] = 0.0;
-            cuda->vy[id] = 0.0;
-            cuda->rho[id] = arg->ref_rho;
+            cuda->x[id] = cuda->temp_x[id] + arg->dt*0.5*(rigid->vx - rigid->omega*(cuda->y[id]-rigid->cogy));
+            cuda->y[id] = cuda->temp_y[id] + arg->dt*0.5*(rigid->vy + rigid->omega*(cuda->x[id]-rigid->cogx));
         }
     }
 }
@@ -224,9 +244,9 @@ __global__ void sph_rigid_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         rigid->accx = 0.0;
         rigid->accy = -arg->g;
         rigid->alpha = 0.0;
-        rigid->cogx = cuda->x[rigid->cog_ptc_id];
-        rigid->cogy = cuda->y[rigid->cog_ptc_id];
-        rigid->vy += -arg->g*arg->dt;
+        //rigid->cogx = cuda->x[rigid->cog_ptc_id];
+        //rigid->cogy = cuda->y[rigid->cog_ptc_id];
+        rigid->vy += -arg->g*arg->dt*0.5;
     }
     if(threadIdx.x == 0)
     {
@@ -250,9 +270,9 @@ __global__ void sph_rigid_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         atomicAdd(&(rigid->accx),accx);
         atomicAdd(&(rigid->accy),accy);
         atomicAdd(&(rigid->alpha),alpha);
-        atomicAdd(&(rigid->vx),accx*arg->dt);
-        atomicAdd(&(rigid->vy),accy*arg->dt);
-        atomicAdd(&(rigid->omega),alpha*arg->dt);
+        atomicAdd(&(rigid->vx),accx*arg->dt*0.5);
+        atomicAdd(&(rigid->vy),accy*arg->dt*0.5);
+        atomicAdd(&(rigid->omega),alpha*arg->dt*0.5);
     }
     __syncthreads();
 }
