@@ -68,6 +68,8 @@ int main(int argc,char *argv[])
         //kernel
         sph_kernel_cuda<<<pair_grid, pair_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
         cudaDeviceSynchronize();
+        sph_sum_w<<<pair_grid,pair_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
+        cudaDeviceSynchronize();
 
         //dummy
         sph_dummy_cuda<<<pair_grid, pair_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
@@ -81,7 +83,7 @@ int main(int argc,char *argv[])
         sph_delta_cuda(&sph);
         
         //sponge
-        sph_sponge_cuda<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
+        //sph_sponge_cuda<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
 
         //rigid
         if(sph.host_arg->init_impac_flag == 0)
@@ -91,8 +93,8 @@ int main(int argc,char *argv[])
         }
 
         //predict
-        sph_predict_cuda<<<ptc_grid, ptc_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
-        cudaDeviceSynchronize();
+        //sph_predict_cuda<<<ptc_grid, ptc_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
+        //cudaDeviceSynchronize();
         
 
 
@@ -107,6 +109,8 @@ int main(int argc,char *argv[])
         //kernel
         sph_kernel_cuda<<<pair_grid, pair_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
         cudaDeviceSynchronize();
+        sph_sum_w<<<pair_grid,pair_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
+        cudaDeviceSynchronize();
 
         //dummy
         sph_dummy_cuda<<<pair_grid, pair_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
@@ -120,7 +124,7 @@ int main(int argc,char *argv[])
         sph_delta_cuda(&sph);
 
         //sponge
-        sph_sponge_cuda<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
+        //sph_sponge_cuda<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
 
         //rigid
         if(sph.host_arg->init_impac_flag == 0)
@@ -130,8 +134,8 @@ int main(int argc,char *argv[])
         }
 
         //correct
-        sph_correct_cuda<<<ptc_grid, ptc_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
-        cudaDeviceSynchronize();
+        //sph_correct_cuda<<<ptc_grid, ptc_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
+        //cudaDeviceSynchronize();
 
 
 

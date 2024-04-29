@@ -44,14 +44,14 @@ void sph_init(SPH *sph)
     particle->type = (int *)(calloc(arg->ptc_num,sizeof(int)));  
 
     //kernel data init
-    kernel->w = (double *)(calloc(arg->pair_volume * arg->mesh_num,sizeof(double)));  //this code donnot use kernel value
-    kernel->dwdx = (double *)(calloc(arg->pair_volume * arg->mesh_num,sizeof(double)));
-    kernel->dwdy = (double *)(calloc(arg->pair_volume * arg->mesh_num,sizeof(double)));
+    kernel->w = (double *)(calloc(32*arg->ptc_num,sizeof(double)));  //this code donnot use kernel value
+    kernel->dwdx = (double *)(calloc(32*arg->ptc_num,sizeof(double)));
+    kernel->dwdy = (double *)(calloc(32*arg->ptc_num,sizeof(double)));
    
     //pair data init
     pair->total = 0; 
-    pair->i = (unsigned int *)(calloc(arg->pair_volume * arg->mesh_num,sizeof(unsigned int)));
-    pair->j = (unsigned int *)(calloc(arg->pair_volume * arg->mesh_num,sizeof(unsigned int)));
+    pair->i = (unsigned int *)(calloc(32*arg->ptc_num,sizeof(unsigned int)));
+    pair->j = (unsigned int *)(calloc(32*arg->ptc_num,sizeof(unsigned int)));
 
     //mesh data init
     mesh->ptc = (int *)calloc(sph->host_arg->mesh_num*sph->host_arg->mesh_volume,sizeof(int));
@@ -91,11 +91,11 @@ void sph_init(SPH *sph)
     cudaMalloc(&(temp_cuda->Lrho_x),arg->ptc_num*sizeof(double));
     cudaMalloc(&(temp_cuda->Lrho_y),arg->ptc_num*sizeof(double));
 
-    cudaMalloc(&(temp_cuda->pair_w),arg->pair_volume * arg->mesh_num*sizeof(double));
-    cudaMalloc(&(temp_cuda->dwdx),arg->pair_volume * arg->mesh_num*sizeof(double));
-    cudaMalloc(&(temp_cuda->dwdy),arg->pair_volume * arg->mesh_num*sizeof(double));
-    cudaMalloc(&(temp_cuda->pair_i),arg->pair_volume * arg->mesh_num*sizeof(int));
-    cudaMalloc(&(temp_cuda->pair_j),arg->pair_volume * arg->mesh_num*sizeof(int));
+    cudaMalloc(&(temp_cuda->pair_w),32*arg->ptc_num*sizeof(double));
+    cudaMalloc(&(temp_cuda->dwdx),32*arg->ptc_num*sizeof(double));
+    cudaMalloc(&(temp_cuda->dwdy),32*arg->ptc_num*sizeof(double));
+    cudaMalloc(&(temp_cuda->pair_i),32*arg->ptc_num*sizeof(int));
+    cudaMalloc(&(temp_cuda->pair_j),32*arg->ptc_num*sizeof(int));
     cudaMalloc(&(temp_cuda->pair_count),sph->host_arg->mesh_num*sizeof(int));
     cudaMalloc(&(temp_cuda->mesh),sph->host_arg->mesh_num*sph->host_arg->mesh_volume*sizeof(int));
     cudaMalloc(&(temp_cuda->mesh_count),sph->host_arg->mesh_num*sizeof(int));
@@ -124,11 +124,11 @@ void sph_init(SPH *sph)
     cudaMemset(temp_cuda->Lrho_x,0,arg->ptc_num*sizeof(double));
     cudaMemset(temp_cuda->Lrho_y,0,arg->ptc_num*sizeof(double));
 
-    cudaMemset(temp_cuda->pair_w,0,arg->pair_volume * arg->mesh_num*sizeof(double));
-    cudaMemset(temp_cuda->dwdx,0,arg->pair_volume * arg->mesh_num*sizeof(double));
-    cudaMemset(temp_cuda->dwdy,0,arg->pair_volume * arg->mesh_num*sizeof(double));
-    cudaMemset(temp_cuda->pair_i,0,arg->pair_volume * arg->mesh_num*sizeof(int));
-    cudaMemset(temp_cuda->pair_j,0,arg->pair_volume * arg->mesh_num*sizeof(int));
+    cudaMemset(temp_cuda->pair_w,0,32*arg->ptc_num*sizeof(double));
+    cudaMemset(temp_cuda->dwdx,0,32*arg->ptc_num*sizeof(double));
+    cudaMemset(temp_cuda->dwdy,0,32*arg->ptc_num*sizeof(double));
+    cudaMemset(temp_cuda->pair_i,0,32*arg->ptc_num*sizeof(int));
+    cudaMemset(temp_cuda->pair_j,0,32*arg->ptc_num*sizeof(int));
     cudaMemset(temp_cuda->pair_count,0,sph->host_arg->mesh_num*sizeof(int));
     cudaMemset(temp_cuda->mesh,0,sph->host_arg->mesh_num*sph->host_arg->mesh_volume*sizeof(int));
     cudaMemset(temp_cuda->mesh_count,0,sph->host_arg->mesh_num*sizeof(int));

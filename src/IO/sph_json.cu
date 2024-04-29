@@ -34,6 +34,8 @@ void sph_read_info(SPH *sph)
     arg->mesh_volume = sph_info["mesh"]["volume"];
 
     arg->pair_volume = sph_info["pair"]["volume"];
+    if(arg->pair_volume > 1024) printf("Error in %s:%d----%d\n",__FILE__,__LINE__,arg->pair_volume);
+    assert(arg->pair_volume <= 1024);
 
     arg->c = sph_info["arg"]["c"];
     arg->h = sph_info["arg"]["h"];

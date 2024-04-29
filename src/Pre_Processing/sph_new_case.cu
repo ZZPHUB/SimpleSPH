@@ -36,8 +36,8 @@ int main(int argc,char *argv[])
     arg.case_dir = argv[1];
     get_input(&sph);
     get_rigid_num(&sph);
-    //arg.pair_volume = (int)(64*arg.ptc_num/arg.mesh_num);
-    arg.pair_volume = 1024;
+    arg.pair_volume = (int)(64*arg.ptc_num/arg.mesh_num);
+    //arg.pair_volume = 1024;
     particle.x = (double *)calloc(arg.ptc_num,sizeof(double));
     particle.y = (double *)calloc(arg.ptc_num,sizeof(double));
     particle.type = (int *)calloc(arg.ptc_num,sizeof(int));
