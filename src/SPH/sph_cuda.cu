@@ -72,6 +72,8 @@ int main(int argc,char *argv[])
         //dummy
         sph_dummy_cuda<<<pair_grid, pair_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
         cudaDeviceSynchronize();
+        sph_check_rho<<<ptc_grid,ptc_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
+        cudaDeviceSynchronize();
 
         //governing
         sph_governing_cuda<<<pair_grid, pair_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
@@ -104,6 +106,8 @@ int main(int argc,char *argv[])
 
         //dummy
         sph_dummy_cuda<<<pair_grid, pair_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
+        cudaDeviceSynchronize();
+        sph_check_rho<<<ptc_grid,ptc_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
         cudaDeviceSynchronize();
 
         //governing
