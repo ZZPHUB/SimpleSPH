@@ -84,6 +84,12 @@ void sph_init(SPH *sph)
     cudaMalloc(&(temp_cuda->p),arg->ptc_num*sizeof(double));
     cudaMalloc(&(temp_cuda->type),arg->ptc_num*sizeof(int));
     cudaMalloc(&(temp_cuda->ptc_w),arg->ptc_num*sizeof(double));
+    cudaMalloc(&(temp_cuda->Lxx),arg->ptc_num*sizeof(double));
+    cudaMalloc(&(temp_cuda->Lxy),arg->ptc_num*sizeof(double));
+    cudaMalloc(&(temp_cuda->Lyx),arg->ptc_num*sizeof(double));
+    cudaMalloc(&(temp_cuda->Lyy),arg->ptc_num*sizeof(double));
+    cudaMalloc(&(temp_cuda->Lrho_x),arg->ptc_num*sizeof(double));
+    cudaMalloc(&(temp_cuda->Lrho_y),arg->ptc_num*sizeof(double));
 
     cudaMalloc(&(temp_cuda->pair_w),32*arg->ptc_num*sizeof(double));
     cudaMalloc(&(temp_cuda->dwdx),32*arg->ptc_num*sizeof(double));
@@ -111,6 +117,12 @@ void sph_init(SPH *sph)
     cudaMemset(temp_cuda->temp_vy,0,arg->ptc_num*sizeof(double));
     cudaMemset(temp_cuda->temp_rho,0,arg->ptc_num*sizeof(double));
     cudaMemset(temp_cuda->ptc_w,0,arg->ptc_num*sizeof(double));
+    cudaMemset(temp_cuda->Lxx,0,arg->ptc_num*sizeof(double));
+    cudaMemset(temp_cuda->Lxy,0,arg->ptc_num*sizeof(double));
+    cudaMemset(temp_cuda->Lyx,0,arg->ptc_num*sizeof(double));
+    cudaMemset(temp_cuda->Lyy,0,arg->ptc_num*sizeof(double));
+    cudaMemset(temp_cuda->Lrho_x,0,arg->ptc_num*sizeof(double));
+    cudaMemset(temp_cuda->Lrho_y,0,arg->ptc_num*sizeof(double));
 
     cudaMemset(temp_cuda->pair_w,0,32*arg->ptc_num*sizeof(double));
     cudaMemset(temp_cuda->dwdx,0,32*arg->ptc_num*sizeof(double));

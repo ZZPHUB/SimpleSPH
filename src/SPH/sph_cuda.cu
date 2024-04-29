@@ -78,6 +78,7 @@ int main(int argc,char *argv[])
         //governing
         sph_governing_cuda<<<pair_grid, pair_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
         cudaDeviceSynchronize();
+        sph_delta_cuda(&sph);
 
         //rigid
         if(sph.host_arg->init_impac_flag == 0)
@@ -113,6 +114,7 @@ int main(int argc,char *argv[])
         //governing
         sph_governing_cuda<<<pair_grid, pair_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
         cudaDeviceSynchronize();
+        sph_delta_cuda(&sph);
 
         //rigid
         if(sph.host_arg->init_impac_flag == 0)

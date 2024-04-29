@@ -92,6 +92,13 @@ typedef struct
     double *temp_vy;
     double *temp_rho;
 
+    double *Lxx;
+    double *Lxy;
+    double *Lyx;
+    double *Lyy;
+    double *Lrho_x;
+    double *Lrho_y;
+
     int *mesh;
     int *mesh_count;
 
