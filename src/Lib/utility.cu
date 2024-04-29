@@ -63,6 +63,7 @@ __global__ void sph_check_rho(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
             {
                 cuda->rho[id] = arg->ref_rho;
                 cuda->p[id] = 0.0;
+            }
         }
     }
 }
