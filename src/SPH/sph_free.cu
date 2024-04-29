@@ -18,14 +18,6 @@ void sph_free(SPH *sph)
     cudaFree(cuda->y);
     cudaFree(cuda->vx);
     cudaFree(cuda->vy);
-    cudaFree(cuda->Lxx);
-    cudaFree(cuda->Lxy);
-    cudaFree(cuda->Lyx);
-    cudaFree(cuda->Lyy);
-    cudaFree(cuda->Lrho_x);
-    cudaFree(cuda->Lrho_y);
-    cudaFree(cuda->pair_count);
-    cudaFree(cuda->vy);
     cudaFree(cuda->temp_x);
     cudaFree(cuda->temp_y);
     cudaFree(cuda->temp_vx);

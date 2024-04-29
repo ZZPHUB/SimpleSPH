@@ -162,13 +162,11 @@ void sph_nnps_cpu(SPH *sph)
 
 __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
 {
-    //blockIdx.x -> mesh x direction && pair x direction
-    //blockIdx.y -> mesh y direction && pair y direction
-    //blockIdx.z -> pair z direction
+    //blockIdx.x -> mesh x direction
+    //blockIdx.y -> mesh y direction
     //threadIdx.x -> local mesh index
     //threadIdx.y -> near mesh index
     const int mesh_id = blockIdx.x + blockIdx.y * gridDim.x;
-    const int pair_id = mesh_id * gridDim.z + blockIdx.z;
     int index_i = 0;
     int index_j = 0;
     double dx = 0.0;
@@ -179,7 +177,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     if(threadIdx.x == 0 && threadIdx.y == 0) count=0;
     __syncthreads();
     
-    if( blockIdx.z == 0 && threadIdx.x < cuda->mesh_count[mesh_id])
+    if(threadIdx.x < cuda->mesh_count[mesh_id])
     {
         index_i = cuda->mesh[mesh_id + threadIdx.x*arg->mesh_num];
         //(x,y)->(x,y)
@@ -196,27 +194,29 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                     //atomicAdd(&(cuda->pair_count[mesh_id]),1);
                     tmp_count = atomicAdd(&count,1);
                     if(tmp_count >= arg->pair_volume) printf("Error in %s:%d---%d\n",__FILE__,__LINE__,tmp_count);
-                    tmp_count += pair_id * arg->pair_volume;
+                    tmp_count += mesh_id*arg->pair_volume;
                     cuda->pair_i[tmp_count] = index_i;
                     cuda->pair_j[tmp_count] = index_j;
+                    //atomicExch(&(cuda->pair_i[tmp_count]),index_i);
+                    //atomicExch(&(cuda->pair_j[tmp_count]),index_j);
                 }
                 else if (cuda->type[index_j] == 0)
                 {
                     tmp_count = atomicAdd(&count,1);
                     if(tmp_count >= arg->pair_volume) printf("Error in %s:%d---%d\n",__FILE__,__LINE__,tmp_count);
-                    tmp_count += pair_id * arg->pair_volume;
+                    tmp_count += mesh_id*arg->pair_volume;
                     cuda->pair_i[tmp_count] = index_j;
                     cuda->pair_j[tmp_count] = index_i;
+                    //atomicExch(&(cuda->pair_i[tmp_count]),index_j);
+                    //atomicExch(&(cuda->pair_j[tmp_count]),index_i);
                 }
             }
         }
     }
     __syncthreads();
-
-    if( blockIdx.z == 1 && threadIdx.x < cuda->mesh_count[mesh_id])
+    if(threadIdx.x < cuda->mesh_count[mesh_id])
     {
         //(x,y)->(x+1,y)
-        index_i = cuda->mesh[mesh_id + threadIdx.x*arg->mesh_num];
         if( blockIdx.x < ( gridDim.x-1))
         {
             if( threadIdx.y < cuda->mesh_count[mesh_id+1])
@@ -232,28 +232,30 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                         //atomicAdd(&(cuda->pair_count[mesh_id]),1);
                         tmp_count = atomicAdd(&count,1);
                         if(tmp_count >= arg->pair_volume) printf("Error in %s:%d---%d\n",__FILE__,__LINE__,tmp_count);
-                        tmp_count += pair_id * arg->pair_volume;
+                        tmp_count += mesh_id*arg->pair_volume;
                         cuda->pair_i[tmp_count] = index_i;
                         cuda->pair_j[tmp_count] = index_j;
+                        //atomicExch(&(cuda->pair_i[tmp_count]),index_i);
+                        //atomicExch(&(cuda->pair_j[tmp_count]),index_j);
                     }
                     else if (cuda->type[index_j] == 0)
                     {
                         tmp_count = atomicAdd(&count,1);
                         if(tmp_count >= arg->pair_volume) printf("Error in %s:%d---%d\n",__FILE__,__LINE__,tmp_count);
-                        tmp_count += pair_id * arg->pair_volume;
+                        tmp_count += mesh_id*arg->pair_volume;
                         cuda->pair_i[tmp_count] = index_j;
                         cuda->pair_j[tmp_count] = index_i;
+                        //atomicExch(&(cuda->pair_i[tmp_count]),index_j);
+                        //atomicExch(&(cuda->pair_j[tmp_count]),index_i);
                     }
                 }
             }
         }
     }
-
     __syncthreads();
-    if( blockIdx.z == 2 && threadIdx.x < cuda->mesh_count[mesh_id])
+    if(threadIdx.x < cuda->mesh_count[mesh_id])
     {
         //(x,y)->(x,y+1)
-        index_i = cuda->mesh[mesh_id + threadIdx.x*arg->mesh_num];
         if( blockIdx.y < ( gridDim.y -1))
         {
             if( threadIdx.y < cuda->mesh_count[mesh_id+ gridDim.x])
@@ -269,28 +271,30 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                         //atomicAdd(&(cuda->pair_count[mesh_id]),1);
                         tmp_count = atomicAdd(&count,1);
                         if(tmp_count >= arg->pair_volume) printf("Error in %s:%d---%d\n",__FILE__,__LINE__,tmp_count);
-                        tmp_count += pair_id * arg->pair_volume;
+                        tmp_count += mesh_id*arg->pair_volume;
                         cuda->pair_i[tmp_count] = index_i;
                         cuda->pair_j[tmp_count] = index_j;
+                        //atomicExch(&(cuda->pair_i[tmp_count]),index_i);
+                        //atomicExch(&(cuda->pair_j[tmp_count]),index_j);
                     }
                     else if (cuda->type[index_j] == 0)
                     {
                         tmp_count = atomicAdd(&count,1);
                         if(tmp_count >= arg->pair_volume) printf("Error in %s:%d---%d\n",__FILE__,__LINE__,tmp_count);
-                        tmp_count += pair_id * arg->pair_volume;
+                        tmp_count += mesh_id*arg->pair_volume;
                         cuda->pair_i[tmp_count] = index_j;
                         cuda->pair_j[tmp_count] = index_i;
+                        //atomicExch(&(cuda->pair_i[tmp_count]),index_j);
+                        //atomicExch(&(cuda->pair_j[tmp_count]),index_i);
                     }
                 }
             }
         }
     }
     __syncthreads();
-
-    if( blockIdx.z == 3 && threadIdx.x < cuda->mesh_count[mesh_id])
+    if(threadIdx.x < cuda->mesh_count[mesh_id])
     {
         //(x,y)->(x+1,y+1)
-        index_i = cuda->mesh[mesh_id + threadIdx.x*arg->mesh_num];
         if( blockIdx.x<( gridDim.x-1) && blockIdx.y<( gridDim.y-1))
         {
             if(threadIdx.y < cuda->mesh_count[mesh_id+ 1+ gridDim.x])
@@ -306,28 +310,30 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                         //atomicAdd(&(cuda->pair_count[mesh_id]),1);
                         tmp_count = atomicAdd(&count,1);
                         if(tmp_count >= arg->pair_volume) printf("Error in %s:%d---%d\n",__FILE__,__LINE__,tmp_count);
-                        tmp_count += pair_id * arg->pair_volume;
+                        tmp_count += mesh_id*arg->pair_volume;
                         cuda->pair_i[tmp_count] = index_i;
                         cuda->pair_j[tmp_count] = index_j;
+                        //atomicExch(&(cuda->pair_i[tmp_count]),index_i);
+                        //atomicExch(&(cuda->pair_j[tmp_count]),index_j);
                     }
                     else if (cuda->type[index_j] == 0)
                     {
                         tmp_count = atomicAdd(&count,1);
                         if(tmp_count >= arg->pair_volume) printf("Error in %s:%d---%d\n",__FILE__,__LINE__,tmp_count);
-                        tmp_count += pair_id * arg->pair_volume;
+                        tmp_count += mesh_id*arg->pair_volume;
                         cuda->pair_i[tmp_count] = index_j;
                         cuda->pair_j[tmp_count] = index_i;
+                        //atomicExch(&(cuda->pair_i[tmp_count]),index_j);
+                        //atomicExch(&(cuda->pair_j[tmp_count]),index_i);
                     }
                 } 
             }
         }
     }
     __syncthreads();
-
-    if( blockIdx.z == 4 && threadIdx.x < cuda->mesh_count[mesh_id])
+    if(threadIdx.x < cuda->mesh_count[mesh_id])
     {
         //(x,y)->(x-1,y+1)
-        index_i = cuda->mesh[mesh_id + threadIdx.x*arg->mesh_num];
         if( blockIdx.x>0 && blockIdx.y<( gridDim.y-1))
         {
             if(threadIdx.y < cuda->mesh_count[mesh_id- 1+ gridDim.x])
@@ -343,17 +349,21 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                         //atomicAdd(&(cuda->pair_count[mesh_id]),1);
                         tmp_count = atomicAdd(&count,1);
                         if(tmp_count >= arg->pair_volume) printf("Error in %s:%d---%d\n",__FILE__,__LINE__,tmp_count);
-                        tmp_count += pair_id * arg->pair_volume;
+                        tmp_count += mesh_id*arg->pair_volume;
                         cuda->pair_i[tmp_count] = index_i;
                         cuda->pair_j[tmp_count] = index_j;
+                        //atomicExch(&(cuda->pair_i[tmp_count]),index_i);
+                        //atomicExch(&(cuda->pair_j[tmp_count]),index_j);
                     }
                     else if (cuda->type[index_j] == 0)
                     {
                         tmp_count = atomicAdd(&count,1);
                         if(tmp_count >= arg->pair_volume) printf("Error in %s:%d---%d\n",__FILE__,__LINE__,tmp_count);
-                        tmp_count += pair_id * arg->pair_volume;
+                        tmp_count += mesh_id*arg->pair_volume;
                         cuda->pair_i[tmp_count] = index_j;
                         cuda->pair_j[tmp_count] = index_i;
+                        //atomicExch(&(cuda->pair_i[tmp_count]),index_j);
+                        //atomicExch(&(cuda->pair_j[tmp_count]),index_i);
                     }
                 } 
             }
@@ -363,7 +373,7 @@ __global__ void sph_nnps_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     if( threadIdx.x == 0 && threadIdx.y == 0)
     {
         atomicAdd(&(arg->pair_num),count);
-        cuda->pair_count[pair_id]=count;
+        cuda->pair_count[mesh_id]=count;
         cuda->mesh_count[mesh_id]=0;
     }
     __syncthreads();
