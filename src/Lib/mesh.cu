@@ -12,9 +12,11 @@ __global__ void sph_mesh_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     if(cuda->type[id] == 0)
     {
         cuda->accy[id] = -arg->g;
+        cuda->ptc_w[id] = arg->alpha*arg->m/(1.0*cuda->rho[id]);
     }
     else 
     {
+        cuda->ptc_w[id] = 0;
         cuda->accy[id] = 0.0;
         cuda->p[id] = 0.0;
         cuda->rho[id] = arg->ref_rho;
@@ -23,7 +25,7 @@ __global__ void sph_mesh_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     }
     cuda->accx[id] = 0.0;
     cuda->drho[id] = 0.0;
-    cuda->ptc_w[id] = 0.0;
+    //cuda->ptc_w[id] = 0.0;
 
     /*这里需要对pair_num进行初始化*/
     if(id == 0) 

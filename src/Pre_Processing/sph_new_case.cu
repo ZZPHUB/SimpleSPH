@@ -36,7 +36,7 @@ int main(int argc,char *argv[])
     arg.case_dir = argv[1];
     get_input(&sph);
     get_rigid_num(&sph);
-    arg.pair_volume = (int)(32*arg.ptc_num/arg.mesh_num);
+    arg.pair_volume = (int)(64*arg.ptc_num/arg.mesh_num);
     particle.x = (double *)calloc(arg.ptc_num,sizeof(double));
     particle.y = (double *)calloc(arg.ptc_num,sizeof(double));
     particle.type = (int *)calloc(arg.ptc_num,sizeof(int));
@@ -93,7 +93,7 @@ void get_input(SPH *sph)
     arg->m = arg->ref_rho*arg->ptc_dx*arg->ptc_dx;
     arg->dt = 0.00002;
     arg->sst = 0.0;
-    arg->alpha = 15.0/(7.0*3.14159265358*pow(arg->h,2));
+    arg->alpha = 7.0/(4.0*3.14159265358*pow(arg->h,2));
 
     arg->init_step = 0;
     arg->total_step = 80000;

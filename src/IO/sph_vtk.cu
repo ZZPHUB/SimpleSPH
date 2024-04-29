@@ -166,6 +166,15 @@ void sph_save_single(SPH *sph)
             vtkfile << setiosflags(ios::scientific) << particle->pressure[i] << endl;
         }
     }
+
+    //ptc_w 
+    vtkfile << "SCALARS "<< "w double 1" << endl;
+    vtkfile << "LOOKUP_TABLE DEFAULT" << endl;
+    for(unsigned int i=0;i<arg->ptc_num;i++)
+    {
+        vtkfile << setiosflags(ios::scientific) << particle->w[i] << endl;
+    }
+
     //velocity
     if(PARA&0x04)
     {

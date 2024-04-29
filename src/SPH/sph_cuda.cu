@@ -150,6 +150,8 @@ int main(int argc,char *argv[])
             cudaDeviceSynchronize();
             cudaMemcpy(sph.particle->pressure, sph.tmp_cuda->p, sizeof(double) * sph.host_arg->ptc_num, cudaMemcpyDeviceToHost);
             cudaDeviceSynchronize();
+            cudaMemcpy(sph.particle->w, sph.tmp_cuda->ptc_w, sizeof(double) * sph.host_arg->ptc_num, cudaMemcpyDeviceToHost);
+            cudaDeviceSynchronize();
             if(sph.host_arg->init_impac_flag == 0)
             {
                 cudaMemcpy(sph.host_rigid,sph.dev_rigid,sizeof(SPH_RIGID),cudaMemcpyDeviceToHost);

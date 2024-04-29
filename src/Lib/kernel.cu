@@ -19,8 +19,8 @@ __global__ void sph_kernel_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     dy = cuda->y[index_i] - cuda->y[index_j];
     r = sqrt(dx*dx+dy*dy);
     q = r/arg->h;
-
-    if(q<=1.0)
+    
+    /*if(q<=1.0)
     {
         cuda->pair_w[id] = arg->alpha*(2.0/3.0-q*q+0.5*q*q*q);
         cuda->dwdx[id] = arg->alpha*((-2.0+1.5*q)*dx/pow(arg->h,2));
@@ -31,6 +31,18 @@ __global__ void sph_kernel_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         cuda->pair_w[id] = arg->alpha*((2.0-q)*(2.0-q)*(2.0-q)/6.0);
         cuda->dwdx[id] = -arg->alpha*0.5*((2.0-q)*(2.0-q)*dx/(arg->h*r));
         cuda->dwdy[id] = -arg->alpha*0.5*((2.0-q)*(2.0-q)*dy/(arg->h*r));
+    }
+    else
+    {
+        cuda->pair_w[id] = 0;
+        cuda->dwdx[id] = 0;
+        cuda->dwdy[id] = 0;
+    }*/
+    if(q <= 2.0)
+    {
+        cuda->pair_w[id] = arg->alpha*((1.0+2.0*q)*pow((1.0-0.5*q),4));
+        cuda->dwdx[id] = arg->alpha*(2.0*pow((1.0-0.5*q),4)-2.0*(1.0+2.0*q)*pow((1.0-0.5*q),3))*dx/(r*arg->h);
+        cuda->dwdy[id] = arg->alpha*(2.0*pow((1.0-0.5*q),4)-2.0*(1.0+2.0*q)*pow((1.0-0.5*q),3))*dy/(r*arg->h);
     }
     else
     {

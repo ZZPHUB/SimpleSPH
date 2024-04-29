@@ -180,7 +180,7 @@ int main(int argc,char *argv[])
     arg.mesh_ynum = (int)(arg.mesh_y/arg.mesh_dx)+1;
     arg.mesh_num = arg.mesh_xnum*arg.mesh_ynum;
 
-    arg.pair_volume = (int)(32*arg.ptc_num/arg.mesh_num);
+    arg.pair_volume = (int)(64*arg.ptc_num/arg.mesh_num);
 
     
 
