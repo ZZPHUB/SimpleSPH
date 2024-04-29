@@ -131,6 +131,8 @@ __global__ void sph_delta_term(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         atomicAdd(&(cuda->drho[index_i]),drho/cuda->rho[index_j]);
         atomicAdd(&(cuda->drho[index_j]),drho/cuda->rho[index_i]);
     }
+    __syncthreads();
+    if( threadIdx.x == 0) cuda->pair_count[mesh_id] = 0;
 }
 
 void sph_delta_cuda(SPH *sph)
