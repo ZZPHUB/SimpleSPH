@@ -54,7 +54,7 @@ __global__ void sph_governing_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         accx = arg->m * ( tmp_acc_v - tmp_acc_p) *cuda->dwdx[id];
         accy = arg->m * ( tmp_acc_v - tmp_acc_p) *cuda->dwdy[id];
 
-        drho_j = drho_i;
+        //drho_j = drho_i;
         //drho_i += 0.01*arg->h*arg->c*2*(cuda->rho[index_i]/cuda->rho[index_j]-1)*arg->m*(dx*cuda->dwdx[id]+dy*cuda->dwdy[id])/(dx*dx+dy*dy);
         //drho_j += 0.01*arg->h*arg->c*2*(cuda->rho[index_j]/cuda->rho[index_i]-1)*arg->m*(dx*cuda->dwdx[id]+dy*cuda->dwdy[id])/(dx*dx+dy*dy); 
         
