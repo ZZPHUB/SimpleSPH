@@ -11,7 +11,8 @@ __global__ void sph_mesh_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     
     if(cuda->type[id] == 0)
     {
-        cuda->accy[id] = -arg->g;
+        //cuda->accy[id] = -arg->g;
+        cuda->accy[id] = 0.0;
         cuda->ptc_w[id] = arg->alpha*arg->m/(1.0*cuda->rho[id]);
     }
     else 
