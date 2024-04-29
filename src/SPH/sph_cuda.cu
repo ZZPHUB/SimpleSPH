@@ -29,10 +29,10 @@ int main(int argc,char *argv[])
     dim3 ptc_grid((int)(sph.host_arg->ptc_num / 256) + 1);
     // define the seed for mesh data structure
     dim3 mesh_block(32, 32);
-    dim3 mesh_grid(sph.host_arg->mesh_xnum, sph.host_arg->mesh_ynum);
+    dim3 mesh_grid(sph.host_arg->mesh_xnum, sph.host_arg->mesh_ynum,5);
     // define the seed for pair data structre
-    dim3 pair_block(128);
-    dim3 pair_grid(sph.host_arg->mesh_xnum, sph.host_arg->mesh_ynum);
+    dim3 pair_block(sph.host_arg->pair_volume);
+    dim3 pair_grid(sph.host_arg->mesh_xnum, sph.host_arg->mesh_ynum,5);
 
     // SPH_CUDA cuda;
     // SPH_ARG tmp_arg;
