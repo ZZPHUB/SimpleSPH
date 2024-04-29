@@ -47,7 +47,8 @@ void sph_read_info(SPH *sph)
     arg->wall_ptc_num = sph_info["arg"]["wall_ptc_num"];
     arg->rigid_ptc_num = sph_info["arg"]["rigid_ptc_num"];
     arg->wall_layer = sph_info["arg"]["wall_layer"];
-    
+    arg->sponge_dx = sph_info["arg"]["sponge_dx"];
+
     arg->dt = sph_info["time"]["dt"];
     arg->sst = sph_info["time"]["sst"];
     arg->init_step = sph_info["time"]["init_step"];
@@ -146,6 +147,7 @@ void sph_write_info(SPH *sph)
     sph_info["arg"]["rigid_ptc_num"] = arg->rigid_ptc_num;
     //arg->wall_layer = sph_info["arg"]["wall_layer"];
     sph_info["arg"]["wall_layer"] = arg->wall_layer;
+    sph_info["arg"]["sponge_dx"] = arg->sponge_dx;
     
     //arg->dt = sph_info["time"]["dt"];
     sph_info["time"]["dt"] = arg->dt;

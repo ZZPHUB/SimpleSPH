@@ -158,6 +158,8 @@ typedef struct
     int pair_volume; //pear mesh's pair num
     int lock;
     int tmp;   //to count some debug tmp num
+
+    double sponge_dx;
 }SPH_ARG;
 
 typedef struct 

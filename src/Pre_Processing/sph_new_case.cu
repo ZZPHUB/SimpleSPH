@@ -87,6 +87,7 @@ void get_input(SPH *sph)
     arg->mesh_ynum = (int)(arg->mesh_y/arg->mesh_dx)+1;
     arg->mesh_num = arg->mesh_xnum*arg->mesh_ynum;
     arg->mesh_volume = 33;
+    arg->sponge_dx = 0.3;
 
     arg->g = 9.8;
     arg->c = 10.0*sqrt(arg->g*arg->fluid_y);
