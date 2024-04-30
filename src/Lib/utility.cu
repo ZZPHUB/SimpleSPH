@@ -84,17 +84,26 @@ __global__ void sph_filter_sum(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     int id = 0;
     int index_i = 0;
     int index_j = 0;
+    double tmp_rho_i = 0.0;
+    double tmp_rho_j = 0.0;
     if( threadIdx.x < cuda->pair_count[mesh_id])
     {
         id = mesh_id * arg->pair_volume + threadIdx.x;
         index_i = cuda->pair_i[id];
         index_j = cuda->pair_j[id];
 
-        if(cuda->ptc_w[index_i] != 0.0) atomicAdd(&(cuda->rho[index_i]), arg->m*cuda->pair_w[id]/cuda->ptc_w[index_i]);
+        if(cuda->ptc_w[index_i] != 0.0) tmp_rho_i = arg->m*cuda->pair_w[id]/cuda->ptc_w[index_i];
+        if(cuda->type[index_j] == 0)
+        {
+            if(cuda->ptc_w[index_j] != 0.0) tmp_rho_j = arg->m*cuda->pair_w[id]/cuda->ptc_w[index_j];
+        }
+        atomicAdd(&(cuda->rho[index_i]),tmp_rho_i);
+        atomicAdd(&(cuda->rho[index_j]),tmp_rho_h);
+        /*if(cuda->ptc_w[index_i] != 0.0) atomicAdd(&(cuda->rho[index_i]), arg->m*cuda->pair_w[id]/cuda->ptc_w[index_i]);
         if(cuda->type[index_j] == 0) 
         {
             if(cuda->ptc_w[index_j] != 0.0) atomicAdd(&(cuda->rho[index_j]),arg->m*cuda->pair_w[id]/cuda->ptc_w[index_j]);
-        }
+        }*/
     }
 }
 
