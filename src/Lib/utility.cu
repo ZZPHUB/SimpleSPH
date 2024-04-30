@@ -12,10 +12,10 @@ __global__ void sph_dummy_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     int index_i = 0;
     int index_j = 0;
     int id = 0;
-    const int pair_id = ( blockIdx.x + blockIdx.y * gridDim.x) * gridDim.z + blockIdx.z;
-    if( threadIdx.x < cuda->pair_count[pair_id])
+    const int mesh_id = blockIdx.x + blockIdx.y * gridDim.x;
+    if( threadIdx.x < cuda->pair_count[mesh_id])
     {
-        id = pair_id * arg->pair_volume + threadIdx.x;
+        id = mesh_id * arg->pair_volume + threadIdx.x;
         index_i = cuda->pair_i[id];
         index_j = cuda->pair_j[id];
 

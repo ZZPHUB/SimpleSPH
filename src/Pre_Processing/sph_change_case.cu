@@ -64,7 +64,7 @@ int main(int argc,char *argv[])
     //tmp_arg.pair_volume = (int)(64*tmp_arg.ptc_num/tmp_arg.mesh_num);
     //tmp_arg.pair_volume = 1024;
     tmp_arg.pair_list_num = 64*arg.ptc_num;
-    tmp_arg.pair_mesh_num = 5*arg.mesh_num;
+    tmp_arg.pair_mesh_num = arg.mesh_num;
     tmp_arg.pair_volume = (int)(arg.pair_list_num/arg.pair_mesh_num);
 
     tmp_arg.ptc_num = tmp_arg.fluid_ptc_num + tmp_arg.wall_ptc_num + tmp_arg.rigid_ptc_num;

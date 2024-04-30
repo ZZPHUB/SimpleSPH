@@ -40,7 +40,7 @@ int main(int argc,char *argv[])
     //arg.pair_volume = 1024;
 
     arg.pair_list_num = 64*arg.ptc_num;
-    arg.pair_mesh_num = 5*arg.mesh_num;
+    arg.pair_mesh_num = arg.mesh_num;
     arg.pair_volume = (int)(arg.pair_list_num/arg.pair_mesh_num);
 
     particle.x = (double *)calloc(arg.ptc_num,sizeof(double));
