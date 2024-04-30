@@ -2,16 +2,16 @@
 #include <assert.h>
 #include <csignal>
 
-void signal_handle(SPH *sph,int signal_num)
+SPH *sph_extern;
+
+void signal_handle(int signal_num)
 {
-    sph->host_arg->total_step = sph->host_arg->init_step;
+    sph_extern->host_arg->total_step = sph_extern->host_arg->init_step;
     signal(signal_num, SIG_DFL);
 }
 
 int main(int argc,char *argv[])
 {
-    signal(SIGINT,signal_handle);
-
     SPH_PARTICLE particle;
     SPH_KERNEL kernel;
     SPH_PAIR pair;
@@ -20,6 +20,7 @@ int main(int argc,char *argv[])
     SPH_ARG arg;
     SPH_CUDA tmp_cuda;
     SPH sph;
+    sph_extern = &sph;
     sph.particle = &particle;
     sph.kernel = &kernel;
     sph.pair = &pair;
@@ -29,6 +30,8 @@ int main(int argc,char *argv[])
     sph.tmp_cuda = &tmp_cuda;
     assert("argc == 2");
     arg.case_dir = argv[1];
+
+    signal(SIGINT,signal_handle);
 
     cudaSetDevice(0);
     sph_init(&sph);
