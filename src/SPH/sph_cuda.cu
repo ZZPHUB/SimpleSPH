@@ -102,8 +102,8 @@ int main(int argc,char *argv[])
         }
 
         //predict
-        //sph_predict_cuda<<<ptc_grid, ptc_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
-        //cudaDeviceSynchronize();
+        sph_predict_cuda<<<ptc_grid, ptc_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
+        cudaDeviceSynchronize();
         
 
 
@@ -143,8 +143,8 @@ int main(int argc,char *argv[])
         }
 
         //correct
-        //sph_correct_cuda<<<ptc_grid, ptc_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
-        //cudaDeviceSynchronize();
+        sph_correct_cuda<<<ptc_grid, ptc_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
+        cudaDeviceSynchronize();
 
 
 
