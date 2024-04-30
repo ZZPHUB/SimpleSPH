@@ -1,8 +1,17 @@
 #include "SPH.cuh"
 #include <assert.h>
+#include <csignal>
+
+void signal_handle(SPH *sph,int signal_num)
+{
+    sph->host_arg->total_step = sph->host_arg->init_step;
+    signal(signal_num, SIG_DFL);
+}
 
 int main(int argc,char *argv[])
 {
+    signal(SIGINT,signal_handle);
+
     SPH_PARTICLE particle;
     SPH_KERNEL kernel;
     SPH_PAIR pair;
