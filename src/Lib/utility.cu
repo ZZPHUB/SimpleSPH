@@ -67,3 +67,46 @@ __global__ void sph_check_rho(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         }
     }
 }
+
+
+__global__ void sph_filter_init(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
+{
+    const int id = blockIdx.x * blockDim.x + threadIdx.x;
+    if(id < arg->ptc_num )
+    {
+        if(cuda->type[id] == 0 && cuda->ptc_w[id] != 0.0) cuda->rho[id] = arg->m*arg->alpha/cuda->ptc_w[id];
+    }
+}
+
+__global__ void sph_filter_sum(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
+{
+    const int mesh_id = blockIdx.x + blockIdx.y * gridDim.x;
+    int id = 0;
+    int index_i = 0;
+    int index_j = 0;
+    if( threadIdx.x < cuda->pair_count[mesh_id])
+    {
+        id = mesh_id * arg->pair_volume + threadIdx.x;
+        index_i = cuda->pair_i[id];
+        index_j = cuda->pair_j[id];
+
+        if(cuda->ptc_w[index_i] != 0.0) atomicAdd(&(cuda->rho[index_i]), arg->m*cuda->pair_w[id]/cuda->ptc_w[index_i]);
+        if(cuda->type[index_j] == 0) 
+        {
+            if(cuda->ptc_w[index_j] != 0.0) atomicAdd(&(cuda->rho[index_j]),arg->m*cuda->pair_w[id]/cuda->ptc_w[index_j]);
+        }
+    }
+}
+
+void sph_rho_filter(SPH *sph)
+{
+    dim3 pair_block(sph->host_arg->pair_volume);
+    dim3 pair_grid(sph->host_arg->mesh_xnum, sph->host_arg->mesh_ynum);
+    dim3 ptc_block(256);
+    dim3 ptc_grid((int)(sph->host_arg->ptc_num / 256) + 1);
+
+    sph_filter_init<<<ptc_grid,ptc_block>>>(sph->cuda,sph->dev_arg,sph->dev_rigid);
+    cudaDeviceSynchronize();
+    sph_filter_sum<<<pair_grid,pair_block>>>(sph->cuda,sph->dev_arg,sph->dev_rigid);
+    cudaDeviceSynchronize();
+}
