@@ -57,13 +57,22 @@ __global__ void sph_check_rho(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     const int id = threadIdx.x + blockIdx.x * blockDim.x;
     if(id < arg->ptc_num)
     {
-        if(cuda->type[id] != 0)
+        /*if(cuda->type[id] != 0)
         {
             if(cuda->rho[id] < arg->ref_rho) 
             {
                 cuda->rho[id] = arg->ref_rho;
                 cuda->p[id] = 0.0;
             }
+        }*/
+        if(cuda->rho[id] < arg->ref_rho)
+        {
+            cuda->rho[id] = arg->ref_rho;
+            cuda->p[id] = 0.0;
+        }
+        else
+        {
+            cuda->p[id] = arg->c*arg->c*(cuda->rho[id] - arg->ref_rho);
         }
     }
 }

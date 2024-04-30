@@ -86,6 +86,8 @@ int main(int argc,char *argv[])
         {
             sph_rho_filter(&sph);
         }
+        sph_check_rho<<<ptc_grid,ptc_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
+        cudaDeviceSynchronize();
 
         //dummy
         sph_dummy_cuda<<<pair_grid, pair_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
