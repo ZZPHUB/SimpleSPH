@@ -233,7 +233,7 @@ __global__ void sph_predict_cuda(SPH_CUDA *cuda, SPH_ARG *arg, SPH_RIGID *rigid)
             cuda->x[id] += cuda->vx[id] * arg->dt * 0.5;
             cuda->y[id] += cuda->vy[id] * arg->dt * 0.5;
             cuda->vx[id] += cuda->accx[id] * arg->dt * 0.5;
-            //cuda->accy[id] -= arg->g;
+            cuda->accy[id] -= arg->g;
             cuda->vy[id] += cuda->accy[id] * arg->dt * 0.5;
             cuda->rho[id] += cuda->drho[id] * arg->dt * 0.5;
             if (cuda->rho[id] < arg->ref_rho) cuda->rho[id] = arg->ref_rho;
@@ -257,7 +257,7 @@ __global__ void sph_correct_cuda(SPH_CUDA *cuda, SPH_ARG *arg, SPH_RIGID *rigid)
             cuda->x[id] = cuda->temp_x[id] + cuda->vx[id] * arg->dt;
             cuda->y[id] = cuda->temp_y[id] + cuda->vy[id] * arg->dt;
             cuda->vx[id] = cuda->temp_vx[id] + cuda->accx[id] * arg->dt;
-            //cuda->accy[id] -= arg->g;
+            cuda->accy[id] -= arg->g;
             cuda->vy[id] = cuda->temp_vy[id] + cuda->accy[id] * arg->dt;
             cuda->rho[id] = cuda->temp_rho[id] + cuda->drho[id] * arg->dt;
             if (cuda->rho[id] < arg->ref_rho) cuda->rho[id] = arg->ref_rho;
