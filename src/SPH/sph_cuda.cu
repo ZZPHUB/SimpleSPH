@@ -99,8 +99,8 @@ int main(int argc,char *argv[])
         sph_delta_cuda(&sph);
         
         //sponge
-        sph_sponge_cuda<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
-        cudaDeviceSynchronize();
+        //sph_sponge_cuda<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
+        //cudaDeviceSynchronize();
 
         //rigid
         if(sph.host_arg->init_impac_flag == 0)
@@ -141,8 +141,8 @@ int main(int argc,char *argv[])
         sph_delta_cuda(&sph);
 
         //sponge
-        sph_sponge_cuda<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
-        cudaDeviceSynchronize();
+        //sph_sponge_cuda<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
+        //cudaDeviceSynchronize();
 
         //rigid
         if(sph.host_arg->init_impac_flag == 0)
