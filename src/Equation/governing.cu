@@ -54,7 +54,7 @@ __global__ void sph_governing_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
 
         tmp_acc_v = dx*dvx+dy*dvy;
         if(tmp_acc_v > 0.0) tmp_acc_v = 0.0;
-        tmp_acc_v = (tmp_acc_v*0.01*arg->h*arg->c)/((dx*dx+dy*dy+0.01*arg->h)*0.5*(cuda->rho[index_i]+cuda->rho[index_j]));
+        tmp_acc_v = (tmp_acc_v*0.05*arg->h*arg->c)/((dx*dx+dy*dy+0.01*arg->h)*0.5*(cuda->rho[index_i]+cuda->rho[index_j]));
 
         accx = arg->m * ( tmp_acc_v - tmp_acc_p) *cuda->dwdx[id];
         accy = arg->m * ( tmp_acc_v - tmp_acc_p) *cuda->dwdy[id];
