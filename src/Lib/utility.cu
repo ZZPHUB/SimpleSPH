@@ -116,6 +116,20 @@ __global__ void sph_filter_sum(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     }
 }
 
+__global__ void sph_solve_pressure(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
+{
+    const int id = blockIdx.x * blockDim.x + threadIdx.x;
+    if(id < arg->ptc_num )
+    {
+        if(cuda->rho[id] < arg->ref_rho) 
+        {
+            cuda->rho[id] = arg->ref_rho;
+        }
+        //if(cuda->type[id] == 0 && cuda->ptc_w[id] != 0.0) cuda->rho[id] = arg->m*arg->alpha/cuda->ptc_w[id];
+        cuda->p[id] = arg->c*arg->c*(cuda->rho[id] - arg->ref_rho);
+    }
+}
+
 void sph_rho_filter(SPH *sph)
 {
     dim3 pair_block(sph->host_arg->pair_volume);
@@ -126,5 +140,7 @@ void sph_rho_filter(SPH *sph)
     sph_filter_init<<<ptc_grid,ptc_block>>>(sph->cuda,sph->dev_arg,sph->dev_rigid);
     cudaDeviceSynchronize();
     sph_filter_sum<<<pair_grid,pair_block>>>(sph->cuda,sph->dev_arg,sph->dev_rigid);
+    cudaDeviceSynchronize();
+    sph_solve_pressure<<<ptc_grid,ptc_block>>>(sph->cuda,sph->dev_arg,sph->dev_rigid);
     cudaDeviceSynchronize();
 }

@@ -15,6 +15,7 @@ extern __global__ void sph_sponge_cuda(SPH_CUDA *,SPH_ARG *,SPH_RIGID *);
 extern __global__ void sph_sum_w(SPH_CUDA *,SPH_ARG *,SPH_RIGID *);
 extern __global__ void sph_filter_init(SPH_CUDA *,SPH_ARG *,SPH_RIGID *);
 extern __global__ void sph_filter_sum(SPH_CUDA *,SPH_ARG *,SPH_RIGID *);
+extern __global__ void sph_solve_pressure(SPH_CUDA *,SPH_ARG *,SPH_RIGID *);
 extern void sph_rho_filter(SPH *);
 extern void sph_nnps_cpu(SPH *);
 /*extern __global__ void sph_nnps_cuda(int *,double *,double *,int *,int *,int *,int *);
