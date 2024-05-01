@@ -71,5 +71,5 @@ __global__ void sph_governing_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         atomicAdd(&(cuda->drho[index_j]),drho);
     }
     __syncthreads();
-    //if( threadIdx.x == 0)cuda->pair_count[mesh_id] = 0;
+    if( threadIdx.x == 0)cuda->pair_count[mesh_id] = 0;
 }

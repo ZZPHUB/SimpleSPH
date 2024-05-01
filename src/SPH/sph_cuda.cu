@@ -96,7 +96,7 @@ int main(int argc,char *argv[])
         //governing
         sph_governing_cuda<<<pair_grid, pair_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
         cudaDeviceSynchronize();
-        sph_delta_cuda(&sph);
+        //sph_delta_cuda(&sph);
         
         //sponge
         //sph_sponge_cuda<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
@@ -138,7 +138,7 @@ int main(int argc,char *argv[])
         //governing
         sph_governing_cuda<<<pair_grid, pair_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
         cudaDeviceSynchronize();
-        sph_delta_cuda(&sph);
+        //sph_delta_cuda(&sph);
 
         //sponge
         //sph_sponge_cuda<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
