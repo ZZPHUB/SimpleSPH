@@ -50,9 +50,12 @@ __global__ void sph_sum_w(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         id = mesh_id * arg->pair_volume + threadIdx.x;
         index_i = cuda->pair_i[id];
         index_j = cuda->pair_j[id];
-
-        ptc_w_i = arg->m*cuda->pair_w[id]/cuda->rho[index_j];
-        if(cuda->type[index_j] == 0) ptc_w_j = arg->m*cuda->pair_w[id]/cuda->rho[index_i];
+        
+        if(cuda->type[index_j] == 0)
+        {
+            ptc_w_i = arg->m*cuda->pair_w[id]/cuda->rho[index_j];
+            ptc_w_j = arg->m*cuda->pair_w[id]/cuda->rho[index_i];
+        } 
         else ptc_w_j = cuda->pair_w[id];
 
         atomicAdd(&(cuda->ptc_w[index_i]),ptc_w_i);

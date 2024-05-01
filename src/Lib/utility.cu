@@ -101,9 +101,9 @@ __global__ void sph_filter_sum(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         index_i = cuda->pair_i[id];
         index_j = cuda->pair_j[id];
 
-        if(cuda->ptc_w[index_i] != 0.0) tmp_rho_i = arg->m*cuda->pair_w[id]/cuda->ptc_w[index_i];
         if(cuda->type[index_j] == 0)
         {
+            if(cuda->ptc_w[index_i] != 0.0) tmp_rho_i = arg->m*cuda->pair_w[id]/cuda->ptc_w[index_i];
             if(cuda->ptc_w[index_j] != 0.0) tmp_rho_j = arg->m*cuda->pair_w[id]/cuda->ptc_w[index_j];
         }
         atomicAdd(&(cuda->rho[index_i]),tmp_rho_i);
