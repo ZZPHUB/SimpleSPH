@@ -125,7 +125,7 @@ __global__ void sph_delta_term(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         dy = cuda->y[index_i] - cuda->y[index_j];
         
         drho = 2.0*(cuda->rho[index_i] - cuda->rho[index_j]);
-        drho += (cuda->Lrho_x[index_i] + cuda->Lrho_x[index_j])*dx + (cuda->Lrho_y[index_i]+cuda->Lrho_y[index_j])*dy;
+        drho -= (cuda->Lrho_x[index_i] + cuda->Lrho_x[index_j])*dx + (cuda->Lrho_y[index_i]+cuda->Lrho_y[index_j])*dy;
         drho *= 0.2*arg->c*arg->h*(dx*cuda->dwdx[id] + dy*cuda->dwdy[id])*arg->m/(dx*dx+dy*dy);
 
         atomicAdd(&(cuda->drho[index_i]),drho/cuda->rho[index_j]);
