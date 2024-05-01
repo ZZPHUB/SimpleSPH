@@ -12,6 +12,7 @@ __global__ void sph_sponge_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     {
         if(cuda->type[id] == 0)
         {
+            cuda->accy[id] -= arg->g;
             r = sqrt(pow((cuda->x[id]-arg->fluid_x/2.0),2)+pow((cuda->y[id]-arg->fluid_y),2)) - arg->fluid_x/2.0;
             if(r > 0.0)
             {
