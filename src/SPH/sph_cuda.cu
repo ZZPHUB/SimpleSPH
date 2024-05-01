@@ -82,7 +82,7 @@ int main(int argc,char *argv[])
         cudaDeviceSynchronize();
         sph_sum_w<<<pair_grid,pair_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
         cudaDeviceSynchronize();
-        if (sph.host_arg->init_step % sph.host_arg->print_step == 0)
+        if (sph.host_arg->init_step % 20 == 0)
         {
             sph_rho_filter(&sph);
         }
