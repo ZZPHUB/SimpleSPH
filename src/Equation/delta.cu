@@ -39,12 +39,17 @@ __global__ void sph_L_sum(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         tmp_Lyx = (cuda->y[index_i] - cuda->y[index_j])*cuda->dwdx[id]*arg->m;
         tmp_Lyy = (cuda->y[index_i] - cuda->y[index_j])*cuda->dwdy[id]*arg->m;
 
-        atomicAdd(&(cuda->Lxx[index_i]),tmp_Lxx/cuda->rho[index_j]);
+        /*atomicAdd(&(cuda->Lxx[index_i]),tmp_Lxx/cuda->rho[index_j]);
         atomicAdd(&(cuda->Lxy[index_i]),tmp_Lxy/cuda->rho[index_j]);
         atomicAdd(&(cuda->Lyx[index_i]),tmp_Lyx/cuda->rho[index_j]);
-        atomicAdd(&(cuda->Lyy[index_i]),tmp_Lyy/cuda->rho[index_j]);
+        atomicAdd(&(cuda->Lyy[index_i]),tmp_Lyy/cuda->rho[index_j]);*/
         if(cuda->type[index_j] == 0)
         {
+            atomicAdd(&(cuda->Lxx[index_i]),tmp_Lxx/cuda->rho[index_j]);
+            atomicAdd(&(cuda->Lxy[index_i]),tmp_Lxy/cuda->rho[index_j]);
+            atomicAdd(&(cuda->Lyx[index_i]),tmp_Lyx/cuda->rho[index_j]);
+            atomicAdd(&(cuda->Lyy[index_i]),tmp_Lyy/cuda->rho[index_j]);
+
             atomicAdd(&(cuda->Lxx[index_j]),tmp_Lxx/cuda->rho[index_i]);
             atomicAdd(&(cuda->Lxy[index_j]),tmp_Lxy/cuda->rho[index_i]);
             atomicAdd(&(cuda->Lyx[index_j]),tmp_Lyx/cuda->rho[index_i]);
@@ -94,16 +99,19 @@ __global__ void sph_L_rho(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         id = mesh_id * arg->pair_volume + threadIdx.x;
         index_i = cuda->pair_i[id];
         index_j = cuda->pair_j[id];
+        
+        if(cuda->type[index_j] == 0)
+        {
+            tmp_Lrho_x_i = (cuda->rho[index_i]-cuda->rho[index_j])*(cuda->Lxx[index_i]*cuda->dwdx[id] + cuda->Lxy[index_i]*cuda->dwdy[id])*arg->m/cuda->rho[index_j];
+            tmp_Lrho_y_i = (cuda->rho[index_i]-cuda->rho[index_j])*(cuda->Lyx[index_i]*cuda->dwdx[id] + cuda->Lyy[index_i]*cuda->dwdy[id])*arg->m/cuda->rho[index_j];
+            atomicAdd(&(cuda->Lrho_x[index_i]),tmp_Lrho_x_i);
+            atomicAdd(&(cuda->Lrho_y[index_i]),tmp_Lrho_y_i);
 
-        tmp_Lrho_x_i = (cuda->rho[index_i]-cuda->rho[index_j])*(cuda->Lxx[index_i]*cuda->dwdx[id] + cuda->Lxy[index_i]*cuda->dwdy[id])*arg->m/cuda->rho[index_j];
-        tmp_Lrho_y_i = (cuda->rho[index_i]-cuda->rho[index_j])*(cuda->Lyx[index_i]*cuda->dwdx[id] + cuda->Lyy[index_i]*cuda->dwdy[id])*arg->m/cuda->rho[index_j];
-        atomicAdd(&(cuda->Lrho_x[index_i]),tmp_Lrho_x_i);
-        atomicAdd(&(cuda->Lrho_y[index_i]),tmp_Lrho_y_i);
-
-        tmp_Lrho_x_j = (cuda->rho[index_i]-cuda->rho[index_j])*(cuda->Lxx[index_j]*cuda->dwdx[id] + cuda->Lxy[index_j]*cuda->dwdy[id])*arg->m/cuda->rho[index_i];
-        tmp_Lrho_y_j = (cuda->rho[index_i]-cuda->rho[index_j])*(cuda->Lyx[index_j]*cuda->dwdx[id] + cuda->Lyy[index_j]*cuda->dwdy[id])*arg->m/cuda->rho[index_i];
-        atomicAdd(&(cuda->Lrho_x[index_j]),tmp_Lrho_x_j);
-        atomicAdd(&(cuda->Lrho_y[index_j]),tmp_Lrho_y_j);
+            tmp_Lrho_x_j = (cuda->rho[index_i]-cuda->rho[index_j])*(cuda->Lxx[index_j]*cuda->dwdx[id] + cuda->Lxy[index_j]*cuda->dwdy[id])*arg->m/cuda->rho[index_i];
+            tmp_Lrho_y_j = (cuda->rho[index_i]-cuda->rho[index_j])*(cuda->Lyx[index_j]*cuda->dwdx[id] + cuda->Lyy[index_j]*cuda->dwdy[id])*arg->m/cuda->rho[index_i];
+            atomicAdd(&(cuda->Lrho_x[index_j]),tmp_Lrho_x_j);
+            atomicAdd(&(cuda->Lrho_y[index_j]),tmp_Lrho_y_j);
+        }
     }
 }
 
@@ -124,12 +132,15 @@ __global__ void sph_delta_term(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         dx = cuda->x[index_i] - cuda->x[index_j];
         dy = cuda->y[index_i] - cuda->y[index_j];
         
-        drho = 2.0*(cuda->rho[index_i] - cuda->rho[index_j]);
-        drho -= (cuda->Lrho_x[index_i] + cuda->Lrho_x[index_j])*dx + (cuda->Lrho_y[index_i]+cuda->Lrho_y[index_j])*dy;
-        drho *= 0.2*arg->c*arg->h*(dx*cuda->dwdx[id] + dy*cuda->dwdy[id])*arg->m/(dx*dx+dy*dy);
+        if(cuda->type[index_j] == 0)
+        {
+            drho = 2.0*(cuda->rho[index_i] - cuda->rho[index_j]);
+            drho -= (cuda->Lrho_x[index_i] + cuda->Lrho_x[index_j])*dx + (cuda->Lrho_y[index_i]+cuda->Lrho_y[index_j])*dy;
+            drho *= 0.2*arg->c*arg->h*(dx*cuda->dwdx[id] + dy*cuda->dwdy[id])*arg->m/(dx*dx+dy*dy);
 
-        atomicAdd(&(cuda->drho[index_i]),drho/cuda->rho[index_j]);
-        atomicAdd(&(cuda->drho[index_j]),-drho/cuda->rho[index_i]);
+            atomicAdd(&(cuda->drho[index_i]),drho/cuda->rho[index_j]);
+            atomicAdd(&(cuda->drho[index_j]),-drho/cuda->rho[index_i]);
+        }
     }
     __syncthreads();
     if( threadIdx.x == 0) cuda->pair_count[mesh_id] = 0;
