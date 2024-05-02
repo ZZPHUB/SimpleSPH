@@ -347,4 +347,44 @@ void rigid_init(SPH *sph)
         }
     }
     rigid->moi /= arg->rigid_ptc_num;
+    
+    double dx = 0.0;
+    double dy = 0.0;
+    double r = 0.0;
+    double q = 0.0;
+    int tmp_pair[arg->ptc_num];
+    int tmp_avg = 0
+    for(init i=0;i<arg->ptc_num;i++)
+    {
+        if(particle->type[i] == 1)
+        {
+            for(int j=0;j<arg->ptc_num;j++)
+            {
+                if(particle->type[j] == 1)
+                {
+                    dx = particle->x[i] - particle->x[j];
+                    dy = particle->y[i] - particle->y[j];
+                    r = sqrt(dx*dx+dy*dy);
+                    q = r/arg->h;
+                    if(q <= 2.0)
+                    {
+                        tmp_pair[i] ++ ;
+                        tmp_pair[j] ++ ;
+                        tmp_avg += 2;
+                    }
+                }
+            }
+        }
+    }
+    tmp_avg /= arg->rigid_ptc_num;
+    for(int i=0;i<arg->ptc_num;i++)
+    {
+        if(particle->type[i] == 1)
+        {
+            if(tmp_pair[i] < tmp_avg)
+            {
+                particle->type[i] =2 ;
+            }
+        }
+    }
 }
