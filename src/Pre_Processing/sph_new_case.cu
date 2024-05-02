@@ -352,7 +352,7 @@ void rigid_init(SPH *sph)
     double dy = 0.0;
     double r = 0.0;
     double q = 0.0;
-    int tmp_pair[arg->ptc_num];
+    int tmp_pair[arg->ptc_num] = {0,};
     int tmp_avg = 0;
     for(int i=0;i<arg->ptc_num;i++)
     {
