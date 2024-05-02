@@ -21,6 +21,7 @@ void fluid_ptc_generate(SPH *);
 void rigid_ptc_generate(SPH *);
 void write_vtk(SPH *);
 void rigid_init(SPH *);
+void check_type(SPH *);
 
 int main(int argc,char *argv[])
 {
@@ -50,6 +51,11 @@ int main(int argc,char *argv[])
     rigid_ptc_generate(&sph);
 
     rigid_init(&sph);
+
+    sph_write_info(&sph);
+    write_vtk(&sph);
+    
+    check_type(&sph);
 
     sph_write_info(&sph);
     write_vtk(&sph);
@@ -377,7 +383,7 @@ void rigid_init(SPH *sph)
         }
     }
     tmp_avg /= arg->rigid_ptc_num;
-    tmp_avg *= 0.8;
+    tmp_avg *= 0.75;
     for(int i=0;i<arg->ptc_num;i++)
     {
         if(particle->type[i] == 1)
@@ -386,6 +392,43 @@ void rigid_init(SPH *sph)
             {
                 particle->type[i] =2;
             }
+        }
+    }
+}
+
+void check_type(SPH *sph)
+{
+    SPH_ARG *arg;
+    SPH_PARTICLE *particle;
+    SPH_RIGID *rigid;
+    arg = sph->host_arg;
+    particle = sph->particle;
+    rigid = sph->host_rigid;
+
+    int flag = 1;
+    int tmp_id = 0;
+    int tmp_type = 0;
+    cout << "You Should Open the Init.vtk File!!"
+    while (flag == 1)
+    {
+        cout << "Type the PTC Id:(-1 to exit)" << endl;
+        cin >> tmp_id;
+        cout << "Type the PTC Type:" << endl;
+        cin >> tmp_type;
+
+        if(tmp_id >= 0 && tmp_id < arg->ptc_num)
+        {
+            if(particle->type[tmp_id] == 1 || particle->type[tmp_id] == 2)
+            {
+                if(tmp_type == 1 || tmp_type == 2)
+                {
+                    particle->type[tmp_id] = tmp_type;
+                }
+            }
+        }
+        else
+        {
+            flag = 0;
         }
     }
 }
