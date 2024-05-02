@@ -100,7 +100,7 @@ void sph_read_vtk(SPH *sph)
     rigid->cogy = particle->y[rigid->cog_ptc_id];
     for(int i=0;i<arg->ptc_num;i++)
     {
-        if(particle->type[i] == 1)
+        if(particle->type[i] == 1 || particle->type[i] == 2)
         {
             particle->x[i] += rigid->offset_x-rigid->offset_angl*(particle->y[i]-rigid->cogy);
             particle->y[i] += rigid->offset_y+rigid->offset_angl*(particle->x[i]-rigid->cogx);
