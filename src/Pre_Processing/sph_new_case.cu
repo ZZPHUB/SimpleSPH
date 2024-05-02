@@ -63,7 +63,7 @@ int main(int argc,char *argv[])
         sph_write_info(&sph);
         write_vtk(&sph);
 
-        cout << "-1 to exit,1 to continue "<< endl;
+        cout << "save file!!!(0 to exit,1 to continue) "<< endl;
         cin >> flag;
     }
     return 0;
@@ -414,7 +414,7 @@ void check_type(SPH *sph)
     int flag = 1;
     int tmp_id = 0;
     int tmp_type = 0;
-    cout << "You Should Open the Init.vtk File!!" << endl;
+    cout << "You Should Open the Vtk File!!" << endl;
     while (flag == 1)
     {
         cout << "Type the PTC Id:(-1 to exit)" << endl;

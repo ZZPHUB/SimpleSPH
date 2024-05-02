@@ -19,6 +19,7 @@ using namespace std;
 int new_rigid_num(SPH *);
 void rigid_ptc_generate(SPH *);
 void rigid_init(SPH *);
+void check_type(SPH *);
 
 
 int main(int argc,char *argv[])
@@ -97,6 +98,19 @@ int main(int argc,char *argv[])
     rigid_init(&tmp_sph);
     tmp_sph.host_arg->case_dir = argv[1];
     sph_save_last(&tmp_sph);
+
+    int flag = 1;    
+    while (flag)
+    {
+        check_type(&tmp_sph);
+
+        sph_save_last(&tmp_sph;)
+
+        cout << "save file!!!(0 to exit,1 to continue) "<< endl;
+        cin >> flag;
+    }
+
+
     
     return 0;
 }
@@ -201,6 +215,84 @@ void rigid_init(SPH *sph)
         if(particle->type[i] == 1)
         {
             rigid->moi += (arg->m/rigid->mass)*(pow((particle->x[i]-rigid->cogx),2)+pow((particle->y[i]-rigid->cogy),2));
+        }
+    }
+
+    double dx = 0.0;
+    double dy = 0.0;
+    double r = 0.0;
+    double q = 0.0;
+    int tmp_pair[arg->ptc_num] = {0,};
+    int tmp_avg = 0;
+    for(int i=0;i<arg->ptc_num;i++)
+    {
+        if(particle->type[i] == 1)
+        {
+            for(int j=0;j<arg->ptc_num;j++)
+            {
+                if(particle->type[j] == 1)
+                {
+                    dx = particle->x[i] - particle->x[j];
+                    dy = particle->y[i] - particle->y[j];
+                    r = sqrt(dx*dx+dy*dy);
+                    q = r/arg->h;
+                    if(q <= 2.0)
+                    {
+                        tmp_pair[i] ++ ;
+                        tmp_pair[j] ++ ;
+                        tmp_avg += 2;
+                    }
+                }
+            }
+        }
+    }
+    tmp_avg /= arg->rigid_ptc_num;
+    tmp_avg *= 0.75;
+    for(int i=0;i<arg->ptc_num;i++)
+    {
+        if(particle->type[i] == 1)
+        {
+            if(tmp_pair[i] < tmp_avg)
+            {
+                particle->type[i] =2;
+            }
+        }
+    }
+}
+
+void check_type(SPH *sph)
+{
+    SPH_ARG *arg;
+    SPH_PARTICLE *particle;
+    SPH_RIGID *rigid;
+    arg = sph->host_arg;
+    particle = sph->particle;
+    rigid = sph->host_rigid;
+
+    int flag = 1;
+    int tmp_id = 0;
+    int tmp_type = 0;
+    cout << "You Should Open the Vtk File!!" << endl;
+    while (flag == 1)
+    {
+        cout << "Type the PTC Id:(-1 to exit)" << endl;
+        cin >> tmp_id;
+        cout << "Type the PTC Type:" << endl;
+        cin >> tmp_type;
+
+        if(tmp_id >= 0 && tmp_id < arg->ptc_num)
+        {
+            if(particle->type[tmp_id] == 1 || particle->type[tmp_id] == 2)
+            {
+                if(tmp_type == 1 || tmp_type == 2)
+                {
+                    particle->type[tmp_id] = tmp_type;
+                }
+            }
+        }
+        else
+        {
+            flag = 0;
         }
     }
 }
