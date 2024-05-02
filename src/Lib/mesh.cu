@@ -28,6 +28,7 @@ __global__ void sph_mesh_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
     cuda->drho[id] = 0.0;
     //cuda->ptc_w[id] = 0.0;
 
+
     /*这里需要对pair_num进行初始化*/
     if(id == 0) 
     {
