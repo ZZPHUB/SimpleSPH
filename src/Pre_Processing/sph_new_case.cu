@@ -377,6 +377,7 @@ void rigid_init(SPH *sph)
         }
     }
     tmp_avg /= arg->rigid_ptc_num;
+    tmp_avg *= 0.8;
     for(int i=0;i<arg->ptc_num;i++)
     {
         if(particle->type[i] == 1)
