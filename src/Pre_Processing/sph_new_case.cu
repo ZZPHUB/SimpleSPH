@@ -354,7 +354,7 @@ void rigid_init(SPH *sph)
     double q = 0.0;
     int tmp_pair[arg->ptc_num];
     int tmp_avg = 0;
-    for(init i=0;i<arg->ptc_num;i++)
+    for(int i=0;i<arg->ptc_num;i++)
     {
         if(particle->type[i] == 1)
         {
