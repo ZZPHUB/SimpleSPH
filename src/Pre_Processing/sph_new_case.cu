@@ -54,12 +54,18 @@ int main(int argc,char *argv[])
 
     sph_write_info(&sph);
     write_vtk(&sph);
-    
-    check_type(&sph);
 
-    sph_write_info(&sph);
-    write_vtk(&sph);
+    int flag = 1;    
+    while (flag)
+    {
+        check_type(&sph);
 
+        sph_write_info(&sph);
+        write_vtk(&sph);
+
+        cout << "-1 to exit,1 to continue "<< endl;
+        cin >> flag;
+    }
     return 0;
 }
 
