@@ -104,7 +104,7 @@ int main(int argc,char *argv[])
     {
         check_type(&tmp_sph);
 
-        sph_save_last(&tmp_sph;)
+        sph_save_last(&tmp_sph);
 
         cout << "save file!!!(0 to exit,1 to continue) "<< endl;
         cin >> flag;
