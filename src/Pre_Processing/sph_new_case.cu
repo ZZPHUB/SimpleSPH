@@ -408,7 +408,7 @@ void check_type(SPH *sph)
     int flag = 1;
     int tmp_id = 0;
     int tmp_type = 0;
-    cout << "You Should Open the Init.vtk File!!"
+    cout << "You Should Open the Init.vtk File!!" << endl;
     while (flag == 1)
     {
         cout << "Type the PTC Id:(-1 to exit)" << endl;
