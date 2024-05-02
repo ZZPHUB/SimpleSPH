@@ -26,7 +26,7 @@ __global__ void sph_dummy_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
                 tmp_accx = 0.0;
                 tmp_accy = 0.0;
             }
-            else if(cuda->type[index_j] == 1)
+            else if(cuda->type[index_j] == 1 || cuda->type[index_j] == 2)
             {
                 tmp_accx = rigid->accx - pow(rigid->omega,2)*(cuda->x[index_j]-rigid->cogx)- \
                               rigid->alpha*(cuda->y[index_j]-rigid->cogy);
@@ -42,11 +42,11 @@ __global__ void sph_dummy_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
             tmp_prho /= arg->c*arg->c;
             atomicAdd(&(cuda->rho[index_j]),tmp_prho);
 
-            tmp_vx = cuda->vx[index_i]*cuda->pair_w[id]/cuda->ptc_w[index_j];
-            atomicAdd(&(cuda->vx[index_j]),tmp_vx);
+            //tmp_vx = cuda->vx[index_i]*cuda->pair_w[id]/cuda->ptc_w[index_j];
+            //atomicAdd(&(cuda->vx[index_j]),tmp_vx);
 
-            tmp_vy = cuda->vy[index_i]*cuda->pair_w[id]/cuda->ptc_w[index_j];
-            atomicAdd(&(cuda->vy[index_j]),tmp_vy);
+            //tmp_vy = cuda->vy[index_i]*cuda->pair_w[id]/cuda->ptc_w[index_j];
+            //atomicAdd(&(cuda->vy[index_j]),tmp_vy);
         }   
     }
     __syncthreads();

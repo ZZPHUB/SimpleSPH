@@ -41,7 +41,7 @@ __global__ void sph_governing_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
             drho = cuda->vx[index_i]*cuda->dwdx[id]+cuda->vy[index_i]*cuda->dwdy[id];
             drho *= arg->m;
         }
-        else if(cuda->type[index_j] == 1)
+        else if(cuda->type[index_j] == 1 || cuda->type[index_j] == 2)
         {
             //dvx = cuda->vx[index_i] - (2.0*(rigid->vx - rigid->omega*(cuda->y[index_j]-rigid->cogy)) - cuda->vx[index_j]);
             //dvy = cuda->vy[index_i] - (2.0*(rigid->vy + rigid->omega*(cuda->x[index_j]-rigid->cogx)) - cuda->vy[index_j]);
