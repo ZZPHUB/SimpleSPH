@@ -118,7 +118,7 @@ void get_input(SPH *sph)
     arg->total_step = 80000;
     arg->print_step = 400;
 
-    arg->new_case_flag =1;
+    arg->impac_pressure_flag =1;
     arg->init_impac_flag = 1;
     arg->save_last_flag = 1;
 

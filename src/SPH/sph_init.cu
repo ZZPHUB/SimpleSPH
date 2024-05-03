@@ -59,7 +59,7 @@ void sph_init(SPH *sph)
     sph->mesh = mesh;
 
     sph_read_vtk(sph);
-    if(arg->init_impac_flag == 0)
+    if(arg->init_impac_flag == 0 && arg->impac_pressure_flag == 1)
     {
         for(int i=0;i<arg->ptc_num;i++)
         {

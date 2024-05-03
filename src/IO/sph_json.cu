@@ -59,7 +59,7 @@ void sph_read_info(SPH *sph)
     arg->total_step = sph_info["time"]["total_step"];
     arg->print_step = sph_info["time"]["print_step"];
 
-    arg->new_case_flag = sph_info["flag"]["new_case_flag"];
+    arg->impac_pressure_flag = sph_info["flag"]["impac_pressure_flag"];
     arg->init_impac_flag = sph_info["flag"]["init_impac_flag"];
     arg->save_last_flag = sph_info["flag"]["save_last_flag"];
     //some para arg not tmp_arg
@@ -166,8 +166,8 @@ void sph_write_info(SPH *sph)
     //arg->print_step = sph_info["time"]["print_step"];
     sph_info["time"]["print_step"] = arg->print_step;
 
-    //arg->new_case_flag = sph_info["flag"]["new_case_flag"];
-    sph_info["flag"]["new_case_flag"] = arg->new_case_flag;
+    //arg->impac_pressure_flag = sph_info["flag"]["impac_pressure_flag"];
+    sph_info["flag"]["impac_pressure_flag"] = arg->impac_pressure_flag;
     //arg->init_impac_flag = sph_info["flag"]["init_impac_flag"];
     sph_info["flag"]["init_impac_flag"] = arg->init_impac_flag;
     //arg->save_last_flag = sph_info["flag"]["save_last_flag"];
