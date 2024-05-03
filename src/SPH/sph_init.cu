@@ -66,7 +66,7 @@ void sph_init(SPH *sph)
             if(particle->y[i] <= arg->fluid_x)
             {
                 particle->pressure[i] = arg->ref_rho*arg->g*(arg->fluid_x - particle->y[i]);
-                particle->density[i] = arg->ref_rho + particle->pressure/(arg->c * arg->c);
+                particle->density[i] = arg->ref_rho + particle->pressure[i]/(arg->c * arg->c);
             }
         }
     }
