@@ -59,6 +59,17 @@ void sph_init(SPH *sph)
     sph->mesh = mesh;
 
     sph_read_vtk(sph);
+    if(arg->init_impac_flag == 0)
+    {
+        for(int i=0;i<arg->ptc_num;i++)
+        {
+            if(particle->y[i] <= arg->fluid_x)
+            {
+                particle->pressure[i] = arg->ref_rho*arg->g*(arg->fluid_x - particle->y[i]);
+                particle->density[i] = arg->ref_rho + particle->pressure/(arg->c * arg->c);
+            }
+        }
+    }
 
     cudaMalloc(&(sph->dev_arg),sizeof(SPH_ARG));
     cudaMemcpy(sph->dev_arg,sph->host_arg,sizeof(SPH_ARG),cudaMemcpyHostToDevice);

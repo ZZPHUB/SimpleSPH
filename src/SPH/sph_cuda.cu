@@ -98,20 +98,10 @@ int main(int argc,char *argv[])
         cudaDeviceSynchronize();
         sph_delta_cuda(&sph);
 
-
-        //rigid
-        if(sph.host_arg->init_impac_flag == 0)
-        {
-            sph_rigid_cuda<<<ptc_grid,ptc_block>>>(sph.cuda,sph.dev_arg,sph.dev_rigid);
-            cudaDeviceSynchronize();
-        }
-
         //predict
         sph_predict_cuda<<<ptc_grid, ptc_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
         cudaDeviceSynchronize();
         
-
-
         //mesh
         sph_mesh_cuda<<<ptc_grid, ptc_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
         cudaDeviceSynchronize();
@@ -228,11 +218,6 @@ __global__ void sph_predict_cuda(SPH_CUDA *cuda, SPH_ARG *arg, SPH_RIGID *rigid)
             if (cuda->rho[id] < arg->ref_rho) cuda->rho[id] = arg->ref_rho;
             cuda->p[id] = arg->c * arg->c * (cuda->rho[id] - arg->ref_rho);
         }
-        else if (cuda->type[id] == 1 || cuda->type[id] == 2)
-        {
-            cuda->x[id] = cuda->temp_x[id] + arg->dt*0.5*(rigid->vx - rigid->omega*(cuda->y[id]-rigid->cogy));
-            cuda->y[id] = cuda->temp_y[id] + arg->dt*0.5*(rigid->vy + rigid->omega*(cuda->x[id]-rigid->cogx));
-        }
     }
 }
 
@@ -254,8 +239,8 @@ __global__ void sph_correct_cuda(SPH_CUDA *cuda, SPH_ARG *arg, SPH_RIGID *rigid)
         }
         else if(cuda->type[id] == 1 || cuda->type[id] == 2)
         {
-            cuda->x[id] = cuda->temp_x[id] + arg->dt*0.5*(rigid->vx - rigid->omega*(cuda->y[id]-rigid->cogy));
-            cuda->y[id] = cuda->temp_y[id] + arg->dt*0.5*(rigid->vy + rigid->omega*(cuda->x[id]-rigid->cogx));
+            cuda->x[id] = cuda->temp_x[id] + arg->dt*(rigid->vx - rigid->omega*(cuda->y[id]-rigid->cogy));
+            cuda->y[id] = cuda->temp_y[id] + arg->dt*(rigid->vy + rigid->omega*(cuda->x[id]-rigid->cogx));
         }
     }
 }
@@ -273,7 +258,7 @@ __global__ void sph_rigid_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         rigid->alpha = 0.0;
         //rigid->cogx = cuda->x[rigid->cog_ptc_id];
         //rigid->cogy = cuda->y[rigid->cog_ptc_id];
-        rigid->vy += -arg->g*arg->dt*0.5;
+        rigid->vy += -arg->g*arg->dt;
     }
     if(threadIdx.x == 0)
     {
@@ -297,9 +282,9 @@ __global__ void sph_rigid_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         atomicAdd(&(rigid->accx),accx);
         atomicAdd(&(rigid->accy),accy);
         atomicAdd(&(rigid->alpha),alpha);
-        atomicAdd(&(rigid->vx),accx*arg->dt*0.5);
-        atomicAdd(&(rigid->vy),accy*arg->dt*0.5);
-        atomicAdd(&(rigid->omega),alpha*arg->dt*0.5);
+        atomicAdd(&(rigid->vx),accx*arg->dt);
+        atomicAdd(&(rigid->vy),accy*arg->dt);
+        atomicAdd(&(rigid->omega),alpha*arg->dt);
     }
     __syncthreads();
 }
