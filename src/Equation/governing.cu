@@ -65,7 +65,7 @@ __global__ void sph_governing_cuda(SPH_CUDA *cuda,SPH_ARG *arg,SPH_RIGID *rigid)
         accx_i = arg->m * ( tmp_acc_v - tmp_acc_p) *cuda->dwdx[id];
         accy_i = arg->m * ( tmp_acc_v - tmp_acc_p) *cuda->dwdy[id];
 
-        if(cuda->type[index_j == 0])
+        if(cuda->type[index_j] == 0)
         {
             accx_j = -accx_i;
             accy_j = -accy_i;
