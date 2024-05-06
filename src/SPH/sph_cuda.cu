@@ -63,10 +63,7 @@ int main(int argc,char *argv[])
 
         //mesh
         sph_mesh_cuda<<<ptc_grid, ptc_block>>>(sph.cuda, sph.dev_arg, sph.dev_rigid);
-        if (sph.host_arg->init_step % sph.host_arg->print_step == 2 && sph.host_arg->init_impac_flag == 0)
-        {
-            sph_write_csv(&sph);
-        }
+        if (sph.host_arg->init_impac_flag == 0)
         cudaDeviceSynchronize();
         
         //nnps
@@ -159,12 +156,12 @@ int main(int argc,char *argv[])
             cudaDeviceSynchronize();
             cudaMemcpy(sph.particle->w, sph.tmp_cuda->ptc_w, sizeof(double) * sph.host_arg->ptc_num, cudaMemcpyDeviceToHost);
             cudaDeviceSynchronize();
-            if(sph.host_arg->init_impac_flag == 0)
-            {
-                cudaMemcpy(sph.host_rigid,sph.dev_rigid,sizeof(SPH_RIGID),cudaMemcpyDeviceToHost);
-                cudaDeviceSynchronize();
-            }
-            
+        }
+        if(sph.host_arg->init_impac_flag == 0)
+        {
+            cudaMemcpy(sph.host_rigid,sph.dev_rigid,sizeof(SPH_RIGID),cudaMemcpyDeviceToHost);
+            cudaDeviceSynchronize();
+            sph_write_csv(&sph);
         }
         cudaError_t sph_error = cudaGetLastError();
         printf("%s\n", cudaGetErrorName(sph_error));
